@@ -58,7 +58,8 @@ public class CostBenefitMapper implements DocumentMapper<CostBenefitAnalysisData
             return Optional.empty();
         }
 
-        return Optional.of(list.getFirst());
+//        return Optional.of(list.getFirst());
+        return Optional.of(list.get(0));
     }
 
     private boolean isCostBenefitTable(Element element) {
