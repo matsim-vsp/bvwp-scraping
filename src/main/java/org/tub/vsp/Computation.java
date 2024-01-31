@@ -27,16 +27,16 @@ class Computation{
 	public static void main( String[] args ){
 		// A20 "Elbquerung":
 		{
-			log.info("---");
+			log.info("===");
 			Amounts amounts = new Amounts( -18.56, 1.46, 0.13, 131.53, 143.95, 9.75 );
 			Benefits benefits = new Benefits( -785.233, 2555.429, 1025.464, -151.319, -175.021, 5305.683 );
 			double baukosten = 2737.176;
 			nkv( new Modifications( 5., 5., 0. ), amounts, benefits, baukosten );
-			log.info("---");
+			log.info("===");
 		}
 		// A8 Ausbau:
 		{
-			log.info("---");
+			log.info("===");
 			final Amounts amounts = new Amounts( -4.42, 0., 0., 2.31, 0., 0. );
 			final Benefits benefits = new Benefits( -21.838, 532., 0., -6.473, -6.682, 1067.523 );
 			final double baukosten = 34.735;
@@ -44,19 +44,19 @@ class Computation{
 			nkvOhneKR_induz( new Modifications( 1., 5.*145., 0. ), amounts, benefits, baukosten, benefits.all );
 			nkvOhneKR_induz( new Modifications( 5., 145., 38-2.31 ), amounts, benefits, baukosten, benefits.all );
 			nkvOhneKR_induz( new Modifications( 5., 5.*145., 38-2.31 ), amounts, benefits, baukosten, benefits.all );
-			log.info("---");
+			log.info("===");
 		}
 		// A59 Ausbau bei Bonn rechtsrheinisch
 		{
-			log.info("--- A59:");
+			log.info("=== A59:");
 			final Amounts amounts = new Amounts( -1.33, 0., 0., 7.09, 0., 0. );
 			final Benefits benefits = new Benefits( -88.090, 202.416, 0., -3.797, -29.699, 197.074 );
 			final double baukosten = 34.735;
-			nkvOhneKR_induz( new Modifications( 1., 145. , 0.), amounts, benefits, baukosten, benefits.all );
-			nkvOhneKR_induz( new Modifications( 5., 145., 0. ), amounts, benefits, baukosten, benefits.all );
-			nkvOhneKR_induz( new Modifications( 1., 5.*145., 0. ), amounts, benefits, baukosten, benefits.all );
-			nkvOhneKR_induz( new Modifications( 5., 5.*145., 19.9-7.06 ), amounts, benefits, baukosten, benefits.all );
-			log.info("---");
+			log.info("--- orig:"); nkvOhneKR_induz( new Modifications( 1., 145. , 0.), amounts, benefits, baukosten, benefits.all );
+			log.info("--- induz offset:"); nkvOhneKR_induz( new Modifications( 5., 145., 19.9- amounts.fzkm_all() ), amounts, benefits, baukosten, benefits.all );
+			log.info("--- co2 factor:"); nkvOhneKR_induz( new Modifications( 1., 5.*145., 0. ), amounts, benefits, baukosten, benefits.all );
+			log.info("--- induz offset & co2 factor:"); nkvOhneKR_induz( new Modifications( 5., 5.*145., 19.9- amounts.fzkm_all ), amounts, benefits, baukosten, benefits.all );
+			log.info("===");
 		}
 
 	}
