@@ -13,7 +13,13 @@ class Computation{
 	static final double AB_FZKM = 221000;
 	static final double AB_length = 60000.;
 
-	record Modifications(double induzFactor, double co2Price, double mehrFzkm ){}
+	record Modifications(double induzFactor, double co2Price, double mehrFzkm ){
+		Modifications {
+			if ( co2Price <145 ) {
+				log.warn("co2Price is no longer a factor, but the price.  You probably want a value >= 145.");
+			}
+		}
+	}
 	record Amounts ( double rz, double rz_induz, double rz_verl, double fzkm_all, double fzkm_induz, double fzkm_verl, double fzkm_reroute ){
 		Amounts {
 			Assertions.assertEquals( fzkm_all, fzkm_reroute + fzkm_induz + fzkm_verl );
@@ -25,18 +31,23 @@ class Computation{
 	record Benefits(double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all ){}
 
 	public static void main( String[] args ){
+		log.warn("need to either only compute pkw, or include lkw into computation!");
+
 		// A20 "Elbquerung":
 		{
-			log.info("===");
+			log.info("=== A20 (Elbquerung):");
 			Amounts amounts = new Amounts( -18.56, 1.46, 0.13, 131.53, 143.95, 9.75 );
 			Benefits benefits = new Benefits( -785.233, 2555.429, 1025.464, -151.319, -175.021, 5305.683 );
 			double baukosten = 2737.176;
-			nkv( new Modifications( 5., 5., 0. ), amounts, benefits, baukosten );
+			log.info("--- orig:") ; nkv( new Modifications( 1., 145, 0. ), amounts, benefits, baukosten );
+			log.info("--- co2 price:") ; nkv( new Modifications( 1., 5.*145, 0. ), amounts, benefits, baukosten );
+			log.info("--- induz factor:") ; nkv( new Modifications( 5., 145, 0. ), amounts, benefits, baukosten );
+			log.info("--- both:") ; nkv( new Modifications( 5., 5.*145, 0. ), amounts, benefits, baukosten );
 			log.info("===");
 		}
 		// A8 Ausbau:
 		{
-			log.info("===");
+			log.info("=== A8:");
 			final Amounts amounts = new Amounts( -4.42, 0., 0., 2.31, 0., 0. );
 			final Benefits benefits = new Benefits( -21.838, 532., 0., -6.473, -6.682, 1067.523 );
 			final double baukosten = 34.735;
@@ -54,8 +65,8 @@ class Computation{
 			final double baukosten = 34.735;
 			log.info("--- orig:"); nkvOhneKR_induz( new Modifications( 1., 145. , 0.), amounts, benefits, baukosten, benefits.all );
 			log.info("--- induz offset:"); nkvOhneKR_induz( new Modifications( 5., 145., 19.9- amounts.fzkm_all() ), amounts, benefits, baukosten, benefits.all );
-			log.info("--- co2 factor:"); nkvOhneKR_induz( new Modifications( 1., 5.*145., 0. ), amounts, benefits, baukosten, benefits.all );
-			log.info("--- induz offset & co2 factor:"); nkvOhneKR_induz( new Modifications( 5., 5.*145., 19.9- amounts.fzkm_all ), amounts, benefits, baukosten, benefits.all );
+			log.info("--- co2 price:"); nkvOhneKR_induz( new Modifications( 1., 5.*145., 0. ), amounts, benefits, baukosten, benefits.all );
+			log.info("--- induz offset & co2 price:"); nkvOhneKR_induz( new Modifications( 5., 5.*145., 19.9- amounts.fzkm_all ), amounts, benefits, baukosten, benefits.all );
 			log.info("===");
 		}
 
@@ -132,7 +143,7 @@ class Computation{
 		// nkv:
 		final double nkv = b_all / baukosten;
 		String colorString = ConsoleColors.TEXT_BLACK;
-		if ( nkv < 0 ) colorString = ConsoleColors.TEXT_RED;
+		if ( nkv < 1 ) colorString = ConsoleColors.TEXT_RED;
 		log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK );
 		return nkv;
 	}
