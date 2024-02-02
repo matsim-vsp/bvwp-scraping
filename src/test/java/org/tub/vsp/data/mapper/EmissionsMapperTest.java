@@ -3,7 +3,7 @@ package org.tub.vsp.data.mapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.data.LocalFileAccessor;
-import org.tub.vsp.data.container.EmissionsDataContainer;
+import org.tub.vsp.data.container.base.EmissionsDataContainer;
 import org.tub.vsp.data.type.Emission;
 
 import java.io.IOException;

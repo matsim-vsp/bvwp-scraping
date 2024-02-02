@@ -4,8 +4,9 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.data.container.CostBenefitAnalysisDataContainer;
-import org.tub.vsp.data.container.StreetBaseDataContainer;
+import org.tub.vsp.data.container.analysis.StreetAnalysisDataContainer;
+import org.tub.vsp.data.container.base.CostBenefitAnalysisDataContainer;
+import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.data.type.Benefit;
 import org.tub.vsp.data.type.Cost;
 import org.tub.vsp.data.type.Emission;
@@ -39,9 +40,9 @@ public class StreetCsvWriter {
         this.outputPath = outputPath;
     }
 
-    public void writeCsv(List<StreetBaseDataContainer> baseDataContainers) {
+    public void writeCsv(List<StreetAnalysisDataContainer> analysisDataContainers) {
         logger.info("Writing csv.");
-        List<String> headers = getHeaders();
+        List<String> headers = getHeaders(analysisDataContainers);
 
         //make sure that the directory exists
         Path path = Paths.get(outputPath);
@@ -59,9 +60,10 @@ public class StreetCsvWriter {
                                                                                 .setHeader(headers.toArray(new String[0]))
                                                                                 .setDelimiter(';')
                                                                                 .build())) {
-            for (StreetBaseDataContainer baseDataContainer : baseDataContainers) {
-                logger.info("Writing csv record for {}", baseDataContainer.getUrl());
-                csvPrinter.printRecord(getCsvRecord(baseDataContainer));
+            for (StreetAnalysisDataContainer analysisDataContainer : analysisDataContainers) {
+                logger.info("Writing csv record for {}", analysisDataContainer.getStreetBaseDataContainer()
+                                                                              .getUrl());
+                csvPrinter.printRecord(getCsvRecord(analysisDataContainer));
             }
             csvPrinter.flush();
             logger.info("Finished writing csv.");
@@ -70,7 +72,9 @@ public class StreetCsvWriter {
         }
     }
 
-    private static List<Object> getCsvRecord(StreetBaseDataContainer baseDataContainer) {
+    private static List<Object> getCsvRecord(StreetAnalysisDataContainer analysisDataContainer) {
+        StreetBaseDataContainer baseDataContainer = analysisDataContainer.getStreetBaseDataContainer();
+
         List<Object> record = new ArrayList<>();
         //general info
         record.add(baseDataContainer.getProjectInformation()
@@ -101,10 +105,23 @@ public class StreetCsvWriter {
                            .map(CostBenefitAnalysisDataContainer::getCost)
                            .map(Cost::overallCosts)
                            .orElse(null));
+
+
         return record;
     }
 
-    private static List<String> getHeaders() {
+    private static List<String> getHeaders(List<StreetAnalysisDataContainer> analysisDataContainers) {
+        //assert that all entries of new nkv have the same keys
+        assert analysisDataContainers.stream()
+                                     .allMatch(a -> {
+                                         Set<String> thisKeys = a.getNkvByChange()
+                                                                 .keySet();
+                                         Set<String> firstKeys = analysisDataContainers.getFirst()
+                                                                                       .getNkvByChange()
+                                                                                       .keySet();
+                                         return thisKeys.containsAll(firstKeys) && thisKeys.size() == firstKeys.size();
+                                     }) : "Not all nkv have the same keys";
+
         List<String> headers = new ArrayList<>();
         headers.add("project name");
         headers.add("link");
@@ -121,6 +138,12 @@ public class StreetCsvWriter {
 
         headers.add("overall-benefit");
         headers.add("overall-cost");
+
+        for (String s : analysisDataContainers.getFirst()
+                                              .getNkvByChange()
+                                              .keySet()) {
+            headers.add("nkv_" + s);
+        }
         return headers;
     }
 
@@ -138,5 +161,10 @@ public class StreetCsvWriter {
                            .map(m -> m.get(emission))
                            .map(Benefit::overall)
                            .orElse(null));
+    }
+
+    private static void addNkvCalculations(StreetAnalysisDataContainer analysisDataContainer, List<Object> record) {
+        record.addAll(analysisDataContainer.getNkvByChange()
+                                           .values());
     }
 }

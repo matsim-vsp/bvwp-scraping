@@ -1,7 +1,8 @@
 package org.tub.vsp;
 
 import com.google.gson.reflect.TypeToken;
-import org.tub.vsp.data.container.StreetBaseDataContainer;
+import org.tub.vsp.data.container.analysis.StreetAnalysisDataContainer;
+import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.io.JsonIo;
 import org.tub.vsp.io.StreetCsvWriter;
 
@@ -18,7 +19,8 @@ public class RunCsvWriting {
         List<StreetBaseDataContainer> baseDataContainers = jsonIo.readJsonList("output/street_data.json", listType);
 
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");
-        csvWriter.writeCsv(baseDataContainers);
+        csvWriter.writeCsv(baseDataContainers.stream()
+                                             .map(StreetAnalysisDataContainer::new)
+                                             .toList());
     }
-
 }

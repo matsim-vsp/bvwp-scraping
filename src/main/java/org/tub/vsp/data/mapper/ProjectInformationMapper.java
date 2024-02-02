@@ -3,7 +3,7 @@ package org.tub.vsp.data.mapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
-import org.tub.vsp.data.container.ProjectInformationDataContainer;
+import org.tub.vsp.data.container.base.ProjectInformationDataContainer;
 import org.tub.vsp.data.type.Severity;
 
 import java.util.Optional;

@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.JSoupUtils;
-import org.tub.vsp.data.container.CostBenefitAnalysisDataContainer;
+import org.tub.vsp.data.container.base.CostBenefitAnalysisDataContainer;
 import org.tub.vsp.data.type.Benefit;
 import org.tub.vsp.data.type.Cost;
 import org.tub.vsp.data.type.Emission;
@@ -28,7 +28,8 @@ public class CostBenefitMapper {
 
         //We only scrape the cumulated values
         benefit.ifPresent(element -> result.setNb(extractSimpleBenefit(element, "NB"))
-                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten (Betrieb)", 0))
+                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten " +
+                                                   "(Betrieb)", 0))
                                            .setNw(extractSimpleBenefit(element, "NW"))
                                            .setNs(extractSimpleBenefit(element, "NS"))
                                            .setNrz(extractSimpleBenefit(element, "NRZ"))

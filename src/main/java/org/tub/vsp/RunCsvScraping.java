@@ -2,7 +2,7 @@ package org.tub.vsp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.data.container.StreetBaseDataContainer;
+import org.tub.vsp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.io.StreetCsvWriter;
 import org.tub.vsp.scraping.StreetScraper;
 
@@ -15,7 +15,10 @@ public class RunCsvScraping {
         StreetScraper scraper = new StreetScraper();
 
         logger.info("Starting scraping");
-        List<StreetBaseDataContainer> allStreetBaseData = scraper.extractAllBaseData();
+        List<StreetAnalysisDataContainer> allStreetBaseData = scraper.extractAllBaseData()
+                                                                     .stream()
+                                                                     .map(StreetAnalysisDataContainer::new)
+                                                                     .toList();
 
         logger.info("Writing csv");
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");

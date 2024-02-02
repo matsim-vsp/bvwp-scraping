@@ -1,4 +1,4 @@
-package org.tub.vsp.data.container;
+package org.tub.vsp.data.container.base;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

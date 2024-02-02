@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.JSoupUtils;
-import org.tub.vsp.data.container.EmissionsDataContainer;
+import org.tub.vsp.data.container.base.EmissionsDataContainer;
 import org.tub.vsp.data.type.Emission;
 
 import java.text.ParseException;

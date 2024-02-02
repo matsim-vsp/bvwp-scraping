@@ -2,7 +2,7 @@ package org.tub.vsp;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.data.container.StreetBaseDataContainer;
+import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.io.JsonIo;
 import org.tub.vsp.scraping.StreetScraper;
 

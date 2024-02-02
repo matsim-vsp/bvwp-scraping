@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.tub.vsp.data.container.StreetBaseDataContainer;
+import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.data.mapper.CostBenefitMapper;
 import org.tub.vsp.data.mapper.PhysicalEffectMapper;
 import org.tub.vsp.data.mapper.ProjectInformationMapper;

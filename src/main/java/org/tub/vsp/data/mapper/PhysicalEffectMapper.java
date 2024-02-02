@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.JSoupUtils;
-import org.tub.vsp.data.container.PhysicalEffectDataContainer;
+import org.tub.vsp.data.container.base.PhysicalEffectDataContainer;
 
 import java.text.ParseException;
 import java.util.Optional;

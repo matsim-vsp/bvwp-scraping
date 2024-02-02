@@ -1,4 +1,4 @@
-package org.tub.vsp.data.container;
+package org.tub.vsp.data.container.base;
 
 import org.tub.vsp.data.type.Severity;
 

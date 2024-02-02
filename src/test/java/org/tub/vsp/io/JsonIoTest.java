@@ -3,7 +3,7 @@ package org.tub.vsp.io;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.data.LocalFileAccessor;
-import org.tub.vsp.data.container.StreetBaseDataContainer;
+import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.scraping.StreetScraper;
 
 import java.io.IOException;
