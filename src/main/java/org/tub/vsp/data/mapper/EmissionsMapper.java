@@ -13,10 +13,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class EmissionsMapper implements DocumentMapper<EmissionsDataContainer> {
+public class EmissionsMapper {
     private static final Logger logger = LogManager.getLogger(EmissionsMapper.class);
 
-    @Override
     public EmissionsDataContainer mapDocument(Document document) {
         EmissionsDataContainer emissions = EmissionsDataContainer.empty();
 
@@ -26,6 +25,7 @@ public class EmissionsMapper implements DocumentMapper<EmissionsDataContainer> {
             return emissions;
         }
 
+        //Creating the map for the emissions data container
         Map<Emission, Double> collect =
                 Emission.STRING_IDENTIFIER_BY_EMISSION_WITHOUT_CO2_OVERALL
                         .entrySet()
@@ -35,15 +35,20 @@ public class EmissionsMapper implements DocumentMapper<EmissionsDataContainer> {
                         .map(Optional::get)
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        Element envTable = JSoupUtils.getTableByClassAndContainedText(document, "table.table_webprins",
-                                             "Äquivalenten aus Lebenszyklusemissionen")
-                                     .orElseThrow();
+        Optional<Element> envTable = JSoupUtils.getTableByClassAndContainedText(document, "table.table_webprins",
+                "Äquivalenten aus Lebenszyklusemissionen");
 
-        collect.put(Emission.CO2_OVERALL_EQUIVALENTS, getCO2Overall(envTable));
+        if (envTable.isEmpty()) {
+            logger.warn("Could not find table with entry {}.", "Äquivalenten aus Lebenszyklusemissionen");
+            return emissions;
+        }
+
+        collect.put(Emission.CO2_OVERALL_EQUIVALENTS, getCO2Overall(envTable.get()));
 
         return new EmissionsDataContainer(collect);
     }
 
+    //get emission value for one specific emission
     private Optional<Map.Entry<Emission, Double>> getEmissionDoubleEntry(Map.Entry<Emission, String> e, Element table) {
         Optional<Double> v;
         try {
@@ -56,7 +61,7 @@ public class EmissionsMapper implements DocumentMapper<EmissionsDataContainer> {
     }
 
     private Optional<Double> mapEmissionFromRow(Element table, String key) throws ParseException {
-        Optional<Element> row = JSoupUtils.firstRowWithKeyInCol(table, key, 0);
+        Optional<Element> row = JSoupUtils.firstRowWithKeyContainedInCol(table, key, 0);
         if (row.isEmpty()) {
             logger.warn("Could not find row with key {}.", key);
             return Optional.empty();
@@ -67,8 +72,9 @@ public class EmissionsMapper implements DocumentMapper<EmissionsDataContainer> {
                                                      .text()));
     }
 
+    //mapping the CO2 overall equivalents value
     private Double getCO2Overall(Element table) {
-        return JSoupUtils.firstRowWithKeyInCol(table, Emission.STRING_IDENTIFIER_CO2_OVERALL_EQUIVALENTS, 1)
+        return JSoupUtils.firstRowWithKeyContainedInCol(table, Emission.STRING_IDENTIFIER_CO2_OVERALL_EQUIVALENTS, 1)
                          .map(r -> {
                              try {
                                  return JSoupUtils.parseDouble(r.child(2)

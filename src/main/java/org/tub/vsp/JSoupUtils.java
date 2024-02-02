@@ -22,12 +22,21 @@ public class JSoupUtils {
                     .text();
     }
 
-    public static Optional<Element> firstRowWithKeyInCol(Element table, String key, int colIndex) {
+    public static Optional<Element> firstRowWithKeyContainedInCol(Element table, String key, int colIndex) {
         return table.select("tr")
                     .stream()
                     .filter(r -> r.child(colIndex)
                                   .text()
                                   .contains(key))
+                    .findFirst();
+    }
+
+    public static Optional<Element> firstRowWithKeyInCol(Element table, String key, int colIndex) {
+        return table.select("tr")
+                    .stream()
+                    .filter(r -> r.child(colIndex)
+                                  .text()
+                                  .equals(key))
                     .findFirst();
     }
 

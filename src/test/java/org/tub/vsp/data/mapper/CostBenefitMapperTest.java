@@ -24,7 +24,7 @@ class CostBenefitMapperTest {
         Assertions.assertEquals(new Benefit(41.365, 1025.464), result.getNi());
         Assertions.assertEquals(new Benefit(-6.104, -151.319), result.getNl());
         Assertions.assertEquals(new Benefit(-16.059, -398.107), result.getNg());
-        Assertions.assertEquals(new Benefit(10.159, 251.841), result.getNt());
+        Assertions.assertEquals(new Benefit(0.136, 3.363), result.getNt());
         Assertions.assertEquals(new Benefit(29.997, 743.646), result.getNz());
         Assertions.assertEquals(new Cost(3145.75, 2737.176), result.getCost());
 

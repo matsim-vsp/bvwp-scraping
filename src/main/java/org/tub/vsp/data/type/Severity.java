@@ -2,6 +2,8 @@ package org.tub.vsp.data.type;
 
 public enum Severity {
     VB("Vordringlicher Bedarf (VB)"),
+    VBE("Vordringlicher Bedarf - Engpassbeseitigung (VB-E)"),
+    WBP("Weiterer Bedarf mit Planungsrecht (WB*)"),
     UNDEFINED("undefined");
 
     public final String description;

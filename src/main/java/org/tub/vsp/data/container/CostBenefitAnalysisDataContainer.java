@@ -1,13 +1,18 @@
 package org.tub.vsp.data.container;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.tub.vsp.data.type.Benefit;
 import org.tub.vsp.data.type.Cost;
 import org.tub.vsp.data.type.Emission;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 public class CostBenefitAnalysisDataContainer {
+    private static final Logger logger = LogManager.getLogger(CostBenefitAnalysisDataContainer.class);
+
     private Benefit nb;
     private Benefit nw;
     private Benefit ns;
@@ -19,6 +24,7 @@ public class CostBenefitAnalysisDataContainer {
     private Map<Emission, Benefit> na;
     private Benefit nt;
     private Benefit nz;
+    private Benefit overallBenefit;
     private Cost cost;
 
     public Benefit getNb() {
@@ -97,6 +103,16 @@ public class CostBenefitAnalysisDataContainer {
         return na;
     }
 
+    public Benefit getNaCumulated() {
+        if (na == null) {
+            return new Benefit();
+        }
+
+        return na.values()
+                 .stream()
+                 .reduce(new Benefit(0., 0.), Benefit::add);
+    }
+
     public CostBenefitAnalysisDataContainer setNa(Map<Emission, Benefit> na) {
         this.na = na;
         return this;
@@ -129,14 +145,39 @@ public class CostBenefitAnalysisDataContainer {
         return this;
     }
 
-    public Benefit overallBenefits() {
-        //TODO
-        return null;
+    public Benefit getOverallBenefit() {
+        Benefit cumulatedOverallBenefit = Optional.ofNullable(nb)
+                                                  .orElse(new Benefit())
+                                                  .add(nw)
+                                                  .add(ns)
+                                                  .add(nrz)
+                                                  .add(ntz)
+                                                  .add(ni)
+                                                  .add(nl)
+                                                  .add(ng)
+                                                  .add(nt)
+                                                  .add(nz)
+                                                  .add(getNaCumulated());
+
+        if (!cumulatedOverallBenefit.equalsWithPrecision(overallBenefit, 0)) {
+            logger.warn("Different overall benefits. Cumulated overall benefit: {} | Scraped overall benefit: {}",
+                    cumulatedOverallBenefit, overallBenefit);
+        }
+        return overallBenefit;
     }
 
-    public double costBenefitRation() {
-        //TODO
-        return 0.;
+    public CostBenefitAnalysisDataContainer setOverallBenefit(Benefit overallBenefit) {
+        this.overallBenefit = overallBenefit;
+        return this;
+    }
+
+    public Benefit getCo2EquivalentBenefit() {
+        Benefit emissions = Optional.ofNullable(this.na)
+                                    .map(m -> m.get(Emission.CO2))
+                                    .orElse(new Benefit());
+        Benefit lifecycle = Optional.ofNullable(this.nl)
+                                    .orElse(new Benefit());
+        return emissions.add(lifecycle);
     }
 
     @Override

@@ -1,0 +1,97 @@
+{
+  "url": null,
+  "projectInformation": {
+    "projectNumber": "A20-G10-NI-SH",
+    "street": "A 20",
+    "severity": "VB"
+  },
+  "physicalEffect": {
+    "emissionsDataContainer": {
+      "emissions": {
+        "CO": 1305.85,
+        "CO2_OVERALL_EQUIVALENTS": 90786.067,
+        "PM": 2.86,
+        "HC": 11.08,
+        "SO2": 0.63,
+        "CO2": 48689.94,
+        "NOX": 66.85
+      }
+    }
+  },
+  "costBenefitAnalysis": {
+    "nb": {
+      "annual": 40.55,
+      "overall": 1005.26
+    },
+    "nw": {
+      "annual": -5.294,
+      "overall": -131.248
+    },
+    "ns": {
+      "annual": 24.694,
+      "overall": 612.174
+    },
+    "nrz": {
+      "annual": 103.081,
+      "overall": 2555.429
+    },
+    "ntz": {
+      "annual": 10.159,
+      "overall": 251.841
+    },
+    "ni": {
+      "annual": 41.365,
+      "overall": 1025.464
+    },
+    "nl": {
+      "annual": -6.104,
+      "overall": -151.319
+    },
+    "ng": {
+      "annual": -16.059,
+      "overall": -398.107
+    },
+    "na": {
+      "CO": {
+        "annual": -0.081,
+        "overall": -2.007
+      },
+      "PM": {
+        "annual": -0.306,
+        "overall": -7.581
+      },
+      "HC": {
+        "annual": -0.019,
+        "overall": -0.467
+      },
+      "SO2": {
+        "annual": -0.008,
+        "overall": -0.205
+      },
+      "CO2": {
+        "annual": -7.06,
+        "overall": -175.021
+      },
+      "NOX": {
+        "annual": -1.029,
+        "overall": -25.52
+      }
+    },
+    "nt": {
+      "annual": 0.136,
+      "overall": 3.363
+    },
+    "nz": {
+      "annual": 29.997,
+      "overall": 743.646
+    },
+    "overallBenefit": {
+      "annual": 214.022,
+      "overall": 5305.683
+    },
+    "cost": {
+      "cost": 3145.75,
+      "overallCosts": 2737.176
+    }
+  }
+}

@@ -8,10 +8,9 @@ import org.tub.vsp.data.type.Severity;
 
 import java.util.Optional;
 
-public class ProjectInformationMapper implements DocumentMapper<ProjectInformationDataContainer> {
+public class ProjectInformationMapper {
     private static final Logger logger = LogManager.getLogger(ProjectInformationMapper.class);
 
-    @Override
     public ProjectInformationDataContainer mapDocument(Document document) {
         ProjectInformationDataContainer projectInformation = new ProjectInformationDataContainer();
 
@@ -24,7 +23,9 @@ public class ProjectInformationMapper implements DocumentMapper<ProjectInformati
                                  .setSeverity(Severity.getFromString(severity));
     }
 
-    private static String extractInformation(Document document, int tableIndex, String key) {
+    //mapping information from the grunddaten table. There are two tables with the same class, so we need to specify
+    // the index
+    public static String extractInformation(Document document, int tableIndex, String key) {
         Optional<String> info = document.select("table.table_grunddaten")
                                         .get(tableIndex)
                                         .select("tr")

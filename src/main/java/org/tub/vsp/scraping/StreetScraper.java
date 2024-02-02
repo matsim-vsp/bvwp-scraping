@@ -1,4 +1,4 @@
-package org.tub.vsp;
+package org.tub.vsp.scraping;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,21 +25,26 @@ public class StreetScraper extends Scraper {
         return "https://www.bvwp-projekte.de/strasse/";
     }
 
-    public List<StreetBaseDataContainer> getAllStreetBaseData() throws IOException {
-        List<String> projectUrls = getProjectUrls();
-        logger.info("Found {} projects", projectUrls.size());
-        logger.info(projectUrls);
+    public List<StreetBaseDataContainer> extractAllBaseData() {
+        List<String> projectUrls;
+        try {
+            projectUrls = getProjectUrls();
+        } catch (IOException e) {
+            logger.error("Could not get project urls");
+            throw new RuntimeException(e);
+        }
 
         return projectUrls.stream()
-                          .map(this::getStreetBaseDataFromUrl)
+                          .map(this::extractBaseDataFromUrl)
                           .filter(Optional::isPresent)
                           .map(Optional::get)
                           .toList();
     }
 
-    private Optional<StreetBaseDataContainer> getStreetBaseDataFromUrl(String projectUrl) {
-        Document doc;
+    private Optional<StreetBaseDataContainer> extractBaseDataFromUrl(String projectUrl) {
+        logger.info("Scraping project from {}", projectUrl);
 
+        Document doc;
         try {
             doc = Jsoup.connect(projectUrl)
                        .get();
@@ -49,22 +54,38 @@ public class StreetScraper extends Scraper {
             return Optional.empty();
         }
 
-        return getStreetBaseData(doc);
+        return extractBaseData(doc, projectUrl);
     }
 
-    public Optional<StreetBaseDataContainer> getStreetBaseData(Document doc) {
+    public Optional<StreetBaseDataContainer> extractBaseData(Document doc) {
+        return extractBaseData(doc, null);
+    }
+
+    public Optional<StreetBaseDataContainer> extractBaseData(Document doc, String url) {
         if (!checkIfProjectIsScrapable(doc)) {
+            logger.info("Skipping project because it is a subproject.");
             return Optional.empty();
         }
 
         StreetBaseDataContainer streetBaseDataContainer = new StreetBaseDataContainer();
-        return Optional.of(streetBaseDataContainer.setProjectInformation(projectInformationMapper.mapDocument(doc))
+        return Optional.of(streetBaseDataContainer.setUrl(url)
+                                                  .setProjectInformation(projectInformationMapper.mapDocument(doc))
                                                   .setPhysicalEffect(physicalEffectMapper.mapDocument(doc))
                                                   .setCostBenefitAnalysis(costBenefitMapper.mapDocument(doc)));
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
-        //TODO
-        return true;
+        boolean holdsDetailedInformation = !ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
+                                                                            "ältnis")
+                                                                    .contains("siehe Hauptprojekt");
+
+        boolean isNoPartialProject = !doc.select("div.right")
+                                         .select("h1")
+                                         .text()
+                                         .contains("Teilprojekt");
+
+        //main projects are alwyas scraped
+        //partial projects are only scraped if they hold detailed information
+        return isNoPartialProject || holdsDetailedInformation;
     }
 }

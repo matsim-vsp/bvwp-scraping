@@ -1,4 +1,4 @@
-package org.tub.vsp;
+package org.tub.vsp.scraping;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +40,9 @@ public abstract class Scraper {
         logger.info("Found {} projects", projectUrls.size());
         logger.info(projectUrls);
 
-        return projectUrls;
+        return projectUrls.stream()
+                          .map(link -> getBaseUrl() + link)
+                          .toList();
     }
 
 

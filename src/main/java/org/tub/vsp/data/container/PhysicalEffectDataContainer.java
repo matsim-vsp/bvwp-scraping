@@ -1,5 +1,7 @@
 package org.tub.vsp.data.container;
 
+import org.tub.vsp.data.type.Emission;
+
 import java.util.Objects;
 
 public class PhysicalEffectDataContainer {
@@ -8,6 +10,11 @@ public class PhysicalEffectDataContainer {
 
     public EmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
+    }
+
+    public Double getEmission(Emission emission) {
+        return emissionsDataContainer.emissions()
+                                     .get(emission);
     }
 
     public PhysicalEffectDataContainer setEmissionsDataContainer(EmissionsDataContainer emissionsDataContainer) {
