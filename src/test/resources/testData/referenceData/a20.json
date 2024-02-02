@@ -8,20 +8,34 @@
   "physicalEffect": {
     "emissionsDataContainer": {
       "emissions": {
-        "CO": 1305.85,
-        "CO2_OVERALL_EQUIVALENTS": 90786.067,
-        "PM": 2.86,
-        "HC": 11.08,
         "SO2": 0.63,
-        "CO2": 48689.94,
-        "NOX": 66.85
+        "NOX": 66.85,
+        "CO": 1305.85,
+        "HC": 11.08,
+        "PM": 2.86,
+        "CO2_OVERALL_EQUIVALENTS": 90786.067,
+        "CO2": 48689.94
       }
+    },
+    "travelTimes": {
+      "overall": -18.56,
+      "induced": 1.99,
+      "shifted": 0.2
+    },
+    "vehicleKilometers": {
+      "overall": 131.53,
+      "induced": 143.95,
+      "shifted": 9.75
     }
   },
   "costBenefitAnalysis": {
     "nb": {
       "annual": 40.55,
       "overall": 1005.26
+    },
+    "nbOperations": {
+      "annual": -31.675,
+      "overall": -785.233
     },
     "nw": {
       "annual": -5.294,
@@ -52,29 +66,29 @@
       "overall": -398.107
     },
     "na": {
+      "SO2": {
+        "annual": -0.008,
+        "overall": -0.205
+      },
+      "NOX": {
+        "annual": -1.029,
+        "overall": -25.52
+      },
       "CO": {
         "annual": -0.081,
         "overall": -2.007
-      },
-      "PM": {
-        "annual": -0.306,
-        "overall": -7.581
       },
       "HC": {
         "annual": -0.019,
         "overall": -0.467
       },
-      "SO2": {
-        "annual": -0.008,
-        "overall": -0.205
+      "PM": {
+        "annual": -0.306,
+        "overall": -7.581
       },
       "CO2": {
         "annual": -7.06,
         "overall": -175.021
-      },
-      "NOX": {
-        "annual": -1.029,
-        "overall": -25.52
       }
     },
     "nt": {

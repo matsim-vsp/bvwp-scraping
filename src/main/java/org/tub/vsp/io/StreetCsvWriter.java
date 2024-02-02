@@ -106,6 +106,8 @@ public class StreetCsvWriter {
                            .map(Cost::overallCosts)
                            .orElse(null));
 
+        record.addAll(analysisDataContainer.getNkvByChange()
+                                           .values());
 
         return record;
     }
@@ -161,10 +163,5 @@ public class StreetCsvWriter {
                            .map(m -> m.get(emission))
                            .map(Benefit::overall)
                            .orElse(null));
-    }
-
-    private static void addNkvCalculations(StreetAnalysisDataContainer analysisDataContainer, List<Object> record) {
-        record.addAll(analysisDataContainer.getNkvByChange()
-                                           .values());
     }
 }

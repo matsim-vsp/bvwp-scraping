@@ -50,12 +50,21 @@ public class PhysicalEffectDataContainer {
 
         PhysicalEffectDataContainer that = (PhysicalEffectDataContainer) o;
 
-        return Objects.equals(emissionsDataContainer, that.emissionsDataContainer);
+        if (!Objects.equals(emissionsDataContainer, that.emissionsDataContainer)) {
+            return false;
+        }
+        if (!Objects.equals(travelTimes, that.travelTimes)) {
+            return false;
+        }
+        return Objects.equals(vehicleKilometers, that.vehicleKilometers);
     }
 
     @Override
     public int hashCode() {
-        return emissionsDataContainer != null ? emissionsDataContainer.hashCode() : 0;
+        int result = emissionsDataContainer != null ? emissionsDataContainer.hashCode() : 0;
+        result = 31 * result + (travelTimes != null ? travelTimes.hashCode() : 0);
+        result = 31 * result + (vehicleKilometers != null ? vehicleKilometers.hashCode() : 0);
+        return result;
     }
 
     public static final record Effect(double overall, double induced, double shifted) {
