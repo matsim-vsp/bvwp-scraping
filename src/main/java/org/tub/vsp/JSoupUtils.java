@@ -14,6 +14,18 @@ import java.util.Optional;
 public class JSoupUtils {
     private static final Logger logger = LogManager.getLogger(JSoupUtils.class);
 
+    public static Optional<Integer> getFirstRowIndexWithText(Element table, String text) {
+        int counter = 0;
+        for (Element tr : table.select("tr")) {
+            if (tr.text()
+                  .contains(text)) {
+                return Optional.of(counter);
+            }
+            counter++;
+        }
+        return Optional.empty();
+    }
+
     public static String getTextFromRowAndCol(Element table, int rowIndex, int colIndex) {
         return table.select("tr")
                     .get(rowIndex)

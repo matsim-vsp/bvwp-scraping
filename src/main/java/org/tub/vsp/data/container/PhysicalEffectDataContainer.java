@@ -5,8 +5,9 @@ import org.tub.vsp.data.type.Emission;
 import java.util.Objects;
 
 public class PhysicalEffectDataContainer {
-    //TODO add other
     private EmissionsDataContainer emissionsDataContainer;
+    private Effect travelTimes;
+    private Effect vehicleKilometers;
 
     public EmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
@@ -20,6 +21,22 @@ public class PhysicalEffectDataContainer {
     public PhysicalEffectDataContainer setEmissionsDataContainer(EmissionsDataContainer emissionsDataContainer) {
         this.emissionsDataContainer = emissionsDataContainer;
         return this;
+    }
+
+    public Effect getTravelTimes() {
+        return travelTimes;
+    }
+
+    public void setTravelTimes(Effect travelTimes) {
+        this.travelTimes = travelTimes;
+    }
+
+    public Effect getVehicleKilometers() {
+        return vehicleKilometers;
+    }
+
+    public void setVehicleKilometers(Effect vehicleKilometers) {
+        this.vehicleKilometers = vehicleKilometers;
     }
 
     @Override
@@ -39,5 +56,9 @@ public class PhysicalEffectDataContainer {
     @Override
     public int hashCode() {
         return emissionsDataContainer != null ? emissionsDataContainer.hashCode() : 0;
+    }
+
+    public static final record Effect(double overall, double induced, double shifted) {
+
     }
 }
