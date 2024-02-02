@@ -28,6 +28,7 @@ public class CostBenefitMapper {
 
         //We only scrape the cumulated values
         benefit.ifPresent(element -> result.setNb(extractSimpleBenefit(element, "NB"))
+                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten (Betrieb)", 0))
                                            .setNw(extractSimpleBenefit(element, "NW"))
                                            .setNs(extractSimpleBenefit(element, "NS"))
                                            .setNrz(extractSimpleBenefit(element, "NRZ"))

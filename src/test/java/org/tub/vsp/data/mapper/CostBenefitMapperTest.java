@@ -17,6 +17,7 @@ class CostBenefitMapperTest {
                 costBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
         Assertions.assertEquals(new Benefit(40.55, 1005.26), result.getNb());
+        Assertions.assertEquals(new Benefit(-31.675, -785.233), result.getNbOperations());
         Assertions.assertEquals(new Benefit(-5.294, -131.248), result.getNw());
         Assertions.assertEquals(new Benefit(24.694, 612.174), result.getNs());
         Assertions.assertEquals(new Benefit(103.081, 2555.429), result.getNrz());
@@ -27,6 +28,5 @@ class CostBenefitMapperTest {
         Assertions.assertEquals(new Benefit(0.136, 3.363), result.getNt());
         Assertions.assertEquals(new Benefit(29.997, 743.646), result.getNz());
         Assertions.assertEquals(new Cost(3145.75, 2737.176), result.getCost());
-
     }
 }

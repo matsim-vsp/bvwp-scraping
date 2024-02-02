@@ -14,6 +14,7 @@ public class CostBenefitAnalysisDataContainer {
     private static final Logger logger = LogManager.getLogger(CostBenefitAnalysisDataContainer.class);
 
     private Benefit nb;
+    private Benefit nbOperations;
     private Benefit nw;
     private Benefit ns;
     private Benefit nrz;
@@ -33,6 +34,15 @@ public class CostBenefitAnalysisDataContainer {
 
     public CostBenefitAnalysisDataContainer setNb(Benefit nb) {
         this.nb = nb;
+        return this;
+    }
+
+    public Benefit getNbOperations() {
+        return nbOperations;
+    }
+
+    public CostBenefitAnalysisDataContainer setNbOperations(Benefit nbOperations) {
+        this.nbOperations = nbOperations;
         return this;
     }
 
