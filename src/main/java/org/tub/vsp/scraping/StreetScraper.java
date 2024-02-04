@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.tub.vsp.data.container.base.ProjectInformationDataContainer;
 import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.data.mapper.CostBenefitMapper;
 import org.tub.vsp.data.mapper.PhysicalEffectMapper;
@@ -66,6 +67,10 @@ public class StreetScraper extends Scraper {
             logger.info("Skipping project because it is a subproject.");
             return Optional.empty();
         }
+        if (!checkIfProjectIsAutobahn(doc)) {
+            logger.info("Skipping project because it is not an Autobahn.");
+            return Optional.empty();
+        }
 
         StreetBaseDataContainer streetBaseDataContainer = new StreetBaseDataContainer();
         return Optional.of(streetBaseDataContainer.setUrl(url)
@@ -76,7 +81,7 @@ public class StreetScraper extends Scraper {
 
     private boolean checkIfProjectIsScrapable(Document doc) {
         boolean holdsDetailedInformation = !ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
-                                                                            "ältnis")
+                                                                                                                "ältnis")
                                                                     .contains("siehe Hauptprojekt");
 
         boolean isNoPartialProject = !doc.select("div.right")
@@ -87,5 +92,13 @@ public class StreetScraper extends Scraper {
         //main projects are alwyas scraped
         //partial projects are only scraped if they hold detailed information
         return isNoPartialProject || holdsDetailedInformation;
+    }
+    private boolean checkIfProjectIsAutobahn(Document doc) {
+        ProjectInformationDataContainer projectInfo = projectInformationMapper.mapDocument( doc );
+        if ( projectInfo.getProjectNumber().charAt( 0 ) == 'A' ) {
+            return true;
+        } else {
+            return false ;
+        }
     }
 }
