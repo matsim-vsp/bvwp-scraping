@@ -20,9 +20,9 @@ class Computation{
 			}
 		}
 	}
-	record Amounts ( double rz, double rz_induz, double rz_verl, double fzkm_all, double fzkm_induz, double fzkm_verl, double fzkm_reroute ){
+	record Amounts (double rz, double rz_induz, double rz_verl, double pkwkm_all, double pkwkm_induz, double pkwkm_verl, double pkwkm_reroute){
 		Amounts {
-			Assertions.assertEquals( fzkm_all, fzkm_reroute + fzkm_induz + fzkm_verl );
+			Assertions.assertEquals( pkwkm_all, pkwkm_reroute + pkwkm_induz + pkwkm_verl );
 		}
 		Amounts ( double rz, double rz_induz, double rz_verl, double fzkm_all, double fzkm_induz, double fzkm_verl ){
 			this( rz, rz_induz, rz_verl, fzkm_all, fzkm_induz, fzkm_verl, fzkm_all - fzkm_induz - fzkm_verl );
@@ -64,9 +64,9 @@ class Computation{
 			final Benefits benefits = new Benefits( -88.090, 202.416, 0., -3.797, -29.699, 197.074 );
 			final double baukosten = 34.735;
 			log.info("--- orig:"); nkvOhneKR_induz( new Modifications( 1., 145. , 0.), amounts, benefits, baukosten, benefits.all );
-			log.info("--- induz offset:"); nkvOhneKR_induz( new Modifications( 5., 145., 19.9- amounts.fzkm_all() ), amounts, benefits, baukosten, benefits.all );
+			log.info("--- induz offset:"); nkvOhneKR_induz( new Modifications( 5., 145., 19.9- amounts.pkwkm_all() ), amounts, benefits, baukosten, benefits.all );
 			log.info("--- co2 price:"); nkvOhneKR_induz( new Modifications( 1., 5.*145., 0. ), amounts, benefits, baukosten, benefits.all );
-			log.info("--- induz offset & co2 price:"); nkvOhneKR_induz( new Modifications( 5., 5.*145., 19.9- amounts.fzkm_all ), amounts, benefits, baukosten, benefits.all );
+			log.info("--- induz offset & co2 price:"); nkvOhneKR_induz( new Modifications( 5., 5.*145., 19.9- amounts.pkwkm_all ), amounts, benefits, baukosten, benefits.all );
 			log.info("===");
 		}
 
@@ -79,11 +79,11 @@ class Computation{
 		double zw = b.rz / a.rz;
 
 		// Distanzkosten
-		double distCost = b.fzkm / a.fzkm_all ;
+		double distCost = b.fzkm / a.pkwkm_all;
 		{
 			double b_tmp = b_all;
-			b_all -= a.fzkm_induz * distCost;
-			b_all += a.fzkm_induz * distCost * modifications.induzFactor;
+			b_all -= a.pkwkm_induz * distCost;
+			b_all += a.pkwkm_induz * distCost * modifications.induzFactor;
 			prn("rv_fzkm", b_all, b_tmp);
 		}
 		// rv_zeit
@@ -99,8 +99,8 @@ class Computation{
 		// -- we do this by computing the relative b_RV shares and then use that to multiply b.impl.
 
 		// (1) approximiere die b_rv:
-		double b_rv_induz = a.rz_induz * zw + a.fzkm_induz * distCost;
-		double b_rv_verl = a.rz_verl * zw + a.fzkm_verl * distCost;
+		double b_rv_induz = a.rz_induz * zw + a.pkwkm_induz * distCost;
+		double b_rv_verl = a.rz_verl * zw + a.pkwkm_verl * distCost;
 
 		// (2)
 		double b_impl_induz = b.impl * b_rv_induz / ( b_rv_induz + b_rv_verl );
@@ -127,11 +127,11 @@ class Computation{
 		// co2 Betrieb
 
 		// -- differential co2 by induz and other so that only induz can be multiplied:
-		double b_co2_induz = b.co2_betrieb * a.fzkm_induz / a.fzkm_all;
-		double b_co2_verl = b.co2_betrieb * a.fzkm_verl / a.fzkm_all;
-		double b_co2_reroute = b.co2_betrieb * a.fzkm_reroute / a.fzkm_all;
+		double b_co2_induz = b.co2_betrieb * a.pkwkm_induz / a.pkwkm_all;
+		double b_co2_verl = b.co2_betrieb * a.pkwkm_verl / a.pkwkm_all;
+		double b_co2_reroute = b.co2_betrieb * a.pkwkm_reroute / a.pkwkm_all;
 
-		double co2_mult = b.co2_betrieb / a.fzkm_all;
+		double co2_mult = b.co2_betrieb / a.pkwkm_all;
 
 		{
 			double b_tmp = b_all;
