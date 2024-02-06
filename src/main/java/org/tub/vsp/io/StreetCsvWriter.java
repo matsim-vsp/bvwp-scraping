@@ -79,12 +79,12 @@ public class StreetCsvWriter {
         //general info
         record.add(baseDataContainer.getProjectInformation().getProjectNumber());
         record.add(baseDataContainer.getUrl());
-        record.add(baseDataContainer.getProjectInformation().getPriority() );
-        record.add( baseDataContainer.getProjectInformation().getBautyp() );
+        record.add(baseDataContainer.getProjectInformation().getPriority());
+        record.add(baseDataContainer.getProjectInformation().getBautyp());
 
-        record.add( baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall() );
+        record.add(baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
 
-        record.add( baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall() );
+        record.add(baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
         //co2 equivalents
         record.add(baseDataContainer.getPhysicalEffect().getEmission(Emission.CO2_OVERALL_EQUIVALENTS));
@@ -106,6 +106,8 @@ public class StreetCsvWriter {
                            .map(Cost::overallCosts)
                            .orElse(null));
         // (yy warum diese aufwändige Syntax?  kai, feb'24)
+        // --> da sowohl getCostBenefitAnalysis, getCost als auch overallCosts null zurückgeben können, wenn die
+        // Daten nicht vorhanden sind. So spart man sich null checks (paul, feb'24)
 
         record.addAll(analysisDataContainer.getNkvByChange().values());
 
@@ -117,7 +119,8 @@ public class StreetCsvWriter {
         assert analysisDataContainers.stream()
                                      .allMatch(a -> {
                                          Set<String> thisKeys = a.getNkvByChange().keySet();
-                                         Set<String> firstKeys = analysisDataContainers.getFirst().getNkvByChange().keySet();
+                                         Set<String> firstKeys = analysisDataContainers.getFirst().getNkvByChange()
+                                                                                       .keySet();
                                          return thisKeys.containsAll(firstKeys) && thisKeys.size() == firstKeys.size();
                                      }) : "Not all nkv have the same keys";
 

@@ -41,9 +41,10 @@ public class StreetScraper extends Scraper {
                           .toList();
     }
 
-    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path, boolean includeBundesstrassen) {
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
+                    .filter(file -> file.getName().startsWith("A") || includeBundesstrassen)
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
