@@ -3,19 +3,44 @@
   "projectInformation": {
     "projectNumber": "A20-G10-NI-SH",
     "street": "A 20",
-    "severity": "VB"
+    "priority": "VB",
+    "bautyp": "4-streifiger Neubau"
   },
   "physicalEffect": {
     "emissionsDataContainer": {
       "emissions": {
-        "SO2": 0.63,
-        "NOX": 66.85,
-        "CO": 1305.85,
-        "HC": 11.08,
-        "PM": 2.86,
-        "CO2_OVERALL_EQUIVALENTS": 90786.067,
-        "CO2": 48689.94
-      }
+        "CO2": {
+          "pkw": 54773.28,
+          "lkw": -6083.34,
+          "kfz": 48689.94
+        },
+        "PM": {
+          "pkw": 3.0,
+          "lkw": -0.13,
+          "kfz": 2.86
+        },
+        "CO": {
+          "pkw": 1353.13,
+          "lkw": -47.28,
+          "kfz": 1305.85
+        },
+        "HC": {
+          "pkw": 12.54,
+          "lkw": -1.46,
+          "kfz": 11.08
+        },
+        "NOX": {
+          "pkw": 103.65,
+          "lkw": -36.81,
+          "kfz": 66.85
+        },
+        "SO2": {
+          "pkw": 0.66,
+          "lkw": -0.03,
+          "kfz": 0.63
+        }
+      },
+      "co2Overall": 90786.067
     },
     "travelTimes": {
       "overall": -18.56,
@@ -36,6 +61,14 @@
     "nbOperations": {
       "annual": -31.675,
       "overall": -785.233
+    },
+    "nbPersonnel": {
+      "annual": 62.668,
+      "overall": 1553.571
+    },
+    "nbVehicle": {
+      "annual": 9.557,
+      "overall": 236.921
     },
     "nw": {
       "annual": -5.294,
@@ -66,13 +99,13 @@
       "overall": -398.107
     },
     "na": {
-      "SO2": {
-        "annual": -0.008,
-        "overall": -0.205
+      "CO2": {
+        "annual": -7.06,
+        "overall": -175.021
       },
-      "NOX": {
-        "annual": -1.029,
-        "overall": -25.52
+      "PM": {
+        "annual": -0.306,
+        "overall": -7.581
       },
       "CO": {
         "annual": -0.081,
@@ -82,13 +115,13 @@
         "annual": -0.019,
         "overall": -0.467
       },
-      "PM": {
-        "annual": -0.306,
-        "overall": -7.581
+      "NOX": {
+        "annual": -1.029,
+        "overall": -25.52
       },
-      "CO2": {
-        "annual": -7.06,
-        "overall": -175.021
+      "SO2": {
+        "annual": -0.008,
+        "overall": -0.205
       }
     },
     "nt": {

@@ -13,9 +13,8 @@ public class PhysicalEffectDataContainer {
         return emissionsDataContainer;
     }
 
-    public Double getEmission(Emission emission) {
-        return emissionsDataContainer.emissions()
-                                     .get(emission);
+    public Double getKfzEmission(Emission emission) {
+        return emissionsDataContainer.emissions().get(emission).kfz();
     }
 
     public PhysicalEffectDataContainer setEmissionsDataContainer(EmissionsDataContainer emissionsDataContainer) {

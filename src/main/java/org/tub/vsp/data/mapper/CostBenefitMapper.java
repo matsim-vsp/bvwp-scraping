@@ -28,9 +28,11 @@ public class CostBenefitMapper {
 
         //We only scrape the cumulated values
         benefit.ifPresent(element -> result.setNb(extractSimpleBenefit(element, "NB"))
-                                           .setNbVehicle( extractSimpleBenefit( element, "Fahrzeugvorhaltekosten", 0 ) )
-                                           .setNbPersonnel( extractSimpleBenefit( element, "Betriebsführungskosten (Personal)", 0 ) )
-                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten (Betrieb)", 0))
+                                           .setNbVehicle(extractSimpleBenefit(element, "Fahrzeugvorhaltekosten", 0))
+                                           .setNbPersonnel(extractSimpleBenefit(element, "Betriebsführungskosten " +
+                                                   "(Personal)", 0))
+                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten " +
+                                                   "(Betrieb)", 0))
                                            .setNw(extractSimpleBenefit(element, "NW"))
                                            .setNs(extractSimpleBenefit(element, "NS"))
                                            .setNrz(extractSimpleBenefit(element, "NRZ"))
@@ -137,7 +139,7 @@ public class CostBenefitMapper {
     }
 
     private Map<Emission, Benefit> extractEmissionsBenefit(Element table) {
-        return Emission.STRING_IDENTIFIER_BY_EMISSION_WITHOUT_CO2_OVERALL
+        return Emission.STRING_IDENTIFIER_BY_EMISSION
                 .entrySet()
                 .stream()
                 .map(e -> Map.entry(e.getKey(), extractSimpleBenefitOptional(table, e.getValue(), 0)))

@@ -87,7 +87,7 @@ public class StreetCsvWriter {
         record.add(baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
         //co2 equivalents
-        record.add(baseDataContainer.getPhysicalEffect().getEmission(Emission.CO2_OVERALL_EQUIVALENTS));
+        record.add(baseDataContainer.getPhysicalEffect().getEmissionsDataContainer().co2Overall());
         record.add(baseDataContainer.getCostBenefitAnalysis().getCo2EquivalentBenefit().annual());
         record.add(baseDataContainer.getCostBenefitAnalysis().getCo2EquivalentBenefit().overall());
 
@@ -157,7 +157,7 @@ public class StreetCsvWriter {
     private static void addEmissionsAnnualOverallBenefit(StreetBaseDataContainer baseDataContainer,
                                                          List<Object> record, Emission emission) {
         record.add(baseDataContainer.getPhysicalEffect()
-                                    .getEmission(emission));
+                                    .getKfzEmission(emission));
         record.add(Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis())
                            .map(CostBenefitAnalysisDataContainer::getNa)
                            .map(m -> m.get(emission))

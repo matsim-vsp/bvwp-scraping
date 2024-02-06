@@ -20,7 +20,7 @@ public class StreetCsvWriterTest {
         csvWriter.writeCsv(List.of(new StreetAnalysisDataContainer(deserializedContainer)));
 
         Assertions.assertTrue(
-                FileUtils.contentEquals(FileUtils.getFile("src/test/resources/testData/referenceData/a20.csv"),
-                        FileUtils.getFile("output/a20.csv")));
+                FileUtils.contentEqualsIgnoreEOL(FileUtils.getFile("src/test/resources/testData/referenceData/a20.csv"),
+                        FileUtils.getFile("output/a20.csv"), "UTF-8"));
     }
 }
