@@ -5,15 +5,13 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Objects;
-
-class ComputationKN{
+public class ComputationKN{
 	// yyyyyy Einbau von Jahreswerten (z.B. Elektrifizierung über Zeit).  Voraussetzung: Ich kann die Diskontierung nachbauen.
 	
 	private static final Logger log = LogManager.getLogger( ComputationKN.class );
 
-	static final double AB_FZKM = 221000;
-	static final double AB_length = 60000.;
+	public static final double FZKM_AB = 221000;
+	public static final double AB_length = 60000.;
 
 	static final class Amounts{
 		private final double rz;
@@ -23,9 +21,8 @@ class ComputationKN{
 		private final double pkwkm_induz;
 		private final double pkwkm_verl;
 		private final double co2_kfz;
-		//		private final double co2_pkw;
 		private final double pkwkm_reroute;
-		private final double co2_p_pkwkm;
+		private final double co2_per_pkwkm;
 		Amounts( double pkwkm_all, double pkwkm_induz, double pkwkm_verl, double pers_h, double pers_h_induz, double pers_h_verl, double co2_pkw, double co2_kfz ){
 
 			this.rz = pers_h;
@@ -35,40 +32,10 @@ class ComputationKN{
 			this.pkwkm_induz = pkwkm_induz;
 			this.pkwkm_verl = pkwkm_verl;
 			this.co2_kfz = co2_kfz;
-//			this.co2_pkw = co2_pkw;
 			this.pkwkm_reroute = pkwkm_all - pkwkm_induz - pkwkm_verl;
-			this.co2_p_pkwkm = co2_pkw / pkwkm_all;
+			this.co2_per_pkwkm = co2_pkw / pkwkm_all;
 		}
-		@Override
-		public boolean equals( Object obj ){
-			if( obj == this ) return true;
-			if( obj == null || obj.getClass() != this.getClass() ) return false;
-			var that = (Amounts) obj;
-			return Double.doubleToLongBits( this.rz ) == Double.doubleToLongBits( that.rz ) &&
-					       Double.doubleToLongBits( this.rz_induz ) == Double.doubleToLongBits( that.rz_induz ) &&
-					       Double.doubleToLongBits( this.rz_verl ) == Double.doubleToLongBits( that.rz_verl ) &&
-					       Double.doubleToLongBits( this.pkwkm_all ) == Double.doubleToLongBits( that.pkwkm_all ) &&
-					       Double.doubleToLongBits( this.pkwkm_induz ) == Double.doubleToLongBits( that.pkwkm_induz ) &&
-					       Double.doubleToLongBits( this.pkwkm_verl ) == Double.doubleToLongBits( that.pkwkm_verl ) &&
-					       Double.doubleToLongBits( this.pkwkm_reroute ) == Double.doubleToLongBits( that.pkwkm_reroute );
-		}
-		@Override
-		public int hashCode(){
-			return Objects.hash( rz, rz_induz, rz_verl, pkwkm_all, pkwkm_induz, pkwkm_verl, pkwkm_reroute );
-		}
-		@Override
-		public String toString(){
-			return "Amounts[" +
-					       "rz=" + rz + ", " +
-					       "rz_induz=" + rz_induz + ", " +
-					       "rz_verl=" + rz_verl + ", " +
-					       "pkwkm_all=" + pkwkm_all + ", " +
-					       "pkwkm_induz=" + pkwkm_induz + ", " +
-					       "pkwkm_verl=" + pkwkm_verl + ", " +
-					       "pkwkm_reroute=" + pkwkm_reroute + ']';
-		}
-
-		}
+	}
 
 	static final class Benefits{
 		private final double fzkm;
@@ -78,6 +45,7 @@ class ComputationKN{
 		private final double co2_betrieb;
 		private final double all;
 		Benefits( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all ){
+			// yyyyyy ist alles noch ganz schön unklar benannt!!
 			this.fzkm = fzkm;
 			this.rz = rz;
 			this.impl = impl;
@@ -134,9 +102,11 @@ class ComputationKN{
 		double b_all = benefits.all;
 		prn("start", b_all, 0. );
 
-		double m_induzFactor = 1. + modifications.mehrFzkm() / amounts.pkwkm_induz;
+		double m_induzFactor = 1.;
+		if ( amounts.pkwkm_induz > 0. ){
+			m_induzFactor = 1. + modifications.mehrFzkm() / amounts.pkwkm_induz;
+		}
 		// (hatte ich früher direkt eingegeben; jetzt wird er ausgerechnet)
-		// yyyyyy kann Infty oder NaN sein --> abfangen
 
 		// Zeitwert
 		double zw = benefits.rz / amounts.rz;
@@ -193,9 +163,9 @@ class ComputationKN{
 		// (this divides all (negative) co2 benefits by all fzkm, including LKW.  We just need (discounted) benefits of ton co2, indep of where it comes from.)
 
 		// -- b_co2 calculation is now done "by hand".  I.e. take pkwkm, multiply with emissions per km (obtained from co2_pkwkm / pkwkm), and then multiply b_per_co2:
-		double b_co2_induz = amounts.pkwkm_induz * amounts.co2_p_pkwkm * b_per_co2;
-		double b_co2_verl = amounts.pkwkm_verl * amounts.co2_p_pkwkm * b_per_co2;
-		double b_co2_reroute = amounts.co2_p_pkwkm * amounts.pkwkm_reroute * b_per_co2;
+		double b_co2_induz = amounts.pkwkm_induz * amounts.co2_per_pkwkm * b_per_co2;
+		double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
+		double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
 
 		double bb_tmp = b_all;
 		{
@@ -214,7 +184,7 @@ class ComputationKN{
 			double b_tmp = b_all;
 			b_all -= b_co2_induz;
 			b_all += b_co2_induz / 145. * modifications.co2Price();
-			b_all += modifications.mehrFzkm() * amounts.co2_p_pkwkm * b_per_co2 * modifications.co2Price() / 145;
+			b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145;
 //			prn( "co2 after induz", b_all, b_tmp);
 		}
 		prn( "b_co2_betrieb", b_all, bb_tmp );

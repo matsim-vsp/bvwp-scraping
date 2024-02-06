@@ -1,13 +1,14 @@
 package org.tub.vsp.data.container.base;
 
-import org.tub.vsp.data.type.Severity;
+import org.tub.vsp.data.type.Priority;
 
 import java.util.Objects;
 
 public class ProjectInformationDataContainer {
     private String projectNumber;
     private String street;
-    private Severity severity;
+    private Priority priority;
+    private String bautyp;
 
     public String getProjectNumber() {
         return projectNumber;
@@ -27,12 +28,12 @@ public class ProjectInformationDataContainer {
         return this;
     }
 
-    public Severity getSeverity() {
-        return severity;
+    public Priority getPriority() {
+        return priority;
     }
 
-    public ProjectInformationDataContainer setSeverity(Severity severity) {
-        this.severity = severity;
+    public ProjectInformationDataContainer setPriority( Priority priority ) {
+        this.priority = priority;
         return this;
     }
 
@@ -53,14 +54,21 @@ public class ProjectInformationDataContainer {
         if (!Objects.equals(street, that.street)) {
             return false;
         }
-        return severity == that.severity;
+        return priority == that.priority;
     }
 
     @Override
     public int hashCode() {
         int result = projectNumber != null ? projectNumber.hashCode() : 0;
         result = 31 * result + (street != null ? street.hashCode() : 0);
-        result = 31 * result + (severity != null ? severity.hashCode() : 0);
+        result = 31 * result + (priority != null ? priority.hashCode() : 0);
         return result;
+    }
+    public ProjectInformationDataContainer setBautyp( String bautyp ){
+        this.bautyp = bautyp;
+        return this;
+    }
+    public String getBautyp(){
+        return bautyp;
     }
 }

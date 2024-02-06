@@ -1,19 +1,20 @@
 package org.tub.vsp.data.type;
 
-public enum Severity {
+public enum Priority{
     VB("Vordringlicher Bedarf (VB)"),
     VBE("Vordringlicher Bedarf - Engpassbeseitigung (VB-E)"),
     WBP("Weiterer Bedarf mit Planungsrecht (WB*)"),
+    WB( "Weiterer Bedarf (WB)"),
     UNDEFINED("undefined");
 
     public final String description;
 
-    Severity(String description) {
+    Priority( String description ) {
         this.description = description;
     }
 
-    public static Severity getFromString(String description) {
-        for (Severity v : values())
+    public static Priority getFromString( String description ) {
+        for ( Priority v : values())
             if (v.description.equalsIgnoreCase(description)) {
                 return v;
             }

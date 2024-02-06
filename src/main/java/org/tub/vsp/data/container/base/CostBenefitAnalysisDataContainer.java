@@ -15,6 +15,8 @@ public class CostBenefitAnalysisDataContainer {
 
     private Benefit nb;
     private Benefit nbOperations;
+    private Benefit nbPersonnel;
+    private Benefit nbVehicle;
     private Benefit nw;
     private Benefit ns;
     private Benefit nrz;
@@ -252,5 +254,19 @@ public class CostBenefitAnalysisDataContainer {
         result = 31 * result + (nz != null ? nz.hashCode() : 0);
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
         return result;
+    }
+    public Benefit getNbPersonnel(){
+        return nbPersonnel;
+    }
+    public CostBenefitAnalysisDataContainer setNbPersonnel( Benefit nbPersonnel ){
+        this.nbPersonnel = nbPersonnel;
+        return this;
+    }
+    public Benefit getNbVehicle(){
+        return nbVehicle;
+    }
+    public CostBenefitAnalysisDataContainer setNbVehicle( Benefit nbVehicle ){
+        this.nbVehicle = nbVehicle;
+        return this;
     }
 }

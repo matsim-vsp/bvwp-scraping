@@ -20,8 +20,7 @@ public abstract class Scraper {
     public List<String> getProjectUrls() throws IOException {
         logger.info("Scraping projects from {}", getBaseUrl());
 
-        Document doc = Jsoup.connect(getBaseUrl())
-                            .get();
+        Document doc = Jsoup.connect(getBaseUrl()).get();
         Elements links = doc.select("a[href]");
         List<String> projectUrls = new ArrayList<>();
 
@@ -36,6 +35,8 @@ public abstract class Scraper {
         projectUrls.remove("../hinweise.html");
 
         projectUrls.removeIf(link -> link.endsWith(".pdf"));
+
+        projectUrls.removeIf( link -> !link.startsWith( "A" ));
 
         logger.info("Found {} projects", projectUrls.size());
         logger.info(projectUrls);

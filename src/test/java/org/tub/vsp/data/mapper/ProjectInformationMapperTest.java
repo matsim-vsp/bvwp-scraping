@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.data.LocalFileAccessor;
 import org.tub.vsp.data.container.base.ProjectInformationDataContainer;
-import org.tub.vsp.data.type.Severity;
+import org.tub.vsp.data.type.Priority;
 
 import java.io.IOException;
 
@@ -17,6 +17,6 @@ class ProjectInformationMapperTest {
 
         Assertions.assertEquals("A20-G10-NI-SH", mappingResult.getProjectNumber());
         Assertions.assertEquals("A 20", mappingResult.getStreet());
-        Assertions.assertEquals(Severity.VB, mappingResult.getSeverity());
+        Assertions.assertEquals( Priority.VB, mappingResult.getPriority() );
     }
 }

@@ -59,10 +59,10 @@ public class StreetCsvWriter {
                                                                                 .setNullString("")
                                                                                 .setHeader(headers.toArray(new String[0]))
                                                                                 .setDelimiter(';')
-                                                                                .build())) {
+                                                                                .build())
+        ) {
             for (StreetAnalysisDataContainer analysisDataContainer : analysisDataContainers) {
-                logger.info("Writing csv record for {}", analysisDataContainer.getStreetBaseDataContainer()
-                                                                              .getUrl());
+                logger.info("Writing csv record for {}", analysisDataContainer.getStreetBaseDataContainer().getUrl());
                 csvPrinter.printRecord(getCsvRecord(analysisDataContainer));
             }
             csvPrinter.flush();
@@ -77,24 +77,24 @@ public class StreetCsvWriter {
 
         List<Object> record = new ArrayList<>();
         //general info
-        record.add(baseDataContainer.getProjectInformation()
-                                    .getProjectNumber());
+        record.add(baseDataContainer.getProjectInformation().getProjectNumber());
         record.add(baseDataContainer.getUrl());
+        record.add(baseDataContainer.getProjectInformation().getPriority() );
+        record.add( baseDataContainer.getProjectInformation().getBautyp() );
+
+        record.add( baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall() );
+
+        record.add( baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall() );
 
         //co2 equivalents
-        record.add(baseDataContainer.getPhysicalEffect()
-                                    .getEmission(Emission.CO2_OVERALL_EQUIVALENTS));
-        record.add(baseDataContainer.getCostBenefitAnalysis()
-                                    .getCo2EquivalentBenefit()
-                                    .annual());
-        record.add(baseDataContainer.getCostBenefitAnalysis()
-                                    .getCo2EquivalentBenefit()
-                                    .overall());
+        record.add(baseDataContainer.getPhysicalEffect().getEmission(Emission.CO2_OVERALL_EQUIVALENTS));
+        record.add(baseDataContainer.getCostBenefitAnalysis().getCo2EquivalentBenefit().annual());
+        record.add(baseDataContainer.getCostBenefitAnalysis().getCo2EquivalentBenefit().overall());
 
         //emissions
-        for (Emission emission : EMISSION_COLUMNS.keySet()) {
-            addEmissionsAnnualOverallBenefit(baseDataContainer, record, emission);
-        }
+//        for (Emission emission : EMISSION_COLUMNS.keySet()) {
+//            addEmissionsAnnualOverallBenefit(baseDataContainer, record, emission);
+//        }
 
         //overall benefit and cost
         record.add(Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis())
@@ -105,9 +105,9 @@ public class StreetCsvWriter {
                            .map(CostBenefitAnalysisDataContainer::getCost)
                            .map(Cost::overallCosts)
                            .orElse(null));
+        // (yy warum diese aufwändige Syntax?  kai, feb'24)
 
-        record.addAll(analysisDataContainer.getNkvByChange()
-                                           .values());
+        record.addAll(analysisDataContainer.getNkvByChange().values());
 
         return record;
     }
@@ -116,30 +116,32 @@ public class StreetCsvWriter {
         //assert that all entries of new nkv have the same keys
         assert analysisDataContainers.stream()
                                      .allMatch(a -> {
-                                         Set<String> thisKeys = a.getNkvByChange()
-                                                                 .keySet();
-                                         Set<String> firstKeys = analysisDataContainers.getFirst()
-                                                                                       .getNkvByChange()
-                                                                                       .keySet();
+                                         Set<String> thisKeys = a.getNkvByChange().keySet();
+                                         Set<String> firstKeys = analysisDataContainers.getFirst().getNkvByChange().keySet();
                                          return thisKeys.containsAll(firstKeys) && thisKeys.size() == firstKeys.size();
                                      }) : "Not all nkv have the same keys";
 
         List<String> headers = new ArrayList<>();
         headers.add("project name");
         headers.add("link");
+        headers.add("priority");
+        headers.add("bautyp");
+
+        headers.add("pkwkm_all");
+        headers.add("b_fzkm");
 
         headers.add("co2-equivalents-emissions");
-        headers.add("co2-equivalents-annual");
-        headers.add("co2-equivalents-overall");
+        headers.add("b_co2-equivalents-annual");
+        headers.add("b_co2-equivalents-overall");
 
-        for (String colName : EMISSION_COLUMNS.values()) {
-            headers.add(colName + "-emissions");
-            headers.add(colName + "-annual");
-            headers.add(colName + "-overall");
-        }
+//        for (String colName : EMISSION_COLUMNS.values()) {
+//            headers.add(colName + "-emissions");
+//            headers.add(colName + "-annual");
+//            headers.add(colName + "-overall");
+//        }
 
-        headers.add("overall-benefit");
-        headers.add("overall-cost");
+        headers.add("b_overall");
+        headers.add("cost_overall");
 
         for (String s : analysisDataContainers.getFirst()
                                               .getNkvByChange()

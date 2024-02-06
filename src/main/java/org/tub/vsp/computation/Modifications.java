@@ -22,4 +22,8 @@ public record Modifications(double co2Price, double mehrFzkm) {
 
     public static final Modifications NO_CHANGE = new Modifications( 145., 0.);
     public static final Modifications CO2_PRICE = new Modifications( 5. * 145., 0.);
+
+    @Override public String toString() {
+        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "]";
+    }
 }

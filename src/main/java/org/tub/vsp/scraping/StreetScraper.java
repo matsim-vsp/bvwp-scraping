@@ -67,10 +67,12 @@ public class StreetScraper extends Scraper {
             logger.info("Skipping project because it is a subproject.");
             return Optional.empty();
         }
-        if (!checkIfProjectIsAutobahn(doc)) {
-            logger.info("Skipping project because it is not an Autobahn.");
-            return Optional.empty();
-        }
+
+//        if (!checkIfProjectIsAutobahn(doc)) {
+//            logger.info("Skipping project because it is not an Autobahn.");
+//            return Optional.empty();
+//        }
+        // (no longer needed)
 
         StreetBaseDataContainer streetBaseDataContainer = new StreetBaseDataContainer();
         return Optional.of(streetBaseDataContainer.setUrl(url)
@@ -80,25 +82,27 @@ public class StreetScraper extends Scraper {
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
-        boolean holdsDetailedInformation = !ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
-                                                                                                                "ältnis")
-                                                                    .contains("siehe Hauptprojekt");
+        boolean sieheHauptprojekt = ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis").contains("siehe Hauptprojekt");
 
-        boolean isNoPartialProject = !doc.select("div.right")
-                                         .select("h1")
-                                         .text()
-                                         .contains("Teilprojekt");
+        String extractedInformation = ProjectInformationMapper.extractInformation( doc, 2, "Nutzen-Kosten-Verhältnis" );
+        boolean sieheTeilprojekt = extractedInformation.contains( "siehe Teilprojekt" );
+        logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt );
+
+
+//        boolean isNoPartialProject = !doc.select("div.right").select("h1").text().contains("Teilprojekt");
+//        boolean isNoPartialProject = true;
+        // (in some places, the Teilprojekte contain the necessary information)
 
         //main projects are alwyas scraped
         //partial projects are only scraped if they hold detailed information
-        return isNoPartialProject || holdsDetailedInformation;
+        return !sieheTeilprojekt && !sieheHauptprojekt;
     }
-    private boolean checkIfProjectIsAutobahn(Document doc) {
-        ProjectInformationDataContainer projectInfo = projectInformationMapper.mapDocument( doc );
-        if ( projectInfo.getProjectNumber().charAt( 0 ) == 'A' ) {
-            return true;
-        } else {
-            return false ;
-        }
-    }
+//    private boolean checkIfProjectIsAutobahn(Document doc) {
+//        ProjectInformationDataContainer projectInfo = projectInformationMapper.mapDocument( doc );
+//        if ( projectInfo.getProjectNumber().charAt( 0 ) == 'A' ) {
+//            return true;
+//        } else {
+//            return false ;
+//        }
+//    }
 }

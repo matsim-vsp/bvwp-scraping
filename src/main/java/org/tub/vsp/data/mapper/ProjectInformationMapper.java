@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.data.container.base.ProjectInformationDataContainer;
-import org.tub.vsp.data.type.Severity;
+import org.tub.vsp.data.type.Priority;
 
 import java.util.Optional;
 
@@ -16,11 +16,14 @@ public class ProjectInformationMapper {
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");
         String street = extractInformation(document, 0, "Straße");
+        String bautyp = extractInformation( document, 0, "Bautyp(en), Bauziel(e)" );
+
         String severity = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
         return projectInformation.setProjectNumber(projectNumber)
                                  .setStreet(street)
-                                 .setSeverity(Severity.getFromString(severity));
+                                 .setPriority( Priority.getFromString(severity ) )
+                                 .setBautyp( bautyp );
     }
 
     //mapping information from the grunddaten table. There are two tables with the same class, so we need to specify
