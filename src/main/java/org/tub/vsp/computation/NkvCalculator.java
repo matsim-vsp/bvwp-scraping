@@ -47,7 +47,7 @@ public class NkvCalculator {
         }
         VehicleEmissions vehicleEmissions = emissions.get(Emission.CO2);
 
-        if (tt == null || vkm == null) {
+        if (tt == null || vkm == null || vehicleEmissions == null) {
             return Optional.empty();
         }
 

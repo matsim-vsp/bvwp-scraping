@@ -6,6 +6,7 @@ import org.tub.vsp.data.LocalFileAccessor;
 import org.tub.vsp.data.container.base.CostBenefitAnalysisDataContainer;
 import org.tub.vsp.data.type.Benefit;
 import org.tub.vsp.data.type.Cost;
+import org.tub.vsp.data.type.Emission;
 
 import java.io.IOException;
 
@@ -28,5 +29,20 @@ class CostBenefitMapperTest {
         Assertions.assertEquals(new Benefit(0.136, 3.363), result.getNt());
         Assertions.assertEquals(new Benefit(29.997, 743.646), result.getNz());
         Assertions.assertEquals(new Cost(3145.75, 2737.176), result.getCost());
+    }
+
+    @Test
+    void testNulls() throws IOException {
+        CostBenefitMapper costBenefitMapper = new CostBenefitMapper();
+        CostBenefitAnalysisDataContainer result =
+                costBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a2.html"));
+
+        Assertions.assertNotNull(result.getNa());
+        Assertions.assertEquals(result.getNa().get(Emission.CO2), new Benefit(0.0, 0.0));
+        Assertions.assertEquals(result.getNa().get(Emission.CO), new Benefit(0.0, 0.0));
+        Assertions.assertEquals(result.getNa().get(Emission.NOX), new Benefit(0.0, 0.0));
+        Assertions.assertEquals(result.getNa().get(Emission.HC), new Benefit(0.0, 0.0));
+        Assertions.assertEquals(result.getNa().get(Emission.SO2), new Benefit(0.0, 0.0));
+        Assertions.assertEquals(result.getNa().get(Emission.PM), new Benefit(0.0, 0.0));
     }
 }

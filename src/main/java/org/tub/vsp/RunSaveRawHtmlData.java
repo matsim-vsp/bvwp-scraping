@@ -25,7 +25,7 @@ public class RunSaveRawHtmlData {
         final Connection.Response response = Jsoup.connect(projectUrl).execute();
         final Document doc = response.parse();
 
-        final File f = new File("data/street" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
+        final File f = new File("data/street/all/" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
         FileUtils.writeStringToFile(f, doc.outerHtml(), StandardCharsets.UTF_8);
     }
 }
