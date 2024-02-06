@@ -4,15 +4,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.tub.vsp.data.container.base.ProjectInformationDataContainer;
 import org.tub.vsp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.data.mapper.CostBenefitMapper;
 import org.tub.vsp.data.mapper.PhysicalEffectMapper;
 import org.tub.vsp.data.mapper.ProjectInformationMapper;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class StreetScraper extends Scraper {
     private static final Logger logger = LogManager.getLogger(StreetScraper.class);
@@ -26,7 +25,7 @@ public class StreetScraper extends Scraper {
         return "https://www.bvwp-projekte.de/strasse/";
     }
 
-    public List<StreetBaseDataContainer> extractAllBaseData() {
+    public List<StreetBaseDataContainer> extractAllRemoteBaseData() {
         List<String> projectUrls;
         try {
             projectUrls = getProjectUrls();
@@ -36,13 +35,23 @@ public class StreetScraper extends Scraper {
         }
 
         return projectUrls.stream()
-                          .map(this::extractBaseDataFromUrl)
+                          .map(this::extractRemoteBaseData)
                           .filter(Optional::isPresent)
                           .map(Optional::get)
                           .toList();
     }
 
-    private Optional<StreetBaseDataContainer> extractBaseDataFromUrl(String projectUrl) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path) {
+        List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
+        return files.stream()
+                    .map(this::extractLocalBaseData)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .sorted(Comparator.comparing(StreetBaseDataContainer::getUrl))
+                    .toList();
+    }
+
+    private Optional<StreetBaseDataContainer> extractRemoteBaseData(String projectUrl) {
         logger.info("Scraping project from {}", projectUrl);
 
         Document doc;
@@ -58,6 +67,22 @@ public class StreetScraper extends Scraper {
         return extractBaseData(doc, projectUrl);
     }
 
+    private Optional<StreetBaseDataContainer> extractLocalBaseData(File file) {
+        logger.info("Scraping project from file {}", file);
+
+        Document doc;
+        try {
+            doc = Jsoup.parse(file, "UTF-8");
+        } catch (IOException e) {
+            logger.warn("Could not connect to {}", file);
+            logger.warn("Skipping project.");
+            return Optional.empty();
+        }
+
+        String name = file.getName();
+        return extractBaseData(doc, getBaseUrl() + name.substring(0, name.length() - 5) + "/" + name);
+    }
+
     public Optional<StreetBaseDataContainer> extractBaseData(Document doc) {
         return extractBaseData(doc, null);
     }
@@ -68,12 +93,6 @@ public class StreetScraper extends Scraper {
             return Optional.empty();
         }
 
-//        if (!checkIfProjectIsAutobahn(doc)) {
-//            logger.info("Skipping project because it is not an Autobahn.");
-//            return Optional.empty();
-//        }
-        // (no longer needed)
-
         StreetBaseDataContainer streetBaseDataContainer = new StreetBaseDataContainer();
         return Optional.of(streetBaseDataContainer.setUrl(url)
                                                   .setProjectInformation(projectInformationMapper.mapDocument(doc))
@@ -82,11 +101,12 @@ public class StreetScraper extends Scraper {
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
-        boolean sieheHauptprojekt = ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis").contains("siehe Hauptprojekt");
+        boolean sieheHauptprojekt = ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis")
+                                                            .contains("siehe Hauptprojekt");
 
-        String extractedInformation = ProjectInformationMapper.extractInformation( doc, 2, "Nutzen-Kosten-Verhältnis" );
-        boolean sieheTeilprojekt = extractedInformation.contains( "siehe Teilprojekt" );
-        logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt );
+        String extractedInformation = ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis");
+        boolean sieheTeilprojekt = extractedInformation.contains("siehe Teilprojekt");
+        logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt);
 
 
 //        boolean isNoPartialProject = !doc.select("div.right").select("h1").text().contains("Teilprojekt");
@@ -97,12 +117,4 @@ public class StreetScraper extends Scraper {
         //partial projects are only scraped if they hold detailed information
         return !sieheTeilprojekt && !sieheHauptprojekt;
     }
-//    private boolean checkIfProjectIsAutobahn(Document doc) {
-//        ProjectInformationDataContainer projectInfo = projectInformationMapper.mapDocument( doc );
-//        if ( projectInfo.getProjectNumber().charAt( 0 ) == 'A' ) {
-//            return true;
-//        } else {
-//            return false ;
-//        }
-//    }
 }

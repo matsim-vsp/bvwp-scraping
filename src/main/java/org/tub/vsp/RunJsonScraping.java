@@ -15,7 +15,7 @@ public class RunJsonScraping {
         StreetScraper scraper = new StreetScraper();
 
         logger.info("Starting scraping");
-        List<StreetBaseDataContainer> allStreetBaseData = scraper.extractAllBaseData();
+        List<StreetBaseDataContainer> allStreetBaseData = scraper.extractAllRemoteBaseData();
 
         JsonIo jsonIo = new JsonIo();
         logger.info("Writing json");
