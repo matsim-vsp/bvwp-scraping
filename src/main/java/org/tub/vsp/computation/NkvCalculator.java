@@ -30,7 +30,7 @@ public class NkvCalculator {
                                                   .getCost()
                                                   .overallCosts();
 
-        return nkv(modifications, a.get(), b.get(), baukosten);
+        return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );
     }
 
 
@@ -42,9 +42,7 @@ public class NkvCalculator {
         final Map<Emission, VehicleEmissions> emissions = streetBaseDataContainer.getPhysicalEffect()
                                                                                  .getEmissionsDataContainer()
                                                                                  .emissions();
-        for (Map.Entry<Emission, VehicleEmissions> entry : emissions.entrySet()) {
-            log.warn(entry.getKey() + " " + entry.getValue());
-        }
+
         VehicleEmissions vehicleEmissions = emissions.get(Emission.CO2);
 
         if (tt == null || vkm == null || vehicleEmissions == null) {

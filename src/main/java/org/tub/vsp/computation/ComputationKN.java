@@ -33,7 +33,8 @@ public class ComputationKN{
 			this.pkwkm_verl = pkwkm_verl;
 			this.co2_kfz = co2_kfz;
 			this.pkwkm_reroute = pkwkm_all - pkwkm_induz - pkwkm_verl;
-			this.co2_per_pkwkm = co2_pkw / pkwkm_all;
+//			this.co2_per_pkwkm = co2_pkw / pkwkm_all;
+			this.co2_per_pkwkm = 0.1 / 1000 * 1000_000; // 100g/km converted to tons/km, but then the unit in bvwp-projekte is mio pkw-km.
 		}
 	}
 
@@ -109,10 +110,12 @@ public class ComputationKN{
 		// (hatte ich früher direkt eingegeben; jetzt wird er ausgerechnet)
 
 		// Zeitwert
-		double zw = benefits.rz / amounts.rz;
+//		double zw = benefits.rz / amounts.rz;
+		double zw = - 5.5 * 25;
 
 		// Distanzkosten
-		double distCost = benefits.fzkm / amounts.pkwkm_all;
+//		double distCost = benefits.fzkm / amounts.pkwkm_all;
+		double distCost = - 0.24 * 25;
 		{
 			double b_tmp = b_all;
 			b_all -= amounts.pkwkm_induz * distCost;
@@ -148,7 +151,7 @@ public class ComputationKN{
 		return nkvOhneKR_induz( modifications, amounts, benefits, baukosten, b_all );
 
 	}
-	private static double nkvOhneKR_induz( Modifications modifications, Amounts amounts, Benefits benefits, double baukosten, double b_all ){
+	static double nkvOhneKR_induz( Modifications modifications, Amounts amounts, Benefits benefits, double baukosten, double b_all ){
 		prn("incoming", b_all, b_all );
 		// co2 Bau
 		{
@@ -172,20 +175,20 @@ public class ComputationKN{
 			double b_tmp = b_all;
 			b_all -= b_co2_reroute;
 			b_all += b_co2_reroute / 145. * modifications.co2Price();
-//			prn( "co2 after reRoute", b_all, b_tmp);
+			prn( "co2 after reRoute", b_all, b_tmp);
 		}
 		{
 			double b_tmp = b_all;
 			b_all -= b_co2_verl;
 			b_all += b_co2_verl / 145. * modifications.co2Price();
-//			prn( "co2 after verl", b_all, b_tmp);
+			prn( "co2 after verl", b_all, b_tmp);
 		}
 		{
 			double b_tmp = b_all;
 			b_all -= b_co2_induz;
 			b_all += b_co2_induz / 145. * modifications.co2Price();
 			b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145;
-//			prn( "co2 after induz", b_all, b_tmp);
+			prn( "co2 after induz", b_all, b_tmp);
 		}
 		prn( "b_co2_betrieb", b_all, bb_tmp );
 

@@ -41,10 +41,11 @@ public class StreetScraper extends Scraper {
                           .toList();
     }
 
-    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path, boolean includeBundesstrassen) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix ) {
+        // yy wenn man den prefix drin hat, kann man "includeBundesstrassen" vermutlich weglassen.  Kai, feb'24
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
-                    .filter(file -> file.getName().startsWith("A") || includeBundesstrassen)
+                    .filter(file -> file.getName().startsWith(prefix) )
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

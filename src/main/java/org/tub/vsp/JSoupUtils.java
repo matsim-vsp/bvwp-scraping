@@ -53,7 +53,7 @@ public class JSoupUtils {
     }
 
     public static Double parseDouble(String s) throws ParseException {
-        if ( "-".equals( s ) ) {
+        if ( "-".equals( s ) || s == null ) {
             return 0.;
         }
         return NumberFormat.getInstance(Locale.GERMANY)

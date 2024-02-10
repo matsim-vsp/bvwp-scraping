@@ -3,9 +3,11 @@ package org.tub.vsp.data.mapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
+import org.tub.vsp.JSoupUtils;
 import org.tub.vsp.data.container.base.ProjectInformationDataContainer;
 import org.tub.vsp.data.type.Priority;
 
+import java.text.ParseException;
 import java.util.Optional;
 
 public class ProjectInformationMapper {
@@ -16,14 +18,24 @@ public class ProjectInformationMapper {
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");
         String street = extractInformation(document, 0, "Straße");
+        String length = extractInformation( document, 0, "Länge" );
+        if ( length!= null ) {
+            length = length.replace( " km", "" );
+        }
         String bautyp = extractInformation( document, 0, "Bautyp(en), Bauziel(e)" );
 
-        String severity = extractInformation(document, 1, "Dringlichkeitseinstufung");
+        String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
-        return projectInformation.setProjectNumber(projectNumber)
-                                 .setStreet(street)
-                                 .setPriority( Priority.getFromString(severity ) )
-                                 .setBautyp( bautyp );
+        try{
+            return projectInformation.setProjectNumber(projectNumber)
+                                     .setStreet(street)
+                                     .setLength( JSoupUtils.parseDouble( length ) )
+                                     .setBautyp( bautyp )
+                                     .setPriority( Priority.getFromString(priority ) )
+                            ;
+        } catch( ParseException e ){
+            throw new RuntimeException( e );
+        }
     }
 
     //mapping information from the grunddaten table. There are two tables with the same class, so we need to specify

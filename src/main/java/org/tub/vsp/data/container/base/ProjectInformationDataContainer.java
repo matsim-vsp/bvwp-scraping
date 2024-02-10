@@ -9,6 +9,7 @@ public class ProjectInformationDataContainer {
     private String street;
     private Priority priority;
     private String bautyp;
+    private Double length;
 
     public String getProjectNumber() {
         return projectNumber;
@@ -70,5 +71,12 @@ public class ProjectInformationDataContainer {
     }
     public String getBautyp(){
         return bautyp;
+    }
+    public ProjectInformationDataContainer setLength( Double length ){
+        this.length = length;
+        return this;
+    }
+    public Double getLength(){
+        return length;
     }
 }

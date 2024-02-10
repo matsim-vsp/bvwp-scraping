@@ -12,7 +12,7 @@ public record Modifications(double co2Price, double mehrFzkm) {
         }
     }
 
-    public static Modifications createInducedWithMehrFzkm(double mehrFzkm) {
+    public static Modifications createInducedWithAdditionalFzkm( double mehrFzkm ) {
         return new Modifications( 145., mehrFzkm);
     }
 
