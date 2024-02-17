@@ -229,7 +229,7 @@ public class ComputationKN{
 		}
 	}
 
-	public static Double co2( Modifications modifications, Amounts amounts, Benefits benefits ){
+	public static Double b_co2( Modifications modifications, Amounts amounts, Benefits benefits ){
 		// yyyyyy for the time being this returns the benefits since they are easier to compute.  !!!!
 
 		double co2 = 0.;

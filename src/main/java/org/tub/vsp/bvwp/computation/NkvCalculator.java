@@ -72,7 +72,7 @@ public class NkvCalculator {
         // @formatter:on
     }
 
-    public static Double calculateCO2( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ){
+    public static Double calculateB_CO2( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ){
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<Benefits> b = benefitsFromStreetBaseData( streetBaseDataContainer );
@@ -80,6 +80,6 @@ public class NkvCalculator {
         if (a.isEmpty() || b.isEmpty() ) {
             return null;
         }
-        return ComputationKN.co2( modifications, a.get(), b.get() );
+        return ComputationKN.b_co2( modifications, a.get(), b.get() );
     }
 }

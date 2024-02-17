@@ -41,57 +41,15 @@ public class StreetScraper extends Scraper {
                           .toList();
     }
 
-    private static final String myformat( String bundesland, String road ) {
+    public static String projectString( String bundesland, String road ) {
         return "(" + road + "-.*-" + bundesland + ".html" + ")|" ;
     }
 
-    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix ) {
-
-                String regex = myformat( "BW", "A5" )
-                                               + myformat( "BW", "A6" )
-                                               + myformat( "BY", "A003" )
-                                               + myformat( "BY", "A008" )
-                                               + myformat( "BY", "A009" )
-                                               + myformat( "BY", "A092" )
-                                               + myformat( "BY", "A094" )
-                                               + myformat( "BY", "A099" )
-                                               + myformat( "HB", "A27" )
-                                               + myformat( "HE", "A3" )
-                                               + myformat( "HE", "A5" )
-                                               + myformat( "HE", "A45" )
-                                               + myformat( "HE", "A60" )
-                                               + myformat( "HE", "A67" )
-                                               + myformat( "HE", "A67" )
-                                               + myformat( "NI", "A2" )
-                                               + myformat( "NI", "A7" )
-                                               + myformat( "NI", "A27" )
-                                               + myformat( "NI", "A30" )
-                                               + myformat( "NW", "A1" )
-                                               + myformat( "NW", "A2" )
-                                               + myformat( "NW", "A3" )
-                                               + myformat( "NW", "A4" )
-                                               + myformat( "NW", "A30" )
-                                               + myformat( "NW", "A40" )
-                                               + myformat( "NW", "A42" )
-                                               + myformat( "NW", "A43" )
-                                               + myformat( "NW", "A45" )
-                                               + myformat( "NW", "A52" )
-                                               + myformat( "NW", "A57" )
-                                               + myformat( "NW", "A59" )
-                                               + myformat( "NW", "A559" )
-                                               + myformat( "RP", "A1" )
-                                               + myformat( "RP", "A1" )
-                        + "(abcdef)";
-
-//        String regex = "(A5-.*-BW.html)|(abcd)";
-//        String regex2 = myformat( "A5", "BW" );
-//        logger.info( regex );
-//        logger.info( regex2 );
+    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix, String regex ) {
 
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
                     .filter(file -> file.getName().startsWith(prefix) )
-                    .filter( file -> !file.getName().equals( "A20-G10-SH.html" ))
                     .filter( file -> file.getName().matches( regex ) )
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)

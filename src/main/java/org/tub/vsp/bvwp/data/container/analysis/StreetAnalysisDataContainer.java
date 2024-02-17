@@ -56,7 +56,7 @@ public class StreetAnalysisDataContainer {
         entries.put( Headers.NKV_INDUZ, NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ_CO2, NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.PKWKM_INDUZ_NEU, mehrFzkm );
-        entries.put( Headers.CO2_NEU, NkvCalculator.calculateCO2( Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
+        entries.put( Headers.B_CO2_NEU, NkvCalculator.calculateB_CO2( Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
 
         if ( streetBaseDataContainer.getProjectInformation().getProjectNumber().contains( "A1-G50-NI" ) ) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr der per co2 stark negativ bewertet wird.");
