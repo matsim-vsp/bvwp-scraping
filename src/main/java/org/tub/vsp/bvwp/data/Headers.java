@@ -2,10 +2,10 @@ package org.tub.vsp.bvwp.data;
 
 public final class Headers{
 	public static final String B_PER_KM = "b/km";
-	public static final String NKV_NO_CHANGE = "nkv";
-	public static final String NKV_CO2 = "nkv_co2";
-	public static final String NKV_INDUZ = "nkv_induz";
-	public static final String NKV_INDUZ_CO2 = "nkv_induzCo2";
+	public static final String NKV_NO_CHANGE = "cbr";
+	public static final String NKV_CO2 = "cbr_co2";
+	public static final String NKV_INDUZ = "cbr_induz";
+	public static final String NKV_INDUZ_CO2 = "cbr_induzCo2";
 	public static final String PROJECT_NAME = "project name";
 	public static final String LINK = "link";
 	public static final String PRIORITY = "priority";
@@ -19,7 +19,7 @@ public final class Headers{
 	public static final String B_OVERALL = "b_overall";
 	public static final String COST_OVERALL = "cost";
 	public static final String PKWKM_INDUZ = "pkwkm_induz";
-	public static final String PKWKM_INDUZ_NEU = "pkwkm_induz_neu";
-	public static final String B_CO2_NEU = "b_co2_neu";
+	public static final String PKWKM_INDUZ_NEU = "pkwkm_induz_new";
+	public static final String B_CO2_NEU = "b_co2_new";
 	private Headers(){} // do not instantiate
 }
