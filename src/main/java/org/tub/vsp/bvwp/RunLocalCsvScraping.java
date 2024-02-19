@@ -111,19 +111,22 @@ public class RunLocalCsvScraping {
         Axis xAxis = xAxisBuilder.title( xName ).build();
         final int plotWidth = 1700;
 
-//        Figure figurePkwKm = createFigurePkwKm( xAxis, table, xName );
         Figure figureNkv = createFigureNkv( xAxis, plotWidth, table, xName );
-//        Figure figure3 = createFigure3( xAxis, plotWidth, table, xName );
-//        Figure figureCO2 = createFigureCO2( xAxis, plotWidth, table, xName );
-
-        Figure figureNkvChange = createFigureNkvChange(plotWidth, table, xName );
+        Figure figurePkwKm = createFigurePkwKm( xAxis, table, xName );
+        Figure figure3 = createFigure3( xAxis, plotWidth, table, xName );
+        Figure figureCO2 = createFigureCO2( xAxis, plotWidth, table, xName );
+        Figure figureNkvChangeCo2 = createFigureNkvChange(plotWidth, table, Headers.NKV_NO_CHANGE, Headers.NKV_CO2 );
+        Figure figureNkvChangeInduz = createFigureNkvChange(plotWidth, table, Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ );
+        Figure figureNkvChangeInduzCo2 = createFigureNkvChange(plotWidth, table, Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2 );
 
         String page = MultiPlotExample.pageTop + System.lineSeparator() +
             figureNkv.asJavascript( "plot1" ) + System.lineSeparator() +
-//                                      figurePkwKm.asJavascript( "plot2" ) + System.lineSeparator() +
-//                                      figure3.asJavascript( "plot3" ) + System.lineSeparator() +
-//                                      figureCO2.asJavascript( "plot4" ) + System.lineSeparator() +
-            figureNkvChange.asJavascript("plot5") + System.lineSeparator()+
+            figurePkwKm.asJavascript( "plot2" ) + System.lineSeparator() +
+            figure3.asJavascript( "plot3" ) + System.lineSeparator() +
+            figureCO2.asJavascript( "plot4" ) + System.lineSeparator() +
+            figureNkvChangeCo2.asJavascript("plot5") + System.lineSeparator()+
+            figureNkvChangeInduz.asJavascript("plot5b") + System.lineSeparator()+
+            figureNkvChangeInduzCo2.asJavascript("plot5c") + System.lineSeparator()+
             MultiPlotExample.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();
@@ -284,43 +287,43 @@ public class RunLocalCsvScraping {
         return new Figure( layout, trace, trace2 );
     }
 
-    private static Figure createFigureNkvChange(int plotWidth, Table table, String xName) {
+    private static Figure createFigureNkvChange(int plotWidth, Table table, String xName, String yName) {
 
-        String xNameLocal = Headers.NKV_NO_CHANGE;
-        String yName = Headers.NKV_CO2;
+//        String xName = Headers.NKV_NO_CHANGE;
+//        String yName = Headers.NKV_CO2;
         double maxX = 20.;
         double maxY = 20.;
 
         Axis xAxis = Axis.builder()
             .type( Type.LINEAR )
-            .title( xNameLocal )
+            .title( xName )
             .range(0. ,maxX)
 //                             .autoRange( Axis.AutoRange.REVERSED );
             .build();
 
-        table = table.sortDescendingOn( xNameLocal );
+        table = table.sortDescendingOn( xName );
 
         Axis yAxis = Axis.builder()
             .type( Type.LINEAR )
-            .range(0. ,maxY)
+            .range(Double.min(0., 1.1*table.numberColumn(yName).min()) ,maxY)
 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
             .title( yName )
             .build();
 
-        Layout layout = Layout.builder( xNameLocal )
+        Layout layout = Layout.builder( xName )
             .xAxis( xAxis )
             .yAxis( yAxis )
             .width( plotWidth )
             .build();
 
-        Trace cbrOverCbrTrace = ScatterTrace.builder( table.numberColumn( xNameLocal ), table.numberColumn( yName ) )
+        Trace cbrOverCbrTrace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
             .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
             .name( yName )
             .marker( Marker.builder().color( "blue" ).build() )
             .build();
 
-//        double[] xx = new double[]{0., 1.1* table.numberColumn( xNameLocal ).max() };
-//        double[] yy = new double[]{0., 1.1* table.numberColumn( xNameLocal ).max()};
+//        double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
+//        double[] yy = new double[]{0., 1.1* table.numberColumn( xName ).max()};
         double[] xx = new double[]{0., maxX };
         double[] yy = new double[]{0., maxY};
         double[] xy1 = new double[]{1., 1.};

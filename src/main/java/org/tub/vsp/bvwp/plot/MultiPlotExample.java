@@ -39,6 +39,10 @@ public class MultiPlotExample {
 					+ "<div id='plot4'>"
 					+ System.lineSeparator()
 					+ "<div id='plot5'>"
+					+ System.lineSeparator()
+					+ "<div id='plot5b'>"
+					+ System.lineSeparator()
+					+ "<div id='plot5c'>"
 					+ System.lineSeparator();
 
 	public static final String pageBottom = "</body>" + System.lineSeparator() + "</html>";
