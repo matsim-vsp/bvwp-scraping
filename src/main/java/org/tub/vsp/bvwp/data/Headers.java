@@ -2,10 +2,10 @@ package org.tub.vsp.bvwp.data;
 
 public final class Headers{
 	public static final String B_PER_KM = "b/km";
-	public static final String NKV_NO_CHANGE = "cbr";
-	public static final String NKV_CO2 = "cbr_co2";
-	public static final String NKV_INDUZ = "cbr_induz";
-	public static final String NKV_INDUZ_CO2 = "cbr_induzCo2";
+	public static final String NKV_NO_CHANGE = "BCR";
+	public static final String NKV_CO2 = "BCR_co2";
+	public static final String NKV_INDUZ = "BCR_induz";
+	public static final String NKV_INDUZ_CO2 = "BCR_induzCo2";
 	public static final String PROJECT_NAME = "project name";
 	public static final String LINK = "link";
 	public static final String PRIORITY = "priority";
