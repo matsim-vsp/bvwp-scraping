@@ -1,8 +1,8 @@
 package org.tub.vsp.bvwp.data.type;
 
 public enum Priority{
-    VB("Vordringlicher Bedarf (VB)"),
     VBE("Vordringlicher Bedarf - Engpassbeseitigung (VB-E)"),
+    VB("Vordringlicher Bedarf (VB)"),
     WBP("Weiterer Bedarf mit Planungsrecht (WB*)"),
     WB( "Weiterer Bedarf (WB)"),
     UNDEFINED("undefined");
