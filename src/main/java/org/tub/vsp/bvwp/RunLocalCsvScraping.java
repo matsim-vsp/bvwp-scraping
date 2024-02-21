@@ -38,12 +38,12 @@ public class RunLocalCsvScraping {
         Locale.setDefault( Locale.US );
 
         logger.warn( "(vermutl. weitgehend gelöst) Teilweise werden die Hauptprojekte bewertet und nicht die " +
-                                     "Teilprojekte (A20); teilweise werden die Teilprojekte " +
-                                     "bewertet aber nicht das Hauptprojekt (A2).  Müssen aufpassen, dass nichts unter den Tisch fällt." );
+            "Teilprojekte (A20); teilweise werden die Teilprojekte " +
+            "bewertet aber nicht das Hauptprojekt (A2).  Müssen aufpassen, dass nichts unter den Tisch fällt." );
         logger.warn( "Bei https://www.bvwp-projekte.de/strasse/A559-G10-NW/A559-G10-NW.html hat evtl. die Veränderung " +
-                                     "Betriebsleistung PV falsches VZ.  Nutzen (positiv) dann wieder richtig." );
+            "Betriebsleistung PV falsches VZ.  Nutzen (positiv) dann wieder richtig." );
         logger.warn( "Wieso geht bei der https://www.bvwp-projekte.de/strasse/A14-G20-ST-BB/A14-G20-ST-BB.html der " +
-                                     "Nutzen mit impl und co2Price sogar nach oben?" );
+            "Nutzen mit impl und co2Price sogar nach oben?" );
         logger.warn( "===========" );
 
         String positivListe = BvwpUtils.getPositivListe();
@@ -55,10 +55,10 @@ public class RunLocalCsvScraping {
         // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
 
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
-                                                                              .extractAllLocalBaseData( "./data/street/all", "A", ".*" )
-                                                                              .stream()
-                                                                              .map( StreetAnalysisDataContainer::new )
-                                                                              .toList();
+            .extractAllLocalBaseData( "./data/street/all", "A", ".*" )
+            .stream()
+            .map( StreetAnalysisDataContainer::new )
+            .toList();
 
         logger.info( "Writing csv" );
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
@@ -72,35 +72,35 @@ public class RunLocalCsvScraping {
 
         { //KN
             String xName;
-        Axis.AxisBuilder xAxisBuilder = Axis.builder();
+            Axis.AxisBuilder xAxisBuilder = Axis.builder();
 //        {
 //            xName = Headers.B_CO2_NEU;
 //            xAxisBuilder.type( Axis.Type.LOG );
 //        }
-        {
+            {
 //            xName = Headers.NKV_NO_CHANGE;
-            xName = "nkvDiff";
+                xName = "nkvDiff";
 //            xAxisBuilder
 //                            .type( Axis.Type.LOG )
 //                            .autoRange( Axis.AutoRange.REVERSED )
-            ;
-        }
-        table = table.sortDescendingOn( xName );
-        Axis xAxis = xAxisBuilder.title( xName ).build();
+                ;
+            }
+            table = table.sortDescendingOn( xName );
+            Axis xAxis = xAxisBuilder.title( xName ).build();
 
-        Figure figure = PlotUtils.createFigurePkwKm( xAxis, table, xName );
-        Figure figure2 = PlotUtils.createFigureNkv( xAxis, table, xName );
-        Figure figure3 = PlotUtils.createFigureCost( xAxis, table, xName );
-        Figure figure4 = PlotUtils.createFigureCO2( xAxis, table, xName );
+            Figure figure = PlotUtils.createFigurePkwKm( xAxis, table, xName );
+            Figure figure2 = PlotUtils.createFigureNkv( xAxis, table, xName );
+            Figure figure3 = PlotUtils.createFigureCost( xAxis, table, xName );
+            Figure figure4 = PlotUtils.createFigureCO2( xAxis, table, xName );
 //        Figure figure5 = PlotUtils.createFigureNkvRatio( xAxis, table, xName );
 
-        String page = MultiPlotExample.pageTop + System.lineSeparator() +
-                                      figure2.asJavascript( "plot1" ) + System.lineSeparator() +
-                                      figure.asJavascript( "plot2" ) + System.lineSeparator() +
-                                      figure3.asJavascript( "plot3" ) + System.lineSeparator() +
-                                      figure4.asJavascript( "plot4" ) + System.lineSeparator() +
+            String page = MultiPlotExample.pageTop + System.lineSeparator() +
+                figure2.asJavascript( "plot1" ) + System.lineSeparator() +
+                figure.asJavascript( "plot2" ) + System.lineSeparator() +
+                figure3.asJavascript( "plot3" ) + System.lineSeparator() +
+                figure4.asJavascript( "plot4" ) + System.lineSeparator() +
 //                                      figure5.asJavascript( "plot5" ) + System.lineSeparator() +
-                                      MultiPlotExample.pageBottom;
+                MultiPlotExample.pageBottom;
 
             File outputFile = Paths.get("multiplot.html").toFile();
             try (FileWriter fileWriter = new FileWriter(outputFile)) {
@@ -156,16 +156,14 @@ public class RunLocalCsvScraping {
 
             new Browser().browse(outputFileKMT);
         }
-
- 
-
+        
         // === Some calculations
 
         Comparator<Row> comparator = ( o1, o2 ) -> {
-	    Priority p1 = Priority.valueOf( o1.getString( Headers.PRIORITY ) );
-	    Priority p2 = Priority.valueOf( o2.getString( Headers.PRIORITY ) );
-	    return p1.compareTo( p2 );
-	};
+            Priority p1 = Priority.valueOf( o1.getString( Headers.PRIORITY ) );
+            Priority p2 = Priority.valueOf( o2.getString( Headers.PRIORITY ) );
+            return p1.compareTo( p2 );
+        };
         table = table.sortOn( comparator );
         NumberFormat format = NumberFormat.getCompactNumberInstance();
         format.setMaximumFractionDigits( 0 );
