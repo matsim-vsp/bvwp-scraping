@@ -21,5 +21,7 @@ public final class Headers{
 	public static final String PKWKM_INDUZ = "pkwkm_induz";
 	public static final String PKWKM_INDUZ_NEU = "pkwkm_induz_new";
 	public static final String B_CO2_NEU = "b_co2_new";
-	private Headers(){} // do not instantiate
+  public static final String NKV_DIFF = "nkvDiff";
+
+  private Headers(){} // do not instantiate
 }

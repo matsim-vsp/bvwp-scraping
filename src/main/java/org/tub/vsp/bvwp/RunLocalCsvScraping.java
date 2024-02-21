@@ -8,22 +8,18 @@ import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotExample;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
-import tech.tablesaw.aggregate.AggregateFunctions;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Axis.Type;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
-import tech.tablesaw.sorting.Sort;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.text.FieldPosition;
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -66,7 +62,8 @@ public class RunLocalCsvScraping {
 
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
-        table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName( "nkvDiff" ) );
+        table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName(
+            Headers.NKV_DIFF) );
 
         // ===
 
@@ -79,7 +76,7 @@ public class RunLocalCsvScraping {
 //        }
             {
 //            xName = Headers.NKV_NO_CHANGE;
-                xName = "nkvDiff";
+                xName = Headers.NKV_DIFF;
 //            xAxisBuilder
 //                            .type( Axis.Type.LOG )
 //                            .autoRange( Axis.AutoRange.REVERSED )
@@ -156,7 +153,7 @@ public class RunLocalCsvScraping {
 
             new Browser().browse(outputFileKMT);
         }
-        
+
         // === Some calculations
 
         Comparator<Row> comparator = ( o1, o2 ) -> {
