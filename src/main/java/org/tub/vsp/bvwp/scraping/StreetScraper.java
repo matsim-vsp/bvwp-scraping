@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.tub.vsp.bvwp.RunLocalCsvScraping;
 import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.CostBenefitMapper;
 import org.tub.vsp.bvwp.data.mapper.PhysicalEffectMapper;
@@ -51,6 +52,7 @@ public class StreetScraper extends Scraper {
         return files.stream()
                     .filter(file -> file.getName().startsWith(prefix) )
                     .filter( file -> file.getName().matches( regex ) )
+                    .filter( file -> !file.getName().matches(  "A20-G10-SH.html" ) ) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'23
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
