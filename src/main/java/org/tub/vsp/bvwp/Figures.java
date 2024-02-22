@@ -13,7 +13,7 @@ import tech.tablesaw.plotly.traces.ScatterTrace.Mode;
 import tech.tablesaw.plotly.traces.Trace;
 
 class Figures {
-	private static final int plotWidth = 2000;
+	private static final int plotWidth = 1400;
 	private static final String legendFormat = "%30s";
 	private final Table table;
 	private final Axis xAxis;
@@ -162,10 +162,15 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		Trace trace1 = ScatterTrace.builder( new double[]{2,700}, new double[]{ 0.3, 0.3 } )
+		final double elas03 = 0.3;
+		Trace trace1 = ScatterTrace.builder( new double[]{2,700}, new double[]{ elas03, elas03 } )
+				.name(String.format( legendFormat, "elasticity = " + elas03))
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
-		Trace trace2 = ScatterTrace.builder( new double[]{2,700}, new double[]{ 0.6, 0.6 } )
+
+		final double elas06 = 0.6;
+		Trace trace2 = ScatterTrace.builder( new double[]{2,700}, new double[]{ elas06, elas06 } )
+				.name(String.format( legendFormat, "elasticity = " + 0.6))
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
 
@@ -354,39 +359,6 @@ class Figures {
 //        figure2 = new Figure( layout, trace, trace3, trace2, trace4 );
       figure2 = new Figure( layout, trace, trace3, trace4 );
       return figure2;
-  }
-
-  static Figure createFigurePkwKm_KMT(Axis xAxis, Table table, String xName){
-      Figure figure;
-      String yName = Headers.PKWKM_INDUZ;
-      String y2Name = Headers.PKWKM_INDUZ_NEU;
-
-      Axis yAxis = Axis.builder()
-          .title( yName )
-          .type( Type.LOG )
-          .build();
-      Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis )
-          .width( plotWidth )
-          .build();
-
-
-      Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
-          .name( yName )
-          .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-          .build();
-      Trace trace2 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y2Name ) )
-          .name( y2Name )
-          .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-          .marker( Marker.builder().color( "red" ).build() )
-          .build();
-
-//            double[] xx = new double[]{1., 200.};
-//            Trace trace1 = ScatterTrace.builder( xx, xx )
-//                                       .mode( ScatterTrace.Mode.LINE )
-//                                       .build();
-
-      figure = new Figure( layout, trace, trace2 );
-      return figure;
   }
 
   static Figure createFigureCO2(Axis xAxis, int plotWidth, Table table, String xName){

@@ -1,26 +1,10 @@
 package org.tub.vsp.bvwp;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.tub.vsp.bvwp.computation.ComputationKN;
-import org.apache.logging.log4j.core.util.ArrayUtils;
-import org.junit.platform.commons.util.CollectionUtils;
-import org.tub.vsp.bvwp.data.Headers;
-import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
-import org.tub.vsp.bvwp.data.type.Priority;
-import org.tub.vsp.bvwp.io.StreetCsvWriter;
-import org.tub.vsp.bvwp.plot.MultiPlotExample;
-import org.tub.vsp.bvwp.scraping.StreetScraper;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.Row;
-import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
-import tech.tablesaw.plotly.components.Axis;
-import tech.tablesaw.plotly.components.Axis.Type;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.display.Browser;
+import static tech.tablesaw.aggregate.AggregateFunctions.count;
+import static tech.tablesaw.aggregate.AggregateFunctions.max;
+import static tech.tablesaw.aggregate.AggregateFunctions.mean;
+import static tech.tablesaw.aggregate.AggregateFunctions.min;
+import static tech.tablesaw.aggregate.AggregateFunctions.stdDev;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -30,8 +14,21 @@ import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-
-import static tech.tablesaw.aggregate.AggregateFunctions.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.io.StreetCsvWriter;
+import org.tub.vsp.bvwp.plot.MultiPlotExample;
+import org.tub.vsp.bvwp.scraping.StreetScraper;
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.Row;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.plotly.components.Axis;
+import tech.tablesaw.plotly.components.Axis.Type;
+import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.display.Browser;
 
 public class RunLocalCsvScraping {
     private static final Logger logger = LogManager.getLogger(RunLocalCsvScraping.class );
@@ -145,21 +142,17 @@ public class RunLocalCsvScraping {
             Axis xAxis = xAxisBuilder.title(xNameKMT).build();
             final int plotWidth = 1400;
 
-            Figure figureNkv = PlotUtils.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
-            Figure figurePkwKm = PlotUtils.createFigurePkwKm_KMT(xAxis, table, xNameKMT);
-            Figure figure3 = PlotUtils.createFigure3(xAxis, plotWidth, table, xNameKMT);
-            Figure figureCO2 = PlotUtils.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
-            Figure figureNkvChangeCo2 = PlotUtils.createFigureNkvChange(plotWidth, table,
+            Figure figureNkv = Figures.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
+            Figure figureCO2 = Figures.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
+            Figure figureNkvChangeCo2 = Figures.createFigureNkvChange(plotWidth, table,
                 Headers.NKV_NO_CHANGE, Headers.NKV_CO2);
-            Figure figureNkvChangeInduz = PlotUtils.createFigureNkvChange(plotWidth, table,
+            Figure figureNkvChangeInduz = Figures.createFigureNkvChange(plotWidth, table,
                 Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ);
-            Figure figureNkvChangeInduzCo2 = PlotUtils.createFigureNkvChange(plotWidth, table,
+            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
                 Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
             String pageKMT = MultiPlotExample.pageTop + System.lineSeparator() +
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
-                figurePkwKm.asJavascript("plot2") + System.lineSeparator() +
-                figure3.asJavascript("plot3") + System.lineSeparator() +
                 figureCO2.asJavascript("plot4") + System.lineSeparator() +
                 figureNkvChangeCo2.asJavascript("plot5") + System.lineSeparator() +
                 figureNkvChangeInduz.asJavascript("plot5b") + System.lineSeparator() +
