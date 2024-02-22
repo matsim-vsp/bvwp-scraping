@@ -36,7 +36,11 @@ public abstract class Scraper {
 
         projectUrls.removeIf(link -> link.endsWith(".pdf"));
 
-        projectUrls.removeIf( link -> (!link.startsWith( "A" ) && !link.startsWith( "B" )));
+        //Todo: Sollte dieses Aufräumen nicht irgendwo in den Streetscraper? Denn das ist ja die
+        //Staßenspezifische Filterung
+        //A = Autobahn; B = Bundesstraße -> Diese sollen behalten werden
+        projectUrls.removeIf( link -> (!link.startsWith( "A" ) ));
+//        projectUrls.removeIf( link -> (!link.startsWith( "A" ) && !link.startsWith( "B" )));
 
         logger.info("Found {} projects", projectUrls.size());
         logger.info(projectUrls);

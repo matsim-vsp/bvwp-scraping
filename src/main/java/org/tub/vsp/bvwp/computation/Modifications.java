@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 public record Modifications(double co2Price, double mehrFzkm) {
     private static final Logger log = LogManager.getLogger(Modifications.class);
     private static final double co2PriceBVWP = 145.;
-    private static final double co2PriceIncreased = 623.;
+    private static final double co2PriceIncreased = 623.; //€ 623 (in 2012) corresponds to € 680 in 2020 including the inflation.
 
     public Modifications {
         if (co2Price < 145) {
