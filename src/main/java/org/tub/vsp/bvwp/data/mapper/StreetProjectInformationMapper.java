@@ -4,37 +4,37 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
+import org.tub.vsp.bvwp.data.container.base.StreetProjectInformationDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
-import org.tub.vsp.bvwp.data.container.base.ProjectInformationDataContainer;
 
 import java.text.ParseException;
 import java.util.Optional;
 
-public class ProjectInformationMapper {
-    private static final Logger logger = LogManager.getLogger(ProjectInformationMapper.class);
+public class StreetProjectInformationMapper {
+    private static final Logger logger = LogManager.getLogger(StreetProjectInformationMapper.class);
 
-    public ProjectInformationDataContainer mapDocument(Document document) {
-        ProjectInformationDataContainer projectInformation = new ProjectInformationDataContainer();
+    public StreetProjectInformationDataContainer mapDocument(Document document) {
+        StreetProjectInformationDataContainer projectInformation = new StreetProjectInformationDataContainer();
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");
         String street = extractInformation(document, 0, "Straße");
-        String length = extractInformation( document, 0, "Länge" );
-        if ( length!= null ) {
-            length = length.replace( " km", "" );
+        String length = extractInformation(document, 0, "Länge");
+        if (length != null) {
+            length = length.replace(" km", "");
         }
-        String bautyp = extractInformation( document, 0, "Bautyp(en), Bauziel(e)" );
+        String bautyp = extractInformation(document, 0, "Bautyp(en), Bauziel(e)");
 
         String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
-        try{
+        try {
             return projectInformation.setProjectNumber(projectNumber)
                                      .setStreet(street)
-                                     .setLength( JSoupUtils.parseDouble( length ) )
-                                     .setBautyp( bautyp )
-                                     .setPriority( Priority.getFromString(priority ) )
-                            ;
-        } catch( ParseException e ){
-            throw new RuntimeException( e );
+                                     .setLength(JSoupUtils.parseDouble(length))
+                                     .setBautyp(bautyp)
+                                     .setPriority(Priority.getFromString(priority))
+                    ;
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
         }
     }
 

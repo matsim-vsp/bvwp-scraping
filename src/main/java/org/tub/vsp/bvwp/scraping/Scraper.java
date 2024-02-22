@@ -36,8 +36,6 @@ public abstract class Scraper {
 
         projectUrls.removeIf(link -> link.endsWith(".pdf"));
 
-        projectUrls.removeIf( link -> !link.startsWith( "A" ));
-
         logger.info("Found {} projects", projectUrls.size());
         logger.info(projectUrls);
 

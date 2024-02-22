@@ -4,11 +4,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.tub.vsp.bvwp.RunLocalCsvScraping;
 import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
-import org.tub.vsp.bvwp.data.mapper.CostBenefitMapper;
 import org.tub.vsp.bvwp.data.mapper.PhysicalEffectMapper;
-import org.tub.vsp.bvwp.data.mapper.ProjectInformationMapper;
+import org.tub.vsp.bvwp.data.mapper.StreetCostBenefitMapper;
+import org.tub.vsp.bvwp.data.mapper.StreetProjectInformationMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,13 +16,20 @@ import java.util.*;
 public class StreetScraper extends Scraper {
     private static final Logger logger = LogManager.getLogger(StreetScraper.class);
 
-    private final ProjectInformationMapper projectInformationMapper = new ProjectInformationMapper();
+    private final StreetProjectInformationMapper projectInformationMapper = new StreetProjectInformationMapper();
     private final PhysicalEffectMapper physicalEffectMapper = new PhysicalEffectMapper();
-    private final CostBenefitMapper costBenefitMapper = new CostBenefitMapper();
+    private final StreetCostBenefitMapper costBenefitMapper = new StreetCostBenefitMapper();
 
     @Override
     protected String getBaseUrl() {
         return "https://www.bvwp-projekte.de/strasse/";
+    }
+
+    @Override
+    public List<String> getProjectUrls() throws IOException {
+        List<String> result = super.getProjectUrls();
+        result.removeIf(link -> !link.startsWith("A"));
+        return result;
     }
 
     public List<StreetBaseDataContainer> extractAllRemoteBaseData() {
@@ -42,17 +48,19 @@ public class StreetScraper extends Scraper {
                           .toList();
     }
 
-    public static String projectString( String bundesland, String road ) {
-        return "(" + road + "-.*-" + bundesland + ".html" + ")|" ;
+    public static String projectString(String bundesland, String road) {
+        return "(" + road + "-.*-" + bundesland + ".html" + ")|";
     }
 
-    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix, String regex ) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path, String prefix, String regex) {
 
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
-                    .filter(file -> file.getName().startsWith(prefix) )
-                    .filter( file -> file.getName().matches( regex ) )
-                    .filter( file -> !file.getName().matches(  "A20-G10-SH.html" ) ) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'23
+                    .filter(file -> file.getName().startsWith(prefix))
+                    .filter(file -> file.getName().matches(regex))
+                    .filter(file -> !file.getName()
+                                         .matches("A20-G10-SH.html")) // gibt es nochmal mit A20-G10-SH-NI.  Muss man
+                    // beide zusammenzählen?  kai, feb'23
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
@@ -110,10 +118,12 @@ public class StreetScraper extends Scraper {
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
-        boolean sieheHauptprojekt = ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis")
-                                                            .contains("siehe Hauptprojekt");
+        boolean sieheHauptprojekt = StreetProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
+                                                                          "ältnis")
+                                                                  .contains("siehe Hauptprojekt");
 
-        String extractedInformation = ProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis");
+        String extractedInformation = StreetProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
+                "ältnis");
         boolean sieheTeilprojekt = extractedInformation.contains("siehe Teilprojekt");
         logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt);
 

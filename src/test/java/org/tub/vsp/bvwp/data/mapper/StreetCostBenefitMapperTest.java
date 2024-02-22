@@ -3,21 +3,21 @@ package org.tub.vsp.bvwp.data.mapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.bvwp.data.LocalFileAccessor;
-import org.tub.vsp.bvwp.data.container.base.CostBenefitAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.container.base.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
 import org.tub.vsp.bvwp.data.type.Cost;
 import org.tub.vsp.bvwp.data.type.Emission;
 
 import java.io.IOException;
 
-class CostBenefitMapperTest {
+class StreetCostBenefitMapperTest {
     @Test
     void testMapper() throws IOException {
-        CostBenefitMapper costBenefitMapper = new CostBenefitMapper();
-        CostBenefitAnalysisDataContainer result =
-                costBenefitMapper.mapDocument( LocalFileAccessor.getLocalDocument("a20.html" ) );
+        StreetCostBenefitMapper costBenefitMapper = new StreetCostBenefitMapper();
+        StreetCostBenefitAnalysisDataContainer result =
+                costBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
-        Assertions.assertEquals(new Benefit(40.55, 1005.26), result.getNb() );
+        Assertions.assertEquals(new Benefit(40.55, 1005.26), result.getNb());
         Assertions.assertEquals(new Benefit(-31.675, -785.233), result.getNbOperations());
         Assertions.assertEquals(new Benefit(-5.294, -131.248), result.getNw());
         Assertions.assertEquals(new Benefit(24.694, 612.174), result.getNs());
@@ -28,17 +28,17 @@ class CostBenefitMapperTest {
         Assertions.assertEquals(new Benefit(-16.059, -398.107), result.getNg());
         Assertions.assertEquals(new Benefit(0.136, 3.363), result.getNt());
         Assertions.assertEquals(new Benefit(29.997, 743.646), result.getNz());
-        Assertions.assertEquals(new Cost(3145.75, 2737.176), result.getCost() );
+        Assertions.assertEquals(new Cost(3145.75, 2737.176), result.getCost());
     }
 
     @Test
     void testNulls() throws IOException {
-        CostBenefitMapper costBenefitMapper = new CostBenefitMapper();
-        CostBenefitAnalysisDataContainer result =
+        StreetCostBenefitMapper costBenefitMapper = new StreetCostBenefitMapper();
+        StreetCostBenefitAnalysisDataContainer result =
                 costBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a2.html"));
 
         Assertions.assertNotNull(result.getNa());
-        Assertions.assertEquals(result.getNa().get( Emission.CO2 ), new Benefit(0.0, 0.0) );
+        Assertions.assertEquals(result.getNa().get(Emission.CO2), new Benefit(0.0, 0.0));
         Assertions.assertEquals(result.getNa().get(Emission.CO), new Benefit(0.0, 0.0));
         Assertions.assertEquals(result.getNa().get(Emission.NOX), new Benefit(0.0, 0.0));
         Assertions.assertEquals(result.getNa().get(Emission.HC), new Benefit(0.0, 0.0));

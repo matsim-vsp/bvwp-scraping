@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-public class CostBenefitAnalysisDataContainer {
-    private static final Logger logger = LogManager.getLogger(CostBenefitAnalysisDataContainer.class);
+public class StreetCostBenefitAnalysisDataContainer {
+    private static final Logger logger = LogManager.getLogger(StreetCostBenefitAnalysisDataContainer.class);
 
     private Benefit nb;
     private Benefit nbOperations;
@@ -34,7 +34,7 @@ public class CostBenefitAnalysisDataContainer {
         return nb;
     }
 
-    public CostBenefitAnalysisDataContainer setNb(Benefit nb) {
+    public StreetCostBenefitAnalysisDataContainer setNb(Benefit nb) {
         this.nb = nb;
         return this;
     }
@@ -43,7 +43,7 @@ public class CostBenefitAnalysisDataContainer {
         return nbOperations;
     }
 
-    public CostBenefitAnalysisDataContainer setNbOperations(Benefit nbOperations) {
+    public StreetCostBenefitAnalysisDataContainer setNbOperations(Benefit nbOperations) {
         this.nbOperations = nbOperations;
         return this;
     }
@@ -52,7 +52,7 @@ public class CostBenefitAnalysisDataContainer {
         return nw;
     }
 
-    public CostBenefitAnalysisDataContainer setNw(Benefit nw) {
+    public StreetCostBenefitAnalysisDataContainer setNw(Benefit nw) {
         this.nw = nw;
         return this;
     }
@@ -61,7 +61,7 @@ public class CostBenefitAnalysisDataContainer {
         return ns;
     }
 
-    public CostBenefitAnalysisDataContainer setNs(Benefit ns) {
+    public StreetCostBenefitAnalysisDataContainer setNs(Benefit ns) {
         this.ns = ns;
         return this;
     }
@@ -70,7 +70,7 @@ public class CostBenefitAnalysisDataContainer {
         return nrz;
     }
 
-    public CostBenefitAnalysisDataContainer setNrz(Benefit nrz) {
+    public StreetCostBenefitAnalysisDataContainer setNrz(Benefit nrz) {
         this.nrz = nrz;
         return this;
     }
@@ -79,7 +79,7 @@ public class CostBenefitAnalysisDataContainer {
         return ntz;
     }
 
-    public CostBenefitAnalysisDataContainer setNtz(Benefit ntz) {
+    public StreetCostBenefitAnalysisDataContainer setNtz(Benefit ntz) {
         this.ntz = ntz;
         return this;
     }
@@ -88,7 +88,7 @@ public class CostBenefitAnalysisDataContainer {
         return ni;
     }
 
-    public CostBenefitAnalysisDataContainer setNi(Benefit ni) {
+    public StreetCostBenefitAnalysisDataContainer setNi(Benefit ni) {
         this.ni = ni;
         return this;
     }
@@ -97,7 +97,7 @@ public class CostBenefitAnalysisDataContainer {
         return nl;
     }
 
-    public CostBenefitAnalysisDataContainer setNl(Benefit nl) {
+    public StreetCostBenefitAnalysisDataContainer setNl(Benefit nl) {
         this.nl = nl;
         return this;
     }
@@ -106,7 +106,7 @@ public class CostBenefitAnalysisDataContainer {
         return ng;
     }
 
-    public CostBenefitAnalysisDataContainer setNg(Benefit ng) {
+    public StreetCostBenefitAnalysisDataContainer setNg(Benefit ng) {
         this.ng = ng;
         return this;
     }
@@ -125,7 +125,7 @@ public class CostBenefitAnalysisDataContainer {
                  .reduce(new Benefit(0., 0.), Benefit::add);
     }
 
-    public CostBenefitAnalysisDataContainer setNa(Map<Emission, Benefit> na) {
+    public StreetCostBenefitAnalysisDataContainer setNa(Map<Emission, Benefit> na) {
         this.na = na;
         return this;
     }
@@ -134,7 +134,7 @@ public class CostBenefitAnalysisDataContainer {
         return nt;
     }
 
-    public CostBenefitAnalysisDataContainer setNt(Benefit nt) {
+    public StreetCostBenefitAnalysisDataContainer setNt(Benefit nt) {
         this.nt = nt;
         return this;
     }
@@ -143,7 +143,7 @@ public class CostBenefitAnalysisDataContainer {
         return nz;
     }
 
-    public CostBenefitAnalysisDataContainer setNz(Benefit nz) {
+    public StreetCostBenefitAnalysisDataContainer setNz(Benefit nz) {
         this.nz = nz;
         return this;
     }
@@ -152,7 +152,7 @@ public class CostBenefitAnalysisDataContainer {
         return cost;
     }
 
-    public CostBenefitAnalysisDataContainer setCost(Cost cost) {
+    public StreetCostBenefitAnalysisDataContainer setCost(Cost cost) {
         this.cost = cost;
         return this;
     }
@@ -178,7 +178,7 @@ public class CostBenefitAnalysisDataContainer {
         return overallBenefit;
     }
 
-    public CostBenefitAnalysisDataContainer setOverallBenefit(Benefit overallBenefit) {
+    public StreetCostBenefitAnalysisDataContainer setOverallBenefit(Benefit overallBenefit) {
         this.overallBenefit = overallBenefit;
         return this;
     }
@@ -201,7 +201,7 @@ public class CostBenefitAnalysisDataContainer {
             return false;
         }
 
-        CostBenefitAnalysisDataContainer that = (CostBenefitAnalysisDataContainer) o;
+        StreetCostBenefitAnalysisDataContainer that = (StreetCostBenefitAnalysisDataContainer) o;
 
         if (!Objects.equals(nb, that.nb)) {
             return false;
@@ -258,14 +258,14 @@ public class CostBenefitAnalysisDataContainer {
     public Benefit getNbPersonnel(){
         return nbPersonnel;
     }
-    public CostBenefitAnalysisDataContainer setNbPersonnel( Benefit nbPersonnel ){
+    public StreetCostBenefitAnalysisDataContainer setNbPersonnel(Benefit nbPersonnel ){
         this.nbPersonnel = nbPersonnel;
         return this;
     }
     public Benefit getNbVehicle(){
         return nbVehicle;
     }
-    public CostBenefitAnalysisDataContainer setNbVehicle( Benefit nbVehicle ){
+    public StreetCostBenefitAnalysisDataContainer setNbVehicle(Benefit nbVehicle ){
         this.nbVehicle = nbVehicle;
         return this;
     }

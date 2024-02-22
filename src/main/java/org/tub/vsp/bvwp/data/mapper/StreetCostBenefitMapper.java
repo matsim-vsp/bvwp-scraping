@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.CostBenefitAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.container.base.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
 import org.tub.vsp.bvwp.data.type.Cost;
 import org.tub.vsp.bvwp.data.type.Emission;
@@ -17,14 +17,16 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CostBenefitMapper {
-    private static final Logger logger = LogManager.getLogger(CostBenefitMapper.class);
+public class StreetCostBenefitMapper {
+    private static final Logger logger = LogManager.getLogger(StreetCostBenefitMapper.class);
 
-    public CostBenefitAnalysisDataContainer mapDocument( Document document ) {
-        CostBenefitAnalysisDataContainer result = new CostBenefitAnalysisDataContainer();
+    public StreetCostBenefitAnalysisDataContainer mapDocument(Document document) {
+        StreetCostBenefitAnalysisDataContainer result = new StreetCostBenefitAnalysisDataContainer();
 
-        Optional<Element> benefit = getTableByKey(document, "table.table_webprins", CostBenefitMapper::isBenefitTable);
-        Optional<Element> costTable = getTableByKey(document, "table.table_kosten", CostBenefitMapper::isCostTable);
+        Optional<Element> benefit = getTableByKey(document, "table.table_webprins",
+                StreetCostBenefitMapper::isBenefitTable);
+        Optional<Element> costTable = getTableByKey(document, "table.table_kosten",
+                StreetCostBenefitMapper::isCostTable);
 
         //We only scrape the cumulated values
         benefit.ifPresent(element -> result.setNb(extractSimpleBenefit(element, "NB"))
@@ -93,7 +95,7 @@ public class CostBenefitMapper {
         Double costs;
         Double overallCosts;
         try {
-            costs = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 1 ) );
+            costs = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 1));
             overallCosts = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 2));
         } catch (ParseException e) {
             logger.warn("Could not parse benefit value from {}", table);

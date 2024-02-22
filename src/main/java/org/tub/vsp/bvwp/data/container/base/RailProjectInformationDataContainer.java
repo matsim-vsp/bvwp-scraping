@@ -4,9 +4,9 @@ import org.tub.vsp.bvwp.data.type.Priority;
 
 import java.util.Objects;
 
-public class ProjectInformationDataContainer {
+public class RailProjectInformationDataContainer {
     private String projectNumber;
-    private String street;
+    private String title;
     private Priority priority;
     private String bautyp;
     private Double length;
@@ -15,17 +15,17 @@ public class ProjectInformationDataContainer {
         return projectNumber;
     }
 
-    public ProjectInformationDataContainer setProjectNumber(String projectNumber) {
+    public RailProjectInformationDataContainer setProjectNumber(String projectNumber) {
         this.projectNumber = projectNumber;
         return this;
     }
 
-    public String getStreet() {
-        return street;
+    public String getTitle() {
+        return title;
     }
 
-    public ProjectInformationDataContainer setStreet(String street) {
-        this.street = street;
+    public RailProjectInformationDataContainer setTitle(String title) {
+        this.title = title;
         return this;
     }
 
@@ -33,7 +33,7 @@ public class ProjectInformationDataContainer {
         return priority;
     }
 
-    public ProjectInformationDataContainer setPriority( Priority priority ) {
+    public RailProjectInformationDataContainer setPriority(Priority priority) {
         this.priority = priority;
         return this;
     }
@@ -47,12 +47,12 @@ public class ProjectInformationDataContainer {
             return false;
         }
 
-        ProjectInformationDataContainer that = (ProjectInformationDataContainer) o;
+        RailProjectInformationDataContainer that = (RailProjectInformationDataContainer) o;
 
         if (!Objects.equals(projectNumber, that.projectNumber)) {
             return false;
         }
-        if (!Objects.equals(street, that.street)) {
+        if (!Objects.equals(title, that.title)) {
             return false;
         }
         return priority == that.priority;
@@ -61,22 +61,26 @@ public class ProjectInformationDataContainer {
     @Override
     public int hashCode() {
         int result = projectNumber != null ? projectNumber.hashCode() : 0;
-        result = 31 * result + (street != null ? street.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (priority != null ? priority.hashCode() : 0);
         return result;
     }
-    public ProjectInformationDataContainer setBautyp( String bautyp ){
+
+    public RailProjectInformationDataContainer setBautyp(String bautyp) {
         this.bautyp = bautyp;
         return this;
     }
-    public String getBautyp(){
+
+    public String getBautyp() {
         return bautyp;
     }
-    public ProjectInformationDataContainer setLength( Double length ){
+
+    public RailProjectInformationDataContainer setLength(Double length) {
         this.length = length;
         return this;
     }
-    public Double getLength(){
+
+    public Double getLength() {
         return length;
     }
 }

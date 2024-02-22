@@ -5,9 +5,9 @@ import java.util.Objects;
 public class StreetBaseDataContainer {
     private String url;
 
-    private ProjectInformationDataContainer projectInformation;
+    private StreetProjectInformationDataContainer projectInformation;
     private PhysicalEffectDataContainer physicalEffect;
-    private CostBenefitAnalysisDataContainer costBenefitAnalysis;
+    private StreetCostBenefitAnalysisDataContainer costBenefitAnalysis;
 
     public String getUrl() {
         return url;
@@ -18,11 +18,11 @@ public class StreetBaseDataContainer {
         return this;
     }
 
-    public ProjectInformationDataContainer getProjectInformation() {
+    public StreetProjectInformationDataContainer getProjectInformation() {
         return projectInformation;
     }
 
-    public StreetBaseDataContainer setProjectInformation(ProjectInformationDataContainer projectInformation) {
+    public StreetBaseDataContainer setProjectInformation(StreetProjectInformationDataContainer projectInformation) {
         this.projectInformation = projectInformation;
         return this;
     }
@@ -36,11 +36,11 @@ public class StreetBaseDataContainer {
         return this;
     }
 
-    public CostBenefitAnalysisDataContainer getCostBenefitAnalysis() {
+    public StreetCostBenefitAnalysisDataContainer getCostBenefitAnalysis() {
         return costBenefitAnalysis;
     }
 
-    public StreetBaseDataContainer setCostBenefitAnalysis(CostBenefitAnalysisDataContainer costBenefitAnalysis) {
+    public StreetBaseDataContainer setCostBenefitAnalysis(StreetCostBenefitAnalysisDataContainer costBenefitAnalysis) {
         this.costBenefitAnalysis = costBenefitAnalysis;
         return this;
     }
