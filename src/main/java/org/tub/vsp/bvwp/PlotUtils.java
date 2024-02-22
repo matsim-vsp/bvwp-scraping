@@ -12,7 +12,7 @@ import tech.tablesaw.plotly.traces.ScatterTrace.Mode;
 import tech.tablesaw.plotly.traces.Trace;
 
 class PlotUtils{
-	private static final int plotWidth = 2000;
+	private static final int plotWidth = 1400;
 	private static final String legendFormat = "%30s";
 
 	private PlotUtils(){} // do not instantiate

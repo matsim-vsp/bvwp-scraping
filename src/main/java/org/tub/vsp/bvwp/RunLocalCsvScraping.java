@@ -122,7 +122,7 @@ public class RunLocalCsvScraping {
 //        }
             table = table.sortDescendingOn(xNameKMT);
             Axis xAxis = xAxisBuilder.title(xNameKMT).build();
-            final int plotWidth = 1700;
+            final int plotWidth = 1400;
 
             Figure figureNkv = PlotUtils.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
             Figure figurePkwKm = PlotUtils.createFigurePkwKm_KMT(xAxis, table, xNameKMT);
@@ -170,17 +170,17 @@ public class RunLocalCsvScraping {
 
         System.out.println( SEPARATOR );
         System.out.println( table.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY).print() );
-        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
         System.out.println( table2.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY));
 
         System.out.println( SEPARATOR );
         System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
-        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
         System.out.println( table2.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
 
         System.out.println( SEPARATOR );
         System.out.println( table.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
-        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
         System.out.println( table2.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
     }
 
