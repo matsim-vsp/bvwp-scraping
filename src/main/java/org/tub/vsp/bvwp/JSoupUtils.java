@@ -34,26 +34,28 @@ public class JSoupUtils {
                     .text();
     }
 
+    public static Optional<String> getTextFromFirstRowWithKeyContainedInCol(Element table, String key,
+                                                                            int keyColIndex, int valueColIndex) {
+        return firstRowWithKeyContainedInCol(table, key, keyColIndex)
+                .map(r -> r.child(valueColIndex).text());
+    }
+
     public static Optional<Element> firstRowWithKeyContainedInCol(Element table, String key, int colIndex) {
         return table.select("tr")
                     .stream()
-                    .filter(r -> r.child(colIndex)
-                                  .text()
-                                  .contains(key))
+                    .filter(r -> r.child(colIndex).text().contains(key))
                     .findFirst();
     }
 
     public static Optional<Element> firstRowWithKeyInCol(Element table, String key, int colIndex) {
         return table.select("tr")
                     .stream()
-                    .filter(r -> r.child(colIndex)
-                                  .text()
-                                  .equals(key))
+                    .filter(r -> r.child(colIndex).text().equals(key))
                     .findFirst();
     }
 
     public static Double parseDouble(String s) throws ParseException {
-        if ( "-".equals( s ) || s == null ) {
+        if ("-".equals(s) || s == null) {
             return 0.;
         }
         return NumberFormat.getInstance(Locale.GERMANY)

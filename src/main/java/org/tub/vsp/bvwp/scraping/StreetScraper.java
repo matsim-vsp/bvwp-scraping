@@ -6,6 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.PhysicalEffectMapper;
+import org.tub.vsp.bvwp.data.mapper.ProjectInformationMapperUtils;
 import org.tub.vsp.bvwp.data.mapper.StreetCostBenefitMapper;
 import org.tub.vsp.bvwp.data.mapper.StreetProjectInformationMapper;
 
@@ -118,11 +119,11 @@ public class StreetScraper extends Scraper {
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
-        boolean sieheHauptprojekt = StreetProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
-                                                                          "ältnis")
-                                                                  .contains("siehe Hauptprojekt");
+        boolean sieheHauptprojekt = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
+                                                                         "ältnis")
+                                                                 .contains("siehe Hauptprojekt");
 
-        String extractedInformation = StreetProjectInformationMapper.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
+        String extractedInformation = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
                 "ältnis");
         boolean sieheTeilprojekt = extractedInformation.contains("siehe Teilprojekt");
         logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt);

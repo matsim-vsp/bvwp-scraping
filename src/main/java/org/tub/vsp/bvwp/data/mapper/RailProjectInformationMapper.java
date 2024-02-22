@@ -2,32 +2,30 @@ package org.tub.vsp.bvwp.data.mapper;
 
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.StreetProjectInformationDataContainer;
+import org.tub.vsp.bvwp.data.container.base.RailProjectInformationDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 
 import java.text.ParseException;
 
 import static org.tub.vsp.bvwp.data.mapper.ProjectInformationMapperUtils.extractInformation;
 
-public class StreetProjectInformationMapper {
-    public StreetProjectInformationDataContainer mapDocument(Document document) {
-        StreetProjectInformationDataContainer projectInformation = new StreetProjectInformationDataContainer();
+public class RailProjectInformationMapper {
+    public static RailProjectInformationDataContainer mapDocument(Document document) {
+        RailProjectInformationDataContainer projectInformation = new RailProjectInformationDataContainer();
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");
-        String street = extractInformation(document, 0, "Straße");
+        String titel = extractInformation(document, 0, "Maßnahmetitel");
         String length = extractInformation(document, 0, "Länge");
         if (length != null) {
             length = length.replace(" km", "");
         }
-        String bautyp = extractInformation(document, 0, "Bautyp(en), Bauziel(e)");
 
         String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
         try {
             return projectInformation.setProjectNumber(projectNumber)
-                                     .setStreet(street)
+                                     .setTitle(titel)
                                      .setLength(JSoupUtils.parseDouble(length))
-                                     .setBautyp(bautyp)
                                      .setPriority(Priority.getFromString(priority));
         } catch (ParseException e) {
             throw new RuntimeException(e);
