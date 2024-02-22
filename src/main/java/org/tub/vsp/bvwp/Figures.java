@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp;
 
+import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.data.Headers;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
@@ -9,11 +10,18 @@ import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
-class PlotUtils{
+class Figures {
 	private static final int plotWidth = 2000;
 	private static final String legendFormat = "%30s";
-	private PlotUtils(){} // do not instantiate
-	static Figure createFigureCost( Axis xAxis, Table table, String xName ){
+	private final Table table;
+	private final Axis xAxis;
+	private final String xName;
+	Figures( Table table, Axis xAxis, String xName ){
+		this.table = table;
+		this.xAxis = xAxis;
+		this.xName = xName;
+	}
+	Figure createFigureCost( ){
 		Figure figure3;
 		String yName = Headers.COST_OVERALL;
 		String y3Name = Headers.COST_OVERALL;
@@ -53,7 +61,7 @@ class PlotUtils{
 		figure3 = new Figure( layout, trace, trace3, traceWb, traceWbp, traceVb, traceVbe );
 		return figure3;
 	}
-	static Figure createFigureNkv( Axis xAxis, Table table, String xName ){
+	Figure createFigureNkv( ){
 		Figure figure2;
 		String yName = Headers.NKV_NO_CHANGE;
 		String y3Name = Headers.NKV_CO2;
@@ -95,14 +103,14 @@ class PlotUtils{
 		figure2 = new Figure( layout, trace, trace3, traceWb,traceWbp,  traceVb, traceVbe, trace4 );
 		return figure2;
 	}
-	static Figure createFigurePkwKm( Axis xAxis, Table table, String xName ){
+	Figure createFigurePkwKm( ){
 		Figure figure;
 		String yName = Headers.PKWKM_INDUZ;
-		String y2Name = Headers.PKWKM_INDUZ_NEU;
+		String y2Name = Headers.PKWKM_ALL_NEU;
 
 		Axis yAxis = Axis.builder()
 				 .title( yName )
-				 .type( Axis.Type.LOG )
+//				 .type( Axis.Type.LOG ) // sonst "0" nicht darstellbar
 				 .build();
 		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis )
 				      .width( plotWidth )
@@ -126,18 +134,89 @@ class PlotUtils{
 		figure = new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
 		return figure;
 	}
-	static Figure createFigureCO2( Axis xAxis, Table table, String xName ){
+	public Figure createFigureElasticities(){
+		String yName = "elasticity_old";
+		String y2Name = "elasticity_new";
+
+		table.addColumns( table.numberColumn( Headers.PKWKM_ALL )
+				       .divide( ComputationKN.FZKM_AB )
+				       .multiply( ComputationKN.LANE_KM_AB )
+				       .divide( table.numberColumn( Headers.ADDITIONAL_LANE_KM ) ).setName("elasticity_old"),
+				table.numberColumn( Headers.PKWKM_ALL_NEU )
+				     .divide( ComputationKN.FZKM_AB )
+				     .multiply( ComputationKN.LANE_KM_AB )
+				     .divide( table.numberColumn( Headers.ADDITIONAL_LANE_KM ) ).setName("elasticity_new" )
+				);
+
+		Axis yAxis = Axis.builder().title( yName )
+//				 .type( Axis.Type.LOG )
+				 .range( -0.3, 0.8 )
+				 .build();
+
+		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+					  .name( String.format( legendFormat, yName ) )
+					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+					  .build();
+
+		Trace trace1 = ScatterTrace.builder( new double[]{2,700}, new double[]{ 0.3, 0.3 } )
+					   .mode( ScatterTrace.Mode.LINE )
+					   .build();
+		Trace trace2 = ScatterTrace.builder( new double[]{2,700}, new double[]{ 0.6, 0.6 } )
+					   .mode( ScatterTrace.Mode.LINE )
+					   .build();
+
+//		final Trace traceWb = getTraceWb( table, xName, y2Name );
+//		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
+//		final Trace traceVb = getTraceVb( table, xName, y2Name );
+//		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+
+
+		return new Figure( layout, trace,
+//				traceWb, traceWbp, traceVb, traceVbe
+				trace1, trace2 );
+	}
+	public Figure createFigureFzkm(){
+		String yName = Headers.PKWKM_ALL;
+		String y2Name = Headers.PKWKM_ALL;
+
+		Axis yAxis = Axis.builder().title( yName )
+//				 .type( Axis.Type.LOG )
+				 .range( 0.,400. )
+				 .build();
+
+		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+					  .name( String.format( legendFormat, yName ) )
+					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+					  .build();
+
+		final Trace traceWb = getTraceWb( table, xName, y2Name );
+		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
+		final Trace traceVb = getTraceVb( table, xName, y2Name );
+		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+
+		Trace trace1 = ScatterTrace.builder( new double[]{0,700}, new double[]{ 0 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.3} )
+					   .mode( ScatterTrace.Mode.LINE )
+					   .build();
+		Trace trace2 = ScatterTrace.builder( new double[]{0,700}, new double[]{ 0 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.6} )
+					   .mode( ScatterTrace.Mode.LINE )
+					   .build();
+
+		return new Figure( layout, trace,
+//				traceWb, traceWbp, traceVb, traceVbe,
+				trace1, trace2 );
+	}
+
+	Figure createFigureCO2( ){
 		String yName = Headers.B_CO2_NEU;
 		String y2Name = Headers.B_CO2_NEU;
 
-		Axis yAxis = Axis.builder()
-				 .title( yName )
-				 .type( Axis.Type.LOG )
-				 .build();
-		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis )
-				      .width( plotWidth )
-				      .build();
+		Axis yAxis = Axis.builder().title( yName ).type( Axis.Type.LOG ).build();
 
+		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )

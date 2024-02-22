@@ -11,7 +11,7 @@ public class ComputationKN{
 	private static final Logger log = LogManager.getLogger( ComputationKN.class );
 
 	public static final double FZKM_AB = 221000;
-	public static final double AB_length = 60000.;
+	public static final double LANE_KM_AB = 60000.;
 
 	static final class Amounts{
 		private final double rz;
