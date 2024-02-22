@@ -22,30 +22,34 @@ public class StreetAnalysisDataContainer {
     public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer) {
         this.streetBaseDataContainer = streetBaseDataContainer;
         logger.info( this.streetBaseDataContainer.getUrl());
-        this.addComputations(streetBaseDataContainer);
+        this.addComputations();
     }
 
-    private void addComputations(StreetBaseDataContainer streetBaseDataContainer) {
+    private void addComputations() {
 //        double fzkm_induz = streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().induced();
-        //        double mehrFzkm = 4. * fzkm_induz;
-//        if (mehrFzkm == 0.) {
+        //        double mehrFzkmFromElasticity = 4. * fzkm_induz;
+//        if (mehrFzkmFromElasticity == 0.) {
 //            double fzkm = streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
-//            mehrFzkm = 4. * fzkm;
+//            mehrFzkmFromElasticity = 4. * fzkm;
 //        }
         // yyyyyy die obige Rechnung muss schlussendlich genauer sein ... zusätzliche Spurkm / 60000 * 0.6 *
         // Jahresfahrleistung_AB
         // aber bräuchte dafür die Anzahl neuer Fahrspuren.  Und dafür wohl die Länge und die Projektkategorie
         // (woraus sich die Anzahl Fahrspuren ergibt)
 
-        double mehrFzkm = streetBaseDataContainer.getProjectInformation().getLength() * 2 / ComputationKN.AB_length * 0.6 * ComputationKN.FZKM_AB;
+        double additionalLaneKm = streetBaseDataContainer.getProjectInformation().getLength() * 2;
         // (assumption 2 more lanes)
 
         if ( streetBaseDataContainer.getProjectInformation().getBautyp().contains( "4-streifig" ) ) {
-            mehrFzkm *= 2;
+            additionalLaneKm *= 2;
             // (4 more lanes)
         }
 
-        final double additionalFzkm = mehrFzkm - streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
+        entries.put( Headers.ADDITIONAL_LANE_KM, additionalLaneKm );
+
+        double mehrFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.6 * ComputationKN.FZKM_AB;
+
+        final double additionalFzkm = mehrFzkmFromElasticity - streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
         logger.info( "additionalFzkm=" + additionalFzkm);
 //        entries.put("cost/km", streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() / streetBaseDataContainer.getProjectInformation().getLength() );
 //        entries.put("rz", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall());
@@ -55,7 +59,7 @@ public class StreetAnalysisDataContainer {
         entries.put( Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE, streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ, NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ_CO2, NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
-        entries.put( Headers.PKWKM_INDUZ_NEU, mehrFzkm );
+        entries.put( Headers.PKWKM_ALL_NEU, mehrFzkmFromElasticity );
         entries.put( Headers.B_CO2_NEU, NkvCalculator.calculateB_CO2( Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
 
         if ( streetBaseDataContainer.getProjectInformation().getProjectNumber().contains( "A1-G50-NI" ) ) {

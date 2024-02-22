@@ -19,9 +19,9 @@ public final class Headers{
 	public static final String B_OVERALL = "b_overall";
 	public static final String COST_OVERALL = "cost";
 	public static final String PKWKM_INDUZ = "pkwkm_induz";
-	public static final String PKWKM_INDUZ_NEU = "pkwkm_induz_new";
+	public static final String PKWKM_ALL_NEU = "pkwkm_all_neu";
 	public static final String B_CO2_NEU = "b_co2_new";
+	public static final String ADDITIONAL_LANE_KM = "additional_lane_km";
   public static final String NKV_DIFF = "nkvDiff";
-
   private Headers(){} // do not instantiate
 }
