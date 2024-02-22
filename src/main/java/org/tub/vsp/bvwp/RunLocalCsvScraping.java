@@ -1,15 +1,21 @@
 package org.tub.vsp.bvwp;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.ArrayUtils;
+import org.junit.platform.commons.util.CollectionUtils;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotExample;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Axis.Type;
 import tech.tablesaw.plotly.components.Figure;
@@ -166,22 +172,66 @@ public class RunLocalCsvScraping {
         format.setMaximumFractionDigits( 0 );
         table.numberColumn( Headers.B_CO2_NEU ).setPrintFormatter( format, "n/a" );
 
-        Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 1. ) );
+        //Projekte, die bereits vor Änderung NKV <1 haben
+        Table tableBaseKl1 = table.where( table.numberColumn( Headers.NKV_NO_CHANGE).isLessThan( 1. ) );
+        Table tableCo2Kl1 = table.where( table.numberColumn( Headers.NKV_CO2 ).isLessThan( 1. ) );
+        Table tableIndKl1 = table.where( table.numberColumn( Headers.NKV_INDUZ ).isLessThan( 1. ) );
+        Table tableIndCo2kl1 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 1. ) );
 
         System.out.println( SEPARATOR );
-        System.out.println( table.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY).print() );
+        System.out.println( table.summarize( Headers.NKV_NO_CHANGE, count, mean, stdDev, min, max ).by(Headers.PRIORITY) );
         System.out.println( System.lineSeparator() + "Davon NKV < 1:");
-        System.out.println( table2.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY));
+        System.out.println( tableIndCo2kl1.summarize( Headers.NKV_INDUZ_CO2, count, mean, stdDev, min, max ).by(Headers.PRIORITY));
+
+//        System.out.println( SEPARATOR );
+//        System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
+//        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
+//        System.out.println( tableIndCo2kl1.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
+//
+//        System.out.println( SEPARATOR );
+//        System.out.println( table.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
+//        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
+//        System.out.println( tableIndCo2kl1.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
+
+
+        //KMT
+        System.out.println( SEPARATOR );
+        System.out.println("### KMT ###");
+        System.out.println( SEPARATOR );
+        System.out.println("All projects");
+        System.out.println( table.summarize( Headers.NKV_NO_CHANGE, count ).apply());
+        System.out.println(System.lineSeparator() + "Davon NKV < 1:");
+        System.out.println( tableBaseKl1.summarize( Headers.NKV_NO_CHANGE, count ).apply());
+        System.out.println( System.lineSeparator() + "Mit CO2 Price und Änderung NKV < 1:");
+        System.out.println( tableIndCo2kl1.summarize( Headers.NKV_NO_CHANGE, count ).apply());
 
         System.out.println( SEPARATOR );
-        System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
-        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
-        System.out.println( table2.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
 
         System.out.println( SEPARATOR );
-        System.out.println( table.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
-        System.out.println( System.lineSeparator() + "Davon NKV < 1:");
-        System.out.println( table2.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
+        Table kmtTable = Table.create("Projects with BCR < 1");
+        kmtTable.addColumns(DoubleColumn.create("#Projects"
+            , new double[]{table.rowCount()}
+//            , Double.parseDouble(String.valueOf(table.summarize( Headers.NKV_NO_CHANGE, count).apply()))
+        ));
+        kmtTable.addColumns(DoubleColumn.create("Base"
+            , new double[]{tableBaseKl1.rowCount()}
+//            , Double.parseDouble(tableBaseKl1.summarize( Headers.NKV_NO_CHANGE, count ).apply().print())
+        ));
+        kmtTable.addColumns(DoubleColumn.create("CO2_only"
+            , new double[]{tableCo2Kl1.rowCount()}
+//            , Double.parseDouble(tableCo2Kl1.summarize( Headers.NKV_CO2, count ).apply().print())
+        ));
+        kmtTable.addColumns(DoubleColumn.create("induced_only"
+            , new double[]{tableIndKl1.rowCount()}
+//            , Double.parseDouble(tableIndKl1.summarize( Headers.NKV_INDUZ, count ).apply().print())
+        ));
+        kmtTable.addColumns(DoubleColumn.create("CO2_Induced"
+            , new double[]{tableIndCo2kl1.rowCount()}
+//            , Double.parseDouble(tableIndCo2kl1.summarize( Headers.NKV_INDUZ_CO2, count ).apply().print())
+        ));
+
+        System.out.println(kmtTable.print());
+
     }
 
 }
