@@ -21,8 +21,8 @@ public class EmissionsMapper {
 
     public EmissionsDataContainer mapDocument(Document document) {
 
-        Optional<Element> table = JSoupUtils.getTableByClassAndContainedText(document, "table.table_wirkung_strasse",
-                "Veränderung der Abgasemissionen" );
+        Optional<Element> table = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_wirkung_strasse",
+                "Veränderung der Abgasemissionen");
         if (table.isEmpty()) {
             return EmissionsDataContainer.empty();
         }
@@ -37,7 +37,7 @@ public class EmissionsMapper {
                         .map(Optional::get)
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        Optional<Element> envTable = JSoupUtils.getTableByClassAndContainedText(document, "table.table_webprins",
+        Optional<Element> envTable = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_webprins",
                 "Äquivalenten aus Lebenszyklusemissionen");
 
         if (envTable.isEmpty()) {

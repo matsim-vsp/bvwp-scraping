@@ -15,7 +15,7 @@ class EmissionsMapperTest {
     @Test
     void testEmissionsMapping() throws IOException {
         EmissionsDataContainer emissionsDataContainer =
-                new EmissionsMapper().mapDocument( LocalFileAccessor.getLocalDocument("a20.html" ) );
+                new EmissionsMapper().mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
         Map<Emission, VehicleEmissions> expected = new HashMap<>();
         expected.put(Emission.NOX, new VehicleEmissions(103.65, -36.81, 66.85));

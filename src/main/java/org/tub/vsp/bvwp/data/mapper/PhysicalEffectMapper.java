@@ -13,12 +13,12 @@ import java.util.Optional;
 public class PhysicalEffectMapper {
     private static final Logger logger = LogManager.getLogger(PhysicalEffectMapper.class);
 
-    public PhysicalEffectDataContainer mapDocument( Document document ) {
+    public PhysicalEffectDataContainer mapDocument(Document document) {
         PhysicalEffectDataContainer physicalEffectDataContainer =
                 new PhysicalEffectDataContainer().setEmissionsDataContainer(new EmissionsMapper().mapDocument(document));
 
-        Optional<Element> table = JSoupUtils.getTableByClassAndContainedText(document, "table.table_wirkung_strasse",
-                "Verkehrswirkungen im Planfall" );
+        Optional<Element> table = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_wirkung_strasse",
+                "Verkehrswirkungen im Planfall");
 
         if (table.isEmpty()) {
             return physicalEffectDataContainer;

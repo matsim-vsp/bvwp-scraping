@@ -7,14 +7,10 @@ import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
 import org.tub.vsp.bvwp.data.type.Emission;
 
-import java.text.ParseException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class StreetCostBenefitMapper {
@@ -23,9 +19,9 @@ public class StreetCostBenefitMapper {
     public StreetCostBenefitAnalysisDataContainer mapDocument(Document document) {
         StreetCostBenefitAnalysisDataContainer result = new StreetCostBenefitAnalysisDataContainer();
 
-        Optional<Element> benefit = getTableByKey(document, "table.table_webprins",
+        Optional<Element> benefit = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_webprins",
                 StreetCostBenefitMapper::isBenefitTable);
-        Optional<Element> costTable = getTableByKey(document, "table.table_kosten",
+        Optional<Element> costTable = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_kosten",
                 StreetCostBenefitMapper::isCostTable);
 
         //We only scrape the cumulated values
@@ -48,27 +44,9 @@ public class StreetCostBenefitMapper {
                                            .setNa(extractEmissionsBenefit(element))
                                            .setOverallBenefit(extractSimpleBenefit(element, "Gesamtnutzen", 0)));
 
-        costTable.ifPresent(element -> result.setCost(extractCosts(element)));
+        costTable.ifPresent(element -> result.setCost(CostBenefitMapperUtils.extractCosts(element)));
 
         return result;
-    }
-
-    private Optional<Element> getTableByKey(Document document, String key, Predicate<Element> predicate) {
-        List<Element> list = document.select(key)
-                                     .stream()
-                                     .filter(predicate)
-                                     .toList();
-
-        if (list.isEmpty()) {
-            logger.warn("Could not find any element with key {}.", key);
-            return Optional.empty();
-        } else if (list.size() > 1) {
-            logger.warn("Found more than one element with key {}.", key);
-            return Optional.empty();
-        }
-
-//        return Optional.of(list.getFirst());
-        return Optional.of(list.get(0));
     }
 
     //The table with "Veränderung der Betriebskosten" in its second row corresponds to the benefit table
@@ -91,20 +69,6 @@ public class StreetCostBenefitMapper {
                       .contains("Summe bewertungsrelevanter Investitionskosten");
     }
 
-    private Cost extractCosts(Element table) {
-        Double costs;
-        Double overallCosts;
-        try {
-            costs = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 1));
-            overallCosts = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 2));
-        } catch (ParseException e) {
-            logger.warn("Could not parse benefit value from {}", table);
-            return null;
-        }
-
-        return new Cost(costs, overallCosts);
-    }
-
     private Benefit extractSimpleBenefit(Element table, String key) {
         return extractSimpleBenefit(table, key, 1);
     }
@@ -120,24 +84,7 @@ public class StreetCostBenefitMapper {
 
     private Optional<Benefit> extractSimpleBenefitOptional(Element table, String key, int keyColumnIndex) {
         return JSoupUtils.firstRowWithKeyInCol(table, key, keyColumnIndex)
-                         .flatMap(this::extractBenefitFromRow);
-    }
-
-    private Optional<Benefit> extractBenefitFromRow(Element e) {
-        Double annualBenefits;
-        Double overallBenefits;
-        try {
-            annualBenefits = JSoupUtils.parseDouble(e.select("td")
-                                                     .get(2)
-                                                     .text());
-            overallBenefits = JSoupUtils.parseDouble(e.select("td")
-                                                      .get(3)
-                                                      .text());
-        } catch (ParseException ex) {
-            logger.warn("Could not parse benefit value from {}", e);
-            return Optional.empty();
-        }
-        return Optional.of(new Benefit(annualBenefits, overallBenefits));
+                         .flatMap(CostBenefitMapperUtils::extractBenefitFromRow);
     }
 
     private Map<Emission, Benefit> extractEmissionsBenefit(Element table) {

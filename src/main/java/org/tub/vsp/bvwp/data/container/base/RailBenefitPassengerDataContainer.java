@@ -4,7 +4,7 @@ import org.tub.vsp.bvwp.data.type.Benefit;
 
 import java.util.Objects;
 
-public class RailBenefitPassengerTrafficDataContainer {
+public class RailBenefitPassengerDataContainer {
     private Benefit nbPkw;
     private Benefit nbSpv;
     private Benefit nbLuft;
@@ -31,7 +31,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nbPkw;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNbPkw(Benefit nbPkw) {
+    public RailBenefitPassengerDataContainer setNbPkw(Benefit nbPkw) {
         this.nbPkw = nbPkw;
         return this;
     }
@@ -40,7 +40,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nbSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNbSpv(Benefit nbSpv) {
+    public RailBenefitPassengerDataContainer setNbSpv(Benefit nbSpv) {
         this.nbSpv = nbSpv;
         return this;
     }
@@ -49,7 +49,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nbLuft;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNbLuft(Benefit nbLuft) {
+    public RailBenefitPassengerDataContainer setNbLuft(Benefit nbLuft) {
         this.nbLuft = nbLuft;
         return this;
     }
@@ -58,7 +58,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return naPkw;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNaPkw(Benefit naPkw) {
+    public RailBenefitPassengerDataContainer setNaPkw(Benefit naPkw) {
         this.naPkw = naPkw;
         return this;
     }
@@ -67,7 +67,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return naSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNaSpv(Benefit naSpv) {
+    public RailBenefitPassengerDataContainer setNaSpv(Benefit naSpv) {
         this.naSpv = naSpv;
         return this;
     }
@@ -76,7 +76,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return naLuft;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNaLuft(Benefit naLuft) {
+    public RailBenefitPassengerDataContainer setNaLuft(Benefit naLuft) {
         this.naLuft = naLuft;
         return this;
     }
@@ -85,7 +85,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nsPkw;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNsPkw(Benefit nsPkw) {
+    public RailBenefitPassengerDataContainer setNsPkw(Benefit nsPkw) {
         this.nsPkw = nsPkw;
         return this;
     }
@@ -94,7 +94,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nsSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNsSpv(Benefit nsSpv) {
+    public RailBenefitPassengerDataContainer setNsSpv(Benefit nsSpv) {
         this.nsSpv = nsSpv;
         return this;
     }
@@ -103,7 +103,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nrzVerbVerkehr;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNrzVerbVerkehr(Benefit nrzVerbVerkehr) {
+    public RailBenefitPassengerDataContainer setNrzVerbVerkehr(Benefit nrzVerbVerkehr) {
         this.nrzVerbVerkehr = nrzVerbVerkehr;
         return this;
     }
@@ -112,7 +112,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nrzInduzVerkehr;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNrzInduzVerkehr(Benefit nrzInduzVerkehr) {
+    public RailBenefitPassengerDataContainer setNrzInduzVerkehr(Benefit nrzInduzVerkehr) {
         this.nrzInduzVerkehr = nrzInduzVerkehr;
         return this;
     }
@@ -121,7 +121,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nrzVerlagerungPkwSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNrzVerlagerungPkwSpv(Benefit nrzVerlagerungPkwSpv) {
+    public RailBenefitPassengerDataContainer setNrzVerlagerungPkwSpv(Benefit nrzVerlagerungPkwSpv) {
         this.nrzVerlagerungPkwSpv = nrzVerlagerungPkwSpv;
         return this;
     }
@@ -130,7 +130,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return nrzVerlagerungLuftSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNrzVerlagerungLuftSpv(Benefit nrzVerlagerungLuftSpv) {
+    public RailBenefitPassengerDataContainer setNrzVerlagerungLuftSpv(Benefit nrzVerlagerungLuftSpv) {
         this.nrzVerlagerungLuftSpv = nrzVerlagerungLuftSpv;
         return this;
     }
@@ -139,7 +139,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return niInduzVerkehr;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNiInduzVerkehr(Benefit niInduzVerkehr) {
+    public RailBenefitPassengerDataContainer setNiInduzVerkehr(Benefit niInduzVerkehr) {
         this.niInduzVerkehr = niInduzVerkehr;
         return this;
     }
@@ -148,7 +148,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return niVerlagerungPkwSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNiVerlagerungPkwSpv(Benefit niVerlagerungPkwSpv) {
+    public RailBenefitPassengerDataContainer setNiVerlagerungPkwSpv(Benefit niVerlagerungPkwSpv) {
         this.niVerlagerungPkwSpv = niVerlagerungPkwSpv;
         return this;
     }
@@ -157,7 +157,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return niVerlagerungLuftSpv;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setNiVerlagerungLuftSpv(Benefit niVerlagerungLuftSpv) {
+    public RailBenefitPassengerDataContainer setNiVerlagerungLuftSpv(Benefit niVerlagerungLuftSpv) {
         this.niVerlagerungLuftSpv = niVerlagerungLuftSpv;
         return this;
     }
@@ -166,7 +166,7 @@ public class RailBenefitPassengerTrafficDataContainer {
         return overallBenefit;
     }
 
-    public RailBenefitPassengerTrafficDataContainer setOverallBenefit(Benefit overallBenefit) {
+    public RailBenefitPassengerDataContainer setOverallBenefit(Benefit overallBenefit) {
         this.overallBenefit = overallBenefit;
         return this;
     }
@@ -200,7 +200,7 @@ public class RailBenefitPassengerTrafficDataContainer {
             return false;
         }
 
-        RailBenefitPassengerTrafficDataContainer that = (RailBenefitPassengerTrafficDataContainer) o;
+        RailBenefitPassengerDataContainer that = (RailBenefitPassengerDataContainer) o;
 
         if (!Objects.equals(nbPkw, that.nbPkw)) {
             return false;

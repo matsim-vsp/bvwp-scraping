@@ -10,6 +10,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class JSoupUtils {
     private static final Logger logger = LogManager.getLogger(JSoupUtils.class);
@@ -17,8 +18,18 @@ public class JSoupUtils {
     public static Optional<Integer> getFirstRowIndexWithText(Element table, String text) {
         int counter = 0;
         for (Element tr : table.select("tr")) {
-            if (tr.text()
-                  .contains(text)) {
+            if (tr.text().contains(text)) {
+                return Optional.of(counter);
+            }
+            counter++;
+        }
+        return Optional.empty();
+    }
+
+    public static Optional<Integer> getFirstRowIndexWithTextInCol(Element table, String text, int colIndex) {
+        int counter = 0;
+        for (Element tr : table.select("tr")) {
+            if (tr.child(colIndex).text().contains(text)) {
                 return Optional.of(counter);
             }
             counter++;
@@ -63,29 +74,32 @@ public class JSoupUtils {
                            .doubleValue();
     }
 
-    public static Optional<Element> getTableByClassAndContainedText(Document document, String cssClass,
-                                                                    String textToContain) {
-        List<Element> list = document.select(cssClass)
+    public static Optional<Element> getTableByKeyAndContainedText(Document document, String cssClass,
+                                                                  String textToContain) {
+        return getTableByCssKeyAndPredicate(document, cssClass, (e) -> anyRowContainsText(e, textToContain));
+    }
+
+    public static Optional<Element> getTableByCssKeyAndPredicate(Document document, String key,
+                                                                 Predicate<Element> predicate) {
+        List<Element> list = document.select(key)
                                      .stream()
-                                     .filter(e -> anyRowContainsText(e, textToContain))
+                                     .filter(predicate)
                                      .toList();
 
         if (list.isEmpty()) {
-            logger.warn("Could not find any fitting table.");
+            logger.warn("Could not find any element with key {}.", key);
             return Optional.empty();
         } else if (list.size() > 1) {
-            logger.warn("Found more than one fitting table.");
+            logger.warn("Found more than one element with key {}.", key);
             return Optional.empty();
         }
 
-//        return Optional.of(list.getFirst());
         return Optional.of(list.get(0));
     }
 
     private static boolean anyRowContainsText(Element element, String textToContain) {
         return element.select("tr")
                       .stream()
-                      .anyMatch(r -> r.text()
-                                      .contains(textToContain));
+                      .anyMatch(r -> r.text().contains(textToContain));
     }
 }
