@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp.data.container.base;
 
+import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Priority;
 
 import java.util.Objects;
@@ -10,6 +11,7 @@ public class ProjectInformationDataContainer {
     private Priority priority;
     private String bautyp;
     private Double length;
+    private Double verkehrsbelastung2030;
 
     public String getProjectNumber() {
         return projectNumber;
@@ -78,5 +80,12 @@ public class ProjectInformationDataContainer {
     }
     public Double getLength(){
         return length;
+    }
+    public ProjectInformationDataContainer setVerkehrsbelastung2030( Double verkehrsbelastung2030 ){
+        this.verkehrsbelastung2030 = verkehrsbelastung2030;
+        return this;
+    }
+    public Double getVerkehrsbelastung2030(){
+        return verkehrsbelastung2030;
     }
 }

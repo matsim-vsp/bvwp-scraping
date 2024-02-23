@@ -24,6 +24,11 @@ public class ProjectInformationMapper {
         }
         String bautyp = extractInformation( document, 0, "Bautyp(en), Bauziel(e)" );
 
+        String verkehrsbelastung2030 = extractInformation( document, 0, "im Planfall 2030" );
+        if ( verkehrsbelastung2030!=null ) {
+            verkehrsbelastung2030 = verkehrsbelastung2030.replace( " Kfz/24h", "" );
+        }
+
         String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
         try{
@@ -32,6 +37,7 @@ public class ProjectInformationMapper {
                                      .setLength( JSoupUtils.parseDouble( length ) )
                                      .setBautyp( bautyp )
                                      .setPriority( Priority.getFromString(priority ) )
+                                     .setVerkehrsbelastung2030( JSoupUtils.parseDouble( verkehrsbelastung2030 ))
                             ;
         } catch( ParseException e ){
             throw new RuntimeException( e );

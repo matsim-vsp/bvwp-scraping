@@ -62,8 +62,7 @@ public class RunLocalCsvScraping {
 
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
-        final String NKV_DIFF = "nkvDiff";
-        table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName( NKV_DIFF ) );
+        table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName( Headers.NKV_DIFF ) );
 
 
 //        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
@@ -73,36 +72,15 @@ public class RunLocalCsvScraping {
 
         // ===
 
-        String xName;
-        Axis.AxisBuilder xAxisBuilder = Axis.builder();
-        // ---------------------------------------------------------------
-//        {
-//            xName = Headers.B_CO2_NEU;
-//            xAxisBuilder.type( Axis.Type.LOG );
-//        }
-        // ---------------------------------------------------------------
-        // ---------------------------------------------------------------
-        {
-//            xName = Headers.NKV_NO_CHANGE;
-//            xName = NKV_DIFF;
-            xName = Headers.ADDITIONAL_LANE_KM;
-            xAxisBuilder
-                            .type( Axis.Type.LOG )
-//                            .autoRange( Axis.AutoRange.REVERSED )
-            ;
-        }
-        // ---------------------------------------------------------------
-        table = table.sortDescendingOn( xName );
-        Axis xAxis = xAxisBuilder.title( xName ).build();
 
-
-        Figures figures = new Figures( table, xAxis, xName );
+        Figures figures = new Figures( table );
         Figure figure = figures.createFigurePkwKm();
         Figure figure2 = figures.createFigureNkv();
         Figure figure3 = figures.createFigureCost();
         Figure figure4 = figures.createFigureCO2();
         Figure figure5 = figures.createFigureElasticities();
         Figure figure6 = figures.createFigureFzkm();
+        Figure figure7 = figures.createFigureDtv();
 
         String page = MultiPlotExample.pageTop + System.lineSeparator() +
                                       figure2.asJavascript( "plot1" ) + System.lineSeparator() +
@@ -111,6 +89,7 @@ public class RunLocalCsvScraping {
                                       figure4.asJavascript( "plot4" ) + System.lineSeparator() +
                                       figure5.asJavascript( "plot5" ) + System.lineSeparator() +
                                       figure6.asJavascript( "plot6" ) + System.lineSeparator() +
+                                      figure7.asJavascript( "plot7" ) + System.lineSeparator() +
                                       MultiPlotExample.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();

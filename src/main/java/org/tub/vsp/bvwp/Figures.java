@@ -16,10 +16,34 @@ class Figures {
 	private final Table table;
 	private final Axis xAxis;
 	private final String xName;
-	Figures( Table table, Axis xAxis, String xName ){
+	Figures( Table table ){
+		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+		// ---------------------------------------------------------------
+        {
+		xName = Headers.B_CO2_NEU;
+//		xName = Headers.COST_OVERALL;
+//		xName = Headers.VERKEHRSBELASTUNG_2030;
+            xAxisBuilder.type( Axis.Type.LOG );
+        }
+		// ---------------------------------------------------------------
+		// ---------------------------------------------------------------
+//		{
+//			xName = Headers.NKV_NO_CHANGE;
+//			xName = Headers.NKV_INDUZ_CO2;
+//            xName = Headers.NKV_DIFF;
+////            xName = Headers.ADDITIONAL_LANE_KM;
+//			xAxisBuilder
+//					.type( Axis.Type.LOG )
+////                            .autoRange( Axis.AutoRange.REVERSED )
+//                            .range(0,1)
+//			;
+//		}
+		// ---------------------------------------------------------------
+		table = table.sortAscendingOn( xName );
+		this.xAxis = xAxisBuilder.title( xName ).build();
+
+
 		this.table = table;
-		this.xAxis = xAxis;
-		this.xName = xName;
 	}
 	Figure createFigureCost( ){
 		Figure figure3;
@@ -110,7 +134,7 @@ class Figures {
 
 		Axis yAxis = Axis.builder()
 				 .title( yName )
-//				 .type( Axis.Type.LOG ) // sonst "0" nicht darstellbar
+				 .type( Axis.Type.LOG ) // sonst "0" nicht darstellbar
 				 .build();
 		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis )
 				      .width( plotWidth )
@@ -148,9 +172,12 @@ class Figures {
 				     .divide( table.numberColumn( Headers.ADDITIONAL_LANE_KM ) ).setName("elasticity_new" )
 				);
 
+		double xMin = table.numberColumn( xName ).min();
+		double xMax = table.numberColumn( xName ).max();
+
 		Axis yAxis = Axis.builder().title( yName )
 //				 .type( Axis.Type.LOG )
-				 .range( -0.3, 0.8 )
+//				 .range( -0.3, 0.8 )
 				 .build();
 
 		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
@@ -160,10 +187,10 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		Trace trace1 = ScatterTrace.builder( new double[]{2,700}, new double[]{ 0.3, 0.3 } )
+		Trace trace1 = ScatterTrace.builder( new double[]{xMin,xMax}, new double[]{ 0.3, 0.3 } )
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
-		Trace trace2 = ScatterTrace.builder( new double[]{2,700}, new double[]{ 0.6, 0.6 } )
+		Trace trace2 = ScatterTrace.builder( new double[]{xMin, xMax}, new double[]{ 0.6, 0.6 } )
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
 
@@ -178,12 +205,12 @@ class Figures {
 				trace1, trace2 );
 	}
 	public Figure createFigureFzkm(){
-		String yName = Headers.PKWKM_ALL;
 		String y2Name = Headers.PKWKM_ALL;
+		String yName = Headers.PKWKM_ALL_NEU;
 
 		Axis yAxis = Axis.builder().title( yName )
-//				 .type( Axis.Type.LOG )
-				 .range( 0.,400. )
+				 .type( Axis.Type.LOG )
+//				 .range( 0.,400. )
 				 .build();
 
 		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
@@ -198,16 +225,17 @@ class Figures {
 		final Trace traceVb = getTraceVb( table, xName, y2Name );
 		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
 
-		Trace trace1 = ScatterTrace.builder( new double[]{0,700}, new double[]{ 0 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.3} )
-					   .mode( ScatterTrace.Mode.LINE )
-					   .build();
-		Trace trace2 = ScatterTrace.builder( new double[]{0,700}, new double[]{ 0 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.6} )
-					   .mode( ScatterTrace.Mode.LINE )
-					   .build();
+//		Trace trace1 = ScatterTrace.builder( new double[]{1,700}, new double[]{ 1 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.3} )
+//					   .mode( ScatterTrace.Mode.LINE )
+//					   .build();
+//		Trace trace2 = ScatterTrace.builder( new double[]{1,700}, new double[]{ 1 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.6} )
+//					   .mode( ScatterTrace.Mode.LINE )
+//					   .build();
 
-		return new Figure( layout, trace,
-//				traceWb, traceWbp, traceVb, traceVbe,
-				trace1, trace2 );
+		return new Figure( layout, trace
+				,traceWb, traceWbp, traceVb, traceVbe
+//				,trace1, trace2
+		);
 	}
 
 	Figure createFigureCO2( ){
@@ -231,8 +259,30 @@ class Figures {
 
 		return new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
 	}
+	public Figure createFigureDtv(){
+		String yName = Headers.VERKEHRSBELASTUNG_2030;
+		String y2Name = Headers.VERKEHRSBELASTUNG_2030;
+
+		Axis yAxis = Axis.builder().title( yName ).type( Axis.Type.LOG ).build();
+
+		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+					  .name( String.format( legendFormat, yName ) )
+					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+					  .build();
+
+		final Trace traceWb = getTraceWb( table, xName, y2Name );
+		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
+		final Trace traceVb = getTraceVb( table, xName, y2Name );
+		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+
+
+		return new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
+	}
 	private static Trace getTraceVbe( Table table, String xName, String y2Name ){
-		Table tableVbe = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VBE" ) );
+//		Table tableVbe = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VBE" ) );
+		Table tableVbe = table.where( table.stringColumn( Headers.BAUTYP ).containsString( "Aus / Neubau eines Knotenpunktes" ) );
 		Trace traceVbe = ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
 					     .text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					     .name( String.format( legendFormat, y2Name ) )
@@ -241,7 +291,8 @@ class Figures {
 		return traceVbe;
 	}
 	private static Trace getTraceVb( Table table, String xName, String y2Name ){
-		Table tableVb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VB" ) );
+//		Table tableVb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VB" ) );
+		Table tableVb = table.where( table.stringColumn( Headers.BAUTYP ).isEqualTo( "Erweiterung auf 8 Fahrstreifen" ) );
 		Trace traceVb = ScatterTrace.builder( tableVb.numberColumn( xName ), tableVb.numberColumn( y2Name ) )
 					    .text( tableVb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
@@ -250,7 +301,8 @@ class Figures {
 		return traceVb;
 	}
 	private static Trace getTraceWb( Table table, String xName, String y2Name ){
-		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WB" ) );
+//		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WB" ) );
+		Table tableWb = table.where( table.stringColumn( Headers.BAUTYP ).isEqualTo( "4-streifiger Neubau" ) );
 		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
@@ -259,7 +311,8 @@ class Figures {
 		return traceWb;
 	}
 	private static Trace getTraceWbp( Table table, String xName, String y2Name ){
-		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WBP" ) );
+//		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WBP" ) );
+		Table tableWb = table.where( table.stringColumn( Headers.BAUTYP ).isEqualTo( "Erweiterung auf 6 Fahrstreifen" ) );
 		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )

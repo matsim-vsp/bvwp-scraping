@@ -22,5 +22,7 @@ public final class Headers{
 	public static final String PKWKM_ALL_NEU = "pkwkm_all_neu";
 	public static final String B_CO2_NEU = "b_co2_neu";
 	public static final String ADDITIONAL_LANE_KM = "additional_lane_km";
+	public static final String NKV_DIFF = "nkvDiff";
+	public static final String VERKEHRSBELASTUNG_2030 = "DTV 2030";
 	private Headers(){} // do not instantiate
 }
