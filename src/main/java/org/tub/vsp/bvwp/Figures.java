@@ -20,7 +20,7 @@ class Figures {
 		Axis.AxisBuilder xAxisBuilder = Axis.builder();
 		// ---------------------------------------------------------------
         {
-		xName = Headers.B_CO2_NEU;
+//		xName = Headers.B_CO2_NEU;
 //		xName = Headers.COST_OVERALL;
 //		xName = Headers.VERKEHRSBELASTUNG_2030;
             xAxisBuilder.type( Axis.Type.LOG );
@@ -31,7 +31,7 @@ class Figures {
 //			xName = Headers.NKV_NO_CHANGE;
 //			xName = Headers.NKV_INDUZ_CO2;
 //            xName = Headers.NKV_DIFF;
-////            xName = Headers.ADDITIONAL_LANE_KM;
+            xName = Headers.ADDITIONAL_LANE_KM;
 //			xAxisBuilder
 //					.type( Axis.Type.LOG )
 ////                            .autoRange( Axis.AutoRange.REVERSED )
@@ -187,7 +187,7 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		Trace trace1 = ScatterTrace.builder( new double[]{xMin,xMax}, new double[]{ 0.3, 0.3 } )
+		Trace trace1 = ScatterTrace.builder( new double[]{xMin,xMax}, new double[]{ 0.2, 0.2 } )
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
 		Trace trace2 = ScatterTrace.builder( new double[]{xMin, xMax}, new double[]{ 0.6, 0.6 } )
