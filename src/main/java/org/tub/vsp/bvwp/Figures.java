@@ -22,8 +22,7 @@ class Figures {
         {
 //		xName = Headers.B_CO2_NEU;
 //		xName = Headers.COST_OVERALL;
-//		xName = Headers.VERKEHRSBELASTUNG_2030;
-            xAxisBuilder.type( Axis.Type.LOG );
+		xName = Headers.VERKEHRSBELASTUNG_2030;
         }
 		// ---------------------------------------------------------------
 		// ---------------------------------------------------------------
@@ -31,7 +30,7 @@ class Figures {
 //			xName = Headers.NKV_NO_CHANGE;
 //			xName = Headers.NKV_INDUZ_CO2;
 //            xName = Headers.NKV_DIFF;
-            xName = Headers.ADDITIONAL_LANE_KM;
+//            xName = Headers.ADDITIONAL_LANE_KM;
 //			xAxisBuilder
 //					.type( Axis.Type.LOG )
 ////                            .autoRange( Axis.AutoRange.REVERSED )
@@ -39,6 +38,14 @@ class Figures {
 //			;
 //		}
 		// ---------------------------------------------------------------
+
+		switch( xName ){
+			case Headers.NKV_NO_CHANGE
+//					     , Headers.VERKEHRSBELASTUNG_2030
+					-> xAxisBuilder.type( Axis.Type.LOG );
+		}
+
+
 		table = table.sortAscendingOn( xName );
 		this.xAxis = xAxisBuilder.title( xName ).build();
 
@@ -66,10 +73,10 @@ class Figures {
 					  .name( String.format( legendFormat, yName ) )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getTraceCyan( table, xName, y2Name );
+		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
+		final Trace traceVb = getTraceOrange( table, xName, y2Name );
+		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
 		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
 					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -87,8 +94,8 @@ class Figures {
 	}
 	Figure createFigureNkv( ){
 		Figure figure2;
-		String yName = Headers.NKV_NO_CHANGE;
-		String y3Name = Headers.NKV_CO2;
+		String yName = Headers.NKV_INDUZ_CO2;
+//		String y3Name = Headers.NKV_CO2;
 		String y2Name = Headers.NKV_INDUZ_CO2;
 
 		Axis yAxis = Axis.builder()
@@ -106,17 +113,17 @@ class Figures {
 					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceCyan = getTraceCyan( table, xName, y2Name );
+		final Trace traceMagenta = getTraceMagenta( table, xName, y2Name );
+		final Trace traceOrange = getTraceOrange( table, xName, y2Name );
+		final Trace traceRed = getTraceRed( table, xName, y2Name );
 
 
-		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
-					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					   .name( String.format( legendFormat, y3Name ) )
-					   .marker( Marker.builder().color( "gray" ).build() )
-					   .build();
+//		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
+//					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+//					   .name( String.format( legendFormat, y3Name ) )
+//					   .marker( Marker.builder().color( "gray" ).build() )
+//					   .build();
 
 		double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
 		double[] yy = new double[]{1., 1.};
@@ -124,7 +131,12 @@ class Figures {
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
 
-		figure2 = new Figure( layout, trace, trace3, traceWb,traceWbp,  traceVb, traceVbe, trace4 );
+		figure2 = new Figure( layout
+//				, trace
+//				, trace3
+				, traceCyan,traceMagenta
+//				,  traceOrange, traceRed
+				, trace4 );
 		return figure2;
 	}
 	Figure createFigurePkwKm( ){
@@ -145,10 +157,10 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getTraceCyan( table, xName, y2Name );
+		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
+		final Trace traceVb = getTraceOrange( table, xName, y2Name );
+		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
 		//            double[] xx = new double[]{1., 200.};
 		//            Trace trace1 = ScatterTrace.builder( xx, xx )
@@ -220,10 +232,10 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getTraceCyan( table, xName, y2Name );
+		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
+		final Trace traceVb = getTraceOrange( table, xName, y2Name );
+		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
 //		Trace trace1 = ScatterTrace.builder( new double[]{1,700}, new double[]{ 1 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.3} )
 //					   .mode( ScatterTrace.Mode.LINE )
@@ -251,10 +263,10 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getTraceCyan( table, xName, y2Name );
+		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
+		final Trace traceVb = getTraceOrange( table, xName, y2Name );
+		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
 
 		return new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
@@ -272,17 +284,21 @@ class Figures {
 					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getTraceCyan( table, xName, y2Name );
+		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
+		final Trace traceVb = getTraceOrange( table, xName, y2Name );
+		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
 
-		return new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
+		return new Figure( layout, trace
+				, traceWb
+				,traceWbp
+				, traceVb
+				, traceVbe
+		);
 	}
-	private static Trace getTraceVbe( Table table, String xName, String y2Name ){
-//		Table tableVbe = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VBE" ) );
-		Table tableVbe = table.where( table.stringColumn( Headers.BAUTYP ).containsString( "Aus / Neubau eines Knotenpunktes" ) );
+	private static Trace getTraceRed( Table table, String xName, String y2Name ){
+		Table tableVbe = table.where( table.stringColumn( Headers.BAUTYP ).isIn( "EW8" ) );
 		Trace traceVbe = ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
 					     .text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					     .name( String.format( legendFormat, y2Name ) )
@@ -290,9 +306,8 @@ class Figures {
 					     .build();
 		return traceVbe;
 	}
-	private static Trace getTraceVb( Table table, String xName, String y2Name ){
-//		Table tableVb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VB" ) );
-		Table tableVb = table.where( table.stringColumn( Headers.BAUTYP ).isEqualTo( "Erweiterung auf 8 Fahrstreifen" ) );
+	private static Trace getTraceOrange( Table table, String xName, String y2Name ){
+		Table tableVb = table.where( table.stringColumn( Headers.BAUTYP ).isIn( "EW6" ) );
 		Trace traceVb = ScatterTrace.builder( tableVb.numberColumn( xName ), tableVb.numberColumn( y2Name ) )
 					    .text( tableVb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
@@ -300,23 +315,21 @@ class Figures {
 					    .build();
 		return traceVb;
 	}
-	private static Trace getTraceWb( Table table, String xName, String y2Name ){
-//		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WB" ) );
-		Table tableWb = table.where( table.stringColumn( Headers.BAUTYP ).isEqualTo( "4-streifiger Neubau" ) );
+	private static Trace getTraceMagenta( Table table, String xName, String y2Name ){
+		Table tableWb = table.where( table.stringColumn( Headers.BAUTYP ).containsString( "NB" ) );
+		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
+					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+					    .name( String.format( legendFormat, y2Name ) )
+					    .marker( Marker.builder().color( "magenta" ).build() )
+					    .build();
+		return traceWb;
+	}
+	private static Trace getTraceCyan( Table table, String xName, String y2Name ){
+		Table tableWb = table.where( table.stringColumn( Headers.BAUTYP ).containsString( "KNOTENPUNKT" ) ) ;
 		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
 					    .marker( Marker.builder().color( "cyan" ).build() )
-					    .build();
-		return traceWb;
-	}
-	private static Trace getTraceWbp( Table table, String xName, String y2Name ){
-//		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WBP" ) );
-		Table tableWb = table.where( table.stringColumn( Headers.BAUTYP ).isEqualTo( "Erweiterung auf 6 Fahrstreifen" ) );
-		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
-					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					    .name( String.format( legendFormat, y2Name ) )
-					    .marker( Marker.builder().color( "yellow" ).build() )
 					    .build();
 		return traceWb;
 	}

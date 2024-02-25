@@ -46,13 +46,14 @@ public class StreetScraper extends Scraper {
         return "(" + road + "-.*-" + bundesland + ".html" + ")|" ;
     }
 
-    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix, String regex ) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix, String regexToMatch ) {
 
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
                     .filter(file -> file.getName().startsWith(prefix) )
-                    .filter( file -> file.getName().matches( regex ) )
+                    .filter( file -> file.getName().matches( regexToMatch ) )
                     .filter( file -> !file.getName().matches(  "A20-G10-SH.html" ) ) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'23
+                    .filter( file -> !file.getName().matches( "A...B.*" ) ) // Ortsumgehungen, die an AB angrenzen.
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

@@ -168,7 +168,7 @@ public class StreetCsvWriter {
         record.add( Headers.PROJECT_NAME, baseDataContainer.getProjectInformation().getProjectNumber() );
         record.add( Headers.LINK, baseDataContainer.getUrl() );
         record.add( Headers.PRIORITY, baseDataContainer.getProjectInformation().getPriority().name() );
-        record.add( Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp() );
+        record.add( Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp().name() );
 
         record.add( Headers.LENGTH, baseDataContainer.getProjectInformation().getLength() );
 

@@ -9,6 +9,7 @@ import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotExample;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
@@ -23,6 +24,7 @@ import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.function.Function;
 
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
@@ -56,6 +58,8 @@ public class RunLocalCsvScraping {
                                                                               .map( StreetAnalysisDataContainer::new )
                                                                               .toList();
 
+        System.exit(-1);
+
         logger.info( "Writing csv" );
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
         Table table = csvWriter.writeCsv( allStreetBaseData );
@@ -63,6 +67,14 @@ public class RunLocalCsvScraping {
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
         table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName( Headers.NKV_DIFF ) );
+
+        DoubleColumn newColumn = DoubleColumn.create( Headers.NKV_INDUZ_CO2 );
+        for( Double number : table.doubleColumn( Headers.NKV_INDUZ_CO2 ) ){
+            number = Math.min( number, 10. );
+            newColumn.append( number );
+        }
+        table.removeColumns( Headers.NKV_INDUZ_CO2 );
+        table.addColumns( newColumn );
 
 
 //        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
@@ -98,7 +110,7 @@ public class RunLocalCsvScraping {
             fileWriter.write(page);
         }
 
-        new Browser().browse(outputFile );
+//        new Browser().browse(outputFile );
 
         // ===
 

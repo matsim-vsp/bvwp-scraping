@@ -40,10 +40,41 @@ public class StreetAnalysisDataContainer {
         double additionalLaneKm = streetBaseDataContainer.getProjectInformation().getLength() * 2;
         // (assumption 2 more lanes)
 
-        if ( streetBaseDataContainer.getProjectInformation().getBautyp().contains( "4-streifig" ) ) {
-            additionalLaneKm *= 2;
-            // (4 more lanes)
-        }
+	    switch( streetBaseDataContainer.getProjectInformation().getBautyp() ){
+		    case NB4:
+                        additionalLaneKm *= 2;
+                        break;
+		    case NB6:
+                        additionalLaneKm *= 3;
+                        break;
+		    case NB4_EW4:
+                        additionalLaneKm *= 1.5;
+			    break;
+		    case NB6_EW6:
+			    break;
+		    case EW4:
+			    break;
+		    case EW6:
+			    break;
+		    case EW8:
+			    break;
+		    case EW6_EW8:
+			    break;
+//		    case EW8_EW9:
+//			    break;
+		    case KNOTENPUNKT:
+			    break;
+		    case KNOTENPUNKT_EW4:
+			    break;
+		    case KNOTENPUNKT_EW6:
+			    break;
+		    case KNOTENPUNKT_NB4:
+			    break;
+		    case BLANK:
+			    break;
+		    default:
+			    throw new IllegalStateException( "Unexpected value: " + streetBaseDataContainer.getProjectInformation().getBautyp() );
+	    }
 
         entries.put( Headers.ADDITIONAL_LANE_KM, additionalLaneKm );
 
@@ -55,7 +86,7 @@ public class StreetAnalysisDataContainer {
 //        entries.put("rz", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall());
 //        entries.put("rz/km", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall() / streetBaseDataContainer.getProjectInformation().getLength() );
         entries.put( Headers.B_PER_KM, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseDataContainer.getProjectInformation().getLength() );
-        entries.put( Headers.NKV_NO_CHANGE, NkvCalculator.calculateNkv(Modifications.NO_CHANGE, streetBaseDataContainer ) );
+	    entries.put( Headers.NKV_NO_CHANGE, NkvCalculator.calculateNkv( Modifications.NO_CHANGE, streetBaseDataContainer ) );
         entries.put( Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE, streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ, NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ_CO2, NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );

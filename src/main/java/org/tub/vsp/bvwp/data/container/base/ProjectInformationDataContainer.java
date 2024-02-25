@@ -9,7 +9,7 @@ public class ProjectInformationDataContainer {
     private String projectNumber;
     private String street;
     private Priority priority;
-    private String bautyp;
+    private Bautyp bautyp;
     private Double length;
     private Double verkehrsbelastung2030;
 
@@ -67,11 +67,11 @@ public class ProjectInformationDataContainer {
         result = 31 * result + (priority != null ? priority.hashCode() : 0);
         return result;
     }
-    public ProjectInformationDataContainer setBautyp( String bautyp ){
+    public ProjectInformationDataContainer setBautyp( Bautyp bautyp ){
         this.bautyp = bautyp;
         return this;
     }
-    public String getBautyp(){
+    public Bautyp getBautyp(){
         return bautyp;
     }
     public ProjectInformationDataContainer setLength( Double length ){

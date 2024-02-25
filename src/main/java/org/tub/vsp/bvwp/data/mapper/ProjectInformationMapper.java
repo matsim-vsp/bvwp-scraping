@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
+import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.data.container.base.ProjectInformationDataContainer;
 
@@ -28,6 +29,9 @@ public class ProjectInformationMapper {
         if ( verkehrsbelastung2030!=null ) {
             verkehrsbelastung2030 = verkehrsbelastung2030.replace( " Kfz/24h", "" );
         }
+        if ( verkehrsbelastung2030==null ) {
+            verkehrsbelastung2030 = "0.";
+        }
 
         String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
@@ -35,7 +39,7 @@ public class ProjectInformationMapper {
             return projectInformation.setProjectNumber(projectNumber)
                                      .setStreet(street)
                                      .setLength( JSoupUtils.parseDouble( length ) )
-                                     .setBautyp( bautyp )
+                                     .setBautyp( Bautyp.getFromString( bautyp ) )
                                      .setPriority( Priority.getFromString(priority ) )
                                      .setVerkehrsbelastung2030( JSoupUtils.parseDouble( verkehrsbelastung2030 ))
                             ;
