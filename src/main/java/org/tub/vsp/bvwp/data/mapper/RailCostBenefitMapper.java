@@ -49,7 +49,7 @@ public class RailCostBenefitMapper {
     }
 
     private static void setNb(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
-        getFirstRowWithBenefitKey(table, "NB").ifPresent(nb -> {
+        getFirstRowIndexWithBenefitKey(table, "NB").ifPresent(nb -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNbPkw(getBenefitFromRow(rows.get(nb + 1)));
             passengerTrafficDataContainer.setNbSpv(getBenefitFromRow(rows.get(nb + 2)));
@@ -58,7 +58,7 @@ public class RailCostBenefitMapper {
     }
 
     private static void setNa(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
-        getFirstRowWithBenefitKey(table, "NA").ifPresent(na -> {
+        getFirstRowIndexWithBenefitKey(table, "NA").ifPresent(na -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNaPkw(getBenefitFromRow(rows.get(na + 1)));
             passengerTrafficDataContainer.setNaSpv(getBenefitFromRow(rows.get(na + 2)));
@@ -67,7 +67,7 @@ public class RailCostBenefitMapper {
     }
 
     private static void setNs(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
-        getFirstRowWithBenefitKey(table, "NS").ifPresent(ns -> {
+        getFirstRowIndexWithBenefitKey(table, "NS").ifPresent(ns -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNsPkw(getBenefitFromRow(rows.get(ns + 1)));
             passengerTrafficDataContainer.setNsSpv(getBenefitFromRow(rows.get(ns + 2)));
@@ -75,7 +75,7 @@ public class RailCostBenefitMapper {
     }
 
     private static void setNrz(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
-        getFirstRowWithBenefitKey(table, "NRZ").ifPresent(nrz -> {
+        getFirstRowIndexWithBenefitKey(table, "NRZ").ifPresent(nrz -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNrzVerbVerkehr(getBenefitFromRow(rows.get(nrz + 1)));
             passengerTrafficDataContainer.setNrzInduzVerkehr(getBenefitFromRow(rows.get(nrz + 2)));
@@ -85,7 +85,7 @@ public class RailCostBenefitMapper {
     }
 
     private static void setNi(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
-        getFirstRowWithBenefitKey(table, "NI").ifPresent(ni -> {
+        getFirstRowIndexWithBenefitKey(table, "NI").ifPresent(ni -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNiInduzVerkehr(getBenefitFromRow(rows.get(ni + 1)));
             passengerTrafficDataContainer.setNiVerlagerungPkwSpv(getBenefitFromRow(rows.get(ni + 2)));
@@ -93,7 +93,7 @@ public class RailCostBenefitMapper {
         });
     }
 
-    private static Optional<Integer> getFirstRowWithBenefitKey(Element table, String key) {
+    private static Optional<Integer> getFirstRowIndexWithBenefitKey(Element table, String key) {
         Optional<Integer> ni = JSoupUtils.getFirstRowIndexWithTextInCol(table, key, 1);
         if (ni.isEmpty()) {
             logger.warn("Could not find cost benefit for key {}.", key);
