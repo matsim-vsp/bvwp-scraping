@@ -113,8 +113,8 @@ public class RunLocalCsvScrapingKMT {
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
                 figureCO2.asJavascript("plot4") + System.lineSeparator() +
                 figureNkvChangeCo2_680.asJavascript("plot5") + System.lineSeparator() +
-                figureNkvChangeInduz_2000.asJavascript("plot5b") + System.lineSeparator() +
-//                figureNkvChangeInduzCo2.asJavascript("plot5c") + System.lineSeparator() +
+                figureNkvChangeInduz_2000.asJavascript("plot6") + System.lineSeparator() +
+//                figureNkvChangeInduzCo2.asJavascript("plot7") + System.lineSeparator() +
                 MultiPlotExample.pageBottom;
 
             File outputFileKMT = Paths.get("multiplotKMT.html").toFile();
