@@ -11,13 +11,13 @@ import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
-class Figures {
+class FiguresKN{
 	private static final int plotWidth = 2000;
 	private static final String legendFormat = "%30s";
 	private final Table table;
 	private final Axis xAxis;
 	private final String xName;
-	Figures( Table table ){
+	FiguresKN( Table table ){
 		Axis.AxisBuilder xAxisBuilder = Axis.builder();
 		// ---------------------------------------------------------------
         {

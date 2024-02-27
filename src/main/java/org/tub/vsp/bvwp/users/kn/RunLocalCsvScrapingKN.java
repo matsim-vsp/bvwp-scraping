@@ -26,8 +26,8 @@ import java.util.Locale;
 
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
-public class RunLocalCsvScraping {
-    private static final Logger logger = LogManager.getLogger(RunLocalCsvScraping.class );
+public class RunLocalCsvScrapingKN{
+    private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
     public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
     public static void main(String[] args) throws IOException{
@@ -81,7 +81,7 @@ public class RunLocalCsvScraping {
         // ===
 
 
-        Figures figures = new Figures( table );
+        FiguresKN figures = new FiguresKN( table );
         Figure figure = figures.createFigurePkwKm();
         Figure figure2 = figures.createFigureNkv();
         Figure figure3 = figures.createFigureCost();
