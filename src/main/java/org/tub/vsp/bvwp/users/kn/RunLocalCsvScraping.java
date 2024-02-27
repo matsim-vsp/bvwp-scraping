@@ -1,8 +1,8 @@
-package org.tub.vsp.bvwp;
+package org.tub.vsp.bvwp.users.kn;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.bvwp.computation.ComputationKN;
+import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
@@ -12,7 +12,6 @@ import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
 
@@ -24,7 +23,6 @@ import java.text.NumberFormat;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Function;
 
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 

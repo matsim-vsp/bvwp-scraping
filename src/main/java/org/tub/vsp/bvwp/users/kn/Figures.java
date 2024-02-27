@@ -1,4 +1,4 @@
-package org.tub.vsp.bvwp;
+package org.tub.vsp.bvwp.users.kn;
 
 import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.data.Headers;

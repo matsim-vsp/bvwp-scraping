@@ -2,10 +2,10 @@ package org.tub.vsp.bvwp;
 
 import static org.tub.vsp.bvwp.scraping.StreetScraper.projectString;
 
-class BvwpUtils{
+public class BvwpUtils{
 	private BvwpUtils(){} // do not instantiate
 
-	static String getPositivListe(){
+	public static String getPositivListe(){
 	    return projectString( "BW", "A5" )
 				   + projectString( "BW", "A6" )
 				   + projectString( "BY", "A003" )

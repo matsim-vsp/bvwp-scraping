@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.tub.vsp.bvwp.RunLocalCsvScraping;
 import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.CostBenefitMapper;
 import org.tub.vsp.bvwp.data.mapper.PhysicalEffectMapper;
