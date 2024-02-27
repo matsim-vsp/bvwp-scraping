@@ -1,2 +1,2 @@
-project name;link;co2-equivalents-emissions;co2-equivalents-annual;co2-equivalents-overall;co2-emissions;co2-annual;co2-overall;co-emissions;co-annual;co-overall;nox-emissions;nox-annual;nox-overall;pm-emissions;pm-annual;pm-overall;hc-emissions;hc-annual;hc-overall;so2-emissions;so2-annual;so2-overall;overall-benefit;overall-cost
-A20-G10-NI-SH;;90786.067;-13.164;-326.34;48689.94;-7.06;-175.021;1305.85;-0.081;-2.007;66.85;-1.029;-25.52;2.86;-0.306;-7.581;11.08;-0.019;-0.467;0.63;-0.008;-0.205;5305.683;2737.176
+project name;link;priority;bautyp;pkwkm_all;b_fzkm;co2-equivalents-emissions;b_co2-equivalents-annual;b_co2-equivalents-overall;b_overall;cost_overall;nkv_noChange;nkv_co2;nkv_induz;nkv_induzCo2
+A20-G10-NI-SH;;VB;4-streifiger Neubau;131.53;-785.233;90786.067;-13.164;-326.34;5305.683;2737.176;1.9383784601355556;1.4295223373797603;1.3603917315924883;-0.40803865557474395
