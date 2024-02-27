@@ -66,7 +66,7 @@ public class PhysicalEffectDataContainer {
         return result;
     }
 
-    public static final record Effect(double overall, double induced, double shifted) {
+    public static final record Effect(Double overall, Double induced, Double shifted) {
 
     }
 }

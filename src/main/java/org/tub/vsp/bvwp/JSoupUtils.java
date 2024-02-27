@@ -53,12 +53,20 @@ public class JSoupUtils {
     }
 
     public static Double parseDouble(String s) throws ParseException {
-        if ( "-".equals( s ) || s == null ) {
+        if ("-".equals(s) || s == null) {
             return 0.;
         }
         return NumberFormat.getInstance(Locale.GERMANY)
                            .parse(s)
                            .doubleValue();
+    }
+
+    public static Double parseDoubleOrElseNull(String s) {
+        try {
+            return parseDouble(s);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public static Optional<Element> getTableByClassAndContainedText(Document document, String cssClass,
