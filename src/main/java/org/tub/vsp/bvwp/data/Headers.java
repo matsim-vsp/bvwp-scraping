@@ -6,6 +6,11 @@ public final class Headers{
 	public static final String NKV_CO2 = "nkv_co2";
 	public static final String NKV_INDUZ = "nkv_induz";
 	public static final String NKV_INDUZ_CO2 = "nkv_induzCo2";
+	public static final String NKV_NO_CHANGE_EN = "BCR";
+	public static final String NKV_CO2_680_EN = "BCR_co2_680";
+	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
+	public static final String NKV_INDUZ_EN = "BCR_induz";
+	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String PROJECT_NAME = "project name";
 	public static final String LINK = "link";
 	public static final String PRIORITY = "priority";
