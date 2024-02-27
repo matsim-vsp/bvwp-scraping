@@ -58,8 +58,6 @@ public class RunLocalCsvScraping {
                                                                               .map( StreetAnalysisDataContainer::new )
                                                                               .toList();
 
-        System.exit(-1);
-
         logger.info( "Writing csv" );
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
         Table table = csvWriter.writeCsv( allStreetBaseData );
@@ -110,7 +108,7 @@ public class RunLocalCsvScraping {
             fileWriter.write(page);
         }
 
-//        new Browser().browse(outputFile );
+        new Browser().browse(outputFile );
 
         // ===
 

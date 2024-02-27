@@ -2,6 +2,7 @@ package org.tub.vsp.bvwp;
 
 import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.data.Headers;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
@@ -49,6 +50,12 @@ class Figures {
 		table = table.sortAscendingOn( xName );
 		this.xAxis = xAxisBuilder.title( xName ).build();
 
+		DoubleColumn newColumn = DoubleColumn.create( Headers.VERKEHRSBELASTUNG_2030 );
+		for( Double value : table.doubleColumn( Headers.VERKEHRSBELASTUNG_2030 ) ){
+			newColumn.append( value - 500. + 1000. * Math.random() ); // randomize so that they are not on top of each other in plotly
+		}
+		table.removeColumns( Headers.VERKEHRSBELASTUNG_2030 );
+		table.addColumns( newColumn );
 
 		this.table = table;
 	}

@@ -55,8 +55,7 @@ public class NkvCalculator {
         final Amounts amounts = new Amounts(
                         vkm.overall(), vkm.induced(), vkm.shifted(), // pkwkm
                         tt.overall(), tt.induced(), tt.shifted(), // pers_h
-                        vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2 yyyyyy the first one would have to be only from
-                        // pkw, but I think that this is currently not scraped
+                        vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
         );
         final Optional<Amounts> optional = Optional.of( amounts );
         if ( optional.isEmpty() ) {
