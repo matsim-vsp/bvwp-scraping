@@ -100,7 +100,9 @@ public class RunLocalCsvScrapingKMT {
             final int plotWidth = 1400;
 
             Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
-            Figure figureCO2 = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
+            Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.COST_OVERALL);
+            Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.COST_OVERALL);
+            Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
             Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table,
                 Headers.NKV_NO_CHANGE, Headers.NKV_CO2_680_EN);
             Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table,
@@ -110,7 +112,9 @@ public class RunLocalCsvScrapingKMT {
 
             String pageKMT = MultiPlotUtils.pageTop + System.lineSeparator() +
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
-                figureCO2.asJavascript("plot4") + System.lineSeparator() +
+                figureCostByPriority.asJavascript("plot2") + System.lineSeparator() +
+                figureNkvByPriority.asJavascript("plot3")+System.lineSeparator() +
+                figureCO2Benefit.asJavascript("plot4") + System.lineSeparator() +
                 figureNkvChangeCo2_680.asJavascript("plot5") + System.lineSeparator() +
                 figureNkvChangeInduz_2000.asJavascript("plot6") + System.lineSeparator() +
 //                figureNkvChangeInduzCo2.asJavascript("plot7") + System.lineSeparator() +
