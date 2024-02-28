@@ -184,38 +184,6 @@ class FiguresKMT {
 //				traceWb, traceWbp, traceVb, traceVbe
 				trace1, trace2 );
 	}
-	public Figure createFigureFzkm(){
-		String yName = Headers.PKWKM_ALL;
-		String y2Name = Headers.PKWKM_ALL;
-
-		Axis yAxis = Axis.builder().title( yName )
-//				 .type( Axis.Type.LOG )
-				 .range( 0.,400. )
-				 .build();
-
-		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
-
-		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
-					  .name( String.format( legendFormat, yName ) )
-					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					  .build();
-
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
-
-		Trace trace1 = ScatterTrace.builder( new double[]{0,700}, new double[]{ 0 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.3} )
-					   .mode( ScatterTrace.Mode.LINE )
-					   .build();
-		Trace trace2 = ScatterTrace.builder( new double[]{0,700}, new double[]{ 0 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.6} )
-					   .mode( ScatterTrace.Mode.LINE )
-					   .build();
-
-		return new Figure( layout, trace,
-//				traceWb, traceWbp, traceVb, traceVbe,
-				trace1, trace2 );
-	}
 
 	Figure createFigureCO2( ){
 		String yName = Headers.B_CO2_NEU;
@@ -276,47 +244,7 @@ class FiguresKMT {
 	}
 
 
-  static Figure createFigure3(Axis xAxis, int plotWidth, Table table, String xName){
-      Figure figure3;
-      String yName = Headers.COST_OVERALL;
-      String y3Name = Headers.COST_OVERALL;
-      String y2Name = Headers.COST_OVERALL;
-
-      Axis yAxis = Axis.builder()
-//                         .type( Axis.Type.LOG )
-//                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
-          .title( yName )
-          .build();
-      Layout layout = Layout.builder( yName )
-          .xAxis( xAxis )
-          .yAxis( yAxis )
-          .width( plotWidth )
-          .build();
-      Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
-          .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-          .name( yName )
-          .build();
-      Trace trace2 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y2Name ) )
-          .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-          .name( y2Name )
-          .marker( Marker.builder().color( "red" ).build() )
-          .build();
-      Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
-          .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-          .name( y3Name )
-          .marker( Marker.builder().color( "gray" ).build() )
-          .build();
-
-//            double[] xx = new double[]{1., 200.};
-//            Trace trace1 = ScatterTrace.builder( xx, xx )
-//                                       .mode( ScatterTrace.Mode.LINE )
-//                                       .build();
-
-      figure3 = new Figure( layout, trace, trace3, trace2 );
-      return figure3;
-  }
-
-  static Figure createFigureNkv(Axis xAxis, int plotWidth, Table table, String xName){
+	static Figure createFigureNkv(Axis xAxis, int plotWidth, Table table, String xName){
       Figure figure2;
       String yName = Headers.NKV_NO_CHANGE;
       String y3Name = Headers.NKV_CO2_680_EN;
@@ -338,11 +266,7 @@ class FiguresKMT {
           .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
           .name( yName )
           .build();
-//        Trace trace2 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y2Name ) )
-//                                   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-//                                   .name( y2Name )
-//                                   .marker( Marker.builder().color( "red" ).build() )
-//                                   .build();
+
       Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
           .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
           .name( y3Name )
@@ -356,7 +280,6 @@ class FiguresKMT {
           .marker(Marker.builder().color( "red" ).build())
           .build();
 
-//        figure2 = new Figure( layout, trace, trace3, trace2, trace4 );
       figure2 = new Figure( layout, trace, trace3, trace4 );
       return figure2;
   }
@@ -383,11 +306,6 @@ class FiguresKMT {
           .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
           .marker( Marker.builder().color( "red" ).build() )
           .build();
-
-//            double[] xx = new double[]{1., 200.};
-//            Trace trace1 = ScatterTrace.builder( xx, xx )
-//                                       .mode( ScatterTrace.Mode.LINE )
-//                                       .build();
 
       return new Figure( layout, trace, trace2 );
   }
