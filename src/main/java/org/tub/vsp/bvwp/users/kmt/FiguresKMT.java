@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp.users.kmt;
 
+import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.data.Headers;
 import tech.tablesaw.api.Table;
@@ -207,31 +208,34 @@ class FiguresKMT {
 		return new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
 	}
 	private static Trace getTraceVbe( Table table, String xName, String y2Name ){
-		Table tableVbe = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VBE" ) );
+		Table tableVbe = BvwpUtils.extractPriorityTable(table, "VBE");
     return ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
 					     .text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					     .name( String.format( legendFormat, y2Name ) )
 					     .marker( Marker.builder().color( "red" ).build() )
 					     .build();
 	}
+
 	private static Trace getTraceVb( Table table, String xName, String y2Name ){
-		Table tableVb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VB" ) );
+		Table tableVb = BvwpUtils.extractPriorityTable(table, "VB");
     return ScatterTrace.builder( tableVb.numberColumn( xName ), tableVb.numberColumn( y2Name ) )
 					    .text( tableVb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
 					    .marker( Marker.builder().color( "orange" ).build() )
 					    .build();
 	}
+
 	private static Trace getTraceWb( Table table, String xName, String y2Name ){
-		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WB" ) );
+		Table tableWb = BvwpUtils.extractPriorityTable(table, "WB");
     return ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
 					    .marker( Marker.builder().color( "cyan" ).build() )
 					    .build();
 	}
+
 	private static Trace getTraceWbp( Table table, String xName, String y2Name ){
-		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WBP" ) );
+		Table tableWb = BvwpUtils.extractPriorityTable(table, "WBP");
     return ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
