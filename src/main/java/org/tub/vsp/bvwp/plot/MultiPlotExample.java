@@ -15,9 +15,15 @@ import tech.tablesaw.plotly.display.Browser;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
-public class MultiPlotExample {
+/**
+ * Diese Klasse dient als BEispiel zum Erstellen von Multiplots.
+ * Sie ist **nicht** für die Erstellung der Plots selbst gedacht.
+ * {@link MultiPlotUtils} befinden sich einige Komponenten, die zum Erstellen der Plots benötigt
+ * werden.
+ */
+class MultiPlotExample {
 
-	public static final String pageTop =
+	private static final String pageTop =
 			"<html>"
 					+ System.lineSeparator()
 					+ "<head>"
@@ -45,9 +51,9 @@ public class MultiPlotExample {
 					+ "<div id='plot7'>"
 					+ System.lineSeparator();
 
-	public static final String pageBottom = "</body>" + System.lineSeparator() + "</html>";
+	private static final String pageBottom = "</body>" + System.lineSeparator() + "</html>";
 
-	public static String makePage(Figure figure1, Figure figure2, String divName1, String divName2) {
+	private static String makePage(Figure figure1, Figure figure2, String divName1, String divName2) {
 		return new StringBuilder()
 				       .append(pageTop)
 				       .append(System.lineSeparator())

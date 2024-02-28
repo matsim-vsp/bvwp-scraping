@@ -22,7 +22,7 @@ import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
-import org.tub.vsp.bvwp.plot.MultiPlotExample;
+import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
@@ -34,7 +34,6 @@ import tech.tablesaw.plotly.display.Browser;
 
 public class RunLocalCsvScrapingKMT {
     private static final Logger logger = LogManager.getLogger(RunLocalCsvScrapingKMT.class );
-    public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
     public static void main(String[] args) throws IOException {
         Locale.setDefault(Locale.US);
@@ -101,7 +100,9 @@ public class RunLocalCsvScrapingKMT {
             final int plotWidth = 1400;
 
             Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
-            Figure figureCO2 = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
+            Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.COST_OVERALL);
+            Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.COST_OVERALL);
+            Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
             Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table,
                 Headers.NKV_NO_CHANGE, Headers.NKV_CO2_680_EN);
             Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table,
@@ -109,13 +110,15 @@ public class RunLocalCsvScrapingKMT {
 //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
 //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
-            String pageKMT = MultiPlotExample.pageTop + System.lineSeparator() +
+            String pageKMT = MultiPlotUtils.pageTop + System.lineSeparator() +
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
-                figureCO2.asJavascript("plot4") + System.lineSeparator() +
+                figureCostByPriority.asJavascript("plot2") + System.lineSeparator() +
+                figureNkvByPriority.asJavascript("plot3")+System.lineSeparator() +
+                figureCO2Benefit.asJavascript("plot4") + System.lineSeparator() +
                 figureNkvChangeCo2_680.asJavascript("plot5") + System.lineSeparator() +
                 figureNkvChangeInduz_2000.asJavascript("plot6") + System.lineSeparator() +
 //                figureNkvChangeInduzCo2.asJavascript("plot7") + System.lineSeparator() +
-                MultiPlotExample.pageBottom;
+                MultiPlotUtils.pageBottom;
 
             File outputFileKMT = Paths.get("multiplotKMT.html").toFile();
 
@@ -147,7 +150,7 @@ public class RunLocalCsvScrapingKMT {
             table.numberColumn(Headers.NKV_INDUZ_CO2).isLessThan(1.));
 
         { //-- von KN
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(table.summarize(Headers.NKV_NO_CHANGE, count, mean, stdDev, min, max)
                 .by(Headers.PRIORITY));
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
@@ -155,7 +158,7 @@ public class RunLocalCsvScrapingKMT {
                 tableIndCo2kl1.summarize(Headers.NKV_INDUZ_CO2, count, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
 
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
@@ -164,7 +167,7 @@ public class RunLocalCsvScrapingKMT {
                 tableIndCo2kl1.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
 
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(
                     Headers.B_CO2_NEU, sum, mean, stdDev, min, max).by(Headers.PRIORITY));
@@ -176,14 +179,14 @@ public class RunLocalCsvScrapingKMT {
 
         {
             //KMT
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println("### KMT ###");
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println("All projects");
             System.out.println(table.summarize(Headers.NKV_NO_CHANGE, count).apply());
 
-            System.out.println(SEPARATOR);
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             Table kmtTable = Table.create("Projects with BCR < 1");
             kmtTable.addColumns(DoubleColumn.create("#Projects"
                 , new double[]{table.rowCount()
