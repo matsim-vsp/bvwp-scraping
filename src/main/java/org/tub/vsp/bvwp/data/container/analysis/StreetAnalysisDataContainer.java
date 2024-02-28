@@ -79,6 +79,8 @@ public class StreetAnalysisDataContainer {
         entries.put( Headers.ADDITIONAL_LANE_KM, additionalLaneKm );
 
         double mehrFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.6 * ComputationKN.FZKM_AB;
+        final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
+
 
         final double additionalFzkm = mehrFzkmFromElasticity - streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
         logger.info( "additionalFzkm=" + additionalFzkm);
@@ -86,8 +88,10 @@ public class StreetAnalysisDataContainer {
 //        entries.put("rz", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall());
 //        entries.put("rz/km", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall() / streetBaseDataContainer.getProjectInformation().getLength() );
         entries.put( Headers.B_PER_KM, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseDataContainer.getProjectInformation().getLength() );
-	    entries.put( Headers.NKV_NO_CHANGE, NkvCalculator.calculateNkv( Modifications.NO_CHANGE, streetBaseDataContainer ) );
-        entries.put( Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE, streetBaseDataContainer ) );
+	      entries.put( Headers.NKV_NO_CHANGE, NkvCalculator.calculateNkv( Modifications.NO_CHANGE, streetBaseDataContainer ) );
+        entries.put( Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_5FACH, streetBaseDataContainer ) );
+        entries.put( Headers.NKV_CO2_680_EN, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_680, streetBaseDataContainer ) );
+        entries.put( Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv(Modifications.createCo2withoutInduzed(2000 * INFLATION_Factor2022to2012), streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ, NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ_CO2, NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.PKWKM_ALL_NEU, mehrFzkmFromElasticity );
