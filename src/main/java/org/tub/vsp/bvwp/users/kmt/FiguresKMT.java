@@ -208,39 +208,35 @@ class FiguresKMT {
 	}
 	private static Trace getTraceVbe( Table table, String xName, String y2Name ){
 		Table tableVbe = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VBE" ) );
-		Trace traceVbe = ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
+    return ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
 					     .text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					     .name( String.format( legendFormat, y2Name ) )
 					     .marker( Marker.builder().color( "red" ).build() )
 					     .build();
-		return traceVbe;
 	}
 	private static Trace getTraceVb( Table table, String xName, String y2Name ){
 		Table tableVb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "VB" ) );
-		Trace traceVb = ScatterTrace.builder( tableVb.numberColumn( xName ), tableVb.numberColumn( y2Name ) )
+    return ScatterTrace.builder( tableVb.numberColumn( xName ), tableVb.numberColumn( y2Name ) )
 					    .text( tableVb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
 					    .marker( Marker.builder().color( "orange" ).build() )
 					    .build();
-		return traceVb;
 	}
 	private static Trace getTraceWb( Table table, String xName, String y2Name ){
 		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WB" ) );
-		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
+    return ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
 					    .marker( Marker.builder().color( "cyan" ).build() )
 					    .build();
-		return traceWb;
 	}
 	private static Trace getTraceWbp( Table table, String xName, String y2Name ){
 		Table tableWb = table.where( table.stringColumn( Headers.PRIORITY ).isEqualTo( "WBP" ) );
-		Trace traceWb = ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
+    return ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
 					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					    .name( String.format( legendFormat, y2Name ) )
 					    .marker( Marker.builder().color( "yellow" ).build() )
 					    .build();
-		return traceWb;
 	}
 
 
