@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp.data.mapper;
 
+import java.util.OptionalDouble;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
@@ -43,9 +44,9 @@ public class PhysicalEffectMapper {
 
     private PhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
         Double overall = JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
-        Double induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
-                .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
-                .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);
+        Optional<Double> induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
+                        .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
+                        .map(JSoupUtils::parseDoubleOrElseNull);
         Double shifted = getFirstRowIndexWithTextAfter(table, "verlagertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
                 .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);

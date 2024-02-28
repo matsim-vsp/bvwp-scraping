@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp.data.container.base;
 
+import java.util.Optional;
 import org.tub.vsp.bvwp.data.type.Emission;
 
 import java.util.Objects;
@@ -66,7 +67,7 @@ public class PhysicalEffectDataContainer {
         return result;
     }
 
-    public static final record Effect(Double overall, Double induced, Double shifted) {
+    public static final record Effect(Double overall, Optional<Double> induced, Double shifted) {
 
     }
 }

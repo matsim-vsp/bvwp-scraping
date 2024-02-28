@@ -53,8 +53,8 @@ public class NkvCalculator {
         // uncomment to see argument names
 
         final Amounts amounts = new Amounts(
-                        vkm.overall(), vkm.induced(), vkm.shifted(), // pkwkm
-                        tt.overall(), tt.induced(), tt.shifted(), // pers_h
+                        vkm.overall(), vkm.induced().orElse(0.), vkm.shifted(), // pkwkm
+                        tt.overall(), tt.induced().orElse(0.), tt.shifted(), // pers_h
                         vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
         );
         final Optional<Amounts> optional = Optional.of( amounts );
