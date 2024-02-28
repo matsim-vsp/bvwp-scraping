@@ -7,7 +7,7 @@ import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
-import org.tub.vsp.bvwp.plot.MultiPlotExample;
+import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
@@ -90,7 +90,7 @@ public class RunLocalCsvScrapingKN{
         Figure figure6 = figures.createFigureFzkm();
         Figure figure7 = figures.createFigureDtv();
 
-        String page = MultiPlotExample.pageTop + System.lineSeparator() +
+        String page = MultiPlotUtils.pageTop + System.lineSeparator() +
                                       figure2.asJavascript( "plot1" ) + System.lineSeparator() +
                                       figure.asJavascript( "plot2" ) + System.lineSeparator() +
                                       figure3.asJavascript( "plot3" ) + System.lineSeparator() +
@@ -98,7 +98,7 @@ public class RunLocalCsvScrapingKN{
                                       figure5.asJavascript( "plot5" ) + System.lineSeparator() +
                                       figure6.asJavascript( "plot6" ) + System.lineSeparator() +
                                       figure7.asJavascript( "plot7" ) + System.lineSeparator() +
-                                      MultiPlotExample.pageBottom;
+                                      MultiPlotUtils.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();
 

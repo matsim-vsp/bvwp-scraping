@@ -22,7 +22,7 @@ import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
-import org.tub.vsp.bvwp.plot.MultiPlotExample;
+import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
@@ -109,13 +109,13 @@ public class RunLocalCsvScrapingKMT {
 //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
 //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
-            String pageKMT = MultiPlotExample.pageTop + System.lineSeparator() +
+            String pageKMT = MultiPlotUtils.pageTop + System.lineSeparator() +
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
                 figureCO2.asJavascript("plot4") + System.lineSeparator() +
                 figureNkvChangeCo2_680.asJavascript("plot5") + System.lineSeparator() +
                 figureNkvChangeInduz_2000.asJavascript("plot6") + System.lineSeparator() +
 //                figureNkvChangeInduzCo2.asJavascript("plot7") + System.lineSeparator() +
-                MultiPlotExample.pageBottom;
+                MultiPlotUtils.pageBottom;
 
             File outputFileKMT = Paths.get("multiplotKMT.html").toFile();
 
