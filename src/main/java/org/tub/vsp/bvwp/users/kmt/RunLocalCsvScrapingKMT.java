@@ -62,7 +62,7 @@ public class RunLocalCsvScrapingKMT {
         // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
 
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
-            .extractAllLocalBaseData("./data/street/all", "A", ".*")
+            .extractAllLocalBaseData("./data/street/all2", "A", ".*")
             .stream()
             .map(StreetAnalysisDataContainer::new)
             .toList();
