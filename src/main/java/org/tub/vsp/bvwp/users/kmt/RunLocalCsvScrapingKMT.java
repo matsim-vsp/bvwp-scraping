@@ -34,7 +34,6 @@ import tech.tablesaw.plotly.display.Browser;
 
 public class RunLocalCsvScrapingKMT {
     private static final Logger logger = LogManager.getLogger(RunLocalCsvScrapingKMT.class );
-    public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
     public static void main(String[] args) throws IOException {
         Locale.setDefault(Locale.US);
@@ -147,7 +146,7 @@ public class RunLocalCsvScrapingKMT {
             table.numberColumn(Headers.NKV_INDUZ_CO2).isLessThan(1.));
 
         { //-- von KN
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(table.summarize(Headers.NKV_NO_CHANGE, count, mean, stdDev, min, max)
                 .by(Headers.PRIORITY));
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
@@ -155,7 +154,7 @@ public class RunLocalCsvScrapingKMT {
                 tableIndCo2kl1.summarize(Headers.NKV_INDUZ_CO2, count, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
 
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
@@ -164,7 +163,7 @@ public class RunLocalCsvScrapingKMT {
                 tableIndCo2kl1.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
 
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(
                     Headers.B_CO2_NEU, sum, mean, stdDev, min, max).by(Headers.PRIORITY));
@@ -176,14 +175,14 @@ public class RunLocalCsvScrapingKMT {
 
         {
             //KMT
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println("### KMT ###");
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             System.out.println("All projects");
             System.out.println(table.summarize(Headers.NKV_NO_CHANGE, count).apply());
 
-            System.out.println(SEPARATOR);
-            System.out.println(SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
+            System.out.println(BvwpUtils.SEPARATOR);
             Table kmtTable = Table.create("Projects with BCR < 1");
             kmtTable.addColumns(DoubleColumn.create("#Projects"
                 , new double[]{table.rowCount()

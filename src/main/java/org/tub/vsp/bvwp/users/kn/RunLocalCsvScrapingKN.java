@@ -28,7 +28,6 @@ import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
 public class RunLocalCsvScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
-    public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
     public static void main(String[] args) throws IOException{
         Locale.setDefault( Locale.US );
@@ -122,17 +121,17 @@ public class RunLocalCsvScrapingKN{
 
         Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 1. ) );
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY).print() );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY));
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));

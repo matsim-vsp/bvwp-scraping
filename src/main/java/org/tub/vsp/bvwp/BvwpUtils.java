@@ -3,6 +3,9 @@ package org.tub.vsp.bvwp;
 import static org.tub.vsp.bvwp.scraping.StreetScraper.projectString;
 
 public class BvwpUtils{
+
+	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
+
 	private BvwpUtils(){} // do not instantiate
 
 	public static String getPositivListe(){
