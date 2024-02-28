@@ -2,6 +2,7 @@ package org.tub.vsp.bvwp.users.kmt;
 
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.type.Priority;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Axis.Type;
@@ -18,6 +19,18 @@ class FiguresKMT {
 
 	//Do not instanciate
 	FiguresKMT(){}
+
+	private static Trace getPriorityTrace( Table table, Priority priority, String xName, String yName,
+			String color){
+		Table tableVbe = BvwpUtils.extractPriorityTable(table, priority.name());
+		return ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( yName ) )
+				.text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+				.name( String.format( legendFormat, yName + "_" + priority.name()) )
+				.marker( Marker.builder().color( color).build() )
+				.build();
+	}
+
+	//#########################
 
 	static Figure createFigureCostByPriority(int plotWidth, Table table, String xName ){
 		Figure figure3;
@@ -48,10 +61,10 @@ class FiguresKMT {
 					  .name( String.format( legendFormat, yName ) )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getPriorityTrace(table, Priority.WB, xName, y2Name, "cyan");
+		final Trace traceWbp = getPriorityTrace(table, Priority.WBP, xName, y2Name, "yellow");
+		final Trace traceVb = getPriorityTrace(table, Priority.VB, xName, y2Name, "orange");
+		final Trace traceVbe = getPriorityTrace( table, Priority.VBE , xName, y2Name, "red" );
 
 		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
 					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -88,10 +101,10 @@ class FiguresKMT {
 					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
 					  .build();
 
-		final Trace traceWb = getTraceWb( table, xName, y2Name );
-		final Trace traceWbp = getTraceWbp( table, xName, y2Name );
-		final Trace traceVb = getTraceVb( table, xName, y2Name );
-		final Trace traceVbe = getTraceVbe( table, xName, y2Name );
+		final Trace traceWb = getPriorityTrace(table, Priority.WB, xName, y2Name, "cyan");
+		final Trace traceWbp = getPriorityTrace(table, Priority.WBP, xName, y2Name, "yellow");
+		final Trace traceVb = getPriorityTrace(table, Priority.VB, xName, y2Name, "orange");
+		final Trace traceVbe = getPriorityTrace( table, Priority.VBE , xName, y2Name, "red"  );
 
 
 		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
@@ -109,43 +122,6 @@ class FiguresKMT {
 		figure2 = new Figure( layout, trace, trace3, traceWb,traceWbp,  traceVb, traceVbe, trace4 );
 		return figure2;
 	}
-
-	private static Trace getTraceVbe( Table table, String xName, String y2Name ){
-		Table tableVbe = BvwpUtils.extractPriorityTable(table, "VBE");
-    return ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
-					     .text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					     .name( String.format( legendFormat, y2Name + "_VBE") )
-					     .marker( Marker.builder().color( "red" ).build() )
-					     .build();
-	}
-
-	private static Trace getTraceVb( Table table, String xName, String y2Name ){
-		Table tableVb = BvwpUtils.extractPriorityTable(table, "VB");
-    return ScatterTrace.builder( tableVb.numberColumn( xName ), tableVb.numberColumn( y2Name ) )
-					    .text( tableVb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					    .name( String.format( legendFormat, y2Name + "_VB") )
-					    .marker( Marker.builder().color( "orange" ).build() )
-					    .build();
-	}
-
-	private static Trace getTraceWb( Table table, String xName, String y2Name ){
-		Table tableWb = BvwpUtils.extractPriorityTable(table, "WB");
-    return ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
-					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					    .name( String.format( legendFormat, y2Name + "_WB" ) )
-					    .marker( Marker.builder().color( "cyan" ).build() )
-					    .build();
-	}
-
-	private static Trace getTraceWbp( Table table, String xName, String y2Name ){
-		Table tableWb = BvwpUtils.extractPriorityTable(table, "WBP");
-    return ScatterTrace.builder( tableWb.numberColumn( xName ), tableWb.numberColumn( y2Name ) )
-					    .text( tableWb.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					    .name( String.format( legendFormat, y2Name + "_WBP") )
-					    .marker( Marker.builder().color( "yellow" ).build() )
-					    .build();
-	}
-
 
 	static Figure createFigureNkv(Axis xAxis, int plotWidth, Table table, String xName){
       Figure figure2;
