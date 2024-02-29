@@ -3,7 +3,8 @@ package org.tub.vsp.bvwp.data.mapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.bvwp.data.LocalFileAccessor;
-import org.tub.vsp.bvwp.data.container.base.EmissionsDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetEmissionsDataContainer;
+import org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions.EmissionsMapper;
 import org.tub.vsp.bvwp.data.type.Emission;
 import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 class EmissionsMapperTest {
     @Test
     void testEmissionsMapping() throws IOException {
-        EmissionsDataContainer emissionsDataContainer =
+        StreetEmissionsDataContainer emissionsDataContainer =
                 new EmissionsMapper().mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
         Map<Emission, VehicleEmissions> expected = new HashMap<>();

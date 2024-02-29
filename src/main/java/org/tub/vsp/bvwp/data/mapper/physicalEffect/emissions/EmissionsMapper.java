@@ -1,11 +1,11 @@
-package org.tub.vsp.bvwp.data.mapper;
+package org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.EmissionsDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetEmissionsDataContainer;
 import org.tub.vsp.bvwp.data.type.Emission;
 import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 
@@ -19,12 +19,12 @@ public class EmissionsMapper {
 
     private static final Logger logger = LogManager.getLogger(EmissionsMapper.class);
 
-    public EmissionsDataContainer mapDocument(Document document) {
+    public StreetEmissionsDataContainer mapDocument(Document document) {
 
         Optional<Element> table = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_wirkung_strasse",
                 "Veränderung der Abgasemissionen");
         if (table.isEmpty()) {
-            return EmissionsDataContainer.empty();
+            return StreetEmissionsDataContainer.empty();
         }
 
         //Creating the map for the emissions data container
@@ -42,10 +42,10 @@ public class EmissionsMapper {
 
         if (envTable.isEmpty()) {
             logger.warn("Could not find table with entry {}.", "Äquivalenten aus Lebenszyklusemissionen");
-            return new EmissionsDataContainer(collect, null);
+            return new StreetEmissionsDataContainer(collect, null);
         }
 
-        return new EmissionsDataContainer(collect, getCO2Overall(envTable.get()));
+        return new StreetEmissionsDataContainer(collect, getCO2Overall(envTable.get()));
     }
 
     //get emission value for one specific emission

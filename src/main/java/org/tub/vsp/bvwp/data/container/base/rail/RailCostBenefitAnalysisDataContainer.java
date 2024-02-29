@@ -1,4 +1,4 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.rail;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

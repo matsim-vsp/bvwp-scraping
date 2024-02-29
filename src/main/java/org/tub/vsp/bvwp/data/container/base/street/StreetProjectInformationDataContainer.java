@@ -1,4 +1,4 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.street;
 
 import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Priority;

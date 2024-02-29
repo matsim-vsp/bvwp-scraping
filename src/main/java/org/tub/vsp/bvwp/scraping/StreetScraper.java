@@ -4,11 +4,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
-import org.tub.vsp.bvwp.data.mapper.PhysicalEffectMapper;
-import org.tub.vsp.bvwp.data.mapper.ProjectInformationMapperUtils;
-import org.tub.vsp.bvwp.data.mapper.StreetCostBenefitMapper;
-import org.tub.vsp.bvwp.data.mapper.StreetProjectInformationMapper;
+import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
+import org.tub.vsp.bvwp.data.mapper.costBenefit.StreetCostBenefitMapper;
+import org.tub.vsp.bvwp.data.mapper.physicalEffect.PhysicalEffectMapper;
+import org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils;
+import org.tub.vsp.bvwp.data.mapper.projectInformation.StreetProjectInformationMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,14 +53,16 @@ public class StreetScraper extends Scraper {
         return "(" + road + "-.*-" + bundesland + ".html" + ")|";
     }
 
-    public List<StreetBaseDataContainer> extractAllLocalBaseData( String path, String prefix, String regexToMatch ) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path, String prefix, String regexToMatch) {
 
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
-                    .filter(file -> file.getName().startsWith(prefix) )
-                    .filter( file -> file.getName().matches( regexToMatch ) )
-                    .filter( file -> !file.getName().matches(  "A20-G10-SH.html" ) ) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'23
-                    .filter( file -> !file.getName().matches( "A...B.*" ) ) // Ortsumgehungen, die an AB angrenzen.
+                    .filter(file -> file.getName().startsWith(prefix))
+                    .filter(file -> file.getName().matches(regexToMatch))
+                    .filter(file -> !file.getName()
+                                         .matches("A20-G10-SH.html")) // gibt es nochmal mit A20-G10-SH-NI.  Muss man
+                    // beide zusammenzählen?  kai, feb'23
+                    .filter(file -> !file.getName().matches("A...B.*")) // Ortsumgehungen, die an AB angrenzen.
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

@@ -1,4 +1,4 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.street;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -255,17 +255,21 @@ public class StreetCostBenefitAnalysisDataContainer {
         result = 31 * result + (cost != null ? cost.hashCode() : 0);
         return result;
     }
-    public Benefit getNbPersonnel(){
+
+    public Benefit getNbPersonnel() {
         return nbPersonnel;
     }
-    public StreetCostBenefitAnalysisDataContainer setNbPersonnel(Benefit nbPersonnel ){
+
+    public StreetCostBenefitAnalysisDataContainer setNbPersonnel(Benefit nbPersonnel) {
         this.nbPersonnel = nbPersonnel;
         return this;
     }
-    public Benefit getNbVehicle(){
+
+    public Benefit getNbVehicle() {
         return nbVehicle;
     }
-    public StreetCostBenefitAnalysisDataContainer setNbVehicle(Benefit nbVehicle ){
+
+    public StreetCostBenefitAnalysisDataContainer setNbVehicle(Benefit nbVehicle) {
         this.nbVehicle = nbVehicle;
         return this;
     }

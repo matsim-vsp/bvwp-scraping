@@ -3,7 +3,8 @@ package org.tub.vsp.bvwp.data.mapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.bvwp.data.LocalFileAccessor;
-import org.tub.vsp.bvwp.data.container.base.RailProjectInformationDataContainer;
+import org.tub.vsp.bvwp.data.container.base.rail.RailProjectInformationDataContainer;
+import org.tub.vsp.bvwp.data.mapper.projectInformation.RailProjectInformationMapper;
 import org.tub.vsp.bvwp.data.type.Priority;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package org.tub.vsp.bvwp.data.mapper;
+package org.tub.vsp.bvwp.data.mapper.costBenefit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -6,9 +6,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.RailBenefitFreightDataContainer;
-import org.tub.vsp.bvwp.data.container.base.RailBenefitPassengerDataContainer;
-import org.tub.vsp.bvwp.data.container.base.RailCostBenefitAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.container.base.rail.RailBenefitFreightDataContainer;
+import org.tub.vsp.bvwp.data.container.base.rail.RailBenefitPassengerDataContainer;
+import org.tub.vsp.bvwp.data.container.base.rail.RailCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
 import org.tub.vsp.bvwp.data.type.Cost;
 

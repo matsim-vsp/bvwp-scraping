@@ -1,4 +1,4 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.street;
 
 import java.util.Objects;
 
@@ -6,7 +6,7 @@ public class StreetBaseDataContainer {
     private String url;
 
     private StreetProjectInformationDataContainer projectInformation;
-    private PhysicalEffectDataContainer physicalEffect;
+    private StreetPhysicalEffectDataContainer physicalEffect;
     private StreetCostBenefitAnalysisDataContainer costBenefitAnalysis;
 
     public String getUrl() {
@@ -27,11 +27,11 @@ public class StreetBaseDataContainer {
         return this;
     }
 
-    public PhysicalEffectDataContainer getPhysicalEffect() {
+    public StreetPhysicalEffectDataContainer getPhysicalEffect() {
         return physicalEffect;
     }
 
-    public StreetBaseDataContainer setPhysicalEffect(PhysicalEffectDataContainer physicalEffect) {
+    public StreetBaseDataContainer setPhysicalEffect(StreetPhysicalEffectDataContainer physicalEffect) {
         this.physicalEffect = physicalEffect;
         return this;
     }

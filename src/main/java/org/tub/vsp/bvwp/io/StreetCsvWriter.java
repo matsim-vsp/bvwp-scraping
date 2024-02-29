@@ -6,8 +6,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
-import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
-import org.tub.vsp.bvwp.data.container.base.StreetCostBenefitAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
 import org.tub.vsp.bvwp.data.type.Cost;
 import org.tub.vsp.bvwp.data.type.Emission;
@@ -169,15 +169,16 @@ public class StreetCsvWriter {
         Record record = new Record(table);
 
         //general info
-        record.add( Headers.PROJECT_NAME, baseDataContainer.getProjectInformation().getProjectNumber() );
-        record.add( Headers.LINK, baseDataContainer.getUrl() );
-        record.add( Headers.PRIORITY, baseDataContainer.getProjectInformation().getPriority().name() );
-        record.add( Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp().name() );
+        record.add(Headers.PROJECT_NAME, baseDataContainer.getProjectInformation().getProjectNumber());
+        record.add(Headers.LINK, baseDataContainer.getUrl());
+        record.add(Headers.PRIORITY, baseDataContainer.getProjectInformation().getPriority().name());
+        record.add(Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp().name());
 
         record.add(Headers.LENGTH, baseDataContainer.getProjectInformation().getLength());
 
-        record.add( Headers.PKWKM_ALL, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall() );
-        record.add( Headers.PKWKM_INDUZ, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers().induced()).orElse(0.) );
+        record.add(Headers.PKWKM_ALL, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
+        record.add(Headers.PKWKM_INDUZ, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers()
+                                                                             .induced()).orElse(0.));
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
