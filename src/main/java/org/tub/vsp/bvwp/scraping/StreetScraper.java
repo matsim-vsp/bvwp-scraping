@@ -6,7 +6,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.costBenefit.StreetCostBenefitMapper;
-import org.tub.vsp.bvwp.data.mapper.physicalEffect.PhysicalEffectMapper;
+import org.tub.vsp.bvwp.data.mapper.physicalEffect.StreetPhysicalEffectMapper;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.StreetProjectInformationMapper;
 
@@ -16,10 +16,6 @@ import java.util.*;
 
 public class StreetScraper extends Scraper {
     private static final Logger logger = LogManager.getLogger(StreetScraper.class);
-
-    private final StreetProjectInformationMapper projectInformationMapper = new StreetProjectInformationMapper();
-    private final PhysicalEffectMapper physicalEffectMapper = new PhysicalEffectMapper();
-    private final StreetCostBenefitMapper costBenefitMapper = new StreetCostBenefitMapper();
 
     @Override
     protected String getBaseUrl() {
@@ -114,9 +110,9 @@ public class StreetScraper extends Scraper {
 
         StreetBaseDataContainer streetBaseDataContainer = new StreetBaseDataContainer();
         return Optional.of(streetBaseDataContainer.setUrl(url)
-                                                  .setProjectInformation(projectInformationMapper.mapDocument(doc))
-                                                  .setPhysicalEffect(physicalEffectMapper.mapDocument(doc))
-                                                  .setCostBenefitAnalysis(costBenefitMapper.mapDocument(doc)));
+                                                  .setProjectInformation(StreetProjectInformationMapper.mapDocument(doc))
+                                                  .setPhysicalEffect(StreetPhysicalEffectMapper.mapDocument(doc))
+                                                  .setCostBenefitAnalysis(StreetCostBenefitMapper.mapDocument(doc)));
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {

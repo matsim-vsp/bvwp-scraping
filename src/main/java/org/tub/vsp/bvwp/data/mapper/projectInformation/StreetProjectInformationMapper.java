@@ -11,7 +11,7 @@ import java.text.ParseException;
 import static org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils.extractInformation;
 
 public class StreetProjectInformationMapper {
-    public StreetProjectInformationDataContainer mapDocument(Document document) {
+    public static StreetProjectInformationDataContainer mapDocument(Document document) {
         StreetProjectInformationDataContainer projectInformation = new StreetProjectInformationDataContainer();
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");

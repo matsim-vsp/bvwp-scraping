@@ -10,10 +10,10 @@ import org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions.StreetEmissionsMapp
 
 import java.util.Optional;
 
-public class PhysicalEffectMapper {
-    private static final Logger logger = LogManager.getLogger(PhysicalEffectMapper.class);
+public class StreetPhysicalEffectMapper {
+    private static final Logger logger = LogManager.getLogger(StreetPhysicalEffectMapper.class);
 
-    public StreetPhysicalEffectDataContainer mapDocument(Document document) {
+    public static StreetPhysicalEffectDataContainer mapDocument(Document document) {
         StreetPhysicalEffectDataContainer physicalEffectDataContainer =
                 new StreetPhysicalEffectDataContainer().setEmissionsDataContainer(StreetEmissionsMapper.mapDocument(document));
 
@@ -33,7 +33,7 @@ public class PhysicalEffectMapper {
         return physicalEffectDataContainer;
     }
 
-    private Optional<Integer> getFirstRowIndexWithTextAfter(Element table, String key, int afterRow) {
+    private static Optional<Integer> getFirstRowIndexWithTextAfter(Element table, String key, int afterRow) {
         for (int i = afterRow; i < table.select("tr").size(); i++) {
             if (JSoupUtils.getTextFromRowAndCol(table, i, 0).contains(key)) {
                 return Optional.of(i);
@@ -42,7 +42,7 @@ public class PhysicalEffectMapper {
         return Optional.empty();
     }
 
-    private StreetPhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
+    private static StreetPhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
         Double overall = JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
         Double induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))

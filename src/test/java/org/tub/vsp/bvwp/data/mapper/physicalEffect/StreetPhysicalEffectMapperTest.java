@@ -10,11 +10,11 @@ import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 import java.io.IOException;
 import java.util.Map;
 
-class PhysicalEffectMapperTest {
+class StreetPhysicalEffectMapperTest {
     @Test
     void test() throws IOException {
         StreetPhysicalEffectDataContainer physicalEffectDataContainer =
-                new PhysicalEffectMapper().mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
+                new StreetPhysicalEffectMapper().mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
         Assertions.assertEquals(physicalEffectDataContainer.getVehicleKilometers(),
                 new StreetPhysicalEffectDataContainer.Effect(131.53, 143.95, 9.75));
@@ -27,7 +27,8 @@ class PhysicalEffectMapperTest {
     @Test
     void testKnotenpunkte() throws IOException {
         StreetPhysicalEffectDataContainer physicalEffectDataContainer =
-                new PhysicalEffectMapper().mapDocument(LocalFileAccessor.getLocalDocument("A003-G20-HE-T2-HE.html"));
+                new StreetPhysicalEffectMapper().mapDocument(LocalFileAccessor.getLocalDocument("A003-G20-HE-T2-HE" +
+                        ".html"));
 
         Assertions.assertEquals(physicalEffectDataContainer.getVehicleKilometers(),
                 new StreetPhysicalEffectDataContainer.Effect(0.0, null, 0.0));
