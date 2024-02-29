@@ -35,7 +35,7 @@ public class StreetProjectInformationDataContainer {
         return priority;
     }
 
-    public StreetProjectInformationDataContainer setPriority(Priority priority ) {
+    public StreetProjectInformationDataContainer setPriority(Priority priority) {
         this.priority = priority;
         return this;
     }
@@ -67,25 +67,31 @@ public class StreetProjectInformationDataContainer {
         result = 31 * result + (priority != null ? priority.hashCode() : 0);
         return result;
     }
-    public ProjectInformationDataContainer setBautyp( Bautyp bautyp ){
+
+    public StreetProjectInformationDataContainer setBautyp(Bautyp bautyp) {
         this.bautyp = bautyp;
         return this;
     }
-    public Bautyp getBautyp(){
+
+    public Bautyp getBautyp() {
         return bautyp;
     }
-    public StreetProjectInformationDataContainer setLength(Double length ){
+
+    public StreetProjectInformationDataContainer setLength(Double length) {
         this.length = length;
         return this;
     }
-    public Double getLength(){
+
+    public Double getLength() {
         return length;
     }
-    public ProjectInformationDataContainer setVerkehrsbelastung2030( Double verkehrsbelastung2030 ){
+
+    public StreetProjectInformationDataContainer setVerkehrsbelastung2030(Double verkehrsbelastung2030) {
         this.verkehrsbelastung2030 = verkehrsbelastung2030;
         return this;
     }
-    public Double getVerkehrsbelastung2030(){
+
+    public Double getVerkehrsbelastung2030() {
         return verkehrsbelastung2030;
     }
 }

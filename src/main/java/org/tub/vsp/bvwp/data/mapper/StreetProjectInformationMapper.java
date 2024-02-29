@@ -3,6 +3,7 @@ package org.tub.vsp.bvwp.data.mapper;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.StreetProjectInformationDataContainer;
+import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Priority;
 
 import java.text.ParseException;
@@ -27,7 +28,7 @@ public class StreetProjectInformationMapper {
             return projectInformation.setProjectNumber(projectNumber)
                                      .setStreet(street)
                                      .setLength(JSoupUtils.parseDouble(length))
-                                     .setBautyp(bautyp)
+                                     .setBautyp(Bautyp.getFromString(bautyp))
                                      .setPriority(Priority.getFromString(priority));
         } catch (ParseException e) {
             throw new RuntimeException(e);
