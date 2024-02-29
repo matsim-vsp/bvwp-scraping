@@ -10,6 +10,7 @@ import org.tub.vsp.bvwp.data.container.base.RailBenefitFreightDataContainer;
 import org.tub.vsp.bvwp.data.container.base.RailBenefitPassengerDataContainer;
 import org.tub.vsp.bvwp.data.container.base.RailCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
+import org.tub.vsp.bvwp.data.type.Cost;
 
 import java.util.Optional;
 
@@ -40,10 +41,18 @@ public class RailCostBenefitMapper {
         });
         result.setPassengerBenefits(passengerDataContainer);
 
-        //do freight stuff here
+        freightBenefit.ifPresent(table -> {
+            setNb(table, freightDataContainer);
+            setNa(table, freightDataContainer);
+            setNs(table, freightDataContainer);
+            setNtz(table, freightDataContainer);
+            setNi(table, freightDataContainer);
+            setNz(table, freightDataContainer);
+        });
+        result.setFreightBenefits(freightDataContainer);
 
-        costTable.ifPresent(element -> result.setCost(CostBenefitMapperUtils.extractCosts(element)));
-
+        Cost cost = costTable.map(CostBenefitMapperUtils::extractCosts).orElse(null);
+        result.setCost(cost);
 
         return result;
     }
@@ -57,6 +66,15 @@ public class RailCostBenefitMapper {
         });
     }
 
+    private static void setNb(Element table, RailBenefitFreightDataContainer freightDataContainer) {
+        getFirstRowIndexWithBenefitKey(table, "NB").ifPresent(nb -> {
+            Elements rows = table.select("tr");
+            freightDataContainer.setNbLkw(getBenefitFromRow(rows.get(nb + 1)));
+            freightDataContainer.setNbSchiene(getBenefitFromRow(rows.get(nb + 2)));
+            freightDataContainer.setNbSchiff(getBenefitFromRow(rows.get(nb + 3)));
+        });
+    }
+
     private static void setNa(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
         getFirstRowIndexWithBenefitKey(table, "NA").ifPresent(na -> {
             Elements rows = table.select("tr");
@@ -66,11 +84,29 @@ public class RailCostBenefitMapper {
         });
     }
 
+    private static void setNa(Element table, RailBenefitFreightDataContainer freightDataContainer) {
+        getFirstRowIndexWithBenefitKey(table, "NA").ifPresent(nb -> {
+            Elements rows = table.select("tr");
+            freightDataContainer.setNaLkw(getBenefitFromRow(rows.get(nb + 1)));
+            freightDataContainer.setNaSchiene(getBenefitFromRow(rows.get(nb + 2)));
+            freightDataContainer.setNaSchiff(getBenefitFromRow(rows.get(nb + 3)));
+        });
+    }
+
     private static void setNs(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
         getFirstRowIndexWithBenefitKey(table, "NS").ifPresent(ns -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNsPkw(getBenefitFromRow(rows.get(ns + 1)));
             passengerTrafficDataContainer.setNsSpv(getBenefitFromRow(rows.get(ns + 2)));
+        });
+    }
+
+    private static void setNs(Element table, RailBenefitFreightDataContainer freightDataContainer) {
+        getFirstRowIndexWithBenefitKey(table, "NS").ifPresent(nb -> {
+            Elements rows = table.select("tr");
+            freightDataContainer.setNsLkw(getBenefitFromRow(rows.get(nb + 1)));
+            freightDataContainer.setNsSchiene(getBenefitFromRow(rows.get(nb + 2)));
+            freightDataContainer.setNsSchiff(getBenefitFromRow(rows.get(nb + 3)));
         });
     }
 
@@ -84,12 +120,36 @@ public class RailCostBenefitMapper {
         });
     }
 
+    private static void setNtz(Element table, RailBenefitFreightDataContainer freightDataContainer) {
+        getFirstRowIndexWithBenefitKey(table, "NTZ").ifPresent(nrz -> {
+            Elements rows = table.select("tr");
+            freightDataContainer.setNtzVerbVerkehr(getBenefitFromRow(rows.get(nrz + 1)));
+            freightDataContainer.setNtzLkwSchiene(getBenefitFromRow(rows.get(nrz + 2)));
+            freightDataContainer.setNtzSchiffSchiene(getBenefitFromRow(rows.get(nrz + 3)));
+        });
+    }
+
     private static void setNi(Element table, RailBenefitPassengerDataContainer passengerTrafficDataContainer) {
         getFirstRowIndexWithBenefitKey(table, "NI").ifPresent(ni -> {
             Elements rows = table.select("tr");
             passengerTrafficDataContainer.setNiInduzVerkehr(getBenefitFromRow(rows.get(ni + 1)));
             passengerTrafficDataContainer.setNiVerlagerungPkwSpv(getBenefitFromRow(rows.get(ni + 2)));
             passengerTrafficDataContainer.setNiVerlagerungLuftSpv(getBenefitFromRow(rows.get(ni + 3)));
+        });
+    }
+
+    private static void setNi(Element table, RailBenefitFreightDataContainer freightDataContainer) {
+        getFirstRowIndexWithBenefitKey(table, "NI").ifPresent(nb -> {
+            Elements rows = table.select("tr");
+            freightDataContainer.setNiLkwSchiene(getBenefitFromRow(rows.get(nb + 1)));
+            freightDataContainer.setNiSchiffSchiene(getBenefitFromRow(rows.get(nb + 2)));
+        });
+    }
+
+    private static void setNz(Element table, RailBenefitFreightDataContainer freightDataContainer) {
+        getFirstRowIndexWithBenefitKey(table, "NZ").ifPresent(nb -> {
+            Elements rows = table.select("tr");
+            freightDataContainer.setNzVerbVerkehr(getBenefitFromRow(rows.get(nb + 1)));
         });
     }
 
@@ -134,13 +194,12 @@ public class RailCostBenefitMapper {
     }
 
     private static boolean isCostTable(Element element) {
-        if (element.select("tr")
-                   .size() < 4) {
+        if (element.select("tr").size() < 4) {
             return false;
         }
         return element.select("tr")
                       .get(3)
                       .text()
-                      .contains("Summe bewertungsrelevanter Investitionskosten");
+                      .contains("Summe bewertungsrelevante Investitionskosten");
     }
 }
