@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.street.StreetPhysicalEffectDataContainer;
-import org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions.EmissionsMapper;
+import org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions.StreetEmissionsMapper;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ public class PhysicalEffectMapper {
 
     public StreetPhysicalEffectDataContainer mapDocument(Document document) {
         StreetPhysicalEffectDataContainer physicalEffectDataContainer =
-                new StreetPhysicalEffectDataContainer().setEmissionsDataContainer(new EmissionsMapper().mapDocument(document));
+                new StreetPhysicalEffectDataContainer().setEmissionsDataContainer(StreetEmissionsMapper.mapDocument(document));
 
         Optional<Element> table = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_wirkung_strasse",
                 "Verkehrswirkungen im Planfall");

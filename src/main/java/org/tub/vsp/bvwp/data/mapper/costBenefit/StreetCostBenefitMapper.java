@@ -88,7 +88,7 @@ public class StreetCostBenefitMapper {
     }
 
     private Map<Emission, Benefit> extractEmissionsBenefit(Element table) {
-        return Emission.STRING_IDENTIFIER_BY_EMISSION
+        return Emission.STREET_STRING_IDENTIFIER_BY_EMISSION
                 .entrySet()
                 .stream()
                 .map(e -> Map.entry(e.getKey(), extractSimpleBenefitOptional(table, e.getValue(), 0)))

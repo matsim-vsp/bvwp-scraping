@@ -1,10 +1,9 @@
-package org.tub.vsp.bvwp.data.mapper;
+package org.tub.vsp.bvwp.data.mapper.physicalEffect;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.bvwp.data.LocalFileAccessor;
 import org.tub.vsp.bvwp.data.container.base.street.StreetPhysicalEffectDataContainer;
-import org.tub.vsp.bvwp.data.mapper.physicalEffect.PhysicalEffectMapper;
 import org.tub.vsp.bvwp.data.type.Emission;
 import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 
