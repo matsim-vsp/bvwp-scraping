@@ -42,7 +42,7 @@ public class EmissionsMapper {
 
         if (envTable.isEmpty()) {
             logger.warn("Could not find table with entry {}.", "Äquivalenten aus Lebenszyklusemissionen");
-            return EmissionsDataContainer.empty();
+            return new EmissionsDataContainer(collect, null);
         }
 
         return new EmissionsDataContainer(collect, getCO2Overall(envTable.get()));

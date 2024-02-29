@@ -11,7 +11,7 @@ public class ComputationKN{
 	private static final Logger log = LogManager.getLogger( ComputationKN.class );
 
 	public static final double FZKM_AB = 221000;
-	public static final double AB_length = 60000.;
+	public static final double LANE_KM_AB = 60000.;
 
 	static final class Amounts{
 		private final double rz;
@@ -197,11 +197,11 @@ public class ComputationKN{
 		final double nkv = b_all / baukosten;
 		String colorString = ConsoleColors.TEXT_BLACK;
 		if ( nkv < 1 ) colorString = ConsoleColors.TEXT_RED;
-		log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK );
+//		log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK );
 		return nkv;
 	}
 	private static void prn( String msg, double b_all, double b_tmp ){
-		log.info(String.format( "%1$20s: Korrektur = %2$5.0f; bb = %3$5.0f", msg, b_all - b_tmp, b_all ) );
+//		log.info(String.format( "%1$20s: Korrektur = %2$5.0f; bb = %3$5.0f", msg, b_all - b_tmp, b_all ) );
 	}
 
 	@Test void test() {

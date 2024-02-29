@@ -169,15 +169,15 @@ public class StreetCsvWriter {
         Record record = new Record(table);
 
         //general info
-        record.add(Headers.PROJECT_NAME, baseDataContainer.getProjectInformation().getProjectNumber());
-        record.add(Headers.LINK, baseDataContainer.getUrl());
-        record.add(Headers.PRIORITY, baseDataContainer.getProjectInformation().getPriority().name());
-        record.add(Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp());
+        record.add( Headers.PROJECT_NAME, baseDataContainer.getProjectInformation().getProjectNumber() );
+        record.add( Headers.LINK, baseDataContainer.getUrl() );
+        record.add( Headers.PRIORITY, baseDataContainer.getProjectInformation().getPriority().name() );
+        record.add( Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp().name() );
 
         record.add(Headers.LENGTH, baseDataContainer.getProjectInformation().getLength());
 
-        record.add(Headers.PKWKM_ALL, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
-        record.add(Headers.PKWKM_INDUZ, baseDataContainer.getPhysicalEffect().getVehicleKilometers().induced());
+        record.add( Headers.PKWKM_ALL, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall() );
+        record.add( Headers.PKWKM_INDUZ, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers().induced()).orElse(0.) );
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 

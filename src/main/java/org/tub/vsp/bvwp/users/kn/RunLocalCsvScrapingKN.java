@@ -1,37 +1,33 @@
-package org.tub.vsp.bvwp;
+package org.tub.vsp.bvwp.users.kn;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
-import org.tub.vsp.bvwp.plot.MultiPlotExample;
+import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
-import tech.tablesaw.aggregate.AggregateFunctions;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
-import tech.tablesaw.sorting.Sort;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.text.FieldPosition;
 import java.text.NumberFormat;
-import java.text.ParsePosition;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
-public class RunLocalCsvScraping {
-    private static final Logger logger = LogManager.getLogger(RunLocalCsvScraping.class );
-    public static final String SEPARATOR = System.lineSeparator() + "===========================================";
+public class RunLocalCsvScrapingKN{
+    private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
 
     public static void main(String[] args) throws IOException{
         Locale.setDefault( Locale.US );
@@ -65,40 +61,43 @@ public class RunLocalCsvScraping {
 
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
-        table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName( "nkvDiff" ) );
+        table.addColumns( table.numberColumn( Headers.NKV_NO_CHANGE ).subtract( table.numberColumn( Headers.NKV_INDUZ_CO2 ) ).setName( Headers.NKV_DIFF ) );
+
+        DoubleColumn newColumn = DoubleColumn.create( Headers.NKV_INDUZ_CO2 );
+        for( Double number : table.doubleColumn( Headers.NKV_INDUZ_CO2 ) ){
+            number = Math.min( number, 10. );
+            newColumn.append( number );
+        }
+        table.removeColumns( Headers.NKV_INDUZ_CO2 );
+        table.addColumns( newColumn );
+
+
+//        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
+//        LinearModel winsModel = OLS.fit( Formula.lhs("nkvDiff" ), newTable.smile().toDataFrame() );
+//        System.out.println( winsModel );
+//        System.exit(-1);
 
         // ===
 
-        String xName;
-        Axis.AxisBuilder xAxisBuilder = Axis.builder();
-//        {
-//            xName = Headers.B_CO2_NEU;
-//            xAxisBuilder.type( Axis.Type.LOG );
-//        }
-        {
-//            xName = Headers.NKV_NO_CHANGE;
-            xName = "nkvDiff";
-//            xAxisBuilder
-//                            .type( Axis.Type.LOG )
-//                            .autoRange( Axis.AutoRange.REVERSED )
-            ;
-        }
-        table = table.sortDescendingOn( xName );
-        Axis xAxis = xAxisBuilder.title( xName ).build();
 
-        Figure figure = PlotUtils.createFigurePkwKm( xAxis, table, xName );
-        Figure figure2 = PlotUtils.createFigureNkv( xAxis, table, xName );
-        Figure figure3 = PlotUtils.createFigureCost( xAxis, table, xName );
-        Figure figure4 = PlotUtils.createFigureCO2( xAxis, table, xName );
-//        Figure figure5 = PlotUtils.createFigureNkvRatio( xAxis, table, xName );
+        FiguresKN figures = new FiguresKN( table );
+        Figure figure = figures.createFigurePkwKm();
+        Figure figure2 = figures.createFigureNkv();
+        Figure figure3 = figures.createFigureCost();
+        Figure figure4 = figures.createFigureCO2();
+        Figure figure5 = figures.createFigureElasticities();
+        Figure figure6 = figures.createFigureFzkm();
+        Figure figure7 = figures.createFigureDtv();
 
-        String page = MultiPlotExample.pageTop + System.lineSeparator() +
+        String page = MultiPlotUtils.pageTop + System.lineSeparator() +
                                       figure2.asJavascript( "plot1" ) + System.lineSeparator() +
                                       figure.asJavascript( "plot2" ) + System.lineSeparator() +
                                       figure3.asJavascript( "plot3" ) + System.lineSeparator() +
                                       figure4.asJavascript( "plot4" ) + System.lineSeparator() +
-//                                      figure5.asJavascript( "plot5" ) + System.lineSeparator() +
-                                      MultiPlotExample.pageBottom;
+                                      figure5.asJavascript( "plot5" ) + System.lineSeparator() +
+                                      figure6.asJavascript( "plot6" ) + System.lineSeparator() +
+                                      figure7.asJavascript( "plot7" ) + System.lineSeparator() +
+                                      MultiPlotUtils.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();
 
@@ -122,17 +121,17 @@ public class RunLocalCsvScraping {
 
         Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 1. ) );
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY).print() );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.NKV_NO_CHANGE, count ).by(Headers.PRIORITY));
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.B_CO2_NEU, sum, mean, stdDev, min, max ).by(Headers.PRIORITY));

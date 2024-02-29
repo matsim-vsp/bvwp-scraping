@@ -18,12 +18,17 @@ public class NkvCalculator {
 
 
     public static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
-        log.warn("modifications=" + modifications);
+//        log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
 
-        if (a.isEmpty() || b.isEmpty()) {
-            return null;
+        if ( a.isEmpty() ) {
+            log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl() );
+            return null ;
+        }
+        if ( b.isEmpty() ) {
+            log.warn("benefits container is empty for project=" + streetBaseDataContainer.getUrl() );
+            return null ;
         }
 
         Double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts();
@@ -33,15 +38,12 @@ public class NkvCalculator {
 
 
     private static Optional<Amounts> amountsFromStreetBaseData(StreetBaseDataContainer streetBaseDataContainer) {
-        PhysicalEffectDataContainer.Effect tt = streetBaseDataContainer.getPhysicalEffect()
-                                                                       .getTravelTimes();
-        PhysicalEffectDataContainer.Effect vkm = streetBaseDataContainer.getPhysicalEffect()
-                                                                        .getVehicleKilometers();
-        final Map<Emission, VehicleEmissions> emissions = streetBaseDataContainer.getPhysicalEffect()
-                                                                                 .getEmissionsDataContainer()
-                                                                                 .emissions();
 
-        VehicleEmissions vehicleEmissions = emissions.get(Emission.CO2);
+        PhysicalEffectDataContainer.Effect tt = streetBaseDataContainer.getPhysicalEffect().getTravelTimes();
+
+        PhysicalEffectDataContainer.Effect vkm = streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers();
+
+        VehicleEmissions vehicleEmissions = streetBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer().emissions().get(Emission.CO2 );
 
         if (tt == null || vkm == null || vehicleEmissions == null) {
             return Optional.empty();
@@ -50,12 +52,17 @@ public class NkvCalculator {
 //        new Amounts( 1., 1., 1., 1., 1., 1., 1., 1. );
         // uncomment to see argument names
 
-        return Optional.of(new Amounts(
-                vkm.overall(), vkm.induced(), vkm.shifted(), // pkwkm
-                tt.overall(), tt.induced(), tt.shifted(), // pers_h
-                vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2 yyyyyy the first one would have to be only from
-                // pkw, but I think that this is currently not scraped
-        ));
+        final Amounts amounts = new Amounts(
+                        vkm.overall(), Optional.ofNullable(vkm.induced()).orElse(0.), vkm.shifted(), // pkwkm
+                        tt.overall(), Optional.ofNullable(tt.induced()).orElse(0.), tt.shifted(), // pers_h
+                        vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
+        );
+        final Optional<Amounts> optional = Optional.of( amounts );
+        if ( optional.isEmpty() ) {
+            log.warn("here");
+            throw new RuntimeException("stop");
+        }
+        return optional;
     }
 
     private static Optional<Benefits> benefitsFromStreetBaseData(StreetBaseDataContainer streetBaseDataContainer) {

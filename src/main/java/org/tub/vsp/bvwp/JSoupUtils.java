@@ -74,6 +74,14 @@ public class JSoupUtils {
                            .doubleValue();
     }
 
+    public static Double parseDoubleOrElseNull(String s) {
+        try {
+            return parseDouble(s);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
     public static Optional<Element> getTableByKeyAndContainedText(Document document, String cssClass,
                                                                   String textToContain) {
         return getTableByCssKeyAndPredicate(document, cssClass, (e) -> anyRowContainsText(e, textToContain));

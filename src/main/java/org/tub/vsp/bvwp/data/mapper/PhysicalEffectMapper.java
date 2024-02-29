@@ -7,7 +7,6 @@ import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.PhysicalEffectDataContainer;
 
-import java.text.ParseException;
 import java.util.Optional;
 
 public class PhysicalEffectMapper {
@@ -33,15 +32,23 @@ public class PhysicalEffectMapper {
         return physicalEffectDataContainer;
     }
 
-    private PhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
-        try {
-            Double overall = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
-            Double induced = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, firsRow + 2, 1));
-            Double shifted = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, firsRow + 3, 1));
-            return new PhysicalEffectDataContainer.Effect(overall, induced, shifted);
-        } catch (ParseException e) {
-            logger.warn("Could not parse effect value from {}", table);
-            return null;
+    private Optional<Integer> getFirstRowIndexWithTextAfter(Element table, String key, int afterRow) {
+        for (int i = afterRow; i < table.select("tr").size(); i++) {
+            if (JSoupUtils.getTextFromRowAndCol(table, i, 0).contains(key)) {
+                return Optional.of(i);
+            }
         }
+        return Optional.empty();
+    }
+
+    private PhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
+        Double overall = JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
+        Double induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
+                .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
+                .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);
+        Double shifted = getFirstRowIndexWithTextAfter(table, "verlagertem Verkehr", firsRow)
+                .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
+                .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);
+        return new PhysicalEffectDataContainer.Effect(overall, induced, shifted);
     }
 }
