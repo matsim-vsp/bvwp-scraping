@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.tub.vsp</groupId>
+    <groupId>org.tub.vsp.bvwp</groupId>
     <artifactId>bvwp-scraping</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -13,12 +13,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <repositories>
-        <repository>
-            <url>https://mvnrepository.com/</url>
-            <id>abc</id>
-        </repository>
-    </repositories>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.bytedeco/openblas -->
         <dependency>
@@ -44,12 +38,12 @@
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
-            <version>LATEST</version>
+            <version>0.43.1</version>
         </dependency>
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-jsplot</artifactId>
-            <version>LATEST</version>
+            <version>0.43.1</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>
@@ -68,8 +62,15 @@
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version>
+            <scope>test</scope>
+            <version>5.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -90,6 +91,43 @@
 
 
     </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>3.3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.3.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>3.1.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
 
 </project>

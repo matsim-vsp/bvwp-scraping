@@ -2,8 +2,8 @@ package org.tub.vsp.bvwp.io;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.LocalFileAccessor;
+import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 
 import java.io.IOException;

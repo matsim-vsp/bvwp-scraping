@@ -1,13 +1,13 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.street;
 
 import java.util.Objects;
 
 public class StreetBaseDataContainer {
     private String url;
 
-    private ProjectInformationDataContainer projectInformation;
-    private PhysicalEffectDataContainer physicalEffect;
-    private CostBenefitAnalysisDataContainer costBenefitAnalysis;
+    private StreetProjectInformationDataContainer projectInformation;
+    private StreetPhysicalEffectDataContainer physicalEffect;
+    private StreetCostBenefitAnalysisDataContainer costBenefitAnalysis;
 
     public String getUrl() {
         return url;
@@ -18,29 +18,29 @@ public class StreetBaseDataContainer {
         return this;
     }
 
-    public ProjectInformationDataContainer getProjectInformation() {
+    public StreetProjectInformationDataContainer getProjectInformation() {
         return projectInformation;
     }
 
-    public StreetBaseDataContainer setProjectInformation(ProjectInformationDataContainer projectInformation) {
+    public StreetBaseDataContainer setProjectInformation(StreetProjectInformationDataContainer projectInformation) {
         this.projectInformation = projectInformation;
         return this;
     }
 
-    public PhysicalEffectDataContainer getPhysicalEffect() {
+    public StreetPhysicalEffectDataContainer getPhysicalEffect() {
         return physicalEffect;
     }
 
-    public StreetBaseDataContainer setPhysicalEffect(PhysicalEffectDataContainer physicalEffect) {
+    public StreetBaseDataContainer setPhysicalEffect(StreetPhysicalEffectDataContainer physicalEffect) {
         this.physicalEffect = physicalEffect;
         return this;
     }
 
-    public CostBenefitAnalysisDataContainer getCostBenefitAnalysis() {
+    public StreetCostBenefitAnalysisDataContainer getCostBenefitAnalysis() {
         return costBenefitAnalysis;
     }
 
-    public StreetBaseDataContainer setCostBenefitAnalysis(CostBenefitAnalysisDataContainer costBenefitAnalysis) {
+    public StreetBaseDataContainer setCostBenefitAnalysis(StreetCostBenefitAnalysisDataContainer costBenefitAnalysis) {
         this.costBenefitAnalysis = costBenefitAnalysis;
         return this;
     }
