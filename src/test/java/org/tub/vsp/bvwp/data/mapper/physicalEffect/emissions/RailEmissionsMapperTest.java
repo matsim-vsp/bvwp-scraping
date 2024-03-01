@@ -12,7 +12,7 @@ import java.util.Map;
 public class RailEmissionsMapperTest {
 
     @Test
-    void test() throws IOException {
+    public void test() throws IOException {
         RailEmissionsDataContainer emissions =
                 RailEmissionsMapper.mapDocument(LocalFileAccessor.getLocalDocument("2-003-v01.html"));
 
