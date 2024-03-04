@@ -25,15 +25,31 @@ public class ProjectInformationMapper {
         }
         String bautyp = extractInformation( document, 0, "Bautyp(en), Bauziel(e)" );
 
-        String verkehrsbelastung2030 = extractInformation( document, 0, "im Planfall 2030" );
-        if ( verkehrsbelastung2030!=null ) {
-            verkehrsbelastung2030 = verkehrsbelastung2030.replace( " Kfz/24h", "" );
+        String verkehrsbelastungPlanfall = extractInformation( document, 0, "im Planfall 2030" );
+        if ( verkehrsbelastungPlanfall!=null ) {
+            verkehrsbelastungPlanfall = verkehrsbelastungPlanfall.replace( " Kfz/24h", "" );
+        } else {
+            // ( other format for Knotenpunkte )
+            verkehrsbelastungPlanfall = extractInformation( document, 0, "/ Planfall 2030" );
+            verkehrsbelastungPlanfall = verkehrsbelastungPlanfall.replaceAll( "^.* / ", "" );
+            verkehrsbelastungPlanfall = verkehrsbelastungPlanfall.replace( " Kfz/24h", "" );
         }
-        if ( verkehrsbelastung2030==null ) {
-            verkehrsbelastung2030 = "0.";
+        if ( verkehrsbelastungPlanfall==null ) {
+            verkehrsbelastungPlanfall = "0.";
         }
 
         String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
+
+        if ( projectNumber.startsWith( "A008-G010" ) ) {
+            // NKV ist im Hauptprojekt, aber Einstufungen sind in den Teilprojekten.  3 davon VBE, 1 WBP --> VBE.
+
+            priority = Priority.VBE.name();
+            logger.warn( "priority=" + priority );
+        }
+
+        if ( priority.equalsIgnoreCase( "siehe Teilprojekte" ) ) {
+            logger.warn("project=" + projectNumber ) ;
+        }
 
         try{
             return projectInformation.setProjectNumber(projectNumber)
@@ -41,7 +57,7 @@ public class ProjectInformationMapper {
                                      .setLength( JSoupUtils.parseDouble( length ) )
                                      .setBautyp( Bautyp.getFromString( bautyp ) )
                                      .setPriority( Priority.getFromString(priority ) )
-                                     .setVerkehrsbelastung2030( JSoupUtils.parseDouble( verkehrsbelastung2030 ))
+                                     .setVerkehrsbelastungPlanfall( JSoupUtils.parseDouble( verkehrsbelastungPlanfall ) )
                             ;
         } catch( ParseException e ){
             throw new RuntimeException( e );

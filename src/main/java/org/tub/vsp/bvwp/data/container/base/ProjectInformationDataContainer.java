@@ -81,7 +81,7 @@ public class ProjectInformationDataContainer {
     public Double getLength(){
         return length;
     }
-    public ProjectInformationDataContainer setVerkehrsbelastung2030( Double verkehrsbelastung2030 ){
+    public ProjectInformationDataContainer setVerkehrsbelastungPlanfall( Double verkehrsbelastung2030 ){
         this.verkehrsbelastung2030 = verkehrsbelastung2030;
         return this;
     }

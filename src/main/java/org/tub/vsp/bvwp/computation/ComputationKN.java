@@ -236,7 +236,7 @@ public class ComputationKN{
 
 		// co2 Bau
 		{
-			co2 += benefits.co2_infra;
+			co2 += benefits.co2_infra / 145. * modifications.co2Price() ;
 		}
 
 		// co2 Betrieb
@@ -257,9 +257,14 @@ public class ComputationKN{
 		}
 		{
 			co2 += b_co2_induz / 145. * modifications.co2Price() ;
+
 			co2 += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 / 145. * modifications.co2Price();
+			// mehrFzkm are those which are on top of PRINS.  We do same calculation as with the other co2 contribs, except that this one here is currently on one line.
 		}
 
-		return -co2;
+		return co2;
+		// The result will be negative.  We return positive so we can logplot it. yyyyyy really??? -- no longer
+
+		// Note that this really says nothing about old vs new co2 price, or old vs new addl traffic.  That all depends on the settings in "modifications".
 	}
 }

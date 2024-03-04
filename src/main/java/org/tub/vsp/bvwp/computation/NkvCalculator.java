@@ -52,9 +52,17 @@ public class NkvCalculator {
 //        new Amounts( 1., 1., 1., 1., 1., 1., 1., 1. );
         // uncomment to see argument names
 
+        Double induced = tt.induced();
+        if ( induced==null ) {
+            induced=0.;
+        }
+        Double vkmInduced = vkm.induced();
+        if ( vkmInduced==null ) {
+            vkmInduced = 0.;
+        }
         final Amounts amounts = new Amounts(
-                        vkm.overall(), vkm.induced(), vkm.shifted(), // pkwkm
-                        tt.overall(), tt.induced(), tt.shifted(), // pers_h
+                        vkm.overall(), vkmInduced, vkm.shifted(), // pkwkm
+                        tt.overall(), induced, tt.shifted(), // pers_h
                         vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
         );
         final Optional<Amounts> optional = Optional.of( amounts );

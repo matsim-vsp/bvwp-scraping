@@ -76,7 +76,7 @@ public class StreetAnalysisDataContainer {
 			    throw new IllegalStateException( "Unexpected value: " + streetBaseDataContainer.getProjectInformation().getBautyp() );
 	    }
 
-        entries.put( Headers.ADDITIONAL_LANE_KM, additionalLaneKm );
+        entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
 
         double mehrFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.6 * ComputationKN.FZKM_AB;
 
@@ -86,13 +86,14 @@ public class StreetAnalysisDataContainer {
 //        entries.put("rz", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall());
 //        entries.put("rz/km", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall() / streetBaseDataContainer.getProjectInformation().getLength() );
         entries.put( Headers.B_PER_KM, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseDataContainer.getProjectInformation().getLength() );
-	    entries.put( Headers.NKV_NO_CHANGE, NkvCalculator.calculateNkv( Modifications.NO_CHANGE, streetBaseDataContainer ) );
+	    entries.put( Headers.NKV_ORIG, NkvCalculator.calculateNkv( Modifications.NO_CHANGE, streetBaseDataContainer ) );
         entries.put( Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE, streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ, NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm( additionalFzkm ), streetBaseDataContainer ) );
         entries.put( Headers.NKV_INDUZ_CO2, NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
-        entries.put( Headers.PKWKM_ALL_NEU, mehrFzkmFromElasticity );
-        entries.put( Headers.B_CO2_NEU, NkvCalculator.calculateB_CO2( Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
-        entries.put( Headers.VERKEHRSBELASTUNG_2030, streetBaseDataContainer.getProjectInformation().getVerkehrsbelastung2030() );
+        entries.put( Headers.ADDTL_PKWKM_NEU, mehrFzkmFromElasticity );
+	    entries.put( Headers.CO2_COST_ORIG, - NkvCalculator.calculateB_CO2( Modifications.NO_CHANGE, streetBaseDataContainer ) );
+	    entries.put( Headers.CO2_COST_NEU, - NkvCalculator.calculateB_CO2( Modifications.createInducedAndCo2WithMehrFzkm( additionalFzkm ), streetBaseDataContainer ) );
+        entries.put( Headers.VERKEHRSBELASTUNG_PLANFALL, streetBaseDataContainer.getProjectInformation().getVerkehrsbelastung2030() );
 
         if ( streetBaseDataContainer.getProjectInformation().getProjectNumber().contains( "A1-G50-NI" ) ) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr der per co2 stark negativ bewertet wird.");
