@@ -1,22 +1,23 @@
-package org.tub.vsp.bvwp.data.mapper;
+package org.tub.vsp.bvwp.data.mapper.physicalEffect;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.PhysicalEffectDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetPhysicalEffectDataContainer;
+import org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions.StreetEmissionsMapper;
 
 import java.util.Optional;
 
-public class PhysicalEffectMapper {
-    private static final Logger logger = LogManager.getLogger(PhysicalEffectMapper.class);
+public class StreetPhysicalEffectMapper {
+    private static final Logger logger = LogManager.getLogger(StreetPhysicalEffectMapper.class);
 
-    public PhysicalEffectDataContainer mapDocument(Document document) {
-        PhysicalEffectDataContainer physicalEffectDataContainer =
-                new PhysicalEffectDataContainer().setEmissionsDataContainer(new EmissionsMapper().mapDocument(document));
+    public static StreetPhysicalEffectDataContainer mapDocument(Document document) {
+        StreetPhysicalEffectDataContainer physicalEffectDataContainer =
+                new StreetPhysicalEffectDataContainer().setEmissionsDataContainer(StreetEmissionsMapper.mapDocument(document));
 
-        Optional<Element> table = JSoupUtils.getTableByClassAndContainedText(document, "table.table_wirkung_strasse",
+        Optional<Element> table = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_wirkung_strasse",
                 "Verkehrswirkungen im Planfall");
 
         if (table.isEmpty()) {
@@ -32,7 +33,7 @@ public class PhysicalEffectMapper {
         return physicalEffectDataContainer;
     }
 
-    private Optional<Integer> getFirstRowIndexWithTextAfter(Element table, String key, int afterRow) {
+    private static Optional<Integer> getFirstRowIndexWithTextAfter(Element table, String key, int afterRow) {
         for (int i = afterRow; i < table.select("tr").size(); i++) {
             if (JSoupUtils.getTextFromRowAndCol(table, i, 0).contains(key)) {
                 return Optional.of(i);
@@ -41,7 +42,7 @@ public class PhysicalEffectMapper {
         return Optional.empty();
     }
 
-    private PhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
+    private static StreetPhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
         Double overall = JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
         Double induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
@@ -49,6 +50,6 @@ public class PhysicalEffectMapper {
         Double shifted = getFirstRowIndexWithTextAfter(table, "verlagertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
                 .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);
-        return new PhysicalEffectDataContainer.Effect(overall, induced, shifted);
+        return new StreetPhysicalEffectDataContainer.Effect(overall, induced, shifted);
     }
 }

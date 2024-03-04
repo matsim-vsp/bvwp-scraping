@@ -1,33 +1,31 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.rail;
 
-import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Priority;
 
 import java.util.Objects;
 
-public class ProjectInformationDataContainer {
+public class RailProjectInformationDataContainer {
     private String projectNumber;
-    private String street;
+    private String title;
     private Priority priority;
-    private Bautyp bautyp;
+    private String bautyp;
     private Double length;
-    private Double verkehrsbelastung2030;
 
     public String getProjectNumber() {
         return projectNumber;
     }
 
-    public ProjectInformationDataContainer setProjectNumber(String projectNumber) {
+    public RailProjectInformationDataContainer setProjectNumber(String projectNumber) {
         this.projectNumber = projectNumber;
         return this;
     }
 
-    public String getStreet() {
-        return street;
+    public String getTitle() {
+        return title;
     }
 
-    public ProjectInformationDataContainer setStreet(String street) {
-        this.street = street;
+    public RailProjectInformationDataContainer setTitle(String title) {
+        this.title = title;
         return this;
     }
 
@@ -35,7 +33,7 @@ public class ProjectInformationDataContainer {
         return priority;
     }
 
-    public ProjectInformationDataContainer setPriority( Priority priority ) {
+    public RailProjectInformationDataContainer setPriority(Priority priority) {
         this.priority = priority;
         return this;
     }
@@ -49,12 +47,12 @@ public class ProjectInformationDataContainer {
             return false;
         }
 
-        ProjectInformationDataContainer that = (ProjectInformationDataContainer) o;
+        RailProjectInformationDataContainer that = (RailProjectInformationDataContainer) o;
 
         if (!Objects.equals(projectNumber, that.projectNumber)) {
             return false;
         }
-        if (!Objects.equals(street, that.street)) {
+        if (!Objects.equals(title, that.title)) {
             return false;
         }
         return priority == that.priority;
@@ -63,29 +61,26 @@ public class ProjectInformationDataContainer {
     @Override
     public int hashCode() {
         int result = projectNumber != null ? projectNumber.hashCode() : 0;
-        result = 31 * result + (street != null ? street.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (priority != null ? priority.hashCode() : 0);
         return result;
     }
-    public ProjectInformationDataContainer setBautyp( Bautyp bautyp ){
+
+    public RailProjectInformationDataContainer setBautyp(String bautyp) {
         this.bautyp = bautyp;
         return this;
     }
-    public Bautyp getBautyp(){
+
+    public String getBautyp() {
         return bautyp;
     }
-    public ProjectInformationDataContainer setLength( Double length ){
+
+    public RailProjectInformationDataContainer setLength(Double length) {
         this.length = length;
         return this;
     }
-    public Double getLength(){
+
+    public Double getLength() {
         return length;
-    }
-    public ProjectInformationDataContainer setVerkehrsbelastungPlanfall( Double verkehrsbelastung2030 ){
-        this.verkehrsbelastung2030 = verkehrsbelastung2030;
-        return this;
-    }
-    public Double getVerkehrsbelastung2030(){
-        return verkehrsbelastung2030;
     }
 }

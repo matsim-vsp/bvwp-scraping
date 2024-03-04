@@ -4,9 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
+import org.tub.vsp.bvwp.data.container.base.street.StreetProjectInformationDataContainer;
 import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Priority;
-import org.tub.vsp.bvwp.data.container.base.ProjectInformationDataContainer;
 
 import java.text.ParseException;
 import java.util.Optional;
@@ -14,8 +14,8 @@ import java.util.Optional;
 public class ProjectInformationMapper {
     private static final Logger logger = LogManager.getLogger(ProjectInformationMapper.class);
 
-    public ProjectInformationDataContainer mapDocument(Document document) {
-        ProjectInformationDataContainer projectInformation = new ProjectInformationDataContainer();
+    public StreetProjectInformationDataContainer mapDocument( Document document ) {
+        StreetProjectInformationDataContainer projectInformation = new StreetProjectInformationDataContainer();
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");
         String street = extractInformation(document, 0, "Straße");

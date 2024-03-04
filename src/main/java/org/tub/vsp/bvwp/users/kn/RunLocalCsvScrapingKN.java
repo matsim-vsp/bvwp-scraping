@@ -7,7 +7,7 @@ import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Priority;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
-import org.tub.vsp.bvwp.plot.MultiPlotExample;
+import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -27,7 +27,6 @@ import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
 public class RunLocalCsvScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
-    public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
     public static void main(String[] args) throws IOException{
         Locale.setDefault( Locale.US );
@@ -83,7 +82,7 @@ public class RunLocalCsvScrapingKN{
         Figure figureB = figures.createFigureCostVsNkvOld();
         Figure figureC = figures.createFigureCostVsNkvNew();
 
-        String page = MultiPlotExample.pageTop + System.lineSeparator() +
+        String page = MultiPlotUtils.pageTop + System.lineSeparator() +
                                       figure.asJavascript( "plot1" ) + System.lineSeparator() +
                                       figure2.asJavascript( "plot2" ) + System.lineSeparator() +
                                       figure3.asJavascript( "plot3" ) + System.lineSeparator() +
@@ -95,7 +94,7 @@ public class RunLocalCsvScrapingKN{
                                       figureA.asJavascript( "plotA" ) + System.lineSeparator() +
                                       figureB.asJavascript( "plotB" ) + System.lineSeparator() +
                                       figureC.asJavascript( "plotC" ) + System.lineSeparator() +
-                                      MultiPlotExample.pageBottom;
+                                      MultiPlotUtils.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();
 
@@ -119,17 +118,17 @@ public class RunLocalCsvScrapingKN{
 
         Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 1. ) );
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ) );
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
 
-        System.out.println( SEPARATOR );
+        System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.CO2_COST_NEU, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
         System.out.println( table2.summarize( Headers.CO2_COST_NEU, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );

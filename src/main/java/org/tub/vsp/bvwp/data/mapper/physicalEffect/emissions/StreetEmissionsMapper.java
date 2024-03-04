@@ -1,11 +1,11 @@
-package org.tub.vsp.bvwp.data.mapper;
+package org.tub.vsp.bvwp.data.mapper.physicalEffect.emissions;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.EmissionsDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetEmissionsDataContainer;
 import org.tub.vsp.bvwp.data.type.Emission;
 import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 
@@ -14,43 +14,42 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class EmissionsMapper {
+public class StreetEmissionsMapper {
     public static final String STRING_IDENTIFIER_CO2_OVERALL_EQUIVALENTS = "Äquivalenten aus Lebenszyklusemissionen";
 
-    private static final Logger logger = LogManager.getLogger(EmissionsMapper.class);
+    private static final Logger logger = LogManager.getLogger(StreetEmissionsMapper.class);
 
-    public EmissionsDataContainer mapDocument(Document document) {
+    public static StreetEmissionsDataContainer mapDocument(Document document) {
 
-        Optional<Element> table = JSoupUtils.getTableByClassAndContainedText(document, "table.table_wirkung_strasse",
+        Optional<Element> table = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_wirkung_strasse",
                 "Veränderung der Abgasemissionen");
         if (table.isEmpty()) {
-            return EmissionsDataContainer.empty();
+            return StreetEmissionsDataContainer.empty();
         }
 
         //Creating the map for the emissions data container
-        Map<Emission, VehicleEmissions> collect =
-                Emission.STRING_IDENTIFIER_BY_EMISSION
-                        .entrySet()
-                        .stream()
-                        .map(e -> getEmissionDoubleEntry(e, table.get()))
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        Map<Emission, VehicleEmissions> collect = Emission.STREET_STRING_IDENTIFIER_BY_EMISSION
+                .entrySet()
+                .stream()
+                .map(e -> getEmissionDoubleEntry(e, table.get()))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
-        Optional<Element> envTable = JSoupUtils.getTableByClassAndContainedText(document, "table.table_webprins",
+        Optional<Element> envTable = JSoupUtils.getTableByKeyAndContainedText(document, "table.table_webprins",
                 "Äquivalenten aus Lebenszyklusemissionen");
 
         if (envTable.isEmpty()) {
             logger.warn("Could not find table with entry {}.", "Äquivalenten aus Lebenszyklusemissionen");
-            return new EmissionsDataContainer(collect, null);
+            return new StreetEmissionsDataContainer(collect, null);
         }
 
-        return new EmissionsDataContainer(collect, getCO2Overall(envTable.get()));
+        return new StreetEmissionsDataContainer(collect, getCO2Overall(envTable.get()));
     }
 
     //get emission value for one specific emission
-    private Optional<Map.Entry<Emission, VehicleEmissions>> getEmissionDoubleEntry(Map.Entry<Emission, String> e,
-                                                                                   Element table) {
+    private static Optional<Map.Entry<Emission, VehicleEmissions>> getEmissionDoubleEntry(Map.Entry<Emission, String> e,
+                                                                                          Element table) {
         Optional<VehicleEmissions> v;
         try {
             v = mapEmissionFromRow(table, e.getValue());
@@ -61,7 +60,7 @@ public class EmissionsMapper {
         return v.map(d -> Map.entry(e.getKey(), d));
     }
 
-    private Optional<VehicleEmissions> mapEmissionFromRow(Element table, String key) throws ParseException {
+    private static Optional<VehicleEmissions> mapEmissionFromRow(Element table, String key) throws ParseException {
         Optional<Element> row = JSoupUtils.firstRowWithKeyContainedInCol(table, key, 0);
         if (row.isEmpty()) {
             logger.warn("Could not find row with key {}.", key);
@@ -77,7 +76,7 @@ public class EmissionsMapper {
     }
 
     //mapping the CO2 overall equivalents value
-    private Double getCO2Overall(Element table) {
+    private static Double getCO2Overall(Element table) {
         return JSoupUtils.firstRowWithKeyContainedInCol(table, STRING_IDENTIFIER_CO2_OVERALL_EQUIVALENTS, 1)
                          .map(r -> {
                              try {

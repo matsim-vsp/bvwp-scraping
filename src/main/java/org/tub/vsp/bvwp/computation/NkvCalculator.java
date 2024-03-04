@@ -2,12 +2,11 @@ package org.tub.vsp.bvwp.computation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.bvwp.data.container.base.PhysicalEffectDataContainer;
-import org.tub.vsp.bvwp.data.container.base.StreetBaseDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetPhysicalEffectDataContainer;
 import org.tub.vsp.bvwp.data.type.Emission;
 import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 
-import java.util.Map;
 import java.util.Optional;
 
 import static org.tub.vsp.bvwp.computation.ComputationKN.*;
@@ -22,28 +21,33 @@ public class NkvCalculator {
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
 
-        if ( a.isEmpty() ) {
-            log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl() );
-            return null ;
+        if (a.isEmpty()) {
+            log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl());
+            return null;
         }
-        if ( b.isEmpty() ) {
-            log.warn("benefits container is empty for project=" + streetBaseDataContainer.getUrl() );
-            return null ;
+        if (b.isEmpty()) {
+            log.warn("benefits container is empty for project=" + streetBaseDataContainer.getUrl());
+            return null;
         }
 
         Double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts();
 
-        return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );
+        return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten,
+                streetBaseDataContainer.getCostBenefitAnalysis()
+                                                                                                  .getOverallBenefit()
+                                                                                                  .overall());
     }
 
 
     private static Optional<Amounts> amountsFromStreetBaseData(StreetBaseDataContainer streetBaseDataContainer) {
 
-        PhysicalEffectDataContainer.Effect tt = streetBaseDataContainer.getPhysicalEffect().getTravelTimes();
+        StreetPhysicalEffectDataContainer.Effect tt = streetBaseDataContainer.getPhysicalEffect().getTravelTimes();
 
-        PhysicalEffectDataContainer.Effect vkm = streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers();
+        StreetPhysicalEffectDataContainer.Effect vkm = streetBaseDataContainer.getPhysicalEffect()
+                                                                              .getVehicleKilometers();
 
-        VehicleEmissions vehicleEmissions = streetBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer().emissions().get(Emission.CO2 );
+        VehicleEmissions vehicleEmissions = streetBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer()
+                                                                   .emissions().get(Emission.CO2);
 
         if (tt == null || vkm == null || vehicleEmissions == null) {
             return Optional.empty();
@@ -52,21 +56,13 @@ public class NkvCalculator {
 //        new Amounts( 1., 1., 1., 1., 1., 1., 1., 1. );
         // uncomment to see argument names
 
-        Double induced = tt.induced();
-        if ( induced==null ) {
-            induced=0.;
-        }
-        Double vkmInduced = vkm.induced();
-        if ( vkmInduced==null ) {
-            vkmInduced = 0.;
-        }
         final Amounts amounts = new Amounts(
-                        vkm.overall(), vkmInduced, vkm.shifted(), // pkwkm
-                        tt.overall(), induced, tt.shifted(), // pers_h
-                        vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
+                vkm.overall(), Optional.ofNullable(vkm.induced()).orElse(0.), vkm.shifted(), // pkwkm
+                tt.overall(), Optional.ofNullable(tt.induced()).orElse(0.), tt.shifted(), // pers_h
+                vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
         );
-        final Optional<Amounts> optional = Optional.of( amounts );
-        if ( optional.isEmpty() ) {
+        final Optional<Amounts> optional = Optional.of(amounts);
+        if (optional.isEmpty()) {
             log.warn("here");
             throw new RuntimeException("stop");
         }
@@ -87,14 +83,14 @@ public class NkvCalculator {
         // @formatter:on
     }
 
-    public static Double calculateB_CO2( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ){
+    public static Double calculateB_CO2(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
-        Optional<Benefits> b = benefitsFromStreetBaseData( streetBaseDataContainer );
+        Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
 
-        if (a.isEmpty() || b.isEmpty() ) {
+        if (a.isEmpty() || b.isEmpty()) {
             return null;
         }
-        return ComputationKN.b_co2( modifications, a.get(), b.get() );
+        return ComputationKN.b_co2(modifications, a.get(), b.get());
     }
 }

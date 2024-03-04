@@ -1,15 +1,15 @@
-package org.tub.vsp.bvwp.data.container.base;
+package org.tub.vsp.bvwp.data.container.base.street;
 
 import org.tub.vsp.bvwp.data.type.Emission;
 
 import java.util.Objects;
 
-public class PhysicalEffectDataContainer {
-    private EmissionsDataContainer emissionsDataContainer;
+public class StreetPhysicalEffectDataContainer {
+    private StreetEmissionsDataContainer emissionsDataContainer;
     private Effect travelTimes;
     private Effect vehicleKilometers;
 
-    public EmissionsDataContainer getEmissionsDataContainer() {
+    public StreetEmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
     }
 
@@ -17,7 +17,7 @@ public class PhysicalEffectDataContainer {
         return emissionsDataContainer.emissions().get(emission).kfz();
     }
 
-    public PhysicalEffectDataContainer setEmissionsDataContainer(EmissionsDataContainer emissionsDataContainer) {
+    public StreetPhysicalEffectDataContainer setEmissionsDataContainer(StreetEmissionsDataContainer emissionsDataContainer) {
         this.emissionsDataContainer = emissionsDataContainer;
         return this;
     }
@@ -47,7 +47,7 @@ public class PhysicalEffectDataContainer {
             return false;
         }
 
-        PhysicalEffectDataContainer that = (PhysicalEffectDataContainer) o;
+        StreetPhysicalEffectDataContainer that = (StreetPhysicalEffectDataContainer) o;
 
         if (!Objects.equals(emissionsDataContainer, that.emissionsDataContainer)) {
             return false;

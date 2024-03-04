@@ -2,7 +2,13 @@ package org.tub.vsp.bvwp;
 
 import static org.tub.vsp.bvwp.scraping.StreetScraper.projectString;
 
+import org.tub.vsp.bvwp.data.Headers;
+import tech.tablesaw.api.Table;
+
 public class BvwpUtils{
+
+	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
+
 	private BvwpUtils(){} // do not instantiate
 
 	public static String getPositivListe(){
@@ -42,4 +48,9 @@ public class BvwpUtils{
 				   + projectString( "RP", "A1" )
 				   + "(abcdef)"; // um das letzte "|" abzufangen
 	}
+
+	public static Table extractPriorityTable(Table table, String priority) {
+		return table.where(table.stringColumn(Headers.PRIORITY).isEqualTo(priority));
+	}
+
 }

@@ -1,30 +1,28 @@
-package org.tub.vsp.bvwp.data.mapper;
+package org.tub.vsp.bvwp.data.mapper.costBenefit;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.CostBenefitAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
 import org.tub.vsp.bvwp.data.type.Emission;
 
-import java.text.ParseException;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class CostBenefitMapper {
-    private static final Logger logger = LogManager.getLogger(CostBenefitMapper.class);
+public class StreetCostBenefitMapper {
+    private static final Logger logger = LogManager.getLogger(StreetCostBenefitMapper.class);
 
-    public CostBenefitAnalysisDataContainer mapDocument( Document document ) {
-        CostBenefitAnalysisDataContainer result = new CostBenefitAnalysisDataContainer();
+    public static StreetCostBenefitAnalysisDataContainer mapDocument(Document document) {
+        StreetCostBenefitAnalysisDataContainer result = new StreetCostBenefitAnalysisDataContainer();
 
-        Optional<Element> benefit = getTableByKey(document, "table.table_webprins", CostBenefitMapper::isBenefitTable);
-        Optional<Element> costTable = getTableByKey(document, "table.table_kosten", CostBenefitMapper::isCostTable);
+        Optional<Element> benefit = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_webprins",
+                StreetCostBenefitMapper::isBenefitTable);
+        Optional<Element> costTable = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_kosten",
+                StreetCostBenefitMapper::isCostTable);
 
         //We only scrape the cumulated values
         benefit.ifPresent(element -> result.setNb(extractSimpleBenefit(element, "NB"))
@@ -46,27 +44,9 @@ public class CostBenefitMapper {
                                            .setNa(extractEmissionsBenefit(element))
                                            .setOverallBenefit(extractSimpleBenefit(element, "Gesamtnutzen", 0)));
 
-        costTable.ifPresent(element -> result.setCost(extractCosts(element)));
+        costTable.ifPresent(element -> result.setCost(CostBenefitMapperUtils.extractCosts(element)));
 
         return result;
-    }
-
-    private Optional<Element> getTableByKey(Document document, String key, Predicate<Element> predicate) {
-        List<Element> list = document.select(key)
-                                     .stream()
-                                     .filter(predicate)
-                                     .toList();
-
-        if (list.isEmpty()) {
-            logger.warn("Could not find any element with key {}.", key);
-            return Optional.empty();
-        } else if (list.size() > 1) {
-            logger.warn("Found more than one element with key {}.", key);
-            return Optional.empty();
-        }
-
-//        return Optional.of(list.getFirst());
-        return Optional.of(list.get(0));
     }
 
     //The table with "Veränderung der Betriebskosten" in its second row corresponds to the benefit table
@@ -89,25 +69,11 @@ public class CostBenefitMapper {
                       .contains("Summe bewertungsrelevanter Investitionskosten");
     }
 
-    private Cost extractCosts(Element table) {
-        Double costs;
-        Double overallCosts;
-        try {
-            costs = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 1 ) );
-            overallCosts = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 2));
-        } catch (ParseException e) {
-            logger.warn("Could not parse benefit value from {}", table);
-            return null;
-        }
-
-        return new Cost(costs, overallCosts);
-    }
-
-    private Benefit extractSimpleBenefit(Element table, String key) {
+    private static Benefit extractSimpleBenefit(Element table, String key) {
         return extractSimpleBenefit(table, key, 1);
     }
 
-    private Benefit extractSimpleBenefit(Element table, String key, int keyColumnIndex) {
+    private static Benefit extractSimpleBenefit(Element table, String key, int keyColumnIndex) {
         Optional<Benefit> optionalBenefit = extractSimpleBenefitOptional(table, key, keyColumnIndex);
         if (optionalBenefit.isEmpty()) {
             logger.warn("Could not find cost benefit for key {}.", key);
@@ -116,30 +82,13 @@ public class CostBenefitMapper {
         return optionalBenefit.get();
     }
 
-    private Optional<Benefit> extractSimpleBenefitOptional(Element table, String key, int keyColumnIndex) {
+    private static Optional<Benefit> extractSimpleBenefitOptional(Element table, String key, int keyColumnIndex) {
         return JSoupUtils.firstRowWithKeyInCol(table, key, keyColumnIndex)
-                         .flatMap(this::extractBenefitFromRow);
+                         .flatMap(CostBenefitMapperUtils::extractBenefitFromRow);
     }
 
-    private Optional<Benefit> extractBenefitFromRow(Element e) {
-        Double annualBenefits;
-        Double overallBenefits;
-        try {
-            annualBenefits = JSoupUtils.parseDouble(e.select("td")
-                                                     .get(2)
-                                                     .text());
-            overallBenefits = JSoupUtils.parseDouble(e.select("td")
-                                                      .get(3)
-                                                      .text());
-        } catch (ParseException ex) {
-            logger.warn("Could not parse benefit value from {}", e);
-            return Optional.empty();
-        }
-        return Optional.of(new Benefit(annualBenefits, overallBenefits));
-    }
-
-    private Map<Emission, Benefit> extractEmissionsBenefit(Element table) {
-        return Emission.STRING_IDENTIFIER_BY_EMISSION
+    private static Map<Emission, Benefit> extractEmissionsBenefit(Element table) {
+        return Emission.STREET_STRING_IDENTIFIER_BY_EMISSION
                 .entrySet()
                 .stream()
                 .map(e -> Map.entry(e.getKey(), extractSimpleBenefitOptional(table, e.getValue(), 0)))
