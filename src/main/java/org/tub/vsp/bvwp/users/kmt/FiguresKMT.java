@@ -164,8 +164,8 @@ class FiguresKMT {
   }
 
   static Figure createFigureCO2(Axis xAxis, int plotWidth, Table table, String xName){
-      String yName = Headers.B_CO2_NEU;
-      String y2Name = Headers.B_CO2_NEU;
+      String yName = Headers.CO2_COST_NEU;
+      String y2Name = Headers.CO2_COST_NEU;
 
       Axis yAxis = Axis.builder()
           .title( yName )

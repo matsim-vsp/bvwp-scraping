@@ -86,7 +86,7 @@ public class RunLocalCsvScrapingKMT {
             String xNameKMT;
             Axis.AxisBuilder xAxisBuilder = Axis.builder();
             {
-                xNameKMT = Headers.B_CO2_NEU;
+                xNameKMT = Headers.CO2_COST_NEU;
                 xAxisBuilder.type(Type.LINEAR);
             }
 //        {
@@ -140,7 +140,7 @@ public class RunLocalCsvScrapingKMT {
         table = table.sortOn(comparator);
         NumberFormat format = NumberFormat.getCompactNumberInstance();
         format.setMaximumFractionDigits(0);
-        table.numberColumn(Headers.B_CO2_NEU).setPrintFormatter(format, "n/a");
+        table.numberColumn(Headers.CO2_COST_NEU).setPrintFormatter(format, "n/a");
 
         //Projekte, die bereits vor Änderung NKV <1 haben
         Table tableBaseKl1 = table.where(table.numberColumn(Headers.NKV_NO_CHANGE).isLessThan(1.));
@@ -170,10 +170,10 @@ public class RunLocalCsvScrapingKMT {
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(
-                    Headers.B_CO2_NEU, sum, mean, stdDev, min, max).by(Headers.PRIORITY));
+                    Headers.CO2_COST_NEU, sum, mean, stdDev, min, max).by(Headers.PRIORITY));
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
-                tableIndCo2kl1.summarize(Headers.B_CO2_NEU, sum, mean, stdDev, min, max)
+                tableIndCo2kl1.summarize(Headers.CO2_COST_NEU, sum, mean, stdDev, min, max)
                     .by(Headers.PRIORITY));
         }
 

@@ -77,7 +77,7 @@ public class StreetAnalysisDataContainer {
                                                                                               .getBautyp());
         }
 
-        entries.put(Headers.ADDITIONAL_LANE_KM, additionalLaneKm);
+        entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
 
         double mehrFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.6 * ComputationKN.FZKM_AB;
         final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
@@ -94,7 +94,7 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.B_PER_KM, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit()
                                                              .overall() / streetBaseDataContainer.getProjectInformation()
                                                                                                  .getLength());
-        entries.put(Headers.NKV_NO_CHANGE, NkvCalculator.calculateNkv(Modifications.NO_CHANGE,
+        entries.put(Headers.NKV_ORIG, NkvCalculator.calculateNkv(Modifications.NO_CHANGE,
                 streetBaseDataContainer));
         entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_5FACH,
                 streetBaseDataContainer));
@@ -109,11 +109,11 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.NKV_INDUZ_CO2,
                 NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm(additionalFzkm),
                         streetBaseDataContainer));
-        entries.put(Headers.PKWKM_ALL_NEU, mehrFzkmFromElasticity);
-        entries.put(Headers.B_CO2_NEU,
-                NkvCalculator.calculateB_CO2(Modifications.createInducedAndCo2WithMehrFzkm(additionalFzkm),
+        entries.put(Headers.ADDTL_PKWKM_NEU, mehrFzkmFromElasticity );
+	    entries.put( Headers.CO2_COST_ORIG, - NkvCalculator.calculateB_CO2( Modifications.NO_CHANGE, streetBaseDataContainer ) );
+	    entries.put( Headers.CO2_COST_NEU, - NkvCalculator.calculateB_CO2(Modifications.createInducedAndCo2WithMehrFzkm(additionalFzkm),
                         streetBaseDataContainer));
-        entries.put(Headers.VERKEHRSBELASTUNG_2030, streetBaseDataContainer.getProjectInformation()
+        entries.put(Headers.VERKEHRSBELASTUNG_PLANFALL, streetBaseDataContainer.getProjectInformation()
                                                                            .getVerkehrsbelastung2030());
 
         if (streetBaseDataContainer.getProjectInformation().getProjectNumber().contains("A1-G50-NI")) {

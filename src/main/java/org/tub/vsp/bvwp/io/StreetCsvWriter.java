@@ -171,12 +171,12 @@ public class StreetCsvWriter {
         //general info
         record.add(Headers.PROJECT_NAME, baseDataContainer.getProjectInformation().getProjectNumber());
         record.add(Headers.LINK, baseDataContainer.getUrl());
-        record.add(Headers.PRIORITY, baseDataContainer.getProjectInformation().getPriority().name());
+        record.add( Headers.EINSTUFUNG, baseDataContainer.getProjectInformation().getPriority().name() );
         record.add(Headers.BAUTYP, baseDataContainer.getProjectInformation().getBautyp().name());
 
         record.add(Headers.LENGTH, baseDataContainer.getProjectInformation().getLength());
 
-        record.add(Headers.PKWKM_ALL, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
+        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
         record.add(Headers.PKWKM_INDUZ, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers()
                                                                              .induced()).orElse(0.));
 
@@ -185,10 +185,10 @@ public class StreetCsvWriter {
         //co2 equivalents
         record.add(Headers.CO_2_EQUIVALENTS_EMISSIONS, baseDataContainer.getPhysicalEffect().getEmissionsDataContainer()
                                                                         .co2Overall());
-        record.add(Headers.B_CO_2_EQUIVALENTS_ANNUAL, baseDataContainer.getCostBenefitAnalysis()
-                                                                       .getCo2EquivalentBenefit()
-                                                                       .annual()); // yyyy not needed
-        record.add(Headers.B_CO_2_EQUIVALENTS_OVERALL, baseDataContainer.getCostBenefitAnalysis()
+//        record.add(Headers.B_CO_2_EQUIVALENTS_ANNUAL, baseDataContainer.getCostBenefitAnalysis()
+//                                                                       .getCo2EquivalentBenefit()
+//                                                                       .annual()); // yyyy not needed
+        record.add(Headers.B_CO_2_EQUIVALENTS_ORIG, baseDataContainer.getCostBenefitAnalysis()
                                                                         .getCo2EquivalentBenefit().overall());
 
         //emissions
@@ -257,18 +257,18 @@ public class StreetCsvWriter {
         headers.addStringColumn(Headers.PROJECT_NAME);
 
         headers.addStringColumn(Headers.LINK);
-        headers.addStringColumn(Headers.PRIORITY);
+        headers.addStringColumn( Headers.EINSTUFUNG );
         headers.addStringColumn(Headers.BAUTYP);
         headers.addDoubleColumn(Headers.LENGTH);
 
-        headers.addDoubleColumn(Headers.PKWKM_ALL);
+        headers.addDoubleColumn( Headers.ADDTL_PKWKM_ORIG );
         headers.addDoubleColumn(Headers.PKWKM_INDUZ);
 //        headers.addDoubleColumn( Headers.PKWKM_INDUZ_NEU ); // added by automagic
         headers.addDoubleColumn(Headers.B_FZKM);
 
         headers.addDoubleColumn(Headers.CO_2_EQUIVALENTS_EMISSIONS);
-        headers.addDoubleColumn(Headers.B_CO_2_EQUIVALENTS_ANNUAL);
-        headers.addDoubleColumn(Headers.B_CO_2_EQUIVALENTS_OVERALL);
+//        headers.addDoubleColumn( Headers.B_CO_2_EQUIVALENTS_ANNUAL );
+        headers.addDoubleColumn( Headers.B_CO_2_EQUIVALENTS_ORIG );
 
 //        for (String colName : EMISSION_COLUMNS.values()) {
 //            headers.add(colName + "-emissions");
