@@ -2,7 +2,7 @@ package org.tub.vsp.bvwp.users.kmt;
 
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Axis.Type;
@@ -20,8 +20,8 @@ class FiguresKMT {
 	//Do not instanciate
 	FiguresKMT(){}
 
-	private static Trace getPriorityTrace( Table table, Priority priority, String xName, String yName,
-			String color){
+	private static Trace getPriorityTrace( Table table, Einstufung priority, String xName, String yName,
+					       String color){
 		Table tableVbe = BvwpUtils.extractPriorityTable(table, priority.name());
 		return ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( yName ) )
 				.text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -61,10 +61,10 @@ class FiguresKMT {
 					  .name( String.format( legendFormat, yName ) )
 					  .build();
 
-		final Trace traceWb = getPriorityTrace(table, Priority.WB, xName, y2Name, "cyan");
-		final Trace traceWbp = getPriorityTrace(table, Priority.WBP, xName, y2Name, "yellow");
-		final Trace traceVb = getPriorityTrace(table, Priority.VB, xName, y2Name, "orange");
-		final Trace traceVbe = getPriorityTrace( table, Priority.VBE , xName, y2Name, "red" );
+		final Trace traceWb = getPriorityTrace(table, Einstufung.WB, xName, y2Name, "cyan" );
+		final Trace traceWbp = getPriorityTrace(table, Einstufung.WBP, xName, y2Name, "yellow" );
+		final Trace traceVb = getPriorityTrace(table, Einstufung.VB, xName, y2Name, "orange" );
+		final Trace traceVbe = getPriorityTrace( table, Einstufung.VBE , xName, y2Name, "red" );
 
 		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
 					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -84,7 +84,7 @@ class FiguresKMT {
 		Figure figure2;
 		String yName = Headers.NKV_ORIG;
 		String y3Name = Headers.NKV_CO2_680_EN;
-		String y2Name = Headers.NKV_INDUZ_CO2_CONSTRUCTION;
+		String y2Name = Headers.NKV_EL03_CO2_CONSTRUCTION;
 
 		Axis yAxis = Axis.builder()
 //			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
@@ -101,10 +101,10 @@ class FiguresKMT {
 					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
 					  .build();
 
-		final Trace traceWb = getPriorityTrace(table, Priority.WB, xName, y2Name, "cyan");
-		final Trace traceWbp = getPriorityTrace(table, Priority.WBP, xName, y2Name, "yellow");
-		final Trace traceVb = getPriorityTrace(table, Priority.VB, xName, y2Name, "orange");
-		final Trace traceVbe = getPriorityTrace( table, Priority.VBE , xName, y2Name, "red"  );
+		final Trace traceWb = getPriorityTrace(table, Einstufung.WB, xName, y2Name, "cyan" );
+		final Trace traceWbp = getPriorityTrace(table, Einstufung.WBP, xName, y2Name, "yellow" );
+		final Trace traceVb = getPriorityTrace(table, Einstufung.VB, xName, y2Name, "orange" );
+		final Trace traceVbe = getPriorityTrace( table, Einstufung.VBE , xName, y2Name, "red" );
 
 
 		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )

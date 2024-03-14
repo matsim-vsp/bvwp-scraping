@@ -1,14 +1,16 @@
 package org.tub.vsp.bvwp.data;
 
+import org.tub.vsp.bvwp.data.type.Einstufung;
+
 public final class Headers{
 	/**
 	 * Additional lane-km of the project.  Estimated from length of the construction project and project type (e.g. "Neubau" vs. "Erweiterung").
 	 */
 	public static final String ADDTL_LANE_KM = "addtl_lane_km";
 	/**
-	 * = {@link #ADDTL_PKWKM_NEU} - {@link #ADDTL_PKWKM_ORIG}
+	 * = {@link #ADDTL_PKWKM_EL03} - {@link #ADDTL_PKWKM_ORIG}
 	 */
-	public static final String ADDTL_PKWKM_DIFF = "addtl_pkwkm_diff";
+	public static final String ADDTL_PKWKM_EL03_DIFF = "addtl_pkwkm_el03_diff";
 	/**
 	 * Der "induzierte" (Mehr-)Verkehr laut PRINS.
 	 */
@@ -17,7 +19,7 @@ public final class Headers{
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut unserer eigenen Abschätzung.  Wird immer mal mit anderen Elastizitäten gerechnet, so
 	 * dass sich die Werte immer mal ändern.
 	 */
-	public static final String ADDTL_PKWKM_NEU = "addtl_pkwkm_new";
+	public static final String ADDTL_PKWKM_EL03 = "addtl_pkwkm_el03";
 	/**
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut PRINS.
 	 */
@@ -67,7 +69,7 @@ public final class Headers{
 	/**
 	 * So etwas wie "VB-E", "VB", ...
 	 *
-	 * @see org.tub.vsp.bvwp.data.type.Priority
+	 * @see Einstufung
 	 */
 	public static final String EINSTUFUNG = "Einstufung";
 	/**
@@ -81,7 +83,7 @@ public final class Headers{
 	/**
 	 * min( 5 , {@link #NKV_ORIG} )
 	 */
-	public static final String NKV_ORIG_CAPPED5 = "NKV_orig_capped";
+	public static final String NKV_ORIG_CAPPED5 = "NKV_orig_capped5";
 	/**
 	 * NKV bei erhöhtem CO2-Preis (welchem?).
 	 */
@@ -89,29 +91,29 @@ public final class Headers{
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
 	public static final String NKV_CO2_680_EN = "BCR_co2_680";
 	/**
-	 * {@link #NKV_INDUZ_CO2215_CONSTRUCTION} - {@link #NKV_ORIG}
+	 * {@link #NKV_EL03_CO2_215_CONSTRUCTION} - {@link #NKV_ORIG}
 	 */
-	public static final String NKV_DIFF = "nkvDiff";
+	public static final String NKV_EL03_DIFF = "NKV_el03_Diff";
 	/**
 	 * Neues NKV bei erhöhter Abschätzung für Mehrverkehr.
 	 */
-	public static final String NKV_INDUZ = "NKV_induz";
+	public static final String NKV_EL03 = "NKV_el03";
 	/**
 	 * Neues NKV mit höherem Mehrverkehr, CO2-Preis 215, sowie höheren Investitionskosten.
 	 */
-	public static final String NKV_INDUZ_CO2215_CONSTRUCTION = "NKV_induzCo2215Invkosten";
+	public static final String NKV_EL03_CO2_215_CONSTRUCTION = "NKV_el03Co2_215Invkosten";
 	/**
-	 * min( 5, {@link #NKV_INDUZ_CO2215_CONSTRUCTION})
+	 * min( 5, {@link #NKV_EL03_CO2_215_CONSTRUCTION})
 	 */
-	public static final String NKV_INDUZ_CO2215_CONSTRUCTION_CAPPED5 = "NKV_induzCo2215Invkosten_capped5";
+	public static final String NKV_EL03_CO2_215_CONSTRUCTION_CAPPED5 = "NKV_el03Co2_215Invkosten_capped5";
 	/**
 	 * Neues NKV mit höherem Mehrverkehr, höherem CO2-Preis, höheren Investitionskosten.
 	 */
-	public static final String NKV_INDUZ_CO2_CONSTRUCTION = "NKV_induzCo2Invkosten";
+	public static final String NKV_EL03_CO2_CONSTRUCTION = "NKV_el03Co2Invkosten";
 	/**
-	 * min( 5, {@link #NKV_INDUZ_CO2_CONSTRUCTION} )
+	 * min( 5, {@link #NKV_EL03_CO2_CONSTRUCTION} )
 	 */
-	public static final String NKV_INDUZ_CO2_CONSTRUCTION_CAPPED5 = "NKV_induzCo2Invkosten_capped5";
+	public static final String NKV_EL03_CO2_CONSTRUCTION_CAPPED5 = "NKV_el03Co2Invkosten_capped5";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
 	public static final String NKV_NO_CHANGE_EN = "BCR";

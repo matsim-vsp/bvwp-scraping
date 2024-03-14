@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.data.Headers;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.NumericColumn;
 import tech.tablesaw.api.Table;
@@ -67,15 +67,15 @@ class FiguresKN{
 
 		// ============================================
 		table.addColumns(
-				table.numberColumn( Headers.NKV_INDUZ_CO2_CONSTRUCTION ).subtract( table.numberColumn( Headers.NKV_ORIG ) ).setName( Headers.NKV_DIFF )
-				,table.numberColumn( Headers.ADDTL_PKWKM_NEU ).subtract( table.numberColumn( Headers.ADDTL_PKWKM_ORIG ) ).setName( Headers.ADDTL_PKWKM_DIFF )
+				table.numberColumn( Headers.NKV_EL03_CO2_CONSTRUCTION ).subtract( table.numberColumn( Headers.NKV_ORIG ) ).setName( Headers.NKV_EL03_DIFF )
+				,table.numberColumn( Headers.ADDTL_PKWKM_EL03 ).subtract( table.numberColumn( Headers.ADDTL_PKWKM_ORIG ) ).setName( Headers.ADDTL_PKWKM_EL03_DIFF )
 				);
 		// ============================================
 		// ============================================
 		final double cap=5.;
 		{
-			DoubleColumn newColumn = DoubleColumn.create( Headers.NKV_INDUZ_CO2_CONSTRUCTION_CAPPED5 );
-			for( Double number : table.doubleColumn( Headers.NKV_INDUZ_CO2_CONSTRUCTION ) ){
+			DoubleColumn newColumn = DoubleColumn.create( Headers.NKV_EL03_CO2_CONSTRUCTION_CAPPED5 );
+			for( Double number : table.doubleColumn( Headers.NKV_EL03_CO2_CONSTRUCTION ) ){
 				number = Math.min( number,cap - Math.random()*0.1 + 0.05 );
 				newColumn.append( number );
 			}
@@ -84,8 +84,8 @@ class FiguresKN{
 		// ============================================
 		// ============================================
 		{
-			DoubleColumn newColumn = DoubleColumn.create( Headers.NKV_INDUZ_CO2215_CONSTRUCTION_CAPPED5 );
-			for( Double number : table.doubleColumn( Headers.NKV_INDUZ_CO2215_CONSTRUCTION ) ){
+			DoubleColumn newColumn = DoubleColumn.create( Headers.NKV_EL03_CO2_215_CONSTRUCTION_CAPPED5 );
+			for( Double number : table.doubleColumn( Headers.NKV_EL03_CO2_215_CONSTRUCTION ) ){
 				number = Math.min( number, cap - Math.random()*0.1 + 0.05 );
 				newColumn.append( number );
 			}
@@ -117,7 +117,7 @@ class FiguresKN{
 			DoubleColumn column = DoubleColumn.create( Headers.EINSTUFUNG_AS_NUMBER );
 			final double factor = 5.;
 			for( String prio : table.stringColumn( Headers.EINSTUFUNG ) ){
-				switch( Priority.valueOf( prio ) ){
+				switch( Einstufung.valueOf( prio ) ){
 					case VBE -> {
 						column.append( 4. * factor );
 					}
@@ -143,12 +143,13 @@ class FiguresKN{
 
 
 		table = table.sortAscendingOn( xName );
-		this.xAxis = xAxisBuilder.title( xName ).build();
+
+		this.xAxis = xAxisBuilder.title( xName ).type( Axis.Type.LOG ).build();
 
 		this.table = table;
 
 		nkvCappedMax = table.doubleColumn( Headers.NKV_ORIG_CAPPED5 ).max() + 0.2 ;
-		nkvMin = table.doubleColumn( Headers.NKV_INDUZ_CO2215_CONSTRUCTION_CAPPED5 ).min();
+		nkvMin = table.doubleColumn( Headers.NKV_EL03_CO2_215_CONSTRUCTION_CAPPED5 ).min();
 
 		NumberFormat nf = NumberFormat.getInstance( Locale.GERMAN );
 
@@ -160,23 +161,25 @@ class FiguresKN{
 
 		new CsvWriter().write( table, CsvWriteOptions.builder( new File( "output.tsv" ) ).separator( '\t' ).usePrintFormatters( true ).build() );
 
-		System.exit(-1);
 	}
+	// ################################################################
+	// ################################################################
 	Figure createFigureCostVsLanekm(){
-//		String xName = Headers.ADDTL_LANE_KM;
-//		Axis xAxis = Axis.builder().title(xName).type( Axis.Type.LOG ).build();
-
-		Figure figure3;
 		String yName = Headers.COST_OVERALL;
 //		String y3Name = Headers.COST_OVERALL;
 		String y2Name = Headers.COST_OVERALL;
+
+		String title = "";
+		if ( Headers.ADDTL_LANE_KM.equals( xName ) ) {
+			title = "construction cost SIMTO lane-km, but quite varied:";
+		}
 
 		Axis yAxis = Axis.builder()
 				 .type( Axis.Type.LOG )
 				 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
 				 .title( yName )
 				 .build();
-		Layout layout = Layout.builder( "construction cost SIMTO lane-km, but quite varied:" )
+		Layout layout = Layout.builder( title )
 				      .xAxis( xAxis )
 				      .yAxis( yAxis )
 				      .width( plotWidth )
@@ -198,26 +201,29 @@ class FiguresKN{
 		//                                       .mode( ScatterTrace.Mode.LINE )
 		//                                       .build();
 
-		figure3 = new Figure( layout
+		Figure figure3 = new Figure( layout
 //				, trace, trace3
 				, traceWb, traceWbp, traceVb, traceVbe );
 		return figure3;
 	}
+	// ========================================================================================
+	// ========================================================================================
 	Figure createFigureNkvVsLanekm(){
-//		String xName = Headers.ADDTL_LANE_KM;
-//		Axis xAxis = Axis.builder().title(xName).type( Axis.Type.LOG ).build();
-
-		Figure figure2;
-		String yName = Headers.NKV_DIFF;
+		String yName = Headers.NKV_EL03_DIFF;
 //		String y3Name = Headers.NKV_CO2;
-		String y2Name = Headers.NKV_DIFF;
+		String y2Name = Headers.NKV_EL03_DIFF;
 
 		Axis yAxis = Axis.builder()
 //			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
 				 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
 				 .title( yName )
 				 .build();
-		Layout layout = Layout.builder( "since (co2_cost SIMTO lane-km) and (cost SIMTO lane-km), the division of the two does not depend on lane-km:" )
+
+		String title = "";
+		if ( Headers.ADDTL_LANE_KM.equals( xName ) ){
+			title = "since (co2_cost SIMTO lane-km) and (cost SIMTO lane-km), the division of the two does not depend on lane-km:";
+		}
+		Layout layout = Layout.builder( title )
 				      .xAxis( xAxis )
 				      .yAxis( yAxis )
 				      .width( plotWidth )
@@ -245,25 +251,26 @@ class FiguresKN{
 //					   .mode( ScatterTrace.Mode.LINE )
 //					   .build();
 
-		figure2 = new Figure( layout
+		Figure figure2 = new Figure( layout
 //				, trace
 //				, trace3
-				, traceCyan,traceMagenta
-				,  traceOrange, traceRed
+				, traceCyan, traceMagenta
+				, traceOrange, traceRed
 //				, trace4
-				);
+		);
 		return figure2;
 	}
+	// ========================================================================================
+	// ========================================================================================
 	Figure createFigurePkwKm( ){
-		Figure figure;
 		String yName = Headers.ADDTL_PKWKM_INDUZ_ORIG;
-		String y2Name = Headers.ADDTL_PKWKM_NEU;
+		String y2Name = Headers.ADDTL_PKWKM_EL03;
 
 		Axis yAxis = Axis.builder()
 				 .title( yName )
 				 .type( Axis.Type.LOG ) // sonst "0" nicht darstellbar
 				 .build();
-		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis )
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis )
 				      .width( plotWidth )
 				      .build();
 
@@ -282,13 +289,12 @@ class FiguresKN{
 		//                                       .mode( ScatterTrace.Mode.LINE )
 		//                                       .build();
 
-		figure = new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
+		Figure figure = new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
 		return figure;
 	}
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureElasticities(){
-//		String xName = Headers.ADDTL_LANE_KM;
-//		Axis xAxis = Axis.builder().title(xName).type( Axis.Type.LOG ).build();
-
 		String yName = "elasticity_old";
 		String y2Name = "elasticity_new";
 
@@ -296,7 +302,7 @@ class FiguresKN{
 				       .divide( ComputationKN.FZKM_AB )
 				       .multiply( ComputationKN.LANE_KM_AB )
 				       .divide( table.numberColumn( Headers.ADDTL_LANE_KM ) ).setName("elasticity_old" ),
-				table.numberColumn( Headers.ADDTL_PKWKM_NEU )
+				table.numberColumn( Headers.ADDTL_PKWKM_EL03 )
 				     .divide( ComputationKN.FZKM_AB )
 				     .multiply( ComputationKN.LANE_KM_AB )
 				     .divide( table.numberColumn( Headers.ADDTL_LANE_KM ) ).setName("elasticity_new" )
@@ -310,7 +316,11 @@ class FiguresKN{
 //				 .range( -0.3, 0.8 )
 				 .build();
 
-		Layout layout = Layout.builder( "elasticities are indep of lane-km:" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		String title = "";
+		if ( Headers.ADDTL_LANE_KM.equals( xName ) ){
+			title = "elasticities are indep of lane-km:";
+		}
+		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
@@ -334,8 +344,10 @@ class FiguresKN{
 //				traceWb, traceWbp, traceVb, traceVbe
 				trace1, trace2 );
 	}
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureFzkm(){
-		String y2Name = Headers.ADDTL_PKWKM_NEU;
+		String y2Name = Headers.ADDTL_PKWKM_EL03;
 		String yName = Headers.ADDTL_PKWKM_ORIG;
 
 		Axis yAxis = Axis.builder().title( yName )
@@ -343,7 +355,7 @@ class FiguresKN{
 //				 .range( 0.,400. )
 				 .build();
 
-		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
@@ -368,16 +380,20 @@ class FiguresKN{
 		);
 	}
 
-	Figure createFigureCO2VsLanekm(){
-//		String xName = Headers.ADDTL_LANE_KM;
-//		Axis xAxis = Axis.builder().title(xName).type( Axis.Type.LOG ).build();
-
+	// ========================================================================================
+	// ========================================================================================
+	Figure createFigureCO2(){
 		String yName = Headers.CO2_COST_ORIG;
 		String y2Name = Headers.CO2_COST_NEU;
 
 		Axis yAxis = Axis.builder().title( yName ).type( Axis.Type.LOG ).build();
 
-		Layout layout = Layout.builder( "CO2 costs SIMTO addtl lane-km:" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		String title = "";
+		if ( Headers.ADDTL_LANE_KM.equals( xName ) ) {
+			title = "CO2 costs SIMTO addtl lane-km:";
+		}
+
+		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
@@ -394,13 +410,15 @@ class FiguresKN{
 				, trace
 				, traceWb, traceWbp, traceVb, traceVbe );
 	}
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureDtv(){
 		String yName = Headers.VERKEHRSBELASTUNG_PLANFALL;
 		String y2Name = Headers.VERKEHRSBELASTUNG_PLANFALL;
 
 		Axis yAxis = Axis.builder().title( yName ).type( Axis.Type.LOG ).build();
 
-		Layout layout = Layout.builder( "plot" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .name( String.format( legendFormat, yName ) )
@@ -421,16 +439,18 @@ class FiguresKN{
 				, traceVbe
 		);
 	}
-	public Figure createFigureFzkmNewVsLanekm(){
-//		String xName = Headers.ADDTL_LANE_KM;
-//		Axis xAxis = Axis.builder().title(xName).type( Axis.Type.LOG ).build();
-
+	public Figure createFigureFzkmNew(){
 		String yName = Headers.ADDTL_PKWKM_ORIG;
-		String y2Name = Headers.ADDTL_PKWKM_NEU;
+		String y2Name = Headers.ADDTL_PKWKM_EL03;
 
 		Axis yAxis = Axis.builder().title( y2Name ).type( Axis.Type.LOG ).build();
 
-		Layout layout = Layout.builder( "addtl_veh-km are PROPTO addtl_lane-km:" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		String title = "";
+		if ( Headers.ADDTL_LANE_KM.equals( xName ) ){
+			title = "addtl_veh-km are PROPTO addtl_lane-km:";
+		}
+
+		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
@@ -442,8 +462,8 @@ class FiguresKN{
 		final Trace traceVb = getTraceOrange( table, xName, y2Name );
 		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
-		log.warn( table.where( table.stringColumn( Headers.PROJECT_NAME ).startsWith( "A008" ) ) );
-		log.warn("here");
+//		log.warn( table.where( table.stringColumn( Headers.PROJECT_NAME ).startsWith( "A008" ) ) );
+//		log.warn("here");
 
 		return new Figure( layout
 				, trace
@@ -453,15 +473,19 @@ class FiguresKN{
 				, traceVbe
 		);
 	}
-	public Figure createFigureFzkmDiffVsLanekm(){
-//		String xName = Headers.ADDTL_LANE_KM;
-//		Axis xAxis = Axis.builder().title(xName).type( Axis.Type.LOG ).build();
-
-		String y2Name = Headers.ADDTL_PKWKM_DIFF;
+	// ========================================================================================
+	// ========================================================================================
+	public Figure createFigureFzkmDiff(){
+		String y2Name = Headers.ADDTL_PKWKM_EL03_DIFF;
 
 		Axis yAxis = Axis.builder().title( y2Name ).type( Axis.Type.LOG ).build();
 
-		Layout layout = Layout.builder( "addtl_veh-km_diff are SIM addtl_lane-km:" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		String title = "";
+		if ( Headers.ADDTL_LANE_KM.equals( xName ) ){
+			title = "addtl_veh-km_diff are SIM addtl_lane-km:";
+		}
+
+		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .name( String.format( legendFormat, yName ) )
@@ -483,13 +507,15 @@ class FiguresKN{
 	}
 
 
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureNkvVsDtv(){
 		String xName = Headers.VERKEHRSBELASTUNG_PLANFALL;
 		Axis xAxis = Axis.builder().title(xName).build();
 
 		Table table2 = table.sortAscendingOn( xName ); // cannot remember why this is necessary
 
-		String yName = Headers.NKV_INDUZ_CO2_CONSTRUCTION_CAPPED5;
+		String yName = Headers.NKV_EL03_CO2_CONSTRUCTION_CAPPED5;
 		Axis yAxis = Axis.builder().title( yName ).build(); // cannot use a a logarithmic y axis since it removes nkv < 1
 
 		String title = "nkv_nb normally low; nkv_knotenpunkt normally high; nkv_ew depends on dtv";
@@ -507,8 +533,10 @@ class FiguresKN{
 
 		return new Figure( layout, traceCyan, traceMagenta, traceOrange, traceRed, trace4 );
 	}
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureCostVsNkvNew(){
-		String xName = Headers.NKV_INDUZ_CO2215_CONSTRUCTION_CAPPED5;
+		String xName = Headers.NKV_EL03_CO2_215_CONSTRUCTION_CAPPED5;
 
 		Axis xAxis = Axis.builder().title(xName).autoRange( Axis.AutoRange.REVERSED )
 				 .showZeroLine( false )
@@ -541,8 +569,10 @@ class FiguresKN{
 				, trace4
 		);
 	}
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureCO2VsNkvNew(){
-		String xName = Headers.NKV_INDUZ_CO2215_CONSTRUCTION_CAPPED5;
+		String xName = Headers.NKV_EL03_CO2_215_CONSTRUCTION_CAPPED5;
 
 		Axis xAxis = Axis.builder().title(xName).autoRange( Axis.AutoRange.REVERSED )
 				 .showZeroLine( false )
@@ -575,6 +605,8 @@ class FiguresKN{
 				, trace4
 		);
 	}
+	// ========================================================================================
+	// ========================================================================================
 	public Figure createFigureCostVsNkvOld(){
 		String xName = Headers.NKV_ORIG_CAPPED5;
 
@@ -615,11 +647,15 @@ class FiguresKN{
 				, trace4
 		);
 	}
+	// ========================================================================================
+	// ========================================================================================
+
 	// "BubblePlot" handles categorical variables --> could convert BAUTYP into the categories that are of interest.
 	// There is also ScatterPlot3D
 
 	// one can combine the four methods below by setting the marker color etc. to a Column instead of to a single value.  See examples in BubblePlot.
 	// (however, in the end this does not work that much differently from what follows here except that it loops over the categorical column instead of repeating the code)
+
 	private static Trace getTraceRed( Table table, String xName, String y2Name ){
 		Table tableVbe = table.where( table.stringColumn( Headers.BAUTYP ).isIn( "EW8" ) );
 		final String nameInLegend = "EW8";

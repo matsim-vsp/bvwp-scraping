@@ -20,7 +20,7 @@ import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
@@ -63,7 +63,7 @@ public class RunLocalCsvScrapingKMT {
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
             .extractAllLocalBaseData("./data/street/all2", "A", ".*")
             .stream()
-            .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 0.6, 1. ) )
+            .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 1. ) )
             .toList();
 
         logger.info("Writing csv");
@@ -73,8 +73,8 @@ public class RunLocalCsvScrapingKMT {
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
         table.addColumns(table.numberColumn(Headers.NKV_ORIG )
-                              .subtract(table.numberColumn(Headers.NKV_INDUZ_CO2_CONSTRUCTION ) ).setName(
-                Headers.NKV_DIFF ));
+                              .subtract(table.numberColumn(Headers.NKV_EL03_CO2_CONSTRUCTION ) ).setName(
+                Headers.NKV_EL03_DIFF ) );
 
 //        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
 //        LinearModel winsModel = OLS.fit( Formula.lhs("nkvDiff" ), newTable.smile().toDataFrame() );
@@ -133,8 +133,8 @@ public class RunLocalCsvScrapingKMT {
         // === Some calculations
 
         Comparator<Row> comparator = (o1, o2) -> {
-            Priority p1 = Priority.valueOf(o1.getString(Headers.EINSTUFUNG ) );
-            Priority p2 = Priority.valueOf(o2.getString(Headers.EINSTUFUNG ) );
+            Einstufung p1 = Einstufung.valueOf(o1.getString(Headers.EINSTUFUNG ) );
+            Einstufung p2 = Einstufung.valueOf(o2.getString(Headers.EINSTUFUNG ) );
             return p1.compareTo(p2);
         };
         table = table.sortOn(comparator);
@@ -147,7 +147,7 @@ public class RunLocalCsvScrapingKMT {
         Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_680_EN).isLessThan(1.));
         Table tableCo2_2000_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
         Table tableIndCo2kl1 = table.where(
-            table.numberColumn(Headers.NKV_INDUZ_CO2_CONSTRUCTION ).isLessThan(1. ) );
+            table.numberColumn(Headers.NKV_EL03_CO2_CONSTRUCTION ).isLessThan(1. ) );
 
         { //-- von KN
             System.out.println(BvwpUtils.SEPARATOR);
@@ -155,7 +155,7 @@ public class RunLocalCsvScrapingKMT {
                 .by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
-                tableIndCo2kl1.summarize(Headers.NKV_INDUZ_CO2_CONSTRUCTION, count, mean, stdDev, min, max )
+                tableIndCo2kl1.summarize(Headers.NKV_EL03_CO2_CONSTRUCTION, count, mean, stdDev, min, max )
                     .by(Headers.EINSTUFUNG ) );
 
             System.out.println(BvwpUtils.SEPARATOR);

@@ -1,13 +1,13 @@
 package org.tub.vsp.bvwp.data.container.base.rail;
 
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 
 import java.util.Objects;
 
 public class RailProjectInformationDataContainer {
     private String projectNumber;
     private String title;
-    private Priority priority;
+    private Einstufung priority;
     private String bautyp;
     private Double length;
 
@@ -29,11 +29,11 @@ public class RailProjectInformationDataContainer {
         return this;
     }
 
-    public Priority getPriority() {
+    public Einstufung getPriority() {
         return priority;
     }
 
-    public RailProjectInformationDataContainer setPriority(Priority priority) {
+    public RailProjectInformationDataContainer setPriority( Einstufung priority ) {
         this.priority = priority;
         return this;
     }
