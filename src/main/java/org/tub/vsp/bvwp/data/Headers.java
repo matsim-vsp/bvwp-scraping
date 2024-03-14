@@ -120,7 +120,7 @@ public final class Headers{
 	 */
 	public static final String NKV_ORIG = "NKV_orig";
 	/**
-	 * Dies ist da, damit "buble size" als Funktion der Einstufung geplottet werden kann.
+	 * Dies ist da, damit "bubble size" als Funktion der Einstufung geplottet werden kann.
 	 */
 	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
 	public static final String PROJECT_NAME = "project _name";
