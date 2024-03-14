@@ -21,7 +21,7 @@ public class StreetCsvWriterTest {
         StreetBaseDataContainer deserializedContainer = jsonIo.readJson(filePath, StreetBaseDataContainer.class);
 
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/a20.csv");
-        csvWriter.writeCsv(List.of(new StreetAnalysisDataContainer(deserializedContainer)));
+        csvWriter.writeCsv(List.of(new StreetAnalysisDataContainer(deserializedContainer, 0.6, 1. ) ) );
 
         Assertions.assertTrue(
                 FileUtils.contentEqualsIgnoreEOL(FileUtils.getFile("src/test/resources/testData/referenceData/a20.csv"),

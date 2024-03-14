@@ -1,40 +1,121 @@
 package org.tub.vsp.bvwp.data;
 
 public final class Headers{
-	public static final String ADDTL_LANE_KM = "additional_lane_km";
+	/**
+	 * Additional lane-km of the project.  Estimated from length of the construction project and project type (e.g. "Neubau" vs. "Erweiterung").
+	 */
+	public static final String ADDTL_LANE_KM = "addtl_lane_km";
+	/**
+	 * = {@link #ADDTL_PKWKM_NEU} - {@link #ADDTL_PKWKM_ORIG}
+	 */
 	public static final String ADDTL_PKWKM_DIFF = "addtl_pkwkm_diff";
-	public static final String ADDTL_PKWKM_NEU = "addtl_pkwkm_neu";
+	public static final String ADDTL_PKWKM_INDUZ = "addtl_pkwkm_induz";
+	/**
+	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut unserer eigenen Abschätzung.  Wird immer mal mit anderen Elastizitäten gerechnet, so
+	 * dass sich die Werte immer mal ändern.
+	 */
+	public static final String ADDTL_PKWKM_NEU = "addtl_pkwkm_new";
+	/**
+	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut PRINS.
+	 */
 	public static final String ADDTL_PKWKM_ORIG = "addtl_pkwkm_orig";
+	/**
+	 * So etwas wie "Neubau", "Knotenpunkt(projekt)", Erweiterung auf 6 oder 8 Spuren.  Siehe {@link org.tub.vsp.bvwp.data.type.Bautyp}.
+	 */
 	public static final String BAUTYP = "bautyp";
-	public static final String B_CO_2_EQUIVALENTS_ORIG = "b_co2-equivalents-overall";
-	public static final String B_FZKM = "b_fzkm";
-	public static final String B_OVERALL = "b_overall";
-	public static final String B_PER_KM = "b/km";
-	public static final String CO2_COST_NEU = "cost_co2_neu";
+	/**
+	 * Die (vermutlich negativen) Nutzenbeiträge ("benefits") durch CO2 sowie durch Emissionen, die auf CO2 umgerechnet werden können.  (??)
+	 */
+	public static final String B_CO_2_EQUIVALENTS_ORIG = "b_co2_equivalents_orig";
+	/**
+	 * Die (vermutlich negativen) Nutzenbeiträge ("benefits") durch zusätzliche Fahrzeug-km.
+	 */
+	public static final String B_FZKM = "b_fzkm_orig";
+	/**
+	 * Gesamter Projektnutzen.
+	 */
+	public static final String B_OVERALL = "b_overall_orig";
+	/**
+	 * (Vermutlich) Projektnutzen pro Fahrstreifen-km.
+	 */
+	public static final String B_PER_KM = "b_orig_per_km";
+	/**
+	 * CO2-Kosten nach Neuberechnung (immer mal anders).
+	 */
+	public static final String CO2_COST_NEU = "cost_co2_new";
+	/**
+	 * Originale CO2-Kosten.
+	 */
 	public static final String CO2_COST_ORIG = "cost_co2_orig";
-	public static final String COST_OVERALL = "cost";
-	public static final String CO_2_EQUIVALENTS_EMISSIONS = "co2-equivalents-emissions";
+	/**
+	 * Originale Investitionskosten.
+	 */
+	public static final String COST_OVERALL = "investment_cost_orig";
+	/**
+	 * Investitionskosten nach Neuberechnung.  Immer mal anders.
+	 */
+	public static final String COST_OVERALL_INCREASED = "investment_cost_increased";
+	/**
+	 * Umrechnung von Emissionen (welchen??) in CO2-Äquivalente.
+	 */
+	public static final String CO_2_EQUIVALENTS_EMISSIONS = "co2_equivalents_emissions_orig";
+	/**
+	 * So etwas wie "VB-E", "VB", ...
+	 */
 	public static final String EINSTUFUNG = "Einstufung";
+	/**
+	 * Länge des Projektes.
+	 */
 	public static final String LENGTH = "length";
-	public static final String LINK = "link";
-	public static final String NKV_CAPPED = "nkv_old_capped";
-	public static final String NKV_CO2 = "nkv_co2";
+	/**
+	 * URL des Projektes.
+	 */
+	public static final String LINK = "URL";
+	/**
+	 * min( 5 , {@link #NKV_ORIG} )
+	 */
+	public static final String NKV_ORIG_CAPPED5 = "NKV_orig_capped";
+	/**
+	 * NKV bei erhöhtem CO2-Preis (welchem?).
+	 */
+	public static final String NKV_CO2 = "NKV_co2";
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
 	public static final String NKV_CO2_680_EN = "BCR_co2_680";
+	/**
+	 * {@link #NKV_INDUZ_CO2215_CONSTRUCTION} - {@link #NKV_ORIG}
+	 */
 	public static final String NKV_DIFF = "nkvDiff";
-	public static final String NKV_INDUZ = "nkv_induz";
-	public static final String NKV_INDUZ_CO2 = "nkv_induzCo2";
-	public static final String NKV_INDUZ_CO2_CAPPED = "nkv_induzCo2_capped";
+	/**
+	 * Neues NKV bei erhöhter Abschätzung für Mehrverkehr.
+	 */
+	public static final String NKV_INDUZ = "NKV_induz";
+	/**
+	 * Neues NKV mit höherem Mehrverkehr, CO2-Preis 215, sowie höheren Investitionskosten.
+	 */
+	public static final String NKV_INDUZ_CO2215_CONSTRUCTION = "NKV_induzCo2215Invkosten";
+	/**
+	 * min( 5, {@link #NKV_INDUZ_CO2215_CONSTRUCTION})
+	 */
+	public static final String NKV_INDUZ_CO2215_CONSTRUCTION_CAPPED5 = "NKV_induzCo2215Invkosten_capped5";
+	/**
+	 * Neues NKV mit höherem Mehrverkehr, höherem CO2-Preis, höheren Investitionskosten.
+	 */
+	public static final String NKV_INDUZ_CO2_CONSTRUCTION = "NKV_induzCo2Invkosten";
+	/**
+	 * min( 5, {@link #NKV_INDUZ_CO2_CONSTRUCTION} )
+	 */
+	public static final String NKV_INDUZ_CO2_CONSTRUCTION_CAPPED5 = "NKV_induzCo2Invkosten_capped5";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
-	public static final String NKV_NO_CHANGE = "nkv";
+	public static final String NKV_NO_CHANGE = "NKV_orig";
 	public static final String NKV_NO_CHANGE_EN = "BCR";
-	public static final String NKV_ORIG = "nkv";
-	public static final String PKWKM_INDUZ = "pkwkm_induz";
+	/**
+	 * Originales NKV.
+	 */
+	public static final String NKV_ORIG = "NKV_orig";
 	public static final String PRIORITY = "priority";
 	public static final String PRIO_AS_NUMBER = "prioAsNumber";
-	public static final String PROJECT_NAME = "project name";
-	public static final String VERKEHRSBELASTUNG_PLANFALL = "Verkehrsbelastung Planfall";
-//	public static final String B_CO_2_EQUIVALENTS_ANNUAL = "b_co2-equivalents-annual";
+	public static final String PROJECT_NAME = "project _name";
+	public static final String VERKEHRSBELASTUNG_PLANFALL = "Verkehrsbelastung_Planfall";
 	private Headers(){} // do not instantiate
 }

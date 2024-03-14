@@ -11,7 +11,6 @@ import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
 
 import java.io.File;
@@ -46,19 +45,21 @@ public class RunLocalCsvScrapingKN{
 
         logger.info( "Starting scraping" );
 
-        // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
+        final double constructionCostFactor = 1.5;
 
+
+        // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
                                                                               .extractAllLocalBaseData( "./data/street/all", "A", ".*" )
                                                                               .stream()
-                                                                              .map( StreetAnalysisDataContainer::new )
+                                                                              .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 0.3, constructionCostFactor ) )
                                                                               .toList();
 
         logger.info( "Writing csv" );
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
         Table table = csvWriter.writeCsv( allStreetBaseData );
 
-
+        table.addColumns( table.numberColumn( Headers.COST_OVERALL ).multiply( constructionCostFactor ).setName( Headers.COST_OVERALL_INCREASED ) );
 
 //        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
 //        LinearModel winsModel = OLS.fit( Formula.lhs("nkvDiff" ), newTable.smile().toDataFrame() );
@@ -69,31 +70,20 @@ public class RunLocalCsvScrapingKN{
 
 
         FiguresKN figures = new FiguresKN( table );
-        Figure figure = figures.createFigureFzkmNewVsLanekm();
-        Figure figure2 = figures.createFigureElasticities();
-        Figure figure3 = figures.createFigureFzkmDiffVsLanekm();
-        Figure figure4 = figures.createFigureCO2VsLanekm();
-        Figure figure5 = figures.createFigureCostVsLanekm();
-        Figure figure6 = figures.createFigureNkvVsLanekm();
-        Figure figure7 = figures.createFigureDtv();
-        Figure figure8 = figures.createFigureFzkmNewVsLanekm();
-
-        Figure figureA = figures.createFigureNkvVsDtv();
-        Figure figureB = figures.createFigureCostVsNkvOld();
-        Figure figureC = figures.createFigureCostVsNkvNew();
 
         String page = MultiPlotUtils.pageTop + System.lineSeparator() +
-                                      figure.asJavascript( "plot1" ) + System.lineSeparator() +
-                                      figure2.asJavascript( "plot2" ) + System.lineSeparator() +
-                                      figure3.asJavascript( "plot3" ) + System.lineSeparator() +
-                                      figure4.asJavascript( "plot4" ) + System.lineSeparator() +
-                                      figure5.asJavascript( "plot5" ) + System.lineSeparator() +
-                                      figure6.asJavascript( "plot6" ) + System.lineSeparator() +
-                                      figure7.asJavascript( "plot7" ) + System.lineSeparator() +
-                                      figure8.asJavascript( "plot8" ) + System.lineSeparator() +
-                                      figureA.asJavascript( "plotA" ) + System.lineSeparator() +
-                                      figureB.asJavascript( "plotB" ) + System.lineSeparator() +
-                                      figureC.asJavascript( "plotC" ) + System.lineSeparator() +
+                                      figures.createFigureFzkmNewVsLanekm().asJavascript( "plot1" ) + System.lineSeparator() +
+                                      figures.createFigureElasticities().asJavascript( "plot2" ) + System.lineSeparator() +
+                                      figures.createFigureFzkmDiffVsLanekm().asJavascript( "plot3" ) + System.lineSeparator() +
+                                      figures.createFigureCO2VsLanekm().asJavascript( "plot4" ) + System.lineSeparator() +
+                                      figures.createFigureCostVsLanekm().asJavascript( "plot5" ) + System.lineSeparator() +
+                                      figures.createFigureNkvVsLanekm().asJavascript( "plot6" ) + System.lineSeparator() +
+                                      figures.createFigureDtv().asJavascript( "plot7" ) + System.lineSeparator() +
+                                      figures.createFigureFzkmNewVsLanekm().asJavascript( "plot8" ) + System.lineSeparator() +
+                                      figures.createFigureNkvVsDtv().asJavascript( "plotA" ) + System.lineSeparator() +
+                                      figures.createFigureCostVsNkvOld().asJavascript( "plotB" ) + System.lineSeparator() +
+                                      figures.createFigureCostVsNkvNew().asJavascript( "plotC" ) + System.lineSeparator() +
+                                      figures.createFigureCO2VsNkvNew().asJavascript( "plotD" ) + System.lineSeparator() +
                                       MultiPlotUtils.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();
@@ -116,7 +106,7 @@ public class RunLocalCsvScrapingKN{
         format.setMaximumFractionDigits( 0 );
         table.numberColumn( Headers.CO2_COST_NEU ).setPrintFormatter( format, "n/a" );
 
-        Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 1. ) );
+        Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2_CONSTRUCTION ).isLessThan( 1. ) );
 
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );

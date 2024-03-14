@@ -63,7 +63,7 @@ public class RunLocalCsvScrapingKMT {
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
             .extractAllLocalBaseData("./data/street/all2", "A", ".*")
             .stream()
-            .map(StreetAnalysisDataContainer::new)
+            .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 0.6, 1. ) )
             .toList();
 
         logger.info("Writing csv");
@@ -73,8 +73,8 @@ public class RunLocalCsvScrapingKMT {
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
         table.addColumns(table.numberColumn(Headers.NKV_NO_CHANGE)
-            .subtract(table.numberColumn(Headers.NKV_INDUZ_CO2)).setName(
-                Headers.NKV_DIFF));
+                              .subtract(table.numberColumn(Headers.NKV_INDUZ_CO2_CONSTRUCTION ) ).setName(
+                Headers.NKV_DIFF ));
 
 //        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
 //        LinearModel winsModel = OLS.fit( Formula.lhs("nkvDiff" ), newTable.smile().toDataFrame() );
@@ -147,7 +147,7 @@ public class RunLocalCsvScrapingKMT {
         Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_680_EN).isLessThan(1.));
         Table tableCo2_2000_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
         Table tableIndCo2kl1 = table.where(
-            table.numberColumn(Headers.NKV_INDUZ_CO2).isLessThan(1.));
+            table.numberColumn(Headers.NKV_INDUZ_CO2_CONSTRUCTION ).isLessThan(1. ) );
 
         { //-- von KN
             System.out.println(BvwpUtils.SEPARATOR);
@@ -155,7 +155,7 @@ public class RunLocalCsvScrapingKMT {
                 .by(Headers.PRIORITY));
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
-                tableIndCo2kl1.summarize(Headers.NKV_INDUZ_CO2, count, mean, stdDev, min, max)
+                tableIndCo2kl1.summarize(Headers.NKV_INDUZ_CO2_CONSTRUCTION, count, mean, stdDev, min, max )
                     .by(Headers.PRIORITY));
 
             System.out.println(BvwpUtils.SEPARATOR);
