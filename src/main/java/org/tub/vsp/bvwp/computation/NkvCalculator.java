@@ -10,6 +10,7 @@ import org.tub.vsp.bvwp.data.type.VehicleEmissions;
 import java.util.Optional;
 
 import static org.tub.vsp.bvwp.computation.ComputationKN.*;
+import static org.tub.vsp.bvwp.computation.ConsoleColors.*;
 
 public class NkvCalculator {
 
@@ -30,12 +31,9 @@ public class NkvCalculator {
             return null;
         }
 
-        Double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts();
+        Double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
 
-        return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten,
-                streetBaseDataContainer.getCostBenefitAnalysis()
-                                                                                                  .getOverallBenefit()
-                                                                                                  .overall());
+        return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall());
     }
 
 
@@ -83,14 +81,18 @@ public class NkvCalculator {
         // @formatter:on
     }
 
-    public static Double calculateB_CO2(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
+    public static Double calculateCost_CO2( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
 
         if (a.isEmpty() || b.isEmpty()) {
-            return null;
+            throw new RuntimeException( "co2 costs cannot be computed" );
         }
-        return ComputationKN.b_co2(modifications, a.get(), b.get());
+        final double co2Costs = -b_co2( modifications, a.get(), b.get() );
+
+        log.warn( TEXT_RED + "project=" + streetBaseDataContainer.getProjectInformation().getProjectNumber() + "; co2Costs=" + co2Costs + TEXT_BLACK );
+
+        return co2Costs;
     }
 }

@@ -90,7 +90,7 @@ public class StreetProjectInformationDataContainer {
         return this;
     }
 
-    public Double getVerkehrsbelastung2030() {
+    public Double getVerkehrsbelastungPlanfall() {
         return verkehrsbelastung2030;
     }
 }

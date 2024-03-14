@@ -13,14 +13,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SequencedMap;
 
+import static org.tub.vsp.bvwp.computation.Modifications.co2Price680;
+
 public class StreetAnalysisDataContainer {
     Logger logger = LogManager.getLogger(StreetAnalysisDataContainer.class);
     private final StreetBaseDataContainer streetBaseDataContainer;
+    private final double elasticity;
+    private final double constructionCostFactor;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
 
-    public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer) {
+    public StreetAnalysisDataContainer( StreetBaseDataContainer streetBaseDataContainer, double elasticity, double constructionCostFactor ) {
         this.streetBaseDataContainer = streetBaseDataContainer;
+        this.elasticity = elasticity;
+        this.constructionCostFactor = constructionCostFactor;
         logger.info(this.streetBaseDataContainer.getUrl());
         this.addComputations();
     }
@@ -77,44 +83,37 @@ public class StreetAnalysisDataContainer {
                                                                                               .getBautyp());
         }
 
-        entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
-
-        double mehrFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.6 * ComputationKN.FZKM_AB;
         final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
 
+        if ( additionalLaneKm==0. ) {
+            additionalLaneKm = 1.; // Knotenpunkt-Projekte; so that it becomes visible on logplot. kai, mar'24
+        }
 
-        final double additionalFzkm = mehrFzkmFromElasticity - streetBaseDataContainer.getPhysicalEffect()
-                                                                                      .getVehicleKilometers().overall();
-        logger.info("additionalFzkm=" + additionalFzkm);
+        entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
+
+        double mehrFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * elasticity * ComputationKN.FZKM_AB;
+
+        final double additionalFzkm = mehrFzkmFromElasticity - streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
+//        logger.info("additionalFzkm=" + additionalFzkm);
 //        entries.put("cost/km", streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() /
 //        streetBaseDataContainer.getProjectInformation().getLength() );
 //        entries.put("rz", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall());
 //        entries.put("rz/km", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall() /
 //        streetBaseDataContainer.getProjectInformation().getLength() );
-        entries.put(Headers.B_PER_KM, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit()
-                                                             .overall() / streetBaseDataContainer.getProjectInformation()
-                                                                                                 .getLength());
-        entries.put(Headers.NKV_ORIG, NkvCalculator.calculateNkv(Modifications.NO_CHANGE,
-                streetBaseDataContainer));
-        entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_5FACH,
-                streetBaseDataContainer));
-        entries.put(Headers.NKV_CO2_680_EN, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_680,
-                streetBaseDataContainer));
-        entries.put(Headers.NKV_CO2_2000_EN,
-                NkvCalculator.calculateNkv(Modifications.createCo2withoutInduzed(2000 * INFLATION_Factor2022to2012),
-                        streetBaseDataContainer));
-        entries.put(Headers.NKV_INDUZ,
-                NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm(additionalFzkm),
-                        streetBaseDataContainer));
-        entries.put(Headers.NKV_INDUZ_CO2,
-                NkvCalculator.calculateNkv(Modifications.createInducedAndCo2WithMehrFzkm(additionalFzkm),
-                        streetBaseDataContainer));
+        entries.put(Headers.B_PER_KM, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseDataContainer.getProjectInformation().getLength());
+        entries.put(Headers.NKV_ORIG, NkvCalculator.calculateNkv(Modifications.NO_CHANGE, streetBaseDataContainer));
+        entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_680, streetBaseDataContainer));
+        entries.put(Headers.NKV_CO2_680_EN, NkvCalculator.calculateNkv(Modifications.CO2_PRICE_680, streetBaseDataContainer));
+        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv(Modifications.createCo2withoutInduzed(2000 * INFLATION_Factor2022to2012), streetBaseDataContainer));
+        entries.put(Headers.NKV_INDUZ, NkvCalculator.calculateNkv(Modifications.createInducedWithAdditionalFzkm(additionalFzkm), streetBaseDataContainer));
+        entries.put(Headers.NKV_INDUZ_CO2215_CONSTRUCTION,
+                        NkvCalculator.calculateNkv( new Modifications( 215, additionalFzkm, constructionCostFactor ), streetBaseDataContainer ) );
+        entries.put(Headers.NKV_INDUZ_CO2_CONSTRUCTION, NkvCalculator.calculateNkv( new Modifications( co2Price680, additionalFzkm, constructionCostFactor ), streetBaseDataContainer ) );
         entries.put(Headers.ADDTL_PKWKM_NEU, mehrFzkmFromElasticity );
-	    entries.put( Headers.CO2_COST_ORIG, - NkvCalculator.calculateB_CO2( Modifications.NO_CHANGE, streetBaseDataContainer ) );
-	    entries.put( Headers.CO2_COST_NEU, - NkvCalculator.calculateB_CO2(Modifications.createInducedAndCo2WithMehrFzkm(additionalFzkm),
-                        streetBaseDataContainer));
-        entries.put(Headers.VERKEHRSBELASTUNG_PLANFALL, streetBaseDataContainer.getProjectInformation()
-                                                                           .getVerkehrsbelastung2030());
+        entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( Modifications.NO_CHANGE, streetBaseDataContainer ) ) );
+        entries.put(Headers.CO2_COST_NEU, Math.max( 1., NkvCalculator.calculateCost_CO2(Modifications.createInducedAndCo2WithMehrFzkm(additionalFzkm ), streetBaseDataContainer ) ) );
+        // ("max(1,...)" so that they become visible on logplot.  find other solution!
+        entries.put(Headers.VERKEHRSBELASTUNG_PLANFALL, streetBaseDataContainer.getProjectInformation().getVerkehrsbelastungPlanfall() );
 
         if (streetBaseDataContainer.getProjectInformation().getProjectNumber().contains("A1-G50-NI")) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr " +

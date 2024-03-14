@@ -84,7 +84,7 @@ class FiguresKMT {
 		Figure figure2;
 		String yName = Headers.NKV_NO_CHANGE;
 		String y3Name = Headers.NKV_CO2_680_EN;
-		String y2Name = Headers.NKV_INDUZ_CO2;
+		String y2Name = Headers.NKV_INDUZ_CO2_CONSTRUCTION;
 
 		Axis yAxis = Axis.builder()
 //			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!

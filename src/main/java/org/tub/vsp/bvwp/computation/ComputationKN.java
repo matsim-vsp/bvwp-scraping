@@ -73,18 +73,18 @@ public class ComputationKN {
             Benefits benefits = new Benefits(-785.233, 2555.429, 1025.464, -151.319, -175.021, 5305.683);
             double baukosten = 2737.176;
             log.info("--- orig:");
-            nkv(new Modifications(145, 0.), amounts, benefits, baukosten);
+            nkv(new Modifications(145, 0., 1 ), amounts, benefits, baukosten );
             log.info("--- co2 price:");
-            nkv(new Modifications(5. * 145, 0.), amounts, benefits, baukosten);
+            nkv(new Modifications(5. * 145, 0., 1 ), amounts, benefits, baukosten );
             log.info("--- induz:");
-            nkv(new Modifications(145, amounts.pkwkm_induz * 4.), amounts, benefits, baukosten);
+            nkv(new Modifications(145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten );
             log.info("--- induz wo b_impl:");
-            nkvOhneKR_induz(new Modifications(145, amounts.pkwkm_induz * 4.), amounts, benefits, baukosten,
+            nkvOhneKR_induz(new Modifications(145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten,
                     benefits.all);
             log.info("--- both:");
-            nkv(new Modifications(5. * 145, amounts.pkwkm_induz * 4.), amounts, benefits, baukosten);
+            nkv(new Modifications(5. * 145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten );
             log.info("--- both wo b_impl:");
-            nkvOhneKR_induz(new Modifications(5. * 145, amounts.pkwkm_induz * 4.), amounts, benefits, baukosten,
+            nkvOhneKR_induz(new Modifications(5. * 145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten,
                     benefits.all);
             log.info("===");
         }
@@ -94,10 +94,10 @@ public class ComputationKN {
             final Amounts amounts = new Amounts(2.31, 0., 0., -4.42, 0., 0., 1_981.64, 2_037.89);
             final Benefits benefits = new Benefits(-21.838, 532., 0., -6.473, -6.682, 1067.523);
             final double baukosten = 34.735;
-            nkvOhneKR_induz(new Modifications(145., 0.), amounts, benefits, baukosten, benefits.all);
-            nkvOhneKR_induz(new Modifications(5. * 145., 0.), amounts, benefits, baukosten, benefits.all);
-            nkvOhneKR_induz(new Modifications(145., 38 - 2.31), amounts, benefits, baukosten, benefits.all);
-            nkvOhneKR_induz(new Modifications(5. * 145., 38 - 2.31), amounts, benefits, baukosten, benefits.all);
+            nkvOhneKR_induz(new Modifications(145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
+            nkvOhneKR_induz(new Modifications(5. * 145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
+            nkvOhneKR_induz(new Modifications(145., 38 - 2.31, 1 ), amounts, benefits, baukosten, benefits.all );
+            nkvOhneKR_induz(new Modifications(5. * 145., 38 - 2.31, 1 ), amounts, benefits, baukosten, benefits.all );
             log.info("===");
         }
         // A59 Ausbau bei Bonn rechtsrheinisch
@@ -107,14 +107,14 @@ public class ComputationKN {
             final Benefits benefits = new Benefits(-88.090, 202.416, 0., -3.797, -29.699, 197.074);
             final double baukosten = 34.735;
             log.info("--- orig:");
-            nkvOhneKR_induz(new Modifications(145., 0.), amounts, benefits, baukosten, benefits.all);
+            nkvOhneKR_induz(new Modifications(145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
             log.info("--- induz offset:");
-            nkvOhneKR_induz(new Modifications(145., 19.9 - amounts.pkwkm_all), amounts, benefits, baukosten,
+            nkvOhneKR_induz(new Modifications(145., 19.9 - amounts.pkwkm_all, 1 ), amounts, benefits, baukosten,
                     benefits.all);
             log.info("--- co2 price:");
-            nkvOhneKR_induz(new Modifications(5. * 145., 0.), amounts, benefits, baukosten, benefits.all);
+            nkvOhneKR_induz(new Modifications(5. * 145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
             log.info("--- induz offset & co2 price:");
-            nkvOhneKR_induz(new Modifications(5. * 145., 19.9 - amounts.pkwkm_all), amounts, benefits, baukosten,
+            nkvOhneKR_induz(new Modifications(5. * 145., 19.9 - amounts.pkwkm_all, 1 ), amounts, benefits, baukosten,
                     benefits.all);
             log.info("===");
         }
@@ -176,8 +176,7 @@ public class ComputationKN {
 
     }
 
-    static double nkvOhneKR_induz(Modifications modifications, Amounts amounts, Benefits benefits, double baukosten,
-                                  double b_all) {
+    static double nkvOhneKR_induz(Modifications modifications, Amounts amounts, Benefits benefits, double baukosten, double b_all) {
         prn("incoming", b_all, b_all);
         // co2 Bau
         {
