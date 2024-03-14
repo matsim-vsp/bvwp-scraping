@@ -114,7 +114,7 @@ class FiguresKN{
 		// ===========================
 		// ===========================
 		{
-			DoubleColumn column = DoubleColumn.create( Headers.PRIO_AS_NUMBER );
+			DoubleColumn column = DoubleColumn.create( Headers.EINSTUFUNG_AS_NUMBER );
 			final double factor = 5.;
 			for( String prio : table.stringColumn( Headers.EINSTUFUNG ) ){
 				switch( Priority.valueOf( prio ) ){
@@ -256,7 +256,7 @@ class FiguresKN{
 	}
 	Figure createFigurePkwKm( ){
 		Figure figure;
-		String yName = Headers.ADDTL_PKWKM_INDUZ;
+		String yName = Headers.ADDTL_PKWKM_INDUZ_ORIG;
 		String y2Name = Headers.ADDTL_PKWKM_NEU;
 
 		Axis yAxis = Axis.builder()
@@ -631,7 +631,7 @@ class FiguresKN{
 		Trace traceVbe = ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
 					     .text( tableVbe.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 					     .name( String.format( legendFormat, nameInLegend ) )
-					     .marker( Marker.builder().color( color ).size( tableVbe.doubleColumn( Headers.PRIO_AS_NUMBER ) ).sizeMode( Marker.SizeMode.DIAMETER ).build() )
+					     .marker( Marker.builder().color( color ).size( tableVbe.doubleColumn( Headers.EINSTUFUNG_AS_NUMBER ) ).sizeMode( Marker.SizeMode.DIAMETER ).build() )
 					     .build();
 		return traceVbe;
 	}

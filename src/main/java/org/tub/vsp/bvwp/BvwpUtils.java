@@ -50,7 +50,7 @@ public class BvwpUtils{
 	}
 
 	public static Table extractPriorityTable(Table table, String priority) {
-		return table.where(table.stringColumn(Headers.PRIORITY).isEqualTo(priority));
+		return table.where(table.stringColumn(Headers.EINSTUFUNG ).isEqualTo(priority ) );
 	}
 
 }

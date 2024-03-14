@@ -18,27 +18,13 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
         }
     }
 
-    @Deprecated // I think that we should inline this and then remove the method.  kai, mar'24
-    public static Modifications createInducedWithAdditionalFzkm( double mehrFzkm ) {
-        return new Modifications( co2PriceBVWP, mehrFzkm, 1 );
-    }
+    // I think that we should inline this and then remove the method.  kai, mar'24
 
-    @Deprecated // I think that we should inline this and then remove the method.  kai, mar'24
-    public static Modifications createInducedAndCo2WithMehrFzkm(double mehrFzkm) {
-        return new Modifications( co2PriceBVWP, mehrFzkm, 1 );
-    }
+    // I think that we should inline this and then remove the method.  kai, mar'24
 
-    @Deprecated // I think that we should inline this and then remove the method.  kai, mar'24
-    public static Modifications createCo2withoutInduzed (double co2Price){
-        return new Modifications(co2Price, 0, 1 );
-    }
+    // I think that we should inline this and then remove the method.  kai, mar'24
 
-    public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1 );
-
-//    @Deprecated // I think that we should inline this and then remove the method.  kai, mar'24
-//    public static final Modifications CO2_PRICE_5FACH = new Modifications(co2Price5fach, 0., 1 );
-    @Deprecated // I think that we should inline this and then remove the method.  kai, mar'24
-    public static final Modifications CO2_PRICE_680 = new Modifications(co2Price680, 0., 1 );
+	public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1 );
 
     @Override public String toString() {
         return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "]";
