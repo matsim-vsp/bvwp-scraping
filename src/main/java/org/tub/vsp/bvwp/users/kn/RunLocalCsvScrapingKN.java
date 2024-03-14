@@ -52,7 +52,7 @@ public class RunLocalCsvScrapingKN{
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
                                                                               .extractAllLocalBaseData( "./data/street/all", "A", ".*" )
                                                                               .stream()
-                                                                              .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 0.3, constructionCostFactor ) )
+                                                                              .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, constructionCostFactor ) )
                                                                               .toList();
 
         logger.info( "Writing csv" );
@@ -72,14 +72,14 @@ public class RunLocalCsvScrapingKN{
         FiguresKN figures = new FiguresKN( table );
 
         String page = MultiPlotUtils.pageTop + System.lineSeparator() +
-                                      figures.createFigureFzkmNewVsLanekm().asJavascript( "plot1" ) + System.lineSeparator() +
+                                      figures.createFigureFzkmNew().asJavascript( "plot1" ) + System.lineSeparator() +
                                       figures.createFigureElasticities().asJavascript( "plot2" ) + System.lineSeparator() +
-                                      figures.createFigureFzkmDiffVsLanekm().asJavascript( "plot3" ) + System.lineSeparator() +
-                                      figures.createFigureCO2VsLanekm().asJavascript( "plot4" ) + System.lineSeparator() +
+                                      figures.createFigureFzkmDiff().asJavascript( "plot3" ) + System.lineSeparator() +
+                                      figures.createFigureCO2().asJavascript( "plot4" ) + System.lineSeparator() +
                                       figures.createFigureCostVsLanekm().asJavascript( "plot5" ) + System.lineSeparator() +
                                       figures.createFigureNkvVsLanekm().asJavascript( "plot6" ) + System.lineSeparator() +
                                       figures.createFigureDtv().asJavascript( "plot7" ) + System.lineSeparator() +
-                                      figures.createFigureFzkmNewVsLanekm().asJavascript( "plot8" ) + System.lineSeparator() +
+                                      figures.createFigureFzkmNew().asJavascript( "plot8" ) + System.lineSeparator() +
                                       figures.createFigureNkvVsDtv().asJavascript( "plotA" ) + System.lineSeparator() +
                                       figures.createFigureCostVsNkvOld().asJavascript( "plotB" ) + System.lineSeparator() +
                                       figures.createFigureCostVsNkvNew().asJavascript( "plotC" ) + System.lineSeparator() +
@@ -106,7 +106,7 @@ public class RunLocalCsvScrapingKN{
         format.setMaximumFractionDigits( 0 );
         table.numberColumn( Headers.CO2_COST_NEU ).setPrintFormatter( format, "n/a" );
 
-        Table table2 = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2_CONSTRUCTION ).isLessThan( 1. ) );
+        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CO2_CONSTRUCTION ).isLessThan( 1. ) );
 
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );

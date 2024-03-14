@@ -19,14 +19,12 @@ import static org.tub.vsp.bvwp.computation.Modifications.co2Price680;
 public class StreetAnalysisDataContainer {
     Logger logger = LogManager.getLogger(StreetAnalysisDataContainer.class);
     private final StreetBaseDataContainer streetBaseData;
-    private final double elasticity;
     private final double constructionCostFactor;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
 
-    public StreetAnalysisDataContainer( StreetBaseDataContainer streetBaseDataContainer, double elasticity, double constructionCostFactor ) {
+    public StreetAnalysisDataContainer( StreetBaseDataContainer streetBaseDataContainer, double constructionCostFactor ) {
         this.streetBaseData = streetBaseDataContainer;
-        this.elasticity = elasticity;
         this.constructionCostFactor = constructionCostFactor;
         logger.info(this.streetBaseData.getUrl() );
         this.addComputations();
@@ -34,10 +32,10 @@ public class StreetAnalysisDataContainer {
 
     private void addComputations() {
 //        double fzkm_induz = streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().induced();
-        //        double addtlFzkmFromElasticity = 4. * fzkm_induz;
-//        if (addtlFzkmFromElasticity == 0.) {
+        //        double addtlFzkmFromElasticity03 = 4. * fzkm_induz;
+//        if (addtlFzkmFromElasticity03 == 0.) {
 //            double fzkm = streetBaseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
-//            addtlFzkmFromElasticity = 4. * fzkm;
+//            addtlFzkmFromElasticity03 = 4. * fzkm;
 //        }
         // yyyyyy die obige Rechnung muss schlussendlich genauer sein ... zusätzliche Spurkm / 60000 * 0.6 *
         // Jahresfahrleistung_AB
@@ -94,11 +92,11 @@ public class StreetAnalysisDataContainer {
 
         entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
 
-        double addtlFzkmFromElasticity = additionalLaneKm / ComputationKN.LANE_KM_AB * elasticity * ComputationKN.FZKM_AB;
-        final double addtlFzkmBeyondPRINS = addtlFzkmFromElasticity - streetBaseData.getPhysicalEffect().getVehicleKilometers().overall();
-        // (this is formulated such that addtlFzkmBeyondPRINS=0 means the original additional Fzkm)
+        double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.3 * ComputationKN.FZKM_AB;
+        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getVehicleKilometers().overall();
+        // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 
-//        logger.info("addtlFzkmBeyondPRINS=" + addtlFzkmBeyondPRINS);
+//        logger.info("addtlFzkmBeyondPrinsEl03=" + addtlFzkmBeyondPrinsEl03);
 //        entries.put("cost/km", streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() /
 //        streetBaseDataContainer.getProjectInformation().getLength() );
 //        entries.put("rz", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall());
@@ -109,14 +107,14 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv( new Modifications(co2Price680, 0., 1 ), streetBaseData ) );
         entries.put(Headers.NKV_CO2_680_EN, NkvCalculator.calculateNkv( new Modifications(co2Price680, 0., 1 ), streetBaseData ) );
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_INDUZ, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPRINS, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_INDUZ_CO2215_CONSTRUCTION,
-                        NkvCalculator.calculateNkv( new Modifications( 215, addtlFzkmBeyondPRINS, constructionCostFactor ), streetBaseData ) );
-        entries.put(Headers.NKV_INDUZ_CO2_CONSTRUCTION, NkvCalculator.calculateNkv( new Modifications( co2Price680, addtlFzkmBeyondPRINS, constructionCostFactor ), streetBaseData ) );
-        entries.put(Headers.ADDTL_PKWKM_NEU, addtlFzkmFromElasticity );
+        entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CO2_215_CONSTRUCTION,
+                        NkvCalculator.calculateNkv( new Modifications( 215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CO2_CONSTRUCTION, NkvCalculator.calculateNkv( new Modifications( co2Price680, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
         entries.put(Headers.CO2_COST_NEU,
-                        Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPRINS, 1 ), streetBaseData ) ) );
+                        Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
