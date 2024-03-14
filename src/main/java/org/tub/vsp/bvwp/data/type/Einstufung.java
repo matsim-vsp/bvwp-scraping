@@ -3,7 +3,7 @@ package org.tub.vsp.bvwp.data.type;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public enum Priority{
+public enum Einstufung{
     VBE("Vordringlicher Bedarf - Engpassbeseitigung (VB-E)"),
     VB("Vordringlicher Bedarf (VB)"),
     WBP("Weiterer Bedarf mit Planungsrecht (WB*)"),
@@ -11,16 +11,16 @@ public enum Priority{
     @Deprecated // yyyyyy lieber aufklären!!
     UNDEFINED("undefined");
 
-    private static final Logger log = LogManager.getLogger( Priority.class );
+    private static final Logger log = LogManager.getLogger( Einstufung.class );
 
     public final String description;
 
-    Priority( String description ) {
+    Einstufung( String description ) {
         this.description = description;
     }
 
-    public static Priority getFromString( String description ) {
-        for ( Priority v : values()){
+    public static Einstufung getFromString( String description ) {
+        for ( Einstufung v : values()){
             if( v.description.equalsIgnoreCase( description ) ){
                 return v;
             }

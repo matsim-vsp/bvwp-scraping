@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
@@ -97,8 +97,8 @@ public class RunLocalCsvScrapingKN{
         // ===
 
         Comparator<Row> comparator = ( o1, o2 ) -> {
-	    Priority p1 = Priority.valueOf( o1.getString( Headers.EINSTUFUNG ) );
-	    Priority p2 = Priority.valueOf( o2.getString( Headers.EINSTUFUNG ) );
+	    Einstufung p1 = Einstufung.valueOf( o1.getString( Headers.EINSTUFUNG ) );
+	    Einstufung p2 = Einstufung.valueOf( o2.getString( Headers.EINSTUFUNG ) );
 	    return p1.compareTo( p2 );
 	};
         table = table.sortOn( comparator );

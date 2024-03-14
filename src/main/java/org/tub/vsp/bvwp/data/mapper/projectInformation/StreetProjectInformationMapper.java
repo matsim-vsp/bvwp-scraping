@@ -4,10 +4,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.computation.ConsoleColors;
 import org.tub.vsp.bvwp.data.container.base.street.StreetProjectInformationDataContainer;
 import org.tub.vsp.bvwp.data.type.Bautyp;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 
 import java.text.ParseException;
 
@@ -50,7 +49,7 @@ public class StreetProjectInformationMapper {
                                      .setStreet(street)
                                      .setLength(JSoupUtils.parseDouble(length))
                                      .setBautyp(Bautyp.getFromString(bautyp))
-                                     .setPriority(Priority.getFromString(priority))
+                                     .setPriority( Einstufung.getFromString(priority ) )
                                      .setVerkehrsbelastungPlanfall( JSoupUtils.parseDouble( verkehrsbelastungPlanfall ) );
         } catch (ParseException e) {
             throw new RuntimeException(e);

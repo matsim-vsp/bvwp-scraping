@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.data.Headers;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.NumericColumn;
 import tech.tablesaw.api.Table;
@@ -117,7 +117,7 @@ class FiguresKN{
 			DoubleColumn column = DoubleColumn.create( Headers.EINSTUFUNG_AS_NUMBER );
 			final double factor = 5.;
 			for( String prio : table.stringColumn( Headers.EINSTUFUNG ) ){
-				switch( Priority.valueOf( prio ) ){
+				switch( Einstufung.valueOf( prio ) ){
 					case VBE -> {
 						column.append( 4. * factor );
 					}
@@ -160,7 +160,6 @@ class FiguresKN{
 
 		new CsvWriter().write( table, CsvWriteOptions.builder( new File( "output.tsv" ) ).separator( '\t' ).usePrintFormatters( true ).build() );
 
-		System.exit(-1);
 	}
 	Figure createFigureCostVsLanekm(){
 //		String xName = Headers.ADDTL_LANE_KM;
@@ -442,8 +441,8 @@ class FiguresKN{
 		final Trace traceVb = getTraceOrange( table, xName, y2Name );
 		final Trace traceVbe = getTraceRed( table, xName, y2Name );
 
-		log.warn( table.where( table.stringColumn( Headers.PROJECT_NAME ).startsWith( "A008" ) ) );
-		log.warn("here");
+//		log.warn( table.where( table.stringColumn( Headers.PROJECT_NAME ).startsWith( "A008" ) ) );
+//		log.warn("here");
 
 		return new Figure( layout
 				, trace

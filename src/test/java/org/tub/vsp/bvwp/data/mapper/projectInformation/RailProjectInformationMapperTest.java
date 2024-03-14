@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.tub.vsp.bvwp.data.LocalFileAccessor;
 import org.tub.vsp.bvwp.data.container.base.rail.RailProjectInformationDataContainer;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 
 import java.io.IOException;
 
@@ -19,7 +19,7 @@ class RailProjectInformationMapperTest {
         Assertions.assertEquals("\"optimiertes Alpha\" (Bezeichnung noch offen)",
                 railProjectInformationDataContainer.getTitle());
         Assertions.assertEquals(188.10, railProjectInformationDataContainer.getLength());
-        Assertions.assertEquals(Priority.UNDEFINED, railProjectInformationDataContainer.getPriority());
+        Assertions.assertEquals( Einstufung.UNDEFINED, railProjectInformationDataContainer.getPriority() );
     }
 
 }

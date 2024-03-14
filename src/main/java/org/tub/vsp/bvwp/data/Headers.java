@@ -1,5 +1,7 @@
 package org.tub.vsp.bvwp.data;
 
+import org.tub.vsp.bvwp.data.type.Einstufung;
+
 public final class Headers{
 	/**
 	 * Additional lane-km of the project.  Estimated from length of the construction project and project type (e.g. "Neubau" vs. "Erweiterung").
@@ -67,7 +69,7 @@ public final class Headers{
 	/**
 	 * So etwas wie "VB-E", "VB", ...
 	 *
-	 * @see org.tub.vsp.bvwp.data.type.Priority
+	 * @see Einstufung
 	 */
 	public static final String EINSTUFUNG = "Einstufung";
 	/**

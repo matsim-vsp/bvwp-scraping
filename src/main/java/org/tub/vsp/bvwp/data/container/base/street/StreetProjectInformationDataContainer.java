@@ -1,14 +1,14 @@
 package org.tub.vsp.bvwp.data.container.base.street;
 
 import org.tub.vsp.bvwp.data.type.Bautyp;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 
 import java.util.Objects;
 
 public class StreetProjectInformationDataContainer {
     private String projectNumber;
     private String street;
-    private Priority priority;
+    private Einstufung priority;
     private Bautyp bautyp;
     private Double length;
     private Double verkehrsbelastung2030;
@@ -31,11 +31,11 @@ public class StreetProjectInformationDataContainer {
         return this;
     }
 
-    public Priority getPriority() {
+    public Einstufung getPriority() {
         return priority;
     }
 
-    public StreetProjectInformationDataContainer setPriority(Priority priority) {
+    public StreetProjectInformationDataContainer setPriority( Einstufung priority ) {
         this.priority = priority;
         return this;
     }

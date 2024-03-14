@@ -3,7 +3,7 @@ package org.tub.vsp.bvwp.data.mapper.projectInformation;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.rail.RailProjectInformationDataContainer;
-import org.tub.vsp.bvwp.data.type.Priority;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 
 import java.text.ParseException;
 
@@ -26,7 +26,7 @@ public class RailProjectInformationMapper {
             return projectInformation.setProjectNumber(projectNumber)
                                      .setTitle(titel)
                                      .setLength(JSoupUtils.parseDouble(length))
-                                     .setPriority(Priority.getFromString(priority));
+                                     .setPriority( Einstufung.getFromString(priority ) );
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
