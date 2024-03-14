@@ -72,7 +72,7 @@ public class RunLocalCsvScrapingKMT {
 
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
-        table.addColumns(table.numberColumn(Headers.NKV_NO_CHANGE)
+        table.addColumns(table.numberColumn(Headers.NKV_ORIG )
                               .subtract(table.numberColumn(Headers.NKV_INDUZ_CO2_CONSTRUCTION ) ).setName(
                 Headers.NKV_DIFF ));
 
@@ -104,9 +104,9 @@ public class RunLocalCsvScrapingKMT {
             Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.COST_OVERALL);
             Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
             Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table,
-                Headers.NKV_NO_CHANGE, Headers.NKV_CO2_680_EN);
+                Headers.NKV_ORIG, Headers.NKV_CO2_680_EN );
             Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table,
-                Headers.NKV_NO_CHANGE, Headers.NKV_CO2_2000_EN);
+                Headers.NKV_ORIG, Headers.NKV_CO2_2000_EN );
 //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
 //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
@@ -133,8 +133,8 @@ public class RunLocalCsvScrapingKMT {
         // === Some calculations
 
         Comparator<Row> comparator = (o1, o2) -> {
-            Priority p1 = Priority.valueOf(o1.getString(Headers.PRIORITY));
-            Priority p2 = Priority.valueOf(o2.getString(Headers.PRIORITY));
+            Priority p1 = Priority.valueOf(o1.getString(Headers.EINSTUFUNG ) );
+            Priority p2 = Priority.valueOf(o2.getString(Headers.EINSTUFUNG ) );
             return p1.compareTo(p2);
         };
         table = table.sortOn(comparator);
@@ -143,7 +143,7 @@ public class RunLocalCsvScrapingKMT {
         table.numberColumn(Headers.CO2_COST_NEU).setPrintFormatter(format, "n/a");
 
         //Projekte, die bereits vor Änderung NKV <1 haben
-        Table tableBaseKl1 = table.where(table.numberColumn(Headers.NKV_NO_CHANGE).isLessThan(1.));
+        Table tableBaseKl1 = table.where(table.numberColumn(Headers.NKV_ORIG ).isLessThan(1. ) );
         Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_680_EN).isLessThan(1.));
         Table tableCo2_2000_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
         Table tableIndCo2kl1 = table.where(
@@ -151,30 +151,30 @@ public class RunLocalCsvScrapingKMT {
 
         { //-- von KN
             System.out.println(BvwpUtils.SEPARATOR);
-            System.out.println(table.summarize(Headers.NKV_NO_CHANGE, count, mean, stdDev, min, max)
-                .by(Headers.PRIORITY));
+            System.out.println(table.summarize(Headers.NKV_ORIG, count, mean, stdDev, min, max )
+                .by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
                 tableIndCo2kl1.summarize(Headers.NKV_INDUZ_CO2_CONSTRUCTION, count, mean, stdDev, min, max )
-                    .by(Headers.PRIORITY));
+                    .by(Headers.EINSTUFUNG ) );
 
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
-                    .by(Headers.PRIORITY));
+                    .by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
                 tableIndCo2kl1.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
-                    .by(Headers.PRIORITY));
+                    .by(Headers.EINSTUFUNG ) );
 
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(
-                    Headers.CO2_COST_NEU, sum, mean, stdDev, min, max).by(Headers.PRIORITY));
+                    Headers.CO2_COST_NEU, sum, mean, stdDev, min, max).by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
                 tableIndCo2kl1.summarize(Headers.CO2_COST_NEU, sum, mean, stdDev, min, max)
-                    .by(Headers.PRIORITY));
+                    .by(Headers.EINSTUFUNG ) );
         }
 
         {
@@ -183,7 +183,7 @@ public class RunLocalCsvScrapingKMT {
             System.out.println("### KMT ###");
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println("All projects");
-            System.out.println(table.summarize(Headers.NKV_NO_CHANGE, count).apply());
+            System.out.println(table.summarize(Headers.NKV_ORIG, count ).apply() );
 
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(BvwpUtils.SEPARATOR);

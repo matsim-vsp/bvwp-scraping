@@ -9,7 +9,10 @@ public final class Headers{
 	 * = {@link #ADDTL_PKWKM_NEU} - {@link #ADDTL_PKWKM_ORIG}
 	 */
 	public static final String ADDTL_PKWKM_DIFF = "addtl_pkwkm_diff";
-	public static final String ADDTL_PKWKM_INDUZ = "addtl_pkwkm_induz";
+	/**
+	 * Der "induzierte" (Mehr-)Verkehr laut PRINS.
+	 */
+	public static final String ADDTL_PKWKM_INDUZ_ORIG = "addtl_pkwkm_induz";
 	/**
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut unserer eigenen Abschätzung.  Wird immer mal mit anderen Elastizitäten gerechnet, so
 	 * dass sich die Werte immer mal ändern.
@@ -20,7 +23,9 @@ public final class Headers{
 	 */
 	public static final String ADDTL_PKWKM_ORIG = "addtl_pkwkm_orig";
 	/**
-	 * So etwas wie "Neubau", "Knotenpunkt(projekt)", Erweiterung auf 6 oder 8 Spuren.  Siehe {@link org.tub.vsp.bvwp.data.type.Bautyp}.
+	 * So etwas wie "Neubau", "Knotenpunkt(projekt)", Erweiterung auf 6 oder 8 Spuren.
+	 *
+	 * @see org.tub.vsp.bvwp.data.type.Bautyp
 	 */
 	public static final String BAUTYP = "bautyp";
 	/**
@@ -61,6 +66,8 @@ public final class Headers{
 	public static final String CO_2_EQUIVALENTS_EMISSIONS = "co2_equivalents_emissions_orig";
 	/**
 	 * So etwas wie "VB-E", "VB", ...
+	 *
+	 * @see org.tub.vsp.bvwp.data.type.Priority
 	 */
 	public static final String EINSTUFUNG = "Einstufung";
 	/**
@@ -107,14 +114,15 @@ public final class Headers{
 	public static final String NKV_INDUZ_CO2_CONSTRUCTION_CAPPED5 = "NKV_induzCo2Invkosten_capped5";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
-	public static final String NKV_NO_CHANGE = "NKV_orig";
 	public static final String NKV_NO_CHANGE_EN = "BCR";
 	/**
 	 * Originales NKV.
 	 */
 	public static final String NKV_ORIG = "NKV_orig";
-	public static final String PRIORITY = "priority";
-	public static final String PRIO_AS_NUMBER = "prioAsNumber";
+	/**
+	 * Dies ist da, damit "buble size" als Funktion der Einstufung geplottet werden kann.
+	 */
+	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
 	public static final String PROJECT_NAME = "project _name";
 	public static final String VERKEHRSBELASTUNG_PLANFALL = "Verkehrsbelastung_Planfall";
 	private Headers(){} // do not instantiate
