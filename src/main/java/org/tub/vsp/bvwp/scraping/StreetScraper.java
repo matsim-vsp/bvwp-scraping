@@ -25,7 +25,7 @@ public class StreetScraper extends Scraper {
     @Override
     public List<String> getProjectUrls() throws IOException {
         List<String> result = super.getProjectUrls();
-        result.removeIf(link -> !link.startsWith("A"));
+//        result.removeIf(link -> !link.startsWith("A"));
         return result;
     }
 
@@ -55,9 +55,9 @@ public class StreetScraper extends Scraper {
         return files.stream()
                     .filter(file -> file.getName().startsWith(prefix))
                     .filter(file -> file.getName().matches(regexToMatch))
-                    .filter(file -> !file.getName()
-                                         .matches("A20-G10-SH.html")) // gibt es nochmal mit A20-G10-SH-NI.  Muss man
-                    // beide zusammenzählen?  kai, feb'23
+                    .filter(file -> !file.getName().matches("A20-G10-SH.html")) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'24
+//                    .filter(file -> !file.getName().matches("A57-G10-NW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
+//                    .filter(file -> !file.getName().matches("A81-G50-BW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
                     .filter(file -> !file.getName().matches("A...B.*")) // Ortsumgehungen, die an AB angrenzen.
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
@@ -116,12 +116,8 @@ public class StreetScraper extends Scraper {
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
-        boolean sieheHauptprojekt = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
-                                                                         "ältnis")
-                                                                 .contains("siehe Hauptprojekt");
-
-        String extractedInformation = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verh" +
-                "ältnis");
+        boolean sieheHauptprojekt = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis").contains("siehe Hauptprojekt");
+        String extractedInformation = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis");
         boolean sieheTeilprojekt = extractedInformation.contains("siehe Teilprojekt");
         logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt);
 

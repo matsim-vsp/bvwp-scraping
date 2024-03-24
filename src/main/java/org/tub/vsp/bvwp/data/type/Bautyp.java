@@ -3,17 +3,23 @@ package org.tub.vsp.bvwp.data.type;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public enum Bautyp{
+public enum Bautyp {
 //	NB2_4 ("2-streifiger Neubau / 4-streifiger Neubau"),
 	// z.B. https://bvwp-projekte.de/strasse/A25_B5-G20-SH/A25_B5-G20-SH.html .
 	// Eher eine Ortsumgehung ("B5").
 //	NB3_4 ("3-streifiger Neubau / 4-streifiger Neubau"),
 	// z.B. https://bvwp-projekte.de/strasse/A46-B7-G41-NW/A46-B7-G41-NW.html .
 	// Lückenschluss, der teilweise als Bundesstrasse ("B7") realisiert wird.
+NB2( "2-streifiger Neubau"),
+	NB2_NB3( "2-streifiger Neubau / 3-streifiger Neubau"),
+	NB2_NB4( "2-streifiger Neubau / 4-streifiger Neubau"),
+	NB3( "3-streifiger Neubau"),
 	NB4( "4-streifiger Neubau"),
 	NB6( "6-streifiger Neubau"),
 //	NB2_EW4( "2-streifiger Neubau / Erweiterung auf 4 Fahrstreifen"),
+NB3_EW4( "3-streifiger Neubau / Erweiterung auf 4 Fahrstreifen"),
 	NB4_EW4( "4-streifiger Neubau / Erweiterung auf 4 Fahrstreifen"),
+	NB4_EW6( "4-streifiger Neubau / Erweiterung auf 6 Fahrstreifen"),
 	NB6_EW6( "6-streifiger Neubau / Erweiterung auf 6 Fahrstreifen"),
 	EW4("Erweiterung auf 4 Fahrstreifen"),
 	EW6("Erweiterung auf 6 Fahrstreifen"),
@@ -53,6 +59,18 @@ public enum Bautyp{
 		}
 		if ( description.equals( "Erweiterung auf 8 Fahrstreifen / Erweiterung auf 9 Fahrstreifen" ) ) {
 			return EW8;
+		}
+		if ( description.equals( "Erweiterung auf 4 Fahrstreifen / 4-streifiger Neubau" ) ) {
+			return NB4_EW4;
+		}
+		if ( description.equals( "2/3-streifiger Neubau / 4-streifiger Neubau" ) ) {
+			return NB3;
+		}
+		if ( description.equals( "3/4-streifiger Neubau / Erweiterung auf 4 Fahrstreifen" ) ) {
+			return NB4_EW4;
+		}
+		if ( description.equals( "3-streifiger Neubau / 4-streifiger Neubau" ) ) {
+			return NB3;
 		}
 		log.error( "cannot find Bautyp for description=" + description );
 //		Thread.dumpStack();

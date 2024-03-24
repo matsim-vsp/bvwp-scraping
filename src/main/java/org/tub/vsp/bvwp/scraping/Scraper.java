@@ -38,7 +38,7 @@ public abstract class Scraper {
 
         //Todo: Sollte dieses Aufräumen nicht irgendwo in den Streetscraper? Denn das ist ja die **straßen**spezifische Filterung, KMT Feb24
         //A = Autobahn; B = Bundesstraße -> Diese sollen behalten werden.
-        projectUrls.removeIf( link -> (!link.startsWith( "A" ) ));
+//        projectUrls.removeIf( link -> (!link.startsWith( "A" ) ));
 //        projectUrls.removeIf( link -> (!link.startsWith( "A" ) && !link.startsWith( "B" )));
 
         logger.info("Found {} projects", projectUrls.size());

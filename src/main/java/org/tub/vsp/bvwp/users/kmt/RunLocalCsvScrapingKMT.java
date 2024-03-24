@@ -73,7 +73,7 @@ public class RunLocalCsvScrapingKMT {
 //        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
         table.addColumns(table.numberColumn(Headers.NKV_ORIG )
-                              .subtract(table.numberColumn(Headers.NKV_EL03_CO2_CONSTRUCTION ) ).setName(
+			      .subtract(table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOST50 ) ).setName(
                 Headers.NKV_EL03_DIFF ) );
 
 //        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
@@ -147,7 +147,7 @@ public class RunLocalCsvScrapingKMT {
         Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_680_EN).isLessThan(1.));
         Table tableCo2_2000_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
         Table tableIndCo2kl1 = table.where(
-            table.numberColumn(Headers.NKV_EL03_CO2_CONSTRUCTION ).isLessThan(1. ) );
+            table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOST50 ).isLessThan(1. ) );
 
         { //-- von KN
             System.out.println(BvwpUtils.SEPARATOR);
@@ -155,7 +155,7 @@ public class RunLocalCsvScrapingKMT {
                 .by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
-                tableIndCo2kl1.summarize(Headers.NKV_EL03_CO2_CONSTRUCTION, count, mean, stdDev, min, max )
+                tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOST50, count, mean, stdDev, min, max )
                     .by(Headers.EINSTUFUNG ) );
 
             System.out.println(BvwpUtils.SEPARATOR);
