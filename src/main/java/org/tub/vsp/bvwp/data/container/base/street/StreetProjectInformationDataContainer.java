@@ -35,7 +35,7 @@ public class StreetProjectInformationDataContainer {
         return priority;
     }
 
-    public StreetProjectInformationDataContainer setPriority( Einstufung priority ) {
+    public StreetProjectInformationDataContainer setEinstufung( Einstufung priority ) {
         this.priority = priority;
         return this;
     }

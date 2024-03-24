@@ -78,8 +78,7 @@ public class StreetAnalysisDataContainer {
             case BLANK:
                 break;
             default:
-                throw new IllegalStateException("Unexpected value: " + streetBaseData.getProjectInformation()
-                                                                                     .getBautyp());
+//                throw new IllegalStateException("Unexpected value: " + streetBaseData.getProjectInformation().getBautyp());
         }
 
         final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
@@ -108,9 +107,9 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.NKV_CO2_680_EN, NkvCalculator.calculateNkv( new Modifications(co2Price680, 0., 1 ), streetBaseData ) );
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1 ), streetBaseData ) );
         entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CO2_215_CONSTRUCTION,
+        entries.put(Headers.NKV_EL03_CARBON215_INVCOST50,
                         NkvCalculator.calculateNkv( new Modifications( 215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CO2_CONSTRUCTION, NkvCalculator.calculateNkv( new Modifications( co2Price680, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+//        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price680, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
         entries.put(Headers.CO2_COST_NEU,

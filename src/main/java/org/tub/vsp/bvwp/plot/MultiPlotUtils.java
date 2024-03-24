@@ -41,6 +41,10 @@ public class MultiPlotUtils {
 					+ "<div id='plotC'>"
 					+ System.lineSeparator()
 					+ "<div id='plotD'>"
+					+ System.lineSeparator()
+					+ "<div id='plotE'>"
+					+ System.lineSeparator()
+					+ "<div id='plotF'>"
 					+ System.lineSeparator();
 
 	public static final String pageBottom = "</body>" + System.lineSeparator() + "</html>";

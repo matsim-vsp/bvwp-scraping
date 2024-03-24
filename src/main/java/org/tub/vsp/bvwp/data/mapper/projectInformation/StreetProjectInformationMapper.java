@@ -2,6 +2,7 @@ package org.tub.vsp.bvwp.data.mapper.projectInformation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.Assert;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.street.StreetProjectInformationDataContainer;
@@ -26,10 +27,10 @@ public class StreetProjectInformationMapper {
         }
         String bautyp = extractInformation(document, 0, "Bautyp(en), Bauziel(e)");
 
-        String priority = extractInformation(document, 1, "Dringlichkeitseinstufung");
+        String einstufung = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
         String verkehrsbelastungPlanfall = extractInformation( document, 0, "im Planfall 2030" );
-        if ( verkehrsbelastungPlanfall!=null ) {
+        if ( verkehrsbelastungPlanfall != null ) {
             verkehrsbelastungPlanfall = verkehrsbelastungPlanfall.replace( " Kfz/24h", "" );
         } else {
             // ( other format for Knotenpunkte )
@@ -43,15 +44,36 @@ public class StreetProjectInformationMapper {
 
 //        logger.warn( ConsoleColors.TEXT_RED + "project=" + projectNumber + "; verkehrsbelastungPlanfall=" + verkehrsbelastungPlanfall + ConsoleColors.TEXT_BLACK ) ;
 
+        if ( projectNumber.contains( "A008-G010-BY" ) ){
+            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn( "Project has NKV in main project but the Einstufungen VBE, VBE, VBE, WBP in the subprojects.  Setting the main project to VBE." );
+            einstufung = Einstufung.VBE.name();
+        }
+        if ( projectNumber.contains( "A21-G20-SH-NI" ) ) {
+            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP, WBP, WBP in the subprojects.  Setting the main project to VB (!)." );
+            einstufung = Einstufung.VB.name();
+        }
+        if ( projectNumber.contains( "A98-G110-BW" ) ) {
+            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP in the subprojects.  Setting the main project to VB." );
+            einstufung = Einstufung.VB.name();
+        }
+        if ( projectNumber.contains( "A006-G015-BY" ) ) {
+            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP in the subprojects.  Setting the main project to VB." );
+            einstufung = Einstufung.VB.name();
+        }
 
         try {
             return projectInformation.setProjectNumber(projectNumber)
                                      .setStreet(street)
                                      .setLength(JSoupUtils.parseDouble(length))
                                      .setBautyp(Bautyp.getFromString(bautyp))
-                                     .setPriority( Einstufung.getFromString(priority ) )
+                                     .setEinstufung( Einstufung.getFromString(einstufung ) )
                                      .setVerkehrsbelastungPlanfall( JSoupUtils.parseDouble( verkehrsbelastungPlanfall ) );
         } catch (ParseException e) {
+            logger.error( "projectNumber=" + projectNumber );
             throw new RuntimeException(e);
         }
     }
