@@ -91,7 +91,7 @@ public final class Headers{
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
 	public static final String NKV_CO2_680_EN = "BCR_co2_680";
 	/**
-	 * {@link #NKV_EL03_CO2_215_CONSTRUCTION} - {@link #NKV_ORIG}
+	 * {@link #NKV_EL03_CARBON215_INVCOST50} - {@link #NKV_ORIG}
 	 */
 	public static final String NKV_EL03_DIFF = "NKV_el03_Diff";
 	/**
@@ -101,19 +101,19 @@ public final class Headers{
 	/**
 	 * Neues NKV mit höherem Mehrverkehr, CO2-Preis 215, sowie höheren Investitionskosten.
 	 */
-	public static final String NKV_EL03_CO2_215_CONSTRUCTION = "NKV_el03Co2_215Invkosten";
+	public static final String NKV_EL03_CARBON215_INVCOST50 = "NKV_el03_carbon215_invcost50";
 	/**
-	 * min( 5, {@link #NKV_EL03_CO2_215_CONSTRUCTION})
+	 * min( 5, {@link #NKV_EL03_CARBON215_INVCOST50})
 	 */
-	public static final String NKV_EL03_CO2_215_CONSTRUCTION_CAPPED5 = "NKV_el03Co2_215Invkosten_capped5";
-	/**
-	 * Neues NKV mit höherem Mehrverkehr, höherem CO2-Preis, höheren Investitionskosten.
-	 */
-	public static final String NKV_EL03_CO2_CONSTRUCTION = "NKV_el03Co2Invkosten";
-	/**
-	 * min( 5, {@link #NKV_EL03_CO2_CONSTRUCTION} )
-	 */
-	public static final String NKV_EL03_CO2_CONSTRUCTION_CAPPED5 = "NKV_el03Co2Invkosten_capped5";
+	public static final String NKV_EL03_CARBON215_INVCOST50_CAPPED5 = NKV_EL03_CARBON215_INVCOST50 + "_capped5";
+//	/**
+//	 * Neues NKV mit höherem Mehrverkehr, höherem CO2-Preis, höheren Investitionskosten.
+//	 */
+//	public static final String NKV_EL03_CO2_INVCOST50 = "NKV_el03_Co2_Invcost50";
+//	/**
+//	 * min( 5, {@link #NKV_EL03_CO2_INVCOST50} )
+//	 */
+//	public static final String NKV_EL03_CO2_INVCOST50_CAPPED5 = "NKV_el03_Co2_invcost50_capped5";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
 	public static final String NKV_NO_CHANGE_EN = "BCR";
@@ -126,6 +126,7 @@ public final class Headers{
 	 */
 	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
 	public static final String PROJECT_NAME = "project _name";
-	public static final String VERKEHRSBELASTUNG_PLANFALL = "Verkehrsbelastung_Planfall";
+	public static final String VERKEHRSBELASTUNG_PLANFALL = "DTV_Planfall";
+	public static final String NKV_EL03_CARBON215_INVCOST50_CAPPED10 = NKV_EL03_CARBON215_INVCOST50 + "_capped10";
 	private Headers(){} // do not instantiate
 }

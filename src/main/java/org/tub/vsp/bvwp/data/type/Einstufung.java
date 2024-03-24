@@ -7,9 +7,9 @@ public enum Einstufung{
     VBE("Vordringlicher Bedarf - Engpassbeseitigung (VB-E)"),
     VB("Vordringlicher Bedarf (VB)"),
     WBP("Weiterer Bedarf mit Planungsrecht (WB*)"),
-    WB( "Weiterer Bedarf (WB)"),
-    @Deprecated // yyyyyy lieber aufklären!!
-    UNDEFINED("undefined");
+    WB( "Weiterer Bedarf (WB)")
+    ,@Deprecated /* yyyyyy lieber aufklären!! */ UNDEFINED("undefined")
+    ;
 
     private static final Logger log = LogManager.getLogger( Einstufung.class );
 
@@ -29,6 +29,7 @@ public enum Einstufung{
             }
         }
         log.warn( "description=" + description );
+//        throw new RuntimeException( "unknown Einstufung=" + description );
         return UNDEFINED;
     }
 }

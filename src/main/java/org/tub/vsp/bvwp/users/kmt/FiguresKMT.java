@@ -83,8 +83,8 @@ class FiguresKMT {
 	static Figure createFigureNkvByPriority( Axis xAxis, int plotWidth, Table table, String xName){
 		Figure figure2;
 		String yName = Headers.NKV_ORIG;
-		String y3Name = Headers.NKV_CO2_680_EN;
-		String y2Name = Headers.NKV_EL03_CO2_CONSTRUCTION;
+//		String y3Name = Headers.NKV_CO2_680_EN;
+		String y2Name = Headers.NKV_EL03_CARBON215_INVCOST50;
 
 		Axis yAxis = Axis.builder()
 //			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
@@ -107,11 +107,11 @@ class FiguresKMT {
 		final Trace traceVbe = getPriorityTrace( table, Einstufung.VBE , xName, y2Name, "red" );
 
 
-		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
-					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-					   .name( String.format( legendFormat, y3Name ) )
-					   .marker( Marker.builder().color( "gray" ).build() )
-					   .build();
+//		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
+//					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+//					   .name( String.format( legendFormat, y3Name ) )
+//					   .marker( Marker.builder().color( "gray" ).build() )
+//					   .build();
 
 		double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
 		double[] yy = new double[]{1., 1.};
@@ -119,7 +119,9 @@ class FiguresKMT {
 					   .mode( ScatterTrace.Mode.LINE )
 					   .build();
 
-		figure2 = new Figure( layout, trace, trace3, traceWb,traceWbp,  traceVb, traceVbe, trace4 );
+		figure2 = new Figure( layout, trace
+//				, trace3
+				, traceWb,traceWbp,  traceVb, traceVbe, trace4 );
 		return figure2;
 	}
 

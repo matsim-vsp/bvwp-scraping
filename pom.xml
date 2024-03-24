@@ -14,13 +14,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.bytedeco/openblas -->
+
         <dependency>
             <groupId>org.bytedeco</groupId>
-            <artifactId>openblas</artifactId>
-            <version>0.3.6-1.5.1</version>
+            <artifactId>openblas-platform</artifactId>
+            <version>0.3.26-1.5.10</version>
         </dependency>
-
 
         <dependency>
             <groupId>com.github.haifengl</groupId>
@@ -28,7 +27,7 @@
             <version>3.0.1</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/io.pebbletemplates/pebble -->
+<!--         https://mvnrepository.com/artifact/io.pebbletemplates/pebble-->
         <dependency>
             <groupId>io.pebbletemplates</groupId>
             <artifactId>pebble</artifactId>

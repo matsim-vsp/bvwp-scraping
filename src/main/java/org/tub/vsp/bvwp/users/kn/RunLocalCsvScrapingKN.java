@@ -11,6 +11,7 @@ import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
 
 import java.io.File;
@@ -18,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -61,30 +63,41 @@ public class RunLocalCsvScrapingKN{
 
         table.addColumns( table.numberColumn( Headers.COST_OVERALL ).multiply( constructionCostFactor ).setName( Headers.COST_OVERALL_INCREASED ) );
 
-//        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
-//        LinearModel winsModel = OLS.fit( Formula.lhs("nkvDiff" ), newTable.smile().toDataFrame() );
-//        System.out.println( winsModel );
-//        System.exit(-1);
+        // ===
+        FiguresKN figures = new FiguresKN( table );
 
+        List<Figure> plots1 = new ArrayList<>();
+        List<Figure> plots2 = new ArrayList<>();
+
+        plots1.add( figures.createFigureNkvVsDtv() );
+        plots1.add( figures.createFigureElasticities() );
+        plots1.add( figures.createFigureFzkmDiff() );
+        plots1.add( figures.createFigureCO2() );
+        plots1.add( figures.createFigureCostVsLanekm() );
+        plots1.add( figures.createFigureNkvVsLanekm() );
+        plots1.add( figures.createFigureDtv() );
+        plots1.add( figures.createFigureFzkmNew() );
+
+        plots2.add( figures.createFigureFzkmNew() );
+        plots2.add( figures.createFigureCostVsNkvOld() );
+        plots2.add( figures.costOrigVsCumulativeCostOrig() );
+        plots2.add( figures.cost_increased_VsNkv_El03_CO2_215_Baukosten_50() );
+        plots2.add( figures.cumulativeCost50VsNkv_el03_carbon2015_invcost50_capped5() );
+        plots2.add( figures.co2_vs_nkv_new() );
         // ===
 
 
-        FiguresKN figures = new FiguresKN( table );
 
-        String page = MultiPlotUtils.pageTop + System.lineSeparator() +
-                                      figures.createFigureFzkmNew().asJavascript( "plot1" ) + System.lineSeparator() +
-                                      figures.createFigureElasticities().asJavascript( "plot2" ) + System.lineSeparator() +
-                                      figures.createFigureFzkmDiff().asJavascript( "plot3" ) + System.lineSeparator() +
-                                      figures.createFigureCO2().asJavascript( "plot4" ) + System.lineSeparator() +
-                                      figures.createFigureCostVsLanekm().asJavascript( "plot5" ) + System.lineSeparator() +
-                                      figures.createFigureNkvVsLanekm().asJavascript( "plot6" ) + System.lineSeparator() +
-                                      figures.createFigureDtv().asJavascript( "plot7" ) + System.lineSeparator() +
-                                      figures.createFigureFzkmNew().asJavascript( "plot8" ) + System.lineSeparator() +
-                                      figures.createFigureNkvVsDtv().asJavascript( "plotA" ) + System.lineSeparator() +
-                                      figures.createFigureCostVsNkvOld().asJavascript( "plotB" ) + System.lineSeparator() +
-                                      figures.createFigureCostVsNkvNew().asJavascript( "plotC" ) + System.lineSeparator() +
-                                      figures.createFigureCO2VsNkvNew().asJavascript( "plotD" ) + System.lineSeparator() +
-                                      MultiPlotUtils.pageBottom;
+        String page = MultiPlotUtils.pageTop + System.lineSeparator();
+        for( int ii=0; ii<plots1.size(); ii++ ) {
+            page += plots1.get(ii).asJavascript( "plot" + (ii+1) ) + System.lineSeparator() ;
+        }
+        for( int ii=0; ii<plots2.size(); ii++ ) {
+            final char c = (char) (ii + 65); // generate A, B, ... to be backwards compatible with what we had so far.  kai, mar'24
+            logger.warn( "c=" + c );
+            page += plots2.get(ii ).asJavascript( "plot" + c ) + System.lineSeparator() ;
+        }
+        page += MultiPlotUtils.pageBottom;
 
         File outputFile = Paths.get("multiplot.html" ).toFile();
 
@@ -106,7 +119,7 @@ public class RunLocalCsvScrapingKN{
         format.setMaximumFractionDigits( 0 );
         table.numberColumn( Headers.CO2_COST_NEU ).setPrintFormatter( format, "n/a" );
 
-        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CO2_CONSTRUCTION ).isLessThan( 1. ) );
+        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOST50 ).isLessThan( 1. ) );
 
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );
