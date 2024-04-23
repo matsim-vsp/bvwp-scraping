@@ -11,7 +11,7 @@ public class RunCsvWriting {
         List<StreetAnalysisDataContainer> allStreetBaseData =
                 new StreetScraper().extractAllLocalBaseData("./data/street/all", "A", ".*")
                                    .stream()
-                                   .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 1. ) )
+                                   .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, 1., 0.0))
                                    .toList();
 
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");
