@@ -49,7 +49,7 @@ public final class Headers{
 	/**
 	 * CO2-Kosten nach Neuberechnung (immer mal anders).
 	 */
-	public static final String CO2_COST_NEU = "cost_co2_new";
+	public static final String CO2_COST_EL03 = "cost_co2_el03";
 	/**
 	 * Originale CO2-Kosten.
 	 */
@@ -57,11 +57,11 @@ public final class Headers{
 	/**
 	 * Originale Investitionskosten.
 	 */
-	public static final String COST_OVERALL = "investment_cost_orig";
+	public static final String INVCOST_ORIG = "investmentCost_orig";
 	/**
 	 * Investitionskosten nach Neuberechnung.  Immer mal anders.
 	 */
-	public static final String COST_OVERALL_INCREASED = "investment_cost_increased";
+	public static final String INVCOST50 = "investmentCost_50";
 	/**
 	 * Umrechnung von Emissionen (welchen??) in CO2-Äquivalente.
 	 */
@@ -89,7 +89,7 @@ public final class Headers{
 	 */
 	public static final String NKV_CO2 = "NKV_co2";
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
-	public static final String NKV_CO2_680_EN = "BCR_co2_680";
+	public static final String NKV_CO2_700_EN = "BCR_co2_680";
 	/**
 	 * {@link #NKV_EL03_CARBON215_INVCOST50} - {@link #NKV_ORIG}
 	 */
@@ -98,22 +98,22 @@ public final class Headers{
 	 * Neues NKV bei erhöhter Abschätzung für Mehrverkehr.
 	 */
 	public static final String NKV_EL03 = "NKV_el03";
+	public static final String NKV_EL03_CAPPED5 = NKV_EL03 + "_capped5";
+	public static final String NKV_CARBON700 = "NKV_carbon700";
+	public static final String NKV_CARBON700_CAPPED5 = NKV_CARBON700 + "_capped5";
 	/**
 	 * Neues NKV mit höherem Mehrverkehr, CO2-Preis 215, sowie höheren Investitionskosten.
 	 */
 	public static final String NKV_EL03_CARBON215_INVCOST50 = "NKV_el03_carbon215_invcost50";
+	public static final String NKV_EL03_CARBON215_INVCOST50_CAPPED10 = NKV_EL03_CARBON215_INVCOST50 + "_capped10";
 	/**
 	 * min( 5, {@link #NKV_EL03_CARBON215_INVCOST50})
 	 */
 	public static final String NKV_EL03_CARBON215_INVCOST50_CAPPED5 = NKV_EL03_CARBON215_INVCOST50 + "_capped5";
-//	/**
-//	 * Neues NKV mit höherem Mehrverkehr, höherem CO2-Preis, höheren Investitionskosten.
-//	 */
-//	public static final String NKV_EL03_CO2_INVCOST50 = "NKV_el03_Co2_Invcost50";
-//	/**
-//	 * min( 5, {@link #NKV_EL03_CO2_INVCOST50} )
-//	 */
-//	public static final String NKV_EL03_CO2_INVCOST50_CAPPED5 = "NKV_el03_Co2_invcost50_capped5";
+	public static final String NKV_EL03_CARBON700 = "NKV_el03_carbon700";
+	public static final String NKV_EL03_CARBON700_CAPPED5 = NKV_EL03_CARBON700 + "_capped5";
+	public static final String NKV_EL03_CARBON700_INVCOST50 = "NKV_el03_carbon700_invcost50";
+	public static final String NKV_EL03_CARBON700_INVCOST50_CAPPED5 = NKV_EL03_CARBON700_INVCOST50 + "_capped5";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
 	public static final String NKV_NO_CHANGE_EN = "BCR";
@@ -127,6 +127,5 @@ public final class Headers{
 	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
 	public static final String PROJECT_NAME = "project _name";
 	public static final String VERKEHRSBELASTUNG_PLANFALL = "DTV_Planfall";
-	public static final String NKV_EL03_CARBON215_INVCOST50_CAPPED10 = NKV_EL03_CARBON215_INVCOST50 + "_capped10";
 	private Headers(){} // do not instantiate
 }

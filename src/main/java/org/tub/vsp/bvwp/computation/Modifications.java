@@ -8,9 +8,13 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
     public static final double co2PriceBVWP = 145.;
     //    public static final double co2Price5fach = 5*145.; //KNs Annahme
     public static final double co2Price700 = 642.;
-    // 700 sind die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückregerechnet nach 2012 führt das zu 642.
+    // (700 sind die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012 führt das zu 642.
+    /**
+     * Wie {@link }#co2Price700}, aber mit 1% Zeitpräferenzrate.
+     */
+    public static final double co2Price215 = 197.;
 
- //    public static final double co2Price680 = 623.;
+    //    public static final double co2Price680 = 623.;
     // (haben wir früher mal verwendet)
     // € 623 (in 2012) corresponds to € 680 in 2020 including the inflation.
     // Kurioserweise steht dies (zwar) im pdf (https://www.umweltbundesamt.de/publikationen/methodenkonvention-umweltkosten; in Euro_2020), aber die Webseite

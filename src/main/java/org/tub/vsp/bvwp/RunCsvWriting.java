@@ -9,7 +9,7 @@ import java.util.List;
 public class RunCsvWriting {
     public static void main(String[] args) {
         List<StreetAnalysisDataContainer> allStreetBaseData =
-                new StreetScraper().extractAllLocalBaseData("./data/street/all", "A", ".*")
+                new StreetScraper().extractAllLocalBaseData("./data/street/all", "A", ".*", "")
                                    .stream()
                                    .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 1. ) )
                                    .toList();

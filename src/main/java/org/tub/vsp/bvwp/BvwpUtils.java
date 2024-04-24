@@ -1,7 +1,5 @@
 package org.tub.vsp.bvwp;
 
-import static org.tub.vsp.bvwp.scraping.StreetScraper.projectString;
-
 import org.tub.vsp.bvwp.data.Headers;
 import tech.tablesaw.api.Table;
 
@@ -53,4 +51,7 @@ public class BvwpUtils{
 		return table.where(table.stringColumn(Headers.EINSTUFUNG ).isEqualTo(priority ) );
 	}
 
+	public static String projectString(String bundesland, String road) {
+	    return "(" + road + "-.*-" + bundesland + ".html" + ")|";
+	}
 }

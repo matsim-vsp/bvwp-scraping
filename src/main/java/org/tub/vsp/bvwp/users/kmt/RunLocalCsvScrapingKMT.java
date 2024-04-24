@@ -61,7 +61,7 @@ public class RunLocalCsvScrapingKMT {
         // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
 
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
-            .extractAllLocalBaseData("./data/street/all2", "A", ".*")
+            .extractAllLocalBaseData("./data/street/all2", "A", ".*", "")
             .stream()
             .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 1. ) )
             .toList();
@@ -86,7 +86,7 @@ public class RunLocalCsvScrapingKMT {
             String xNameKMT;
             Axis.AxisBuilder xAxisBuilder = Axis.builder();
             {
-                xNameKMT = Headers.CO2_COST_NEU;
+                xNameKMT = Headers.CO2_COST_EL03;
                 xAxisBuilder.type(Type.LINEAR);
             }
 //        {
@@ -100,17 +100,17 @@ public class RunLocalCsvScrapingKMT {
             final int plotWidth = 1400;
 
             Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
-            Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.COST_OVERALL);
-            Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.COST_OVERALL);
+            Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.INVCOST_ORIG );
+            Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.INVCOST_ORIG );
             Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
             Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table,
-                Headers.NKV_ORIG, Headers.NKV_CO2_680_EN );
+                Headers.NKV_ORIG, Headers.NKV_CO2_700_EN );
             Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table,
                 Headers.NKV_ORIG, Headers.NKV_CO2_2000_EN );
 //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
 //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
-            String pageKMT = MultiPlotUtils.pageTop + System.lineSeparator() +
+            String pageKMT = MultiPlotUtils.pageTop() + System.lineSeparator() +
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
                 figureCostByPriority.asJavascript("plot2") + System.lineSeparator() +
                 figureNkvByPriority.asJavascript("plot3")+System.lineSeparator() +
@@ -140,11 +140,11 @@ public class RunLocalCsvScrapingKMT {
         table = table.sortOn(comparator);
         NumberFormat format = NumberFormat.getCompactNumberInstance();
         format.setMaximumFractionDigits(0);
-        table.numberColumn(Headers.CO2_COST_NEU).setPrintFormatter(format, "n/a");
+        table.numberColumn(Headers.CO2_COST_EL03 ).setPrintFormatter(format, "n/a" );
 
         //Projekte, die bereits vor Änderung NKV <1 haben
         Table tableBaseKl1 = table.where(table.numberColumn(Headers.NKV_ORIG ).isLessThan(1. ) );
-        Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_680_EN).isLessThan(1.));
+        Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_700_EN ).isLessThan(1. ) );
         Table tableCo2_2000_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
         Table tableIndCo2kl1 = table.where(
             table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOST50 ).isLessThan(1. ) );
@@ -160,20 +160,20 @@ public class RunLocalCsvScrapingKMT {
 
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
-                table.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
+                table.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max )
                     .by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
-                tableIndCo2kl1.summarize(Headers.COST_OVERALL, sum, mean, stdDev, min, max)
+                tableIndCo2kl1.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max )
                     .by(Headers.EINSTUFUNG ) );
 
             System.out.println(BvwpUtils.SEPARATOR);
             System.out.println(
                 table.summarize(
-                    Headers.CO2_COST_NEU, sum, mean, stdDev, min, max).by(Headers.EINSTUFUNG ) );
+                    Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
             System.out.println(System.lineSeparator() + "Davon NKV < 1:");
             System.out.println(
-                tableIndCo2kl1.summarize(Headers.CO2_COST_NEU, sum, mean, stdDev, min, max)
+                tableIndCo2kl1.summarize(Headers.CO2_COST_EL03, sum, mean, stdDev, min, max )
                     .by(Headers.EINSTUFUNG ) );
         }
 
