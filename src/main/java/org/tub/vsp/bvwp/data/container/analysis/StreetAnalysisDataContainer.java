@@ -14,20 +14,23 @@ import java.util.List;
 import java.util.SequencedMap;
 
 import static org.tub.vsp.bvwp.computation.Modifications.*;
-import static org.tub.vsp.bvwp.computation.Modifications.co2Price680;
 
 public class StreetAnalysisDataContainer {
     Logger logger = LogManager.getLogger(StreetAnalysisDataContainer.class);
     private final StreetBaseDataContainer streetBaseData;
     private final double constructionCostFactor;
+    private final double constructionCostTum;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
 
-    public StreetAnalysisDataContainer( StreetBaseDataContainer streetBaseDataContainer, double constructionCostFactor ) {
+    public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double constructionCostFactor
+            , double constructionCostTum) {
         this.streetBaseData = streetBaseDataContainer;
         this.constructionCostFactor = constructionCostFactor;
-        logger.info(this.streetBaseData.getUrl() );
+        this.constructionCostTum = constructionCostTum;
         this.addComputations();
+
+        logger.info(this.streetBaseData.getUrl());
     }
 
     private void addComputations() {
@@ -45,7 +48,7 @@ public class StreetAnalysisDataContainer {
         double additionalLaneKm = streetBaseData.getProjectInformation().getLength() * 2;
         // (assumption 2 more lanes)
 
-        switch ( streetBaseData.getProjectInformation().getBautyp()) {
+        switch (streetBaseData.getProjectInformation().getBautyp()) {
             case NB4:
                 additionalLaneKm *= 2;
                 break;
@@ -113,7 +116,9 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
         entries.put(Headers.CO2_COST_NEU,
-                        Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );
+                Math.max(1., NkvCalculator.calculateCost_CO2(new Modifications(co2PriceBVWP, addtlFzkmBeyondPrinsEl03
+                        , 1), streetBaseData)));
+        entries.put(Headers.COST_OVERALL_TUM, this.constructionCostTum);
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {

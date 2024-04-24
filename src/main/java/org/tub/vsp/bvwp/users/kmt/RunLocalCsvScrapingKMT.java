@@ -1,20 +1,5 @@
 package org.tub.vsp.bvwp.users.kmt;
 
-import static tech.tablesaw.aggregate.AggregateFunctions.count;
-import static tech.tablesaw.aggregate.AggregateFunctions.max;
-import static tech.tablesaw.aggregate.AggregateFunctions.mean;
-import static tech.tablesaw.aggregate.AggregateFunctions.min;
-import static tech.tablesaw.aggregate.AggregateFunctions.stdDev;
-import static tech.tablesaw.aggregate.AggregateFunctions.sum;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.text.NumberFormat;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
@@ -31,6 +16,17 @@ import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Axis.Type;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.text.NumberFormat;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
 public class RunLocalCsvScrapingKMT {
     private static final Logger logger = LogManager.getLogger(RunLocalCsvScrapingKMT.class );
@@ -63,7 +59,7 @@ public class RunLocalCsvScrapingKMT {
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
             .extractAllLocalBaseData("./data/street/all2", "A", ".*")
             .stream()
-            .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 1. ) )
+			.map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, 1., 0.))
             .toList();
 
         logger.info("Writing csv");
