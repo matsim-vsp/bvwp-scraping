@@ -24,7 +24,7 @@ public class RunLocalCsvScraping {
         StreetScraper scraper = new StreetScraper();
 
         logger.info("Starting scraping");
-        List<StreetAnalysisDataContainer> allStreetData = scraper.extractAllLocalBaseData("./data/street", "A", ".*")
+        List<StreetAnalysisDataContainer> allStreetData = scraper.extractAllLocalBaseData("./data/street", "A", ".*", "" )
                                                                  .stream()
                                                                  .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, 1., 0.))
                                                                  .toList();

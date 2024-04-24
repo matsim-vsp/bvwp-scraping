@@ -45,11 +45,7 @@ public class StreetScraper extends Scraper {
                           .toList();
     }
 
-    public static String projectString(String bundesland, String road) {
-        return "(" + road + "-.*-" + bundesland + ".html" + ")|";
-    }
-
-    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path, String prefix, String regexToMatch) {
+    public List<StreetBaseDataContainer> extractAllLocalBaseData(String path, String prefix, String regexToMatch, String regexToExclude ) {
 
         List<File> files = Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).toList();
         return files.stream()
@@ -58,7 +54,7 @@ public class StreetScraper extends Scraper {
                     .filter(file -> !file.getName().matches("A20-G10-SH.html")) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'24
 //                    .filter(file -> !file.getName().matches("A57-G10-NW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
 //                    .filter(file -> !file.getName().matches("A81-G50-BW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
-                    .filter(file -> !file.getName().matches("A...B.*")) // Ortsumgehungen, die an AB angrenzen.
+                    .filter(file -> !file.getName().matches( regexToExclude ))
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
                     .map(Optional::get)

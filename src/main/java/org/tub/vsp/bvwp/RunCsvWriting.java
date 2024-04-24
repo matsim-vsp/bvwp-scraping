@@ -13,7 +13,7 @@ public class RunCsvWriting {
         Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTumFile(filePath);
 
         List<StreetAnalysisDataContainer> allStreetBaseData =
-                new StreetScraper().extractAllLocalBaseData("./data/street/all", "A", ".*")
+                new StreetScraper().extractAllLocalBaseData("./data/street/all", "A", ".*", "")
                                    .stream()
                                    .map(s -> new StreetAnalysisDataContainer(s, 1.,
                                            constructionCostsByProject.get(s.getProjectInformation().getProjectNumber())))

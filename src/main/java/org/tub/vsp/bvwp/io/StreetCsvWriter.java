@@ -198,10 +198,10 @@ public class StreetCsvWriter {
                                               .map(StreetCostBenefitAnalysisDataContainer::getOverallBenefit)
                                               .map(Benefit::overall)
                                               .orElse(null));
-        record.add(Headers.COST_OVERALL, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis())
-                                                 .map(StreetCostBenefitAnalysisDataContainer::getCost)
-                                                 .map(Cost::overallCosts)
-                                                 .orElse(null));
+        record.add(Headers.INVCOST_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
+						 .map(StreetCostBenefitAnalysisDataContainer::getCost)
+						 .map(Cost::overallCosts)
+						 .orElse(null));
         // (yy warum diese aufwändige Syntax?  kai, feb'24)
         // --> da sowohl getCostBenefitAnalysis, getCost als auch overallCosts null zurückgeben können, wenn die
         // Daten nicht vorhanden sind. So spart man sich null checks (paul, feb'24)
@@ -274,7 +274,7 @@ public class StreetCsvWriter {
 //        }
 
         headers.addDoubleColumn(Headers.B_OVERALL);
-        headers.addDoubleColumn(Headers.COST_OVERALL);
+        headers.addDoubleColumn(Headers.INVCOST_ORIG );
 
         for (String s : analysisDataContainers.getFirst()
                                               .getColumns()

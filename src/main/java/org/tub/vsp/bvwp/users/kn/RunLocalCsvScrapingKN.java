@@ -50,9 +50,11 @@ public class RunLocalCsvScrapingKN{
         final double constructionCostFactor = 1.5;
 
 
+        final String regexToExclude = "(A...B.*)|(A....B.*)"; // Bundesstrassen, die von Autobahnen ausgehen.
+
         // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
-                                                                              .extractAllLocalBaseData( "./data/street/all", "A", ".*" )
+                                                                              .extractAllLocalBaseData( "./data/street/all", "A", ".*", regexToExclude )
                                                                               .stream()
                                                                               .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, constructionCostFactor, 0.))
                                                                               .toList();
@@ -61,34 +63,45 @@ public class RunLocalCsvScrapingKN{
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
         Table table = csvWriter.writeCsv( allStreetBaseData );
 
-        table.addColumns( table.numberColumn( Headers.COST_OVERALL ).multiply( constructionCostFactor ).setName( Headers.COST_OVERALL_INCREASED ) );
+        table.addColumns( table.numberColumn( Headers.INVCOST_ORIG ).multiply( constructionCostFactor ).setName( Headers.INVCOST50 ) );
 
         // ===
-        FiguresKN figures = new FiguresKN( table );
+        Figures1KN figures1 = new Figures1KN( table );
+        Figures2KN figures2 = new Figures2KN( table );
 
         List<Figure> plots1 = new ArrayList<>();
         List<Figure> plots2 = new ArrayList<>();
 
-        plots1.add( figures.createFigureNkvVsDtv() );
-        plots1.add( figures.createFigureElasticities() );
-        plots1.add( figures.createFigureFzkmDiff() );
-        plots1.add( figures.createFigureCO2() );
-        plots1.add( figures.createFigureCostVsLanekm() );
-        plots1.add( figures.createFigureNkvVsLanekm() );
-        plots1.add( figures.createFigureDtv() );
-        plots1.add( figures.createFigureFzkmNew() );
+        plots1.add( figures1.nkv_el03() );
+        plots1.add( figures1.nkv_carbon700() );
+        plots1.add( figures1.nkv_el03_carbon700() );
 
-        plots2.add( figures.createFigureFzkmNew() );
-        plots2.add( figures.createFigureCostVsNkvOld() );
-        plots2.add( figures.costOrigVsCumulativeCostOrig() );
-        plots2.add( figures.cost_increased_VsNkv_El03_CO2_215_Baukosten_50() );
-        plots2.add( figures.cumulativeCost50VsNkv_el03_carbon2015_invcost50_capped5() );
-        plots2.add( figures.co2_vs_nkv_new() );
+//        plots1.add( figures1.elasticities() );
+//        plots1.add( figures1.fzkmDiff() );
+//        plots1.add( figures1.carbon() );
+//        plots1.add( figures1.invcost() );
+//        plots1.add( figures1.nkv_el03_diff() );
+//        plots1.add( figures1.dtv() );
+//        plots1.add( figures1.fzkmNew() );
+
+        plots2.add( figures2.nkvVsDtv() );
+
+        plots2.add( figures2.cost_VS_nkvOrig() );
+
+        plots2.add( figures2.costOrigVsCumulativeCostOrig() );
+
+        plots2.add( figures2.invcost50_vs_nkvEl03Cprice215Invcost50Capped5() );
+        plots2.add( figures2.cumulativeCost50_vs_nkvEl03Cprice215Invcost50Capped5() );
+        plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
+
+        plots2.add( figures2.invcost50_vs_NkvEl03Cprice600Invcost50() );
+        plots2.add( figures2.cumulativeCost50_vs_nkvEl03Cprice600Invcost50Capped5() );
+
         // ===
 
 
 
-        String page = MultiPlotUtils.pageTop + System.lineSeparator();
+        String page = MultiPlotUtils.pageTop() + System.lineSeparator();
         for( int ii=0; ii<plots1.size(); ii++ ) {
             page += plots1.get(ii).asJavascript( "plot" + (ii+1) ) + System.lineSeparator() ;
         }
@@ -117,7 +130,7 @@ public class RunLocalCsvScrapingKN{
         table = table.sortOn( comparator );
         NumberFormat format = NumberFormat.getCompactNumberInstance();
         format.setMaximumFractionDigits( 0 );
-        table.numberColumn( Headers.CO2_COST_NEU ).setPrintFormatter( format, "n/a" );
+        table.numberColumn( Headers.CO2_COST_EL03 ).setPrintFormatter( format, "n/a" );
 
         Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOST50 ).isLessThan( 1. ) );
 
@@ -127,14 +140,14 @@ public class RunLocalCsvScrapingKN{
         System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ) );
 
         System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println( table.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println( table.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-        System.out.println( table2.summarize( Headers.COST_OVERALL, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println( table2.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
 
         System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println( table.summarize( Headers.CO2_COST_NEU, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println( table.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
         System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-        System.out.println( table2.summarize( Headers.CO2_COST_NEU, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println( table2.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
     }
 
 }

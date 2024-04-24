@@ -34,9 +34,9 @@ class FiguresKMT {
 
 	static Figure createFigureCostByPriority(int plotWidth, Table table, String xName ){
 		Figure figure3;
-		String yName = Headers.COST_OVERALL;
-		String y3Name = Headers.COST_OVERALL;
-		String y2Name = Headers.COST_OVERALL;
+		String yName = Headers.INVCOST_ORIG;
+		String y3Name = Headers.INVCOST_ORIG;
+		String y2Name = Headers.INVCOST_ORIG;
 
 		double maxX = table.numberColumn( xName ).max();
 		Axis xAxis = Axis.builder()
@@ -128,7 +128,7 @@ class FiguresKMT {
 	static Figure createFigureNkv(Axis xAxis, int plotWidth, Table table, String xName){
       Figure figure2;
       String yName = Headers.NKV_ORIG;
-      String y3Name = Headers.NKV_CO2_680_EN;
+      String y3Name = Headers.NKV_CO2_700_EN;
 //        String y2Name = Headers.NKV_INDUZ_CO2;
 
       Axis yAxis = Axis.builder()
@@ -166,8 +166,8 @@ class FiguresKMT {
   }
 
   static Figure createFigureCO2(Axis xAxis, int plotWidth, Table table, String xName){
-      String yName = Headers.CO2_COST_NEU;
-      String y2Name = Headers.CO2_COST_NEU;
+      String yName = Headers.CO2_COST_EL03;
+      String y2Name = Headers.CO2_COST_EL03;
 
       Axis yAxis = Axis.builder()
           .title( yName )

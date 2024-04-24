@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.tub.vsp.bvwp.scraping.StreetScraper.projectString;
-
 public class BvwpUtils{
 
 	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
@@ -67,6 +65,9 @@ public class BvwpUtils{
 		return table.where(table.stringColumn(Headers.EINSTUFUNG ).isEqualTo(priority ) );
 	}
 
+	public static String projectString(String bundesland, String road) {
+	    return "(" + road + "-.*-" + bundesland + ".html" + ")|";
+	}
 	/**
 	 * A function, that gets the path of a file and a column name. It returns a map that has as key the values of
 	 * "PRINS.Projektnummer" and as value the values of the given column.

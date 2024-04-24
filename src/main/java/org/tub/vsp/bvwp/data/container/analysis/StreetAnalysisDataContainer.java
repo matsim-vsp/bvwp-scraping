@@ -105,20 +105,21 @@ public class StreetAnalysisDataContainer {
 //        entries.put("rz/km", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall() /
 //        streetBaseDataContainer.getProjectInformation().getLength() );
         entries.put(Headers.B_PER_KM, streetBaseData.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseData.getProjectInformation().getLength() );
+
         entries.put(Headers.NKV_ORIG, NkvCalculator.calculateNkv( NO_CHANGE, streetBaseData ) );
-        entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv( new Modifications(co2Price680, 0., 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_680_EN, NkvCalculator.calculateNkv( new Modifications(co2Price680, 0., 1 ), streetBaseData ) );
+        entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_700_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
+        entries.put(Headers.NKV_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1 ), streetBaseData ) );
         entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON215_INVCOST50,
-                        NkvCalculator.calculateNkv( new Modifications( 215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
-//        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price680, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON215_INVCOST50, NkvCalculator.calculateNkv( new Modifications( 215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON700_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1. ), streetBaseData ) );
+//        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
-        entries.put(Headers.CO2_COST_NEU,
-                Math.max(1., NkvCalculator.calculateCost_CO2(new Modifications(co2PriceBVWP, addtlFzkmBeyondPrinsEl03
-                        , 1), streetBaseData)));
-        entries.put(Headers.COST_OVERALL_TUM, this.constructionCostTum);
+        entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );entries.put(Headers.COST_OVERALL_TUM, this.constructionCostTum);
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
