@@ -24,13 +24,13 @@ public class RunLocalCsvScraping {
         StreetScraper scraper = new StreetScraper();
 
         logger.info("Starting scraping");
-        List<StreetAnalysisDataContainer> allStreetBaseData = scraper.extractAllLocalBaseData("./data/street", "A", ".*", "" )
-                                                                     .stream()
-                                                                     .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, 1. ) )
-                                                                     .toList();
+        List<StreetAnalysisDataContainer> allStreetData = scraper.extractAllLocalBaseData("./data/street", "A", ".*", "" )
+                                                                 .stream()
+                                                                 .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, 1., 0.))
+                                                                 .toList();
 
         logger.info("Writing csv");
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");
-        csvWriter.writeCsv(allStreetBaseData);
+        csvWriter.writeCsv(allStreetData);
     }
 }

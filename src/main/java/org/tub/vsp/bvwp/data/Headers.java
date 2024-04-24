@@ -58,6 +58,10 @@ public final class Headers{
 	 * Originale Investitionskosten.
 	 */
 	public static final String INVCOST_ORIG = "investmentCost_orig";
+    /**
+     * Investitionskosten nach Berechnung der TUM
+     */
+    public static final String COST_OVERALL_TUM = "investment_cost_tum";
 	/**
 	 * Investitionskosten nach Neuberechnung.  Immer mal anders.
 	 */

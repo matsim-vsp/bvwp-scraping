@@ -56,7 +56,7 @@ public class RunLocalCsvScrapingKN{
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
                                                                               .extractAllLocalBaseData( "./data/street/all", "A", ".*", regexToExclude )
                                                                               .stream()
-                                                                              .map( streetBaseDataContainer -> new StreetAnalysisDataContainer( streetBaseDataContainer, constructionCostFactor ) )
+                                                                              .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, constructionCostFactor, 0.))
                                                                               .toList();
 
         logger.info( "Writing csv" );

@@ -1,11 +1,25 @@
 package org.tub.vsp.bvwp;
 
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
+import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.io.input.BOMInputStream;
 import org.tub.vsp.bvwp.data.Headers;
 import tech.tablesaw.api.Table;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class BvwpUtils{
 
 	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
+
+	private static final String CONSTRUCTION_COST_COLUMN = "BMF.Gesamtprojektkosten2022-Preis_2022-zusammengefasst_zu_NKA-Projekten";
 
 	private BvwpUtils(){} // do not instantiate
 
@@ -53,5 +67,48 @@ public class BvwpUtils{
 
 	public static String projectString(String bundesland, String road) {
 	    return "(" + road + "-.*-" + bundesland + ".html" + ")|";
+	}
+	/**
+	 * A function, that gets the path of a file and a column name. It returns a map that has as key the values of
+	 * "PRINS.Projektnummer" and as value the values of the given column.
+	 */
+	public static Map<String, Double> getConstructionCostsFromTumFile(String pathToSharedSvn) {
+		Map<String, Double> resultMap = new HashMap<>();
+
+		File csvFile = Paths.get(pathToSharedSvn, "/projects/unotrans/PRINS_BMF-Baukosten_aktualisiert_v02_rh-20240412.csv").toFile();
+
+		try (BufferedReader br =
+					 new BufferedReader(new InputStreamReader(new BOMInputStream(new FileInputStream(csvFile)), StandardCharsets.UTF_8))) {
+
+			CSVParser csvParser = CSVFormat.DEFAULT.withFirstRecordAsHeader().withDelimiter(';').parse(br);
+
+			// Get the index of the required columns
+			int prinsProjektnummerIndex = csvParser.getHeaderMap().get("PRINS.Projektnummer");
+			int columnIndex = csvParser.getHeaderMap().get(CONSTRUCTION_COST_COLUMN);
+
+			// If the required columns are not found, return an empty map
+			if (prinsProjektnummerIndex == -1 || columnIndex == -1) {
+				throw new RuntimeException("The required columns are not found in the file.");
+			}
+
+			// Iterate over the records and extract the required values
+			for (CSVRecord record : csvParser) {
+				String prinsProjektnummer = record.get(prinsProjektnummerIndex);
+
+				Double columnValue = Optional.of(record.get(columnIndex))
+											 .filter(s -> !s.isEmpty())
+											 .map(Double::valueOf)
+											 .orElse(-1.);
+
+				Double before = resultMap.put(prinsProjektnummer, columnValue);
+				assert Objects.isNull(before) : "Duplicate PRINS.Projektnummer found: " + prinsProjektnummer;
+			}
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("The TUM construction costs file is not found.", e);
+		} catch (IOException e) {
+			throw new RuntimeException("An error occurred while reading the TUM construction costs file.", e);
+		}
+
+		return resultMap;
 	}
 }
