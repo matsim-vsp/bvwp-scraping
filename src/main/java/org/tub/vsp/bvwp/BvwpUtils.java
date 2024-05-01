@@ -10,6 +10,7 @@ import tech.tablesaw.api.Table;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -19,7 +20,8 @@ public class BvwpUtils{
 
 	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
-	private static final String CONSTRUCTION_COST_COLUMN = "BMF.Gesamtprojektkosten2022-Preis_2022-zusammengefasst_zu_NKA-Projekten";
+//	private static final String CONSTRUCTION_COST_COLUMN = "BMF.Gesamtprojektkosten2022-Preis_2022-zusammengefasst_zu_NKA-Projekten";
+	private static final String INVESTMENT_COST_COLUMN = "NKA.Summe bewertungsrelevanter Investitionskosten-Barwert_skalliert";
 
 	private BvwpUtils(){} // do not instantiate
 
@@ -72,7 +74,7 @@ public class BvwpUtils{
 	 * A function, that gets the path of a file and a column name. It returns a map that has as key the values of
 	 * "PRINS.Projektnummer" and as value the values of the given column.
 	 */
-	public static Map<String, Double> getConstructionCostsFromTumFile(String pathToSharedSvn) {
+	public static Map<String, Double> getConstructionCostsFromTudFile( String pathToSharedSvn ) {
 		Map<String, Double> resultMap = new HashMap<>();
 
 		File csvFile = Paths.get(pathToSharedSvn, "/projects/unotrans/PRINS_BMF-Baukosten_aktualisiert_v02_rh-20240412.csv").toFile();
@@ -84,7 +86,7 @@ public class BvwpUtils{
 
 			// Get the index of the required columns
 			int prinsProjektnummerIndex = csvParser.getHeaderMap().get("PRINS.Projektnummer");
-			int columnIndex = csvParser.getHeaderMap().get(CONSTRUCTION_COST_COLUMN);
+			int columnIndex = csvParser.getHeaderMap().get( INVESTMENT_COST_COLUMN );
 
 			// If the required columns are not found, return an empty map
 			if (prinsProjektnummerIndex == -1 || columnIndex == -1) {
@@ -96,16 +98,17 @@ public class BvwpUtils{
 				String prinsProjektnummer = record.get(prinsProjektnummerIndex);
 
 				Double columnValue = Optional.of(record.get(columnIndex))
-											 .filter(s -> !s.isEmpty())
-											 .map(Double::valueOf)
-											 .orElse(-1.);
+							     .filter(s -> !s.isEmpty())
+//											 .map(Double::valueOf)
+							     .map( JSoupUtils::parseDoubleOrElseNull)
+							     .orElse(-1.);
 
 				Double before = resultMap.put(prinsProjektnummer, columnValue);
 				assert Objects.isNull(before) : "Duplicate PRINS.Projektnummer found: " + prinsProjektnummer;
 			}
 		} catch (FileNotFoundException e) {
 			throw new RuntimeException("The TUM construction costs file is not found.", e);
-		} catch (IOException e) {
+		} catch ( IOException e ) {
 			throw new RuntimeException("An error occurred while reading the TUM construction costs file.", e);
 		}
 

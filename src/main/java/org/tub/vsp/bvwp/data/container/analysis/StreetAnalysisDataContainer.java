@@ -18,16 +18,18 @@ import static org.tub.vsp.bvwp.computation.Modifications.*;
 public class StreetAnalysisDataContainer {
     Logger logger = LogManager.getLogger(StreetAnalysisDataContainer.class);
     private final StreetBaseDataContainer streetBaseData;
-    private final double constructionCostFactor;
-    private final double constructionCostTum;
+    private double constructionCostFactor;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
+    private final double constructionCostTum;
 
-    public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double constructionCostFactor
-            , double constructionCostTum) {
+    public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double investmentCostNew ) {
         this.streetBaseData = streetBaseDataContainer;
-        this.constructionCostFactor = constructionCostFactor;
-        this.constructionCostTum = constructionCostTum;
+        this.constructionCostTum = investmentCostNew;
+        constructionCostFactor = investmentCostNew / streetBaseData.getCostBenefitAnalysis().getCost().overallCosts();
+        if ( constructionCostFactor < 0. ) {
+            constructionCostFactor = 1.;
+        }
         this.addComputations();
 
         logger.info(this.streetBaseData.getUrl());
@@ -48,41 +50,11 @@ public class StreetAnalysisDataContainer {
         double additionalLaneKm = streetBaseData.getProjectInformation().getLength() * 2;
         // (assumption 2 more lanes)
 
-        switch (streetBaseData.getProjectInformation().getBautyp()) {
-            case NB4:
-                additionalLaneKm *= 2;
-                break;
-            case NB6:
-                additionalLaneKm *= 3;
-                break;
-            case NB4_EW4:
-                additionalLaneKm *= 1.5;
-                break;
-            case NB6_EW6:
-                break;
-            case EW4:
-                break;
-            case EW6:
-                break;
-            case EW8:
-                break;
-            case EW6_EW8:
-                break;
-//		    case EW8_EW9:
-//			    break;
-            case KNOTENPUNKT:
-                break;
-            case KNOTENPUNKT_EW4:
-                break;
-            case KNOTENPUNKT_EW6:
-                break;
-            case KNOTENPUNKT_NB4:
-                break;
-            case BLANK:
-                break;
-            default:
-//                throw new IllegalStateException("Unexpected value: " + streetBaseData.getProjectInformation().getBautyp());
-        }
+	    switch( streetBaseData.getProjectInformation().getBautyp() ){
+		    case NB4 -> additionalLaneKm *= 2;
+		    case NB6 -> additionalLaneKm *= 3;
+		    case NB4_EW4 -> additionalLaneKm *= 1.5;
+	    }
 
         final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
 
@@ -112,15 +84,23 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.NKV_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1 ), streetBaseData ) );
         entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON215_INVCOST50, NkvCalculator.calculateNkv( new Modifications( 215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON700_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON700_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
         entries.put(Headers.NKV_EL03_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1. ), streetBaseData ) );
 //        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
 
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
-        entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );entries.put(Headers.COST_OVERALL_TUM, this.constructionCostTum);
+        entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
+        entries.put(Headers.INVCOST_TUD, this.constructionCostTum );
+
+        double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL = 50; // km/h
+        double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;
+        entries.put( Headers.ADDTL_PKWKM_FROM_TTIME, addtlFzkmFromTtime );
+
+        entries.put( Headers.NKV_ELTTIME_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmFromTtime, constructionCostFactor ), streetBaseData ) );
+        entries.put( Headers.NKV_ELTTIME_CARBON700_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmFromTtime, constructionCostFactor ), streetBaseData ) );
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr " +

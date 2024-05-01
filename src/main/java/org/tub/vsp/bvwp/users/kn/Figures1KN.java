@@ -20,6 +20,8 @@ import tech.tablesaw.plotly.traces.Trace;
 
 import java.io.File;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
@@ -75,14 +77,14 @@ class Figures1KN{
 
 			// ===========================
 			table.addColumns(
-					table.numberColumn( NKV_EL03_CARBON215_INVCOST50 ).subtract( table.numberColumn( NKV_ORIG ) ).setName( NKV_EL03_DIFF )
+					table.numberColumn( NKV_EL03_CARBON215_INVCOSTTUD ).subtract( table.numberColumn( NKV_ORIG ) ).setName( NKV_EL03_DIFF )
 					, table.numberColumn( ADDTL_PKWKM_EL03 ).subtract( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_EL03_DIFF )
 					);
 			// ===========================
 			// ===========================
 			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON215_INVCOST50_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON215_INVCOST50 ) ){
+				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 );
+				for( Double number : table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD ) ){
 					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
 					newColumn.append( number );
 				}
@@ -91,8 +93,8 @@ class Figures1KN{
 			// ===========================
 			// ===========================
 			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON700_INVCOST50_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON700_INVCOST50 ) ){
+				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5 );
+				for( Double number : table.doubleColumn( NKV_EL03_CARBON700_INVCOSTTUD ) ){
 					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
 					newColumn.append( number );
 				}
@@ -100,9 +102,13 @@ class Figures1KN{
 			}
 			// ===========================
 			// ===========================
+			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
+			Headers.addCap5( table, NKV_ELTTIME_CARBON700_INVCOSTTUD );
+			// ===========================
+			// ===========================
 			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON215_INVCOST50_CAPPED10 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON215_INVCOST50 ) ){
+				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED10 );
+				for( Double number : table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD ) ){
 					number = Math.min( number, 10 - Math.random() * 0.1 + 0.05 );
 					newColumn.append( number );
 				}
@@ -212,53 +218,58 @@ class Figures1KN{
 		this.table = table;
 
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
-		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOST50_CAPPED5 ).min();
+		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
 
 
 
 	}
 	// ################################################################
 	// ################################################################
-	Figure invcost(){
-		String yName = INVCOST_ORIG;
-//		String y3Name = Headers.COST_OVERALL;
-		String y2Name = INVCOST_ORIG;
+	Figure invcost_tud_vs_orig(){
+		String xName = INVCOST_ORIG;
 
-		String title = "";
-		if ( ADDTL_LANE_KM.equals( xName ) ) {
-			title = "construction cost SIMTO lane-km, but quite varied:";
-		}
+		String yName = INVCOST_TUD;
+//		String y3Name = Headers.COST_OVERALL;
+		String y2Name = INVCOST_TUD;
+
+		String plotTitle = "";
+
+		Axis xAxis = Axis.builder()
+				 .title( xName )
+				 .type( Axis.Type.LOG)
+				 .build();
 
 		Axis yAxis = Axis.builder()
 				 .type( Axis.Type.LOG )
 				 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
 				 .title( yName )
 				 .build();
-		Layout layout = Layout.builder( title )
+		Layout layout = Layout.builder( plotTitle )
 				      .xAxis( xAxis )
 				      .yAxis( yAxis )
 				      .width( plotWidth )
 				      .build();
+
+		List<Trace> traces = new ArrayList<>();
+
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .name( String.format( legendFormat, yName ) )
 //					  .build();
 
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
 
-//		final Trace trace3 = getTrace( xName, y3Name, table, y3Name, "gray" );
-
-		//            double[] xx = new double[]{1., 200.};
-		//            Trace trace1 = ScatterTrace.builder( xx, xx )
-		//                                       .mode( ScatterTrace.Mode.LINE )
-		//                                       .build();
-
-		Figure figure3 = new Figure( layout
-//				, trace, trace3
-				, traceWb, traceWbp, traceVb, traceVbe );
+		{
+			double[] xx = new double[]{ table.numberColumn( xName ).min(), table.numberColumn( xName ).max() };
+			double[] yy = new double[]{ table.numberColumn( xName ).min(), table.numberColumn( xName ).max() };
+			traces.add( ScatterTrace.builder( xx, yy )
+						   .mode( ScatterTrace.Mode.LINE )
+						   .build() );
+		}
+		Figure figure3 = new Figure( layout, traces.toArray( new Trace[0] ) );
 		return figure3;
 	}
 	// ========================================================================================
@@ -701,23 +712,65 @@ class Figures1KN{
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
+		List<Trace> traces = new ArrayList<>();
+
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .name( String.format( legendFormat, yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .build();
 
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
 
-		return new Figure( layout
-//				, trace
-				, traceWb
-				,traceWbp
-				, traceVb
-				, traceVbe
-		);
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
+
+	}
+	public Figure fzkmFromTtime_vs_fzkmOrig(){
+		String xName = ADDTL_PKWKM_ORIG;
+
+		String y2Name = ADDTL_PKWKM_FROM_TTIME;
+		String yName = ADDTL_PKWKM_FROM_TTIME;
+
+		Axis xAxis = Axis.builder().title( xName ).build();
+
+		Axis yAxis = Axis.builder().title( y2Name ).build();
+
+		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
+
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
+	}
+	public Figure fzkmFromTtimeSum_vs_fzkmOrig(){
+		String xName = ADDTL_PKWKM_ORIG;
+
+		final String ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG = "additional pkwkm from ttime plus orig";
+
+		table.addColumns(  table.numberColumn( ADDTL_PKWKM_FROM_TTIME ).add( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG ) );
+
+		String y2Name = ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG;
+
+		Axis xAxis = Axis.builder().title( xName ).build();
+
+		Axis yAxis = Axis.builder().title( y2Name ).build();
+
+		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
+
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 
 
