@@ -19,10 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
@@ -47,8 +44,8 @@ public class RunLocalCsvScrapingKN{
 
         logger.info( "Starting scraping" );
 
-        final double constructionCostFactor = 1.5;
-
+        String filePath = "../../shared-svn/";
+        Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTudFile(filePath );
 
         final String regexToExclude = "(A...B.*)|(A....B.*)"; // Bundesstrassen, die von Autobahnen ausgehen.
 
@@ -56,14 +53,15 @@ public class RunLocalCsvScrapingKN{
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
                                                                               .extractAllLocalBaseData( "./data/street/all", "A", ".*", regexToExclude )
                                                                               .stream()
-                                                                              .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, constructionCostFactor, 0.))
+                                                                              .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(
+                                                                                              streetBaseDataContainer,
+                                                                                              constructionCostsByProject.get(streetBaseDataContainer.getProjectInformation().getProjectNumber())
+                                                                              ))
                                                                               .toList();
 
         logger.info( "Writing csv" );
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
         Table table = csvWriter.writeCsv( allStreetBaseData );
-
-        table.addColumns( table.numberColumn( Headers.INVCOST_ORIG ).multiply( constructionCostFactor ).setName( Headers.INVCOST50 ) );
 
         // ===
         Figures1KN figures1 = new Figures1KN( table );
@@ -72,6 +70,11 @@ public class RunLocalCsvScrapingKN{
         List<Figure> plots1 = new ArrayList<>();
         List<Figure> plots2 = new ArrayList<>();
 
+
+        plots1.add( figures1.fzkmFromTtime_vs_fzkmOrig() );
+        plots1.add( figures1.fzkmFromTtimeSum_vs_fzkmOrig() );
+
+        plots1.add( figures1.invcost_tud_vs_orig() );
         plots1.add( figures1.nkv_el03() );
         plots1.add( figures1.nkv_carbon700() );
         plots1.add( figures1.nkv_el03_carbon700() );
@@ -90,12 +93,14 @@ public class RunLocalCsvScrapingKN{
 
         plots2.add( figures2.costOrigVsCumulativeCostOrig() );
 
-        plots2.add( figures2.invcost50_vs_nkvEl03Cprice215Invcost50Capped5() );
+        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon215Invcosttud() );
+        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud() );
         plots2.add( figures2.cumulativeCost50_vs_nkvEl03Cprice215Invcost50Capped5() );
-        plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
 
-        plots2.add( figures2.invcost50_vs_NkvEl03Cprice600Invcost50() );
-        plots2.add( figures2.cumulativeCost50_vs_nkvEl03Cprice600Invcost50Capped5() );
+        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud() );
+        plots2.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
+        plots2.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
+        plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
 
         // ===
 
@@ -132,7 +137,7 @@ public class RunLocalCsvScrapingKN{
         format.setMaximumFractionDigits( 0 );
         table.numberColumn( Headers.CO2_COST_EL03 ).setPrintFormatter( format, "n/a" );
 
-        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOST50 ).isLessThan( 1. ) );
+        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD ).isLessThan( 1. ) );
 
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );

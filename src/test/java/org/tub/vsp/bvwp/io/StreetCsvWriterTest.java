@@ -20,7 +20,7 @@ public class StreetCsvWriterTest {
                 "a20.html")).orElseThrow();
 
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/a20.csv");
-        csvWriter.writeCsv(List.of(new StreetAnalysisDataContainer(streetBaseData, 1., 123456.789)));
+        csvWriter.writeCsv(List.of(new StreetAnalysisDataContainer(streetBaseData, 123456.789) ) );
 
         Assertions.assertTrue(
                 FileUtils.contentEqualsIgnoreEOL(FileUtils.getFile("src/test/resources/testData/referenceData/a20.csv"),

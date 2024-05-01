@@ -8,6 +8,7 @@ public class StreetPhysicalEffectDataContainer {
     private StreetEmissionsDataContainer emissionsDataContainer;
     private Effect travelTimes;
     private Effect vehicleKilometers;
+    private Effect vehicleHours;
 
     public StreetEmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
@@ -64,6 +65,12 @@ public class StreetPhysicalEffectDataContainer {
         result = 31 * result + (travelTimes != null ? travelTimes.hashCode() : 0);
         result = 31 * result + (vehicleKilometers != null ? vehicleKilometers.hashCode() : 0);
         return result;
+    }
+    public void setVehicleHours( Effect vehicleHours ){
+        this.vehicleHours = vehicleHours;
+    }
+    public Effect getVehicleHours(){
+        return vehicleHours;
     }
 
     public static final record Effect(Double overall, Double induced, Double shifted) {
