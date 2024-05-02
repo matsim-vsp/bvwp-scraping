@@ -18,11 +18,11 @@ class ComputationKNTest {
                 , 5305.683);
         double baukosten = 2737.176;
         {
-            double nkv = nkv(new Modifications(145., 0., 1 ), amounts, benefits, baukosten );
+            double nkv = nkv(new Modifications(145., 0., 1, 1. ), amounts, benefits, baukosten );
             Assertions.assertEquals(1.938378, nkv, 0.001);
         }
         {
-            double nkv = nkv(new Modifications(5. * 145., amounts.getPkwkm_induz() * 4., 1 ), amounts, benefits, baukosten );
+            double nkv = nkv(new Modifications(5. * 145., amounts.getPkwkm_induz() * 4., 1, 1. ), amounts, benefits, baukosten );
             Assertions.assertEquals(-0.2963518828995041, nkv, 0.001);
         }
 
@@ -30,7 +30,7 @@ class ComputationKNTest {
         // and lkw:
         amounts = new ComputationKN.Amounts(131.53, 143.95, 9.75, -18.56, 1.46, 0.13, 48_689.94, 48_689.94);
         {
-            double nkv = nkv(new Modifications(5. * 145., amounts.getPkwkm_induz() * 4., 1 ), amounts, benefits, baukosten );
+            double nkv = nkv(new Modifications(5. * 145., amounts.getPkwkm_induz() * 4., 1, 1. ), amounts, benefits, baukosten );
             Assertions.assertEquals(-0.089529, nkv, 0.001);
         }
     }
