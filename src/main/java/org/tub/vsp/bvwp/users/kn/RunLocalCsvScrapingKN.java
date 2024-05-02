@@ -137,22 +137,22 @@ public class RunLocalCsvScrapingKN{
         format.setMaximumFractionDigits( 0 );
         table.numberColumn( Headers.CO2_COST_EL03 ).setPrintFormatter( format, "n/a" );
 
-        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD ).isLessThan( 1. ) );
-
-        System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );
-        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-        System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ) );
-
-        System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println( table.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-        System.out.println( table2.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-
-        System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println( table.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-        System.out.println( table2.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+//        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD ).isLessThan( 1. ) );
+//
+//        System.out.println(BvwpUtils.SEPARATOR);
+//        System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );
+//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+//        System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ) );
+//
+//        System.out.println(BvwpUtils.SEPARATOR);
+//        System.out.println( table.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+//        System.out.println( table2.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+//
+//        System.out.println(BvwpUtils.SEPARATOR);
+//        System.out.println( table.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+//        System.out.println( table2.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
     }
 
 }

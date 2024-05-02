@@ -73,7 +73,6 @@ class Figures1KN{
 
 		if ( init ){
 			init = false;
-//        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
 			// ===========================
 			table.addColumns(
@@ -82,85 +81,23 @@ class Figures1KN{
 					);
 			// ===========================
 			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD ) ){
-					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON700_INVCOSTTUD ) ){
-					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
-			// ===========================
-			// ===========================
+			Headers.addCap5( table, NKV_EL03_CARBON215_INVCOSTTUD );
+			Headers.addCap5( table, NKV_EL03_CARBON700_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ELTTIME_CARBON700_INVCOSTTUD );
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED10 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD ) ){
-					number = Math.min( number, 10 - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_ORIG_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_ORIG ) ){
-					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_EL03 ) ){
-					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_CARBON700_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_CARBON700) ){
-					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( NKV_EL03_CARBON700_CAPPED5 );
-				for( Double number : table.doubleColumn( NKV_EL03_CARBON700) ){
-					number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
-					newColumn.append( number );
-				}
-				table.addColumns( newColumn );
-			}
+			Headers.addCap5( table, NKV_ORIG );
+			Headers.addCap5( table, NKV_EL03 );
+			Headers.addCap5( table, NKV_EL03_CARBON700 );
+			Headers.addCap5( table, NKV_CARBON700 );
+
+			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
 			// ===========================
 			// ===========================
 			{
 				DoubleColumn newColumn = DoubleColumn.create( VERKEHRSBELASTUNG_PLANFALL );
 				for( Double value : table.doubleColumn( VERKEHRSBELASTUNG_PLANFALL ) ){
-					newColumn.append(
-							value + 2000. * Math.random() ); // randomize so that they are not on top of each other in plotly.  Deliberately not centered to that values are > 0.
+					newColumn.append( value + 2000. * Math.random() );
+					// (randomize so that they are not on top of each other in plotly.  Deliberately not centered to that values are > 0.)
 				}
 				table.removeColumns( VERKEHRSBELASTUNG_PLANFALL );
 				table.addColumns( newColumn );

@@ -222,10 +222,10 @@ public class ComputationKN {
 
         // nkv:
         final double nkv = b_all / baukosten;
-        String colorString = ConsoleColors.TEXT_BLACK;
-        if (nkv < 1) {
-            colorString = ConsoleColors.TEXT_RED;
-        }
+//        String colorString = ConsoleColors.TEXT_BLACK;
+//        if (nkv < 1) {
+//            colorString = ConsoleColors.TEXT_RED;
+//        }
 //		log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK );
         return nkv;
     }
@@ -234,7 +234,7 @@ public class ComputationKN {
 //		log.info(String.format( "%1$20s: Korrektur = %2$5.0f; bb = %3$5.0f", msg, b_all - b_tmp, b_all ) );
     }
 
-    public static Double b_co2(Modifications modifications, Amounts amounts, Benefits benefits) {
+    static Double b_co2(Modifications modifications, Amounts amounts, Benefits benefits) {
         // yyyyyy for the time being this returns the benefits since they are easier to compute.  !!!!
 
         double co2 = 0.;

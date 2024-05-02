@@ -21,11 +21,11 @@ public class StreetAnalysisDataContainer {
     private double constructionCostFactor;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
-    private final double constructionCostTum;
+    private final double constructionCostTud;
 
     public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double investmentCostNew ) {
         this.streetBaseData = streetBaseDataContainer;
-        this.constructionCostTum = investmentCostNew;
+        this.constructionCostTud = investmentCostNew;
         constructionCostFactor = investmentCostNew / streetBaseData.getCostBenefitAnalysis().getCost().overallCosts();
         if ( constructionCostFactor < 0. ) {
             constructionCostFactor = 1.;
@@ -93,7 +93,7 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
         entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
-        entries.put(Headers.INVCOST_TUD, this.constructionCostTum );
+        entries.put(Headers.INVCOST_TUD, this.constructionCostTud );
 
         double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL = 50; // km/h
         double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;

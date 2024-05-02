@@ -15,8 +15,20 @@ import static org.tub.vsp.bvwp.computation.ConsoleColors.*;
 public class NkvCalculator {
 
     private static final Logger log = LogManager.getLogger(NkvCalculator.class);
+    private final StreetBaseDataContainer streetBaseDataContainer;
 
+    // moving towards replacing the stateless static functions by a modifiable instance approach:
+    public NkvCalculator( StreetBaseDataContainer streetBaseDataContainer ) {
+        this.streetBaseDataContainer = streetBaseDataContainer;
+    }
+    public Double calculateNkv( Modifications modifications ) {
+        return calculateNkv( modifications, this.streetBaseDataContainer );
+    }
+    public Double calculateCost_CO2( Modifications modifications ) {
+        return calculateCost_CO2( modifications, this.streetBaseDataContainer );
+    }
 
+    // old static methods beyond:
     public static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
 //        log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
@@ -31,7 +43,7 @@ public class NkvCalculator {
             return null;
         }
 
-        Double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
+        double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
 
         return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall());
     }

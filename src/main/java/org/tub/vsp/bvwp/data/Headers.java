@@ -135,13 +135,21 @@ public final class Headers{
 	public static final String NKV_ELTTIME_CARBON700_INVCOSTTUD = "NKV_elFromTtime_carbon700_invcostTud";
 
 	public static String capped5Of( String str ) {
-		return str + "_capped5";
+		int cap=5;
+		return cappedOf( cap, str );
+	}
+	public static String cappedOf( int cap, String str ){
+		return str + "_capped" + cap;
 	}
 
 	public static void addCap5( Table table, String key ) {
-		DoubleColumn newColumn = DoubleColumn.create( Headers.capped5Of(  key ) );
+		int cap=5;
+		addCap( cap, table, key );
+	}
+	public static void addCap( int cap, Table table, String key ){
+		DoubleColumn newColumn = DoubleColumn.create( Headers.cappedOf( cap, key ) );
 		for( Double number : table.doubleColumn( key ) ){
-			number = Math.min( number, 5. - Math.random() * 0.1 + 0.05 );
+			number = Math.min( number, cap - Math.random() * 0.1 + 0.05 );
 			newColumn.append( number );
 		}
 		table.addColumns( newColumn );
