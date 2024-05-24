@@ -21,11 +21,11 @@ public class StreetAnalysisDataContainer {
     private double constructionCostFactor;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
-    private final double constructionCostTum;
+    private final double constructionCostTud;
 
     public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double investmentCostNew ) {
         this.streetBaseData = streetBaseDataContainer;
-        this.constructionCostTum = investmentCostNew;
+        this.constructionCostTud = investmentCostNew;
         constructionCostFactor = investmentCostNew / streetBaseData.getCostBenefitAnalysis().getCost().overallCosts();
         if ( constructionCostFactor < 0. ) {
             constructionCostFactor = 1.;
@@ -79,28 +79,30 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.B_PER_KM, streetBaseData.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseData.getProjectInformation().getLength() );
 
         entries.put(Headers.NKV_ORIG, NkvCalculator.calculateNkv( NO_CHANGE, streetBaseData ) );
-        entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_700_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON700_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1. ), streetBaseData ) );
+        entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_700_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), streetBaseData ) );
+        entries.put(Headers.NKV_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1, 1. ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON700tpr0_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1.75 ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON700tpr0, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1., 1.75 ), streetBaseData ) );
 //        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
 
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
         entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
-        entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ), streetBaseData ) ) );
+        entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculator.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), streetBaseData ) ) );
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
-        entries.put(Headers.INVCOST_TUD, this.constructionCostTum );
+        entries.put(Headers.INVCOST_TUD, this.constructionCostTud );
 
         double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL = 50; // km/h
         double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;
         entries.put( Headers.ADDTL_PKWKM_FROM_TTIME, addtlFzkmFromTtime );
 
-        entries.put( Headers.NKV_ELTTIME_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmFromTtime, constructionCostFactor ), streetBaseData ) );
-        entries.put( Headers.NKV_ELTTIME_CARBON700_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmFromTtime, constructionCostFactor ), streetBaseData ) );
+        entries.put( Headers.NKV_ELTTIME_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmFromTtime, constructionCostFactor, 1. ), streetBaseData ) );
+        entries.put( Headers.NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmFromTtime, constructionCostFactor, 1.75 ), streetBaseData ) );
+
+        entries.put( Headers.NKV_ELTTIME_CARBON2000_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, addtlFzkmFromTtime, constructionCostFactor, 1.75 ), streetBaseData ) );
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr " +

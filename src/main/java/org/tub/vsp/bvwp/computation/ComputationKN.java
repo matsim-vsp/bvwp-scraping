@@ -63,6 +63,7 @@ public class ComputationKN {
         }
     }
 
+    /*
     public static void main(String[] args) {
         log.warn("need to either only compute pkw, or include lkw into computation!");
 
@@ -120,7 +121,7 @@ public class ComputationKN {
         }
 
     }
-
+     */
     static double nkv(Modifications modifications, Amounts amounts, Benefits benefits, double baukosten) {
         double b_all = benefits.all;
         prn("start", b_all, 0.);
@@ -129,7 +130,6 @@ public class ComputationKN {
         if (amounts.pkwkm_induz > 0.) {
             m_induzFactor = 1. + modifications.mehrFzkm() / amounts.pkwkm_induz;
         }
-        // (hatte ich früher direkt eingegeben; jetzt wird er ausgerechnet)
 
         // Zeitwert
 //		double zw = benefits.rz / amounts.rz;
@@ -178,15 +178,8 @@ public class ComputationKN {
 
     static double nkvOhneKR_induz(Modifications modifications, Amounts amounts, Benefits benefits, double baukosten, double b_all) {
         prn("incoming", b_all, b_all);
-        // co2 Bau
-        {
-            double b_tmp = b_all;
-            b_all -= benefits.co2_infra;
-            b_all += modifications.co2Price() / 145. * benefits.co2_infra;
-            prn("b_co2_infra", b_all, b_tmp);
-        }
 
-        // co2 Betrieb
+        // ### preparations:
 
         double b_per_co2 = benefits.co2_betrieb / amounts.co2_kfz;
         // (this divides all (negative) co2 benefits by all fzkm, including LKW.  We just need (discounted) benefits
@@ -198,34 +191,55 @@ public class ComputationKN {
         double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
         double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
 
-        double bb_tmp = b_all;
+
+        // ### first deduct the CO2 components so that we can later re-scale the other material according to changed discount rate:
+
+        // --- for infra:
+        b_all -= benefits.co2_infra;
+
+        // --- for operations:
+        b_all -= b_co2_reroute;
+        b_all -= b_co2_verl;
+        b_all -= b_co2_induz;
+
+        // ### then add the CO2 components with the new values:
+
+        // co2 Bau
         {
-            double b_tmp = b_all;
-            b_all -= b_co2_reroute;
+//            double b_tmp = b_all;
+            b_all += modifications.co2Price() / 145. * benefits.co2_infra;
+//            prn("b_co2_infra", b_all, b_tmp);
+        }
+
+        // co2 Betrieb
+
+
+//        double bb_tmp = b_all;
+        {
+//            double b_tmp = b_all;
             b_all += b_co2_reroute / 145. * modifications.co2Price();
-            prn("co2 after reRoute", b_all, b_tmp);
+//            prn("co2 after reRoute", b_all, b_tmp);
         }
         {
-            double b_tmp = b_all;
-            b_all -= b_co2_verl;
+//            double b_tmp = b_all;
             b_all += b_co2_verl / 145. * modifications.co2Price();
-            prn("co2 after verl", b_all, b_tmp);
+//            prn("co2 after verl", b_all, b_tmp);
         }
         {
-            double b_tmp = b_all;
-            b_all -= b_co2_induz;
+//            double b_tmp = b_all;
             b_all += b_co2_induz / 145. * modifications.co2Price();
             b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145;
-            prn("co2 after induz", b_all, b_tmp);
+//            prn("co2 after induz", b_all, b_tmp);
         }
-        prn("b_co2_betrieb", b_all, bb_tmp);
+//        prn("b_co2_betrieb", b_all, bb_tmp);
 
-        // nkv:
+        // ### finally compute the nkv and return it:
+
         final double nkv = b_all / baukosten;
-        String colorString = ConsoleColors.TEXT_BLACK;
-        if (nkv < 1) {
-            colorString = ConsoleColors.TEXT_RED;
-        }
+//        String colorString = ConsoleColors.TEXT_BLACK;
+//        if (nkv < 1) {
+//            colorString = ConsoleColors.TEXT_RED;
+//        }
 //		log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK );
         return nkv;
     }
@@ -234,7 +248,7 @@ public class ComputationKN {
 //		log.info(String.format( "%1$20s: Korrektur = %2$5.0f; bb = %3$5.0f", msg, b_all - b_tmp, b_all ) );
     }
 
-    public static Double b_co2(Modifications modifications, Amounts amounts, Benefits benefits) {
+    static Double b_co2(Modifications modifications, Amounts amounts, Benefits benefits) {
         // yyyyyy for the time being this returns the benefits since they are easier to compute.  !!!!
 
         double co2 = 0.;
