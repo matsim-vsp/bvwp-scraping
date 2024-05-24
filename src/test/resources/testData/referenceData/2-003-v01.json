@@ -1,0 +1,165 @@
+{
+  "url": null,
+  "projectInformation": {
+    "projectNumber": "2-003-v01",
+    "title": "ABS/NBS Hamburg / Bremerhaven – Hannover (Y-Trasse)",
+    "priority": "UNDEFINED",
+    "bautyp": null,
+    "length": 200.2
+  },
+  "physicalEffect": {
+    "emissionsDataContainer": {
+      "emissions": {
+        "CO2": -74699.0,
+        "SO2": -9.0,
+        "NOX": -65.0,
+        "HC": 6.0,
+        "PM": -1.0,
+        "CO": -69.0
+      }
+    }
+  },
+  "costBenefitAnalysis": {
+    "passengerBenefits": {
+      "nbPkw": {
+        "annual": 43543.0,
+        "overall": 866.0
+      },
+      "nbSpv": {
+        "annual": 8827.0,
+        "overall": 175.6
+      },
+      "nbLuft": {
+        "annual": 7215.0,
+        "overall": 143.5
+      },
+      "naPkw": {
+        "annual": 3514.0,
+        "overall": 69.9
+      },
+      "naSpv": {
+        "annual": 225.0,
+        "overall": 4.5
+      },
+      "naLuft": {
+        "annual": 2055.0,
+        "overall": 4.5
+      },
+      "nsPkw": {
+        "annual": 5690.0,
+        "overall": 113.2
+      },
+      "nsSpv": {
+        "annual": 74.0,
+        "overall": 1.5
+      },
+      "nrzVerbVerkehr": {
+        "annual": 65018.0,
+        "overall": 1293.2
+      },
+      "nrzInduzVerkehr": {
+        "annual": -16332.0,
+        "overall": -324.8
+      },
+      "nrzVerlagerungPkwSpv": {
+        "annual": -5630.0,
+        "overall": -112.0
+      },
+      "nrzVerlagerungLuftSpv": {
+        "annual": -7786.0,
+        "overall": -154.9
+      },
+      "niInduzVerkehr": {
+        "annual": 23844.0,
+        "overall": 474.2
+      },
+      "niVerlagerungPkwSpv": {
+        "annual": 19414.0,
+        "overall": 386.1
+      },
+      "niVerlagerungLuftSpv": {
+        "annual": 6854.0,
+        "overall": 136.3
+      },
+      "overallBenefit": {
+        "annual": 156524.0,
+        "overall": 3113.2
+      }
+    },
+    "freightBenefits": {
+      "nbLkw": {
+        "annual": 80425.0,
+        "overall": 1599.6
+      },
+      "nbSchiene": {
+        "annual": -13615.0,
+        "overall": -270.8
+      },
+      "nbSchiff": {
+        "annual": 612.0,
+        "overall": 12.2
+      },
+      "naLkw": {
+        "annual": 9453.0,
+        "overall": 188.0
+      },
+      "naSchiene": {
+        "annual": -1997.0,
+        "overall": -39.7
+      },
+      "naSchiff": {
+        "annual": 72.0,
+        "overall": 1.4
+      },
+      "nsLkw": {
+        "annual": 2844.0,
+        "overall": 56.6
+      },
+      "nsSchiene": {
+        "annual": -537.0,
+        "overall": -10.7
+      },
+      "nsSchiff": {
+        "annual": 2.0,
+        "overall": 0.0
+      },
+      "ntzVerbVerkehr": {
+        "annual": 3373.0,
+        "overall": 67.1
+      },
+      "ntzLkwSchiene": {
+        "annual": -5160.0,
+        "overall": -102.6
+      },
+      "ntzSchiffSchiene": {
+        "annual": 95.0,
+        "overall": 1.9
+      },
+      "niLkwSchiene": {
+        "annual": -3907.0,
+        "overall": -77.7
+      },
+      "niSchiffSchiene": {
+        "annual": -248.0,
+        "overall": -4.9
+      },
+      "nzVerbVerkehr": {
+        "annual": 2767.0,
+        "overall": 55.0
+      },
+      "overallBenefit": null
+    },
+    "nl": {
+      "annual": -1340.0,
+      "overall": -26.6
+    },
+    "overallBenefit": {
+      "annual": 221149.0,
+      "overall": 4398.6
+    },
+    "cost": {
+      "cost": 2360.7,
+      "overallCosts": 2036.5
+    }
+  }
+}
