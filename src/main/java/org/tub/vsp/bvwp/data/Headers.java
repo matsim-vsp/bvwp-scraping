@@ -114,10 +114,10 @@ public final class Headers{
 	 * min( 5, {@link #NKV_EL03_CARBON215_INVCOSTTUD})
 	 */
 	public static final String NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 = NKV_EL03_CARBON215_INVCOSTTUD + "_capped5";
-	public static final String NKV_EL03_CARBON700 = "NKV_el03_carbon700";
-	public static final String NKV_EL03_CARBON700_CAPPED5 = NKV_EL03_CARBON700 + "_capped5";
-	public static final String NKV_EL03_CARBON700_INVCOSTTUD = "NKV_el03_carbon700_invcostTud";
-	public static final String NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5 = NKV_EL03_CARBON700_INVCOSTTUD + "_capped5";
+	public static final String NKV_EL03_CARBON700tpr0 = "NKV_el03_carbon700tpr0";
+	public static final String NKV_EL03_CARBON700_CAPPED5 = NKV_EL03_CARBON700tpr0 + "_capped5";
+	public static final String NKV_EL03_CARBON700tpr0_INVCOSTTUD = "NKV_el03_carbon700tpr0_invcostTud";
+	public static final String NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5 = NKV_EL03_CARBON700tpr0_INVCOSTTUD + "_capped5";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
 	public static final String NKV_NO_CHANGE_EN = "BCR";
@@ -131,8 +131,9 @@ public final class Headers{
 	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
 	public static final String PROJECT_NAME = "project _name";
 	public static final String VERKEHRSBELASTUNG_PLANFALL = "DTV_Planfall";
-	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elFromTtime_carbon215_invcostTud";
-	public static final String NKV_ELTTIME_CARBON700_INVCOSTTUD = "NKV_elFromTtime_carbon700_invcostTud";
+	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elTtime_carbon215_invcostTud";
+	public static final String NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD = "NKV_elTtime_carbon700tpr0_invcostTud";
+	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 
 	public static String capped5Of( String str ) {
 		int cap=5;

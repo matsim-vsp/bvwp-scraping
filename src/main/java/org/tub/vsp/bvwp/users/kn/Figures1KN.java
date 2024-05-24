@@ -82,13 +82,14 @@ class Figures1KN{
 			// ===========================
 			// ===========================
 			Headers.addCap5( table, NKV_EL03_CARBON215_INVCOSTTUD );
-			Headers.addCap5( table, NKV_EL03_CARBON700_INVCOSTTUD );
+			Headers.addCap5( table, NKV_EL03_CARBON700tpr0_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON700_INVCOSTTUD );
+			Headers.addCap5( table, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ORIG );
 			Headers.addCap5( table, NKV_EL03 );
-			Headers.addCap5( table, NKV_EL03_CARBON700 );
+			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
 			Headers.addCap5( table, NKV_CARBON700 );
+			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 
 			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
 			// ===========================
@@ -372,7 +373,7 @@ class Figures1KN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure nkv_el03_carbon700(){
-		String yName = NKV_EL03_CARBON700;
+		String yName = NKV_EL03_CARBON700tpr0;
 		String y2Name = NKV_EL03_CARBON700_CAPPED5;
 
 		Axis yAxis = Axis.builder()

@@ -21,8 +21,6 @@ import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.*;
 
-import static tech.tablesaw.aggregate.AggregateFunctions.*;
-
 public class RunLocalCsvScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
 
@@ -93,14 +91,24 @@ public class RunLocalCsvScrapingKN{
 
         plots2.add( figures2.costOrigVsCumulativeCostOrig() );
 
-        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon215Invcosttud() );
-        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud() );
-        plots2.add( figures2.cumulativeCost50_vs_nkvEl03Cprice215Invcost50Capped5() );
+        plots2.addAll( figures2.nkvElttimeCarbon215(5 ) );
 
-        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud() );
+
+
+
+
+        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
+        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
+        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(Integer.MAX_VALUE ) );
+        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
+
+        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
         plots2.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
         plots2.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
+        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
+
         plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
+
 
         // ===
 
