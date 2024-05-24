@@ -15,10 +15,10 @@ public class RunLocalRailScraping {
         RailScraper scraper = new RailScraper();
 
         logger.info("Starting scraping");
-        List<RailAnalysisDataContainer> allStreetData = scraper.extractAllLocalBaseData("./data/rail", "", ".*", "")
-                                                               .stream()
-                                                               .map(RailAnalysisDataContainer::new)
-                                                               .toList();
+        List<RailAnalysisDataContainer> allRailData = scraper.extractAllLocalBaseData("./data/rail/all", "", "^2.*", "")
+                                                             .stream()
+                                                             .map(RailAnalysisDataContainer::new)
+                                                             .toList();
 
         logger.info("Writing csv");
         RailCsvWriter csvWriter = new RailCsvWriter();

@@ -21,6 +21,11 @@ public class RailScraper extends AbstractScraper<RailBaseDataContainer> {
 
     @Override
     public Optional<RailBaseDataContainer> extractBaseData(Document doc, String url) {
+        if (!isProjectScrapable(doc)) {
+            logger.info("Project not scrapable: {}", url);
+            return Optional.empty();
+        }
+
         logger.info("Scraping rail project from {}", url);
 
         RailBaseDataContainer railBaseDataContainer = new RailBaseDataContainer();
@@ -42,5 +47,10 @@ public class RailScraper extends AbstractScraper<RailBaseDataContainer> {
                     .map(Optional::get)
                     .sorted(Comparator.comparing(RailBaseDataContainer::getUrl))
                     .toList();
+    }
+
+    private boolean isProjectScrapable(Document doc) {
+        //if there is only one table, there is no further information to scrape (e.g. https://www.bvwp-projekte.de/schiene/2-034-V01/2-034-V01.html)
+        return doc.select("table.table_grunddaten").size() > 1;
     }
 }
