@@ -14,11 +14,11 @@ import java.io.IOException;
 
 class RailCostBenefitMapperTest {
     @Test
-    void testPassengerBenefits() throws IOException {
-        RailCostBenefitAnalysisDataContainer railProjectInformationDataContainer =
+    void testPassengerBenefits_rrx() throws IOException {
+        RailCostBenefitAnalysisDataContainer railCostBenefit =
                 RailCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("rrx_v02.html"));
 
-        RailBenefitPassengerDataContainer pb = railProjectInformationDataContainer.getPassengerBenefits();
+        RailBenefitPassengerDataContainer pb = railCostBenefit.getPassengerBenefits();
         Assertions.assertEquals(new Benefit(33305., 734.4), pb.getNbPkw());
         Assertions.assertEquals(new Benefit(-22178., -489.), pb.getNbSpv());
         Assertions.assertEquals(new Benefit(2676., 59.), pb.getNbLuft());
@@ -42,11 +42,11 @@ class RailCostBenefitMapperTest {
     }
 
     @Test
-    void testFreightBenefits() throws IOException {
-        RailCostBenefitAnalysisDataContainer railProjectInformationDataContainer =
+    void testFreightBenefits_hh_ha() throws IOException {
+        RailCostBenefitAnalysisDataContainer railCostBenefit =
                 RailCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("2-003-v01.html"));
 
-        RailBenefitFreightDataContainer fb = railProjectInformationDataContainer.getFreightBenefits();
+        RailBenefitFreightDataContainer fb = railCostBenefit.getFreightBenefits();
 
         Assertions.assertEquals(new Benefit(80425., 1599.6), fb.getNbLkw());
         Assertions.assertEquals(new Benefit(-13615., -270.8), fb.getNbSchiene());
@@ -71,10 +71,28 @@ class RailCostBenefitMapperTest {
     }
 
     @Test
-    void testOverallCost() throws IOException {
-        RailCostBenefitAnalysisDataContainer railProjectInformationDataContainer =
+    void testOverallCost_hh_ha() throws IOException {
+        RailCostBenefitAnalysisDataContainer railCostBenefit =
                 RailCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("2-003-v01.html"));
 
-        Assertions.assertEquals(new Cost(2360.7, 2036.5), railProjectInformationDataContainer.getCost());
+        Assertions.assertEquals(new Cost(2360.7, 2036.5), railCostBenefit.getCost());
+    }
+
+    @Test
+    void testOverallBenefit_hh_ha() throws IOException {
+        RailCostBenefitAnalysisDataContainer railCostBenefit =
+                RailCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("2-003-v01.html"));
+
+        Assertions.assertEquals(new Benefit(-1340.0, -26.6), railCostBenefit.getNl());
+        Assertions.assertEquals(new Benefit(221149.0, 4398.6), railCostBenefit.getOverallBenefit());
+    }
+
+    @Test
+    void testOverallCost_rrx() throws IOException {
+        RailCostBenefitAnalysisDataContainer railCostBenefit =
+                RailCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("rrx_v02.html"));
+
+        Assertions.assertEquals(new Benefit(-49.0, -1.1), railCostBenefit.getNl());
+        Assertions.assertEquals(new Benefit(62258.0, 1372.7), railCostBenefit.getOverallBenefit());
     }
 }

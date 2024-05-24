@@ -28,6 +28,9 @@ public class RailCostBenefitMapper {
         Optional<Element> freightBenefit = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_webprins",
                 RailCostBenefitMapper::isFreightBenefitTable);
 
+        Optional<Element> otherBenefit = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_webprins",
+                RailCostBenefitMapper::isOtherBenefitTable);
+
         Optional<Element> costTable = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_kosten",
                 RailCostBenefitMapper::isCostTable);
 
@@ -50,6 +53,11 @@ public class RailCostBenefitMapper {
             setNz(table, freightDataContainer);
         });
         result.setFreightBenefits(freightDataContainer);
+
+        otherBenefit.ifPresent(table -> {
+            setNl(table, result);
+            setOverallBenefit(table, result);
+        });
 
         Cost cost = costTable.map(CostBenefitMapperUtils::extractCosts).orElse(null);
         result.setCost(cost);
@@ -139,18 +147,31 @@ public class RailCostBenefitMapper {
     }
 
     private static void setNi(Element table, RailBenefitFreightDataContainer freightDataContainer) {
-        getFirstRowIndexWithBenefitKey(table, "NI").ifPresent(nb -> {
+        getFirstRowIndexWithBenefitKey(table, "NI").ifPresent(ni -> {
             Elements rows = table.select("tr");
-            freightDataContainer.setNiLkwSchiene(getBenefitFromRow(rows.get(nb + 1)));
-            freightDataContainer.setNiSchiffSchiene(getBenefitFromRow(rows.get(nb + 2)));
+            freightDataContainer.setNiLkwSchiene(getBenefitFromRow(rows.get(ni + 1)));
+            freightDataContainer.setNiSchiffSchiene(getBenefitFromRow(rows.get(ni + 2)));
         });
     }
 
     private static void setNz(Element table, RailBenefitFreightDataContainer freightDataContainer) {
-        getFirstRowIndexWithBenefitKey(table, "NZ").ifPresent(nb -> {
+        getFirstRowIndexWithBenefitKey(table, "NZ").ifPresent(nz -> {
             Elements rows = table.select("tr");
-            freightDataContainer.setNzVerbVerkehr(getBenefitFromRow(rows.get(nb + 1)));
+            freightDataContainer.setNzVerbVerkehr(getBenefitFromRow(rows.get(nz + 1)));
         });
+    }
+
+    private static void setNl(Element table, RailCostBenefitAnalysisDataContainer result) {
+        getFirstRowIndexWithBenefitKey(table, "NL").ifPresent(nl -> {
+            Elements rows = table.select("tr");
+            result.setNl(getBenefitFromRow(rows.get(nl)));
+        });
+    }
+
+    private static void setOverallBenefit(Element table, RailCostBenefitAnalysisDataContainer result) {
+        Element row = JSoupUtils.firstRowWithKeyMatchesInCol(table, "Summe Nutzen", 0)
+                                .orElseThrow();
+        result.setOverallBenefit(getBenefitFromRow(row));
     }
 
     private static Optional<Integer> getFirstRowIndexWithBenefitKey(Element table, String key) {
@@ -191,6 +212,13 @@ public class RailCostBenefitMapper {
                       .get(0)
                       .text()
                       .contains("Nutzenkomponenten des Güterverkehrs");
+    }
+
+    private static boolean isOtherBenefitTable(Element element) {
+        return element.select("tr")
+                      .get(0)
+                      .text()
+                      .contains("Sonstige Nutzenkomponenten");
     }
 
     private static boolean isCostTable(Element element) {

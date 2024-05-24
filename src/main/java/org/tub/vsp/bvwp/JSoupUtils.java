@@ -58,6 +58,13 @@ public class JSoupUtils {
                     .findFirst();
     }
 
+    public static Optional<Element> firstRowWithKeyMatchesInCol(Element table, String key, int colIndex) {
+        return table.select("tr")
+                    .stream()
+                    .filter(r -> r.child(colIndex).text().equals(key))
+                    .findFirst();
+    }
+
     public static Optional<Element> firstRowWithKeyInCol(Element table, String key, int colIndex) {
         return table.select("tr")
                     .stream()

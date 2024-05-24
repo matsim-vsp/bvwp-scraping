@@ -2,6 +2,8 @@ package org.tub.vsp.bvwp.data.container.base.rail;
 
 import org.tub.vsp.bvwp.data.type.Benefit;
 
+import java.util.Objects;
+
 public class RailBenefitFreightDataContainer {
     private Benefit nbLkw;
     private Benefit nbSchiene;
@@ -168,5 +170,85 @@ public class RailBenefitFreightDataContainer {
     public RailBenefitFreightDataContainer setOverallBenefit(Benefit overallBenefit) {
         this.overallBenefit = overallBenefit;
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        RailBenefitFreightDataContainer that = (RailBenefitFreightDataContainer) o;
+
+        if (!Objects.equals(nbLkw, that.nbLkw)) {
+            return false;
+        }
+        if (!Objects.equals(nbSchiene, that.nbSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(nbSchiff, that.nbSchiff)) {
+            return false;
+        }
+        if (!Objects.equals(naLkw, that.naLkw)) {
+            return false;
+        }
+        if (!Objects.equals(naSchiene, that.naSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(naSchiff, that.naSchiff)) {
+            return false;
+        }
+        if (!Objects.equals(nsLkw, that.nsLkw)) {
+            return false;
+        }
+        if (!Objects.equals(nsSchiene, that.nsSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(nsSchiff, that.nsSchiff)) {
+            return false;
+        }
+        if (!Objects.equals(ntzVerbVerkehr, that.ntzVerbVerkehr)) {
+            return false;
+        }
+        if (!Objects.equals(ntzLkwSchiene, that.ntzLkwSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(ntzSchiffSchiene, that.ntzSchiffSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(niLkwSchiene, that.niLkwSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(niSchiffSchiene, that.niSchiffSchiene)) {
+            return false;
+        }
+        if (!Objects.equals(nzVerbVerkehr, that.nzVerbVerkehr)) {
+            return false;
+        }
+        return Objects.equals(overallBenefit, that.overallBenefit);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = nbLkw != null ? nbLkw.hashCode() : 0;
+        result = 31 * result + (nbSchiene != null ? nbSchiene.hashCode() : 0);
+        result = 31 * result + (nbSchiff != null ? nbSchiff.hashCode() : 0);
+        result = 31 * result + (naLkw != null ? naLkw.hashCode() : 0);
+        result = 31 * result + (naSchiene != null ? naSchiene.hashCode() : 0);
+        result = 31 * result + (naSchiff != null ? naSchiff.hashCode() : 0);
+        result = 31 * result + (nsLkw != null ? nsLkw.hashCode() : 0);
+        result = 31 * result + (nsSchiene != null ? nsSchiene.hashCode() : 0);
+        result = 31 * result + (nsSchiff != null ? nsSchiff.hashCode() : 0);
+        result = 31 * result + (ntzVerbVerkehr != null ? ntzVerbVerkehr.hashCode() : 0);
+        result = 31 * result + (ntzLkwSchiene != null ? ntzLkwSchiene.hashCode() : 0);
+        result = 31 * result + (ntzSchiffSchiene != null ? ntzSchiffSchiene.hashCode() : 0);
+        result = 31 * result + (niLkwSchiene != null ? niLkwSchiene.hashCode() : 0);
+        result = 31 * result + (niSchiffSchiene != null ? niSchiffSchiene.hashCode() : 0);
+        result = 31 * result + (nzVerbVerkehr != null ? nzVerbVerkehr.hashCode() : 0);
+        result = 31 * result + (overallBenefit != null ? overallBenefit.hashCode() : 0);
+        return result;
     }
 }
