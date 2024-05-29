@@ -2,14 +2,14 @@ package org.tub.vsp.bvwp.data.container.base.rail;
 
 import java.util.Objects;
 
-public class RailPhysicalEffectDataContainer {
+public class RailPhysicalEffectsDataContainer{
     private RailEmissionsDataContainer emissionsDataContainer;
 
     public RailEmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
     }
 
-    public RailPhysicalEffectDataContainer setEmissionsDataContainer(RailEmissionsDataContainer emissionsDataContainer) {
+    public RailPhysicalEffectsDataContainer setEmissionsDataContainer( RailEmissionsDataContainer emissionsDataContainer ) {
         this.emissionsDataContainer = emissionsDataContainer;
         return this;
     }
@@ -23,7 +23,7 @@ public class RailPhysicalEffectDataContainer {
             return false;
         }
 
-        RailPhysicalEffectDataContainer that = (RailPhysicalEffectDataContainer) o;
+        RailPhysicalEffectsDataContainer that = (RailPhysicalEffectsDataContainer) o;
 
         return Objects.equals(emissionsDataContainer, that.emissionsDataContainer);
     }
