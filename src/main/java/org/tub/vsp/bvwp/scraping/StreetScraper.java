@@ -2,7 +2,6 @@ package org.tub.vsp.bvwp.scraping;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.costBenefit.StreetCostBenefitMapper;
@@ -14,7 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class StreetScraper extends Scraper {
+public class StreetScraper extends AbstractScraper<StreetBaseDataContainer> {
     private static final Logger logger = LogManager.getLogger(StreetScraper.class);
 
     @Override
@@ -62,42 +61,7 @@ public class StreetScraper extends Scraper {
                     .toList();
     }
 
-    private Optional<StreetBaseDataContainer> extractRemoteBaseData(String projectUrl) {
-        logger.info("Scraping project from {}", projectUrl);
-
-        Document doc;
-        try {
-            doc = Jsoup.connect(projectUrl)
-                       .get();
-        } catch (IOException e) {
-            logger.warn("Could not connect to {}", projectUrl);
-            logger.warn("Skipping project.");
-            return Optional.empty();
-        }
-
-        return extractBaseData(doc, projectUrl);
-    }
-
-    private Optional<StreetBaseDataContainer> extractLocalBaseData(File file) {
-        logger.info("Scraping project from file {}", file);
-
-        Document doc;
-        try {
-            doc = Jsoup.parse(file, "UTF-8");
-        } catch (IOException e) {
-            logger.warn("Could not connect to {}", file);
-            logger.warn("Skipping project.");
-            return Optional.empty();
-        }
-
-        String name = file.getName();
-        return extractBaseData(doc, getBaseUrl() + name.substring(0, name.length() - 5) + "/" + name);
-    }
-
-    public Optional<StreetBaseDataContainer> extractBaseData(Document doc) {
-        return extractBaseData(doc, null);
-    }
-
+    @Override
     public Optional<StreetBaseDataContainer> extractBaseData(Document doc, String url) {
         if (!checkIfProjectIsScrapable(doc)) {
             logger.info("Skipping project because it is a subproject.");

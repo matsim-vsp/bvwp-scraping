@@ -8,8 +8,8 @@ import org.tub.vsp.bvwp.scraping.StreetScraper;
 
 import java.util.List;
 
-public class RunLocalCsvScraping {
-    private static final Logger logger = LogManager.getLogger(RunLocalCsvScraping.class);
+public class RunLocalStreetCsvScraping {
+    private static final Logger logger = LogManager.getLogger(RunLocalStreetCsvScraping.class);
 
     public static void main(String[] args) {
         logger.warn("(vermutl. weitgehend gelöst) Teilweise werden die Hauptprojekte bewertet und nicht die " +

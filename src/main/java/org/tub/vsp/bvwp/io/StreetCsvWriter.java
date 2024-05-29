@@ -28,19 +28,7 @@ public class StreetCsvWriter {
     private static final Logger logger = LogManager.getLogger(StreetCsvWriter.class);
     private final String outputPath;
 
-    private static final Map<Emission, String> EMISSION_COLUMNS = initMap();
     private final Table table;
-
-    private static Map<Emission, String> initMap() {
-        Map<Emission, String> map = new LinkedHashMap<>();
-        map.put(Emission.CO2, "co2");
-        map.put(Emission.CO, "co");
-        map.put(Emission.NOX, "nox");
-        map.put(Emission.PM, "pm");
-        map.put(Emission.HC, "hc");
-        map.put(Emission.SO2, "so2");
-        return map;
-    }
 
     public StreetCsvWriter(String outputPath) {
         this.outputPath = outputPath;
