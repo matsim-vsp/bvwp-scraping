@@ -28,12 +28,13 @@ public class NkvCalculatorRail{
         assert modifications.mehrFzkm() == 0;
         assert modifications.nonCo2BenefitsFactor() == 1.;
 
-        double baukosten = railBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
-        double benefit = railBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall();
-        double co2_infra_eur = railBaseDataContainer.getCostBenefitAnalysis().getNl().overall();
+        double baukosten_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
+        double benefit_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall();
+        double co2_infra_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getNl().overall();
         double co2_betrieb_t = railBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer().emissions().get(Emission.CO2);
 
-        return ComputationKN.nkv_rail(modifications.co2Price(), baukosten, benefit, co2_infra_eur, co2_betrieb_t);
+        return ComputationKN.nkv_rail(modifications.co2Price(), baukosten_MioEur * 10e6, benefit_MioEur * 10e6, co2_infra_MioEur * 10e6,
+                co2_betrieb_t);
     }
 
 //    @Deprecated // use instance approach
