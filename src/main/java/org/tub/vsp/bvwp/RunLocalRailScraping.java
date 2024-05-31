@@ -19,8 +19,6 @@ public class RunLocalRailScraping {
         logger.info("Starting scraping");
         List<RailAnalysisDataContainer> allRailData = scraper.extractAllLocalBaseData("./data/rail/all", "", "^2.*", "")
                                                              .stream()
-                                                             //there is something wrong with the project number of 2-009-V03
-                                                             .filter(d -> !d.getProjectInformation().getProjectNumber().equals("2-009-V03"))
                                                              .map(RailAnalysisDataContainer::new)
                                                              .toList();
 
