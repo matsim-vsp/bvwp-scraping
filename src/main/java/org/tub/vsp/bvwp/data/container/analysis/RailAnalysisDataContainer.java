@@ -13,9 +13,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SequencedMap;
 
-import static org.tub.vsp.bvwp.computation.Modifications.*;
+import static org.tub.vsp.bvwp.computation.Modifications.NO_CHANGE;
+import static org.tub.vsp.bvwp.computation.Modifications.co2Price700;
 import static org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer.INFLATION_Factor2022to2012;
-import static org.tub.vsp.bvwp.data.type.Bautyp.*;
 
 
 public class RailAnalysisDataContainer {
@@ -58,9 +58,9 @@ public class RailAnalysisDataContainer {
         entries.put(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / baseDataContainer.getProjectInformation().getLength() );
 
         entries.put(Headers.NKV_ORIG, NkvCalculatorRail.calculateNkv( NO_CHANGE, baseDataContainer ) );
-        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), baseDataContainer ) );
-        entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), baseDataContainer ) );
-        entries.put(Headers.NKV_CARBON700, NkvCalculatorRail.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), baseDataContainer ) );
+        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
+        entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
+        entries.put(Headers.NKV_CARBON700, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculatorRail.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03, NkvCalculatorRail.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculatorRail.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), baseDataContainer ) );
@@ -69,7 +69,7 @@ public class RailAnalysisDataContainer {
 //        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculatorRail.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), baseDataContainer ) );
 
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
-        entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculatorRail.calculateCost_CO2( NO_CHANGE, baseDataContainer ) ) );
+//        entries.put(Headers.CO2_COST_ORIG, Math.max( 1., NkvCalculatorRail.calculateCost_CO2( NO_CHANGE, baseDataContainer ) ) );
 //        entries.put(Headers.CO2_COST_EL03, Math.max( 1., NkvCalculatorRail.calculateCost_CO2( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), baseDataContainer ) ) );
         // ("max(1,...)" so that they become visible on logplot.  find other solution!
 //        entries.put(Headers.INVCOST_TUD, this.constructionCostTud );

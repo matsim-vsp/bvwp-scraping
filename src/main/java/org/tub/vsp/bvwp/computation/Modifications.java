@@ -4,6 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public record Modifications(double co2Price, double mehrFzkm, double constructionCostFactor, double nonCo2BenefitsFactor) {
+    //TODO nonCo2BenefitsFactor is not used in the codebase
+
     private static final Logger log = LogManager.getLogger(Modifications.class);
     public static final double co2PriceBVWP = 145.;
     public static final double co2Price700 = 642.;

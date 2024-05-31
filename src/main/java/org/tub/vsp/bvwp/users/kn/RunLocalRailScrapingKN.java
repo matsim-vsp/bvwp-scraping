@@ -3,7 +3,7 @@ package org.tub.vsp.bvwp.users.kn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.container.analysis.RailAnalysisDataContainer;
-import org.tub.vsp.bvwp.io.RailCsvWriter;
+import org.tub.vsp.bvwp.io.RailTableCreator;
 import org.tub.vsp.bvwp.scraping.RailScraper;
 import tech.tablesaw.api.Table;
 
@@ -22,9 +22,8 @@ public class RunLocalRailScrapingKN{
                                                              .toList();
 
         logger.info("Writing csv");
-        RailCsvWriter csvWriter = new RailCsvWriter("output/rail_data.csv");
-        Table table = csvWriter.writeCsv( allRailData );
+        RailTableCreator tableCreator = new RailTableCreator();
 
-        //TODO
+        Table table = tableCreator.computeTable(allRailData);
     }
 }
