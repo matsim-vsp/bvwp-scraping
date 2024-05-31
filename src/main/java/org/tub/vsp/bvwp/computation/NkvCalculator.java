@@ -29,6 +29,7 @@ public class NkvCalculator {
     }
 
     // old static methods beyond:
+    @Deprecated // use instance approach
     public static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
 //        log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
@@ -93,6 +94,7 @@ public class NkvCalculator {
         // @formatter:on
     }
 
+    @Deprecated // use instance approach
     public static Double calculateCost_CO2( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);

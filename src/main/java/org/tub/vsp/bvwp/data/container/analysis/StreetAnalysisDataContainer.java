@@ -22,6 +22,7 @@ public class StreetAnalysisDataContainer {
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
     private final double constructionCostTud;
+   static final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
 
     public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double investmentCostNew ) {
         this.streetBaseData = streetBaseDataContainer;
@@ -55,8 +56,6 @@ public class StreetAnalysisDataContainer {
 		    case NB6 -> additionalLaneKm *= 3;
 		    case NB4_EW4 -> additionalLaneKm *= 1.5;
 	    }
-
-        final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
 
         entries.put(Headers.VERKEHRSBELASTUNG_PLANFALL, streetBaseData.getProjectInformation().getVerkehrsbelastungPlanfall() );
 

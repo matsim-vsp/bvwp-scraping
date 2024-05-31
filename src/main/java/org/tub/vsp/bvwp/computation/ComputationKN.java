@@ -288,4 +288,19 @@ public class ComputationKN {
 
 		// Note that this really says nothing about old vs new co2 price, or old vs new addl traffic.  That all depends on the settings in "modifications".
     }
+
+    /**
+     * @param co2_infra_eur benefit in €/a
+     * @param co2_betrieb_t emissions in t/a
+     * @return new nkv
+     */
+    static double nkv_rail(double co2_price, double baukosten, double benefit, double co2_infra_eur, double co2_betrieb_t) {
+        benefit -= co2_infra_eur;
+        benefit -= co2_betrieb_t;
+
+        benefit += co2_price / 145. * co2_infra_eur;
+        benefit += co2_price * co2_betrieb_t;
+
+        return benefit / baukosten;
+    }
 }

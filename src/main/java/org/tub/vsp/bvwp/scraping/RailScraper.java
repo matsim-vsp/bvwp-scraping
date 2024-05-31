@@ -3,6 +3,7 @@ package org.tub.vsp.bvwp.scraping;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
+import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.rail.RailBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.costBenefit.RailCostBenefitMapper;
 import org.tub.vsp.bvwp.data.mapper.physicalEffect.RailPhysicalEffectMapper;
@@ -50,7 +51,8 @@ public class RailScraper extends AbstractScraper<RailBaseDataContainer> {
     }
 
     private boolean isProjectScrapable(Document doc) {
-        //if there is only one table, there is no further information to scrape (e.g. https://www.bvwp-projekte.de/schiene/2-034-V01/2-034-V01.html)
-        return doc.select("table.table_grunddaten").size() > 1;
+        //if there is no emissions table, there is no further information to scrape (e.g. https://www.bvwp-projekte.de/schiene/2-034-V01/2-034-V01.html)
+        return JSoupUtils.getTableByKeyAndContainedText(doc, "table.table_webprins",
+                "Veränderung der Abgasemissionen").isPresent();
     }
 }

@@ -6,7 +6,7 @@ public class RailBaseDataContainer {
     private String url;
 
     RailProjectInformationDataContainer projectInformation;
-    RailPhysicalEffectDataContainer physicalEffect;
+    RailPhysicalEffectsDataContainer physicalEffect;
     RailCostBenefitAnalysisDataContainer costBenefitAnalysis;
 
     public String getUrl() {
@@ -27,11 +27,11 @@ public class RailBaseDataContainer {
         return this;
     }
 
-    public RailPhysicalEffectDataContainer getPhysicalEffect() {
+    public RailPhysicalEffectsDataContainer getPhysicalEffect() {
         return physicalEffect;
     }
 
-    public RailBaseDataContainer setPhysicalEffect(RailPhysicalEffectDataContainer physicalEffect) {
+    public RailBaseDataContainer setPhysicalEffect( RailPhysicalEffectsDataContainer physicalEffect ) {
         this.physicalEffect = physicalEffect;
         return this;
     }
