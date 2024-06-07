@@ -86,7 +86,6 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), streetBaseData ) );
         entries.put(Headers.NKV_EL03_CARBON700tpr0_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1.75 ), streetBaseData ) );
         entries.put(Headers.NKV_EL03_CARBON700tpr0, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1., 1.75 ), streetBaseData ) );
-        entries.put(Headers.NKV_EL03_CARBON700tpr0 + "_KMT", NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1., 1.0 ), streetBaseData ) );
 //        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
 
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
