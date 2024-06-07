@@ -93,7 +93,7 @@ public final class Headers{
 	 */
 	public static final String NKV_CO2 = "NKV_co2";
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
-	public static final String NKV_CO2_700_EN = "BCR_co2_680";
+	public static final String NKV_CO2_700_EN = "BCR_co2_700";
 	/**
 	 * {@link #NKV_EL03_CARBON215_INVCOSTTUD} - {@link #NKV_ORIG}
 	 */
