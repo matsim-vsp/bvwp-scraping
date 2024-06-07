@@ -19,7 +19,7 @@ import static org.tub.vsp.bvwp.data.Headers.*;
 
 class Figures2KN extends Figures1KN {
 	Figures2KN( Table table ){
-		super( table );
+		super( table, null);
 	}
 	// ========================================================================================
 	// ========================================================================================
@@ -314,6 +314,76 @@ class Figures2KN extends Figures1KN {
 
 	// ========================================================================================
 	// ========================================================================================
+	public Figure carbon_vs_inv(){
+		String xName = INVCOST_TUD;
+		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+
+		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
+
+		String yName = CO2_COST_EL03;
+		Axis yAxis = Axis.builder().title( yName ).build();
+
+		Layout layout = Layout.builder( "" ).xAxis( xAxisBuilder.title( xName ).build() ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+		traces.add( getTraceCyan( table2, xName, yName ) );
+		traces.add( getTraceMagenta( table2, xName, yName ) );
+		traces.add( getTraceOrange( table2, xName, yName ) );
+		traces.add( getTraceRed( table2, xName, yName ) );
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
+	}
+
+	// ========================================================================================
+	// ========================================================================================
+	public Figure nco2v_vs_vs_nkvElttimeCarbon700Invcosttud( int cap ){
+		String xName = Headers.cappedOf( cap, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
+		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+
+		if ( cap ==Integer.MAX_VALUE ) {
+			xName = NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD;
+			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
+		} else {
+			xAxisBuilder.range( nkvCappedMax, nkvMin );
+		}
+
+		Table table2 = Table.create( table.stringColumn( PROJECT_NAME )
+				, table.stringColumn( BAUTYP )
+				, table.numberColumn( EINSTUFUNG_AS_NUMBER )
+				, table.doubleColumn( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
+				, table.doubleColumn( xName )
+				, table.doubleColumn( INVCOST_TUD )
+				, table.doubleColumn( CO2_COST_EL03 ) // should be ELTTIME!!
+					   );
+
+		final String N_CO2_V = "N-CO2-V";
+		table2.addColumns( table2.doubleColumn( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
+					 .multiply( table2.doubleColumn( INVCOST_TUD ) )
+					 .divide( table2.doubleColumn( CO2_COST_EL03 ) ).setName( N_CO2_V )
+				 ) ;
+
+
+		String yName = N_CO2_V;
+		Axis yAxis = Axis.builder().title( yName ).build();
+
+		Layout layout = Layout.builder( "" ).xAxis( xAxisBuilder.title( xName ).build() ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		// the nkv=1 line:
+		double[] xx = new double[]{1., 1.};
+		double[] yy = new double[]{0., 1.1* table2.numberColumn( yName ).max() };
+		traces.add( ScatterTrace.builder( xx, yy ).mode( ScatterTrace.Mode.LINE ).name("NKV=1").build() );
+
+		traces.add( getTraceCyan( table2, xName, yName ) );
+		traces.add( getTraceMagenta( table2, xName, yName ) );
+		traces.add( getTraceOrange( table2, xName, yName ) );
+		traces.add( getTraceRed( table2, xName, yName ) );
+
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
+	}
+
+	// ========================================================================================
+	// ========================================================================================
 	public Figure invcosttud_vs_nkvElttimeCarbon2000Invcosttud(){
 		String xName = Headers.capped5Of( NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 		String y2Name = INVCOST_TUD;
@@ -342,6 +412,100 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	private ScatterTrace vertialNkvOneLine( String y2Name ){
 		return vertialNkvOneLine( table, y2Name );
+	}
+	// ################################################################
+	// ################################################################
+	Figure invcost_tud_vs_orig(){
+		String xName = INVCOST_ORIG;
+
+		String yName = INVCOST_TUD;
+//		String y3Name = Headers.COST_OVERALL;
+		String y2Name = INVCOST_TUD;
+
+		String plotTitle = "";
+
+		Axis xAxis = Axis.builder()
+				 .title( xName )
+				 .type( Axis.Type.LOG)
+				 .build();
+
+		Axis yAxis = Axis.builder()
+				 .type( Axis.Type.LOG )
+				 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+				 .title( yName )
+				 .build();
+		Layout layout = Layout.builder( plotTitle )
+				      .xAxis( xAxis )
+				      .yAxis( yAxis )
+				      .width( plotWidth )
+				      .build();
+
+		List<Trace> traces = new ArrayList<>();
+
+//		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+//					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+//					  .name( String.format( legendFormat, yName ) )
+//					  .build();
+
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
+
+		{
+			double[] xx = new double[]{ table.numberColumn( xName ).min(), table.numberColumn( xName ).max() };
+			double[] yy = new double[]{ table.numberColumn( xName ).min(), table.numberColumn( xName ).max() };
+			traces.add( ScatterTrace.builder( xx, yy )
+						   .mode( ScatterTrace.Mode.LINE )
+						   .build() );
+		}
+		Figure figure3 = new Figure( layout, traces.toArray( new Trace[0] ) );
+		return figure3;
+	}
+	public Figure fzkmFromTtime_vs_fzkmOrig(){
+		String xName = ADDTL_PKWKM_ORIG;
+
+		String y2Name = ADDTL_PKWKM_FROM_TTIME;
+		String yName = ADDTL_PKWKM_FROM_TTIME;
+
+		Axis xAxis = Axis.builder().title( xName ).build();
+
+		Axis yAxis = Axis.builder().title( y2Name ).build();
+
+		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
+
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
+	}
+	public Figure fzkmFromTtimeSum_vs_fzkmOrig(){
+		String xName = ADDTL_PKWKM_ORIG;
+
+		final String ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG = "additional pkwkm from ttime plus orig";
+
+		table.addColumns(  table.numberColumn( ADDTL_PKWKM_FROM_TTIME ).add( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG ) );
+
+		String y2Name = ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG;
+
+		Axis xAxis = Axis.builder().title( xName ).build();
+
+		Axis yAxis = Axis.builder().title( y2Name ).build();
+
+		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		traces.add( getTraceCyan( table, xName, y2Name ) );
+		traces.add( getTraceMagenta( table, xName, y2Name ) );
+		traces.add( getTraceOrange( table, xName, y2Name ) );
+		traces.add( getTraceRed( table, xName, y2Name ) );
+
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	private static ScatterTrace vertialNkvOneLine( Table table, String y2Name ){
 		return ScatterTrace.builder( new double[]{1., 1.}, new double[]{0., 1.1 * table.numberColumn( y2Name ).max()} ).mode( ScatterTrace.Mode.LINE ).name( "NKV=1" ).build();
