@@ -135,6 +135,10 @@ public final class Headers{
 	public static final String NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD = "NKV_elTtime_carbon700tpr0_invcostTud";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 
+	public static final String DAUER_PLANUNG = "Planungsdauer_jahre";
+	public static final String DAUER_BAU = "Baudauer_jahre";
+	public static final String DAUER_BETRIEB = "Betriebsdauer_jahre";
+
 	public static String capped5Of( String str ) {
 		int cap=5;
 		return cappedOf( cap, str );
