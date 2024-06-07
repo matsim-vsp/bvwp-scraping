@@ -14,7 +14,6 @@ import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
@@ -25,9 +24,10 @@ import java.util.List;
 import java.util.Locale;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
+import static org.tub.vsp.bvwp.users.kn.Figures1KN.*;
 
-class Figures1KN{
-	private static final Logger log = LogManager.getLogger( Figures1KN.class );
+class Figures1RailKN{
+	private static final Logger log = LogManager.getLogger( Figures1RailKN.class );
 	static final int plotWidth = 2000;
 	static final String legendFormat = "%30s";
 	static final String dotSizeString = "largest = VB-E; large = VB; small = WB*; tiny = WB";
@@ -37,14 +37,9 @@ class Figures1KN{
 	final double nkvCappedMax;
 	final double nkvMin;
 	private static boolean init = true ;
-	Figures1KN( Table table, String xName ){
+	Figures1RailKN( Table table, String xName ){
 		this.xName = xName;
 		Axis.AxisBuilder xAxisBuilder = Axis.builder();
-
-		if ( xName!=null && xName.contains( "NKV" ) ) {
-			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
-		}
-
 		// ---------------------------------------------------------------
         {
 //		xName = Headers.B_CO2_NEU;
@@ -82,59 +77,51 @@ class Figures1KN{
 
 			// ===========================
 			table.addColumns(
-					table.numberColumn( NKV_EL03_CARBON215_INVCOSTTUD ).subtract( table.numberColumn( NKV_ORIG ) ).setName( NKV_EL03_DIFF )
-					, table.numberColumn( ADDTL_PKWKM_EL03 ).subtract( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_EL03_DIFF )
+//					table.numberColumn( NKV_EL03_CARBON215_INVCOSTTUD ).subtract( table.numberColumn( NKV_ORIG ) ).setName( NKV_EL03_DIFF )
+//					, table.numberColumn( ADDTL_PKWKM_EL03 ).subtract( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_EL03_DIFF )
 					);
 			// ===========================
 			// ===========================
-			Headers.addCap5( table, NKV_EL03_CARBON215_INVCOSTTUD );
-			Headers.addCap5( table, NKV_EL03_CARBON700tpr0_INVCOSTTUD );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_EL03_CARBON215_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_EL03_CARBON700tpr0_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ORIG );
-			Headers.addCap5( table, NKV_EL03 );
-			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
+//			Headers.addCap5( table, NKV_EL03 );
+//			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
 			Headers.addCap5( table, NKV_CARBON700 );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 
-			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
-			// ===========================
-			// ===========================
-			{
-				DoubleColumn newColumn = DoubleColumn.create( VERKEHRSBELASTUNG_PLANFALL );
-				for( Double value : table.doubleColumn( VERKEHRSBELASTUNG_PLANFALL ) ){
-					newColumn.append( value + 2000. * Math.random() );
-					// (randomize so that they are not on top of each other in plotly.  Deliberately not centered to that values are > 0.)
-				}
-				table.removeColumns( VERKEHRSBELASTUNG_PLANFALL );
-				table.addColumns( newColumn );
-			}
+//			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
 			// ===========================
 			// ===========================
 			{
 				DoubleColumn column = DoubleColumn.create( EINSTUFUNG_AS_NUMBER );
 				final double factor = 8.;
-				final double offset = 2.;
+				final double offset = 8.;
 				for( String prio : table.stringColumn( EINSTUFUNG ) ){
 					switch( Einstufung.valueOf( prio ) ){
 						case VBE -> {
-							column.append( 3. * factor + offset );
+							column.append( 4. * factor + offset );
 						}
 						case VB -> {
-							column.append( 2. * factor + offset );
+							column.append( 3. * factor + offset );
 						}
 						case WBP -> {
-							column.append( 1. * factor + offset );
+							column.append( 2. * factor + offset );
 						}
 						case WB -> {
+							column.append( 1. * factor + offset );
+						}
+						case KB -> {
 							column.append( offset );
 						}
 //					case UNDEFINED -> {
 //						column.append( 2. );
 //					}
 						default -> {
-							column.append( offset );
-//						throw new IllegalStateException( "Unexpected value: " + prio );
+//							column.append( 2. );
+						throw new IllegalStateException( "Unexpected value: " + prio );
 						}
 					}
 				}
@@ -164,7 +151,8 @@ class Figures1KN{
 		this.table = table;
 
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
-		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
+//		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
+		nkvMin = table.doubleColumn( NKV_CARBON700 ).min();
 
 
 
@@ -235,15 +223,7 @@ class Figures1KN{
 				 .title( yName )
 				 .build();
 
-		String title = "";
-		if ( ADDTL_LANE_KM.equals( xName ) ){
-			title = "since (co2_cost SIMTO lane-km) and (cost SIMTO lane-km), the division of the two does not depend on lane-km:";
-		}
-		Layout layout = Layout.builder( title )
-				      .xAxis( xAxis )
-				      .yAxis( yAxis )
-				      .width( plotWidth )
-				      .build();
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
@@ -278,6 +258,80 @@ class Figures1KN{
 	}
 	// ========================================================================================
 	// ========================================================================================
+	Figure nkv_orig(){
+		String yName = NKV_ORIG_CAPPED5;
+		String y2Name = NKV_ORIG_CAPPED5;
+
+		Axis yAxis = Axis.builder()
+//			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
+				 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+				 .title( yName )
+				 .build();
+
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		final Trace traceWb = getTrace( xName, y2Name, table, "null", "cyan" );
+		traces.add( traceWb );
+
+		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
+		return figure2;
+	}
+	// ========================================================================================
+	// ========================================================================================
+	Figure invCost_orig(){
+		String yName = INVCOST_ORIG;
+		String y2Name = yName;
+
+		Axis yAxis = Axis.builder()
+//			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
+				 //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+				 .title( yName )
+				 .build();
+
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		final Trace traceWb = getTrace( xName, y2Name, table, "null", "cyan" );
+		traces.add( traceWb );
+
+		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
+		return figure2;
+	}
+	// ========================================================================================
+	// ========================================================================================
+	Figure invCost_orig_cumulative(){
+		String yName = INVCOST_ORIG;
+		String y2Name = yName;
+
+		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( INVCOST_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
+
+		table2 = table2.sortDescendingOn( xName ); // necessary to get cumulative cost right
+
+		DoubleColumn cumulativeCost = DoubleColumn.create( "cumulative_cost" );
+		{
+			double sum = 0.;
+			for( Double cost : table2.doubleColumn( INVCOST_ORIG ) ){
+				sum += cost;
+				cumulativeCost.append( sum );
+			}
+		}
+
+		Axis yAxis = Axis.builder().title( "Kumulierte Investitionskosten (orig) [Mio]" ).build();
+
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>();
+
+		var nameInLegend = "cumulative cost";
+		traces.add( ScatterTrace.builder( table2.doubleColumn( xName ), cumulativeCost ).mode( ScatterTrace.Mode.LINE ).showLegend( true ).name( String.format( legendFormat, nameInLegend ) ).build() );
+
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
+	}
+	// ========================================================================================
+	// ========================================================================================
 	Figure nkv_carbon700(){
 		String yName = NKV_CARBON700_CAPPED5;
 		String y2Name = NKV_CARBON700_CAPPED5;
@@ -288,45 +342,14 @@ class Figures1KN{
 				 .title( yName )
 				 .build();
 
-		String title = "";
-		if ( ADDTL_LANE_KM.equals( xName ) ){
-			title = "since (co2_cost SIMTO lane-km) and (cost SIMTO lane-km), the division of the two does not depend on lane-km:";
-		}
-		Layout layout = Layout.builder( title )
-				      .xAxis( xAxis )
-				      .yAxis( yAxis )
-				      .width( plotWidth )
-				      .build();
-//		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
-//					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-//					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
-//					  .build();
+		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		final Trace traceCyan = getTraceCyan( table, xName, y2Name );
-		final Trace traceMagenta = getTraceMagenta( table, xName, y2Name );
-		final Trace traceOrange = getTraceOrange( table, xName, y2Name );
-		final Trace traceRed = getTraceRed( table, xName, y2Name );
+		List<Trace> traces = new ArrayList<>();
 
+		final Trace traceWb = getTrace( xName, y2Name, table, "null", "cyan" );
+		traces.add( traceWb );
 
-//		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
-//					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
-//					   .name( String.format( legendFormat, y3Name ) )
-//					   .marker( Marker.builder().color( "gray" ).build() )
-//					   .build();
-
-//		double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
-//		double[] yy = new double[]{1., 1.};
-//		Trace trace4 = ScatterTrace.builder( xx, yy )
-//					   .mode( ScatterTrace.Mode.LINE )
-//					   .build();
-
-		Figure figure2 = new Figure( layout
-//				, trace
-//				, trace3
-				, traceCyan, traceMagenta
-				, traceOrange, traceRed
-//				, trace4
-		);
+		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
 	}
 	// ========================================================================================
@@ -517,12 +540,20 @@ class Figures1KN{
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( );
-		traces.add( getTraceCyan( table, xName, y2Name ) );
-		traces.add( getTraceMagenta( table, xName, y2Name ) );
-		traces.add( getTraceOrange( table, xName, y2Name ) );
-		traces.add( getTraceRed( table, xName, y2Name ) );
-		return new Figure( layout, traces.toArray(new Trace[]{}) );
+		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+					  .name( String.format( legendFormat, yName ) )
+					  .text( table.stringColumn( PROJECT_NAME ).asObjectArray() )
+					  .build();
+
+		final Trace traceWb = getTraceCyan( table, xName, y2Name );
+		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
+		final Trace traceVb = getTraceOrange( table, xName, y2Name );
+		final Trace traceVbe = getTraceRed( table, xName, y2Name );
+
+
+		return new Figure( layout
+				, trace
+				, traceWb, traceWbp, traceVb, traceVbe );
 	}
 	// ========================================================================================
 	// ========================================================================================
@@ -616,69 +647,7 @@ class Figures1KN{
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 
 	}
-	public Figure invCostTud(){
-		String y2Name = INVCOST_TUD;
-
-		Axis yAxis = Axis.builder().title( y2Name ).type( Axis.Type.LOG ).build();
-
-		String title = "";
-		if ( ADDTL_LANE_KM.equals( xName ) ){
-			title = "addtl_veh-km_diff are SIM addtl_lane-km:";
-		}
-
-		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
-
-		List<Trace> traces = new ArrayList<>();
-
-		traces.add( getTraceCyan( table, xName, y2Name ) );
-		traces.add( getTraceMagenta( table, xName, y2Name ) );
-		traces.add( getTraceOrange( table, xName, y2Name ) );
-		traces.add( getTraceRed( table, xName, y2Name ) );
-
-		return new Figure( layout, traces.toArray(new Trace[]{} ) );
-	}
 
 
 	// ========================================================================================
-	// ========================================================================================
-
-	// "BubblePlot" handles categorical variables --> could convert BAUTYP into the categories that are of interest.
-	// There is also ScatterPlot3D
-
-	// one can combine the four methods below by setting the marker color etc. to a Column instead of to a single value.  See examples in BubblePlot.
-	// (however, in the end this does not work that much differently from what follows here except that it loops over the categorical column instead of repeating the code)
-
-	static Trace getTraceRed( Table table, String xName, String y2Name ){
-		Table tableVbe = table.where( table.stringColumn( BAUTYP ).isIn( "EW8" ) );
-		final String nameInLegend = "EW8";
-		final String color = "red";
-		final Trace traceVbe = getTrace( xName, y2Name, tableVbe, nameInLegend, color );
-		return traceVbe;
-	}
-	static Trace getTrace( String xName, String y2Name, Table tableVbe, String nameInLegend, String color ){
-		Trace traceVbe = ScatterTrace.builder( tableVbe.numberColumn( xName ), tableVbe.numberColumn( y2Name ) )
-					     .text( tableVbe.stringColumn( PROJECT_NAME ).asObjectArray() )
-					     .name( String.format( legendFormat, nameInLegend ) )
-					     .marker( Marker.builder().color( color )
-							    .size(20)
-							    .size( tableVbe.doubleColumn( Headers.EINSTUFUNG_AS_NUMBER ) ).sizeMode( Marker.SizeMode.DIAMETER )
-							    .build() )
-					     .build();
-		return traceVbe;
-	}
-	static Trace getTraceOrange( Table table, String xName, String y2Name ){
-		Table tableVb = table.where( table.stringColumn( BAUTYP ).isIn( "EW6","EW6_EW8" ) );
-		final Trace traceVb = getTrace( xName, y2Name, tableVb, "EW6", "orange" );
-		return traceVb;
-	}
-	static Trace getTraceMagenta( Table table, String xName, String y2Name ){
-		Table tableWb = table.where( table.stringColumn( BAUTYP ).containsString( "NB" ) );
-		final Trace traceWb = getTrace( xName, y2Name, tableWb, "Neubau", "magenta" );
-		return traceWb;
-	}
-	static Trace getTraceCyan( Table table, String xName, String y2Name ){
-		Table tableWb = table.where( table.stringColumn( BAUTYP ).containsString( "KNOTENPUNKT" ) ) ;
-		final Trace traceWb = getTrace( xName, y2Name, tableWb, "Knotenpunkt", "cyan" );
-		return traceWb;
-	}
 }
