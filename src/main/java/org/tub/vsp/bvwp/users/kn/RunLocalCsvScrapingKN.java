@@ -21,6 +21,8 @@ import java.nio.file.Paths;
 import java.text.NumberFormat;
 import java.util.*;
 
+import static org.tub.vsp.bvwp.data.Headers.NKV_ORIG_CAPPED5;
+
 public class RunLocalCsvScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
 
@@ -62,40 +64,38 @@ public class RunLocalCsvScrapingKN{
         Table table = csvWriter.writeCsv( allStreetBaseData );
 
         // ===
-        Figures1KN figures1 = new Figures1KN( table );
+        Figures1KN figures1 = new Figures1KN( table, NKV_ORIG_CAPPED5 );
         Figures2KN figures2 = new Figures2KN( table );
 
         List<Figure> plots1 = new ArrayList<>();
         List<Figure> plots2 = new ArrayList<>();
 
-
-        plots1.add( figures1.fzkmFromTtime_vs_fzkmOrig() );
-        plots1.add( figures1.fzkmFromTtimeSum_vs_fzkmOrig() );
-
-        plots1.add( figures1.invcost_tud_vs_orig() );
-        plots1.add( figures1.nkv_el03() );
-        plots1.add( figures1.nkv_carbon700() );
-        plots1.add( figures1.nkv_el03_carbon700() );
-
+//        plots1.add( figures1.invCostTud() );
+//
+//        plots1.add( figures1.carbon() );
+//
+//
+//        plots1.add( figures2.fzkmFromTtime_vs_fzkmOrig() );
+//        plots1.add( figures2.fzkmFromTtimeSum_vs_fzkmOrig() );
+//
+//        plots1.add( figures1.nkv_el03() );
+//        plots1.add( figures1.nkv_carbon700() );
+//        plots1.add( figures1.nkv_el03_carbon700() );
+//
 //        plots1.add( figures1.elasticities() );
 //        plots1.add( figures1.fzkmDiff() );
-//        plots1.add( figures1.carbon() );
-//        plots1.add( figures1.invcost() );
 //        plots1.add( figures1.nkv_el03_diff() );
 //        plots1.add( figures1.dtv() );
 //        plots1.add( figures1.fzkmNew() );
-
+//
+        plots2.add( figures2.invcost_tud_vs_orig() );
         plots2.add( figures2.nkvVsDtv() );
 
-        plots2.add( figures2.cost_VS_nkvOrig() );
+//        plots2.add( figures2.cost_VS_nkvOrig() );
 
-        plots2.add( figures2.costOrigVsCumulativeCostOrig() );
+//        plots2.add( figures2.costOrigVsCumulativeCostOrig() );
 
         plots2.addAll( figures2.nkvElttimeCarbon215(5 ) );
-
-
-
-
 
         plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
         plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
@@ -103,16 +103,18 @@ public class RunLocalCsvScrapingKN{
         plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
 
         plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
-        plots2.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
-        plots2.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
+//        plots2.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
+//        plots2.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
         plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
 
         plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
 
+        plots2.add( figures2.nco2v_vs_vs_nkvElttimeCarbon700Invcosttud(5 ) );
+
+        plots2.add( figures2.carbon_vs_inv() );
+
 
         // ===
-
-
 
         String page = MultiPlotUtils.pageTop() + System.lineSeparator();
         for( int ii=0; ii<plots1.size(); ii++ ) {
@@ -120,7 +122,6 @@ public class RunLocalCsvScrapingKN{
         }
         for( int ii=0; ii<plots2.size(); ii++ ) {
             final char c = (char) (ii + 65); // generate A, B, ... to be backwards compatible with what we had so far.  kai, mar'24
-            logger.warn( "c=" + c );
             page += plots2.get(ii ).asJavascript( "plot" + c ) + System.lineSeparator() ;
         }
         page += MultiPlotUtils.pageBottom;
