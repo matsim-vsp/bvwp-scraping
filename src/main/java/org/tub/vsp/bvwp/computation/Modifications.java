@@ -31,6 +31,6 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
     public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1, 1. );
 
     @Override public String toString() {
-        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "]";
+        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "; constructionCostFactor" + constructionCostFactor + "; constructionCostFactor" + nonCo2BenefitsFactor + " ]";
     }
 }
