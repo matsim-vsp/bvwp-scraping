@@ -59,13 +59,13 @@ class JsonIoTest {
     @Test
     void testSerializeJson_rail() throws IOException {
         RailScraper railScraper = new RailScraper();
-        RailBaseDataContainer streetBaseData = railScraper.extractBaseData(LocalFileAccessor.getLocalDocument("2-003-v01.html"))
+        RailBaseDataContainer railBaseData = railScraper.extractBaseData(LocalFileAccessor.getLocalDocument("2-003-v01.html"))
                                                           .orElseThrow();
 
         //write Json to file
         JsonIo jsonIo = new JsonIo();
         String filePath = "src/test/resources/testData/referenceData/2-003-v01.json";
         RailBaseDataContainer deserializedContainer = jsonIo.readJson(filePath, RailBaseDataContainer.class);
-        Assertions.assertEquals(streetBaseData, deserializedContainer);
+        Assertions.assertEquals(railBaseData, deserializedContainer);
     }
 }
