@@ -164,6 +164,10 @@ public class StreetCsvWriter {
 
         record.add(Headers.LENGTH, baseDataContainer.getProjectInformation().getLength());
 
+        record.add(Headers.DAUER_PLANUNG, baseDataContainer.getCostBenefitAnalysis().getDurations().planning());
+        record.add(Headers.DAUER_BAU, baseDataContainer.getCostBenefitAnalysis().getDurations().construction());
+        record.add(Headers.DAUER_BETRIEB, baseDataContainer.getCostBenefitAnalysis().getDurations().operation());
+
         record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
         record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers().induced() ).orElse(0. ) );
 
@@ -245,6 +249,10 @@ public class StreetCsvWriter {
         headers.addStringColumn( Headers.EINSTUFUNG );
         headers.addStringColumn(Headers.BAUTYP);
         headers.addDoubleColumn(Headers.LENGTH);
+
+        headers.addDoubleColumn(Headers.DAUER_PLANUNG);
+        headers.addDoubleColumn(Headers.DAUER_BAU);
+        headers.addDoubleColumn(Headers.DAUER_BETRIEB);
 
         headers.addDoubleColumn( Headers.ADDTL_PKWKM_ORIG );
         headers.addDoubleColumn(Headers.ADDTL_PKWKM_INDUZ_ORIG );

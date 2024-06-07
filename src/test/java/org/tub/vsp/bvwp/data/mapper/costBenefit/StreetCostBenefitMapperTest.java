@@ -6,6 +6,7 @@ import org.tub.vsp.bvwp.data.LocalFileAccessor;
 import org.tub.vsp.bvwp.data.container.base.street.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
 import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.Durations;
 import org.tub.vsp.bvwp.data.type.Emission;
 
 import java.io.IOException;
@@ -13,9 +14,7 @@ import java.io.IOException;
 class StreetCostBenefitMapperTest {
     @Test
     void testMapper() throws IOException {
-        StreetCostBenefitMapper costBenefitMapper = new StreetCostBenefitMapper();
-        StreetCostBenefitAnalysisDataContainer result =
-                costBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
+        StreetCostBenefitAnalysisDataContainer result = StreetCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
         Assertions.assertEquals(new Benefit(40.55, 1005.26), result.getNb());
         Assertions.assertEquals(new Benefit(-31.675, -785.233), result.getNbOperations());
@@ -29,13 +28,13 @@ class StreetCostBenefitMapperTest {
         Assertions.assertEquals(new Benefit(0.136, 3.363), result.getNt());
         Assertions.assertEquals(new Benefit(29.997, 743.646), result.getNz());
         Assertions.assertEquals(new Cost(3145.75, 2737.176), result.getCost());
+
+        Assertions.assertEquals(new Durations(120. / 12., 48. / 12., 42.), result.getDurations());
     }
 
     @Test
     void testNulls() throws IOException {
-        StreetCostBenefitMapper costBenefitMapper = new StreetCostBenefitMapper();
-        StreetCostBenefitAnalysisDataContainer result =
-                costBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a2.html"));
+        StreetCostBenefitAnalysisDataContainer result = StreetCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("a2.html"));
 
         Assertions.assertNotNull(result.getNa());
         Assertions.assertEquals(result.getNa().get(Emission.CO2), new Benefit(0.0, 0.0));
@@ -44,5 +43,7 @@ class StreetCostBenefitMapperTest {
         Assertions.assertEquals(result.getNa().get(Emission.HC), new Benefit(0.0, 0.0));
         Assertions.assertEquals(result.getNa().get(Emission.SO2), new Benefit(0.0, 0.0));
         Assertions.assertEquals(result.getNa().get(Emission.PM), new Benefit(0.0, 0.0));
+
+        Assertions.assertEquals(new Durations(90. / 12., 56. / 12., 31.), result.getDurations());
     }
 }
