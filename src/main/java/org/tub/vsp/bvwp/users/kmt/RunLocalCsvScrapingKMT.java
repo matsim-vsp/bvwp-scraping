@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp.users.kmt;
 
+import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
@@ -31,8 +32,8 @@ import static tech.tablesaw.aggregate.AggregateFunctions.*;
 public class RunLocalCsvScrapingKMT {
     private static final Logger logger = LogManager.getLogger(RunLocalCsvScrapingKMT.class );
 
-    public static void main(String[] args) throws IOException {
-        Locale.setDefault(Locale.US);
+    public static void main(String[] args) throws IOException{
+        Locale.setDefault( Locale.US );
 
         logger.warn(
             "(vermutl. weitgehend gelöst) Teilweise werden die Hauptprojekte bewertet und nicht" +
@@ -52,14 +53,22 @@ public class RunLocalCsvScrapingKMT {
 
         StreetScraper scraper = new StreetScraper();
 
-        logger.info("Starting scraping");
+        logger.info( "Starting scraping" );
+
+        String filePath = "../shared-svn/";
+        Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTudFile(filePath );
+
+        final String regexToExclude = "(A...B.*)|(A....B.*)"; // Bundesstrassen, die von Autobahnen ausgehen.
 
         // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
 
         List<StreetAnalysisDataContainer> allStreetBaseData = scraper
             .extractAllLocalBaseData("./data/street/all2", "A", ".*", "")
             .stream()
-			.map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer, 0.) )
+			.map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer,
+          0.
+//          constructionCostsByProject.get(streetBaseDataContainer.getProjectInformation().getProjectNumber())
+      ))
             .toList();
 
         logger.info("Writing csv");
