@@ -88,28 +88,28 @@ public class RunLocalCsvScrapingKN{
 //        plots1.add( figures1.dtv() );
 //        plots1.add( figures1.fzkmNew() );
 //
-//        plots2.add( figures2.invcost_tud_vs_orig() );
-//        plots2.add( figures2.nkvVsDtv() );
-//
+        plots2.add( figures2.invcost_tud_vs_orig() );
+        plots2.add( figures2.nkvVsDtv() );
+
 //        plots2.add( figures2.cost_VS_nkvOrig() );
-//
+
 //        plots2.add( figures2.costOrigVsCumulativeCostOrig() );
-//
-//        plots2.addAll( figures2.nkvElttimeCarbon215(5 ) );
-//
-//        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
-//        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
-//        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(Integer.MAX_VALUE ) );
-//        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
-//
-//        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
+
+        plots2.addAll( figures2.nkvElttimeCarbon215(5 ) );
+
+        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
+        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
+        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(Integer.MAX_VALUE ) );
+        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
+
+        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
 //        plots2.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
 //        plots2.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
-//        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
-//
-//        plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
-//
-//        plots2.add( figures2.nco2v_vs_vs_nkvElttimeCarbon700Invcosttud(5 ) );
+        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
+
+        plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
+
+        plots2.add( figures2.nco2v_vs_vs_nkvElttimeCarbon700Invcosttud(5 ) );
 
         plots2.add( figures2.carbon_vs_inv() );
 

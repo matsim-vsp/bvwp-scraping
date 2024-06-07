@@ -202,6 +202,10 @@ public class ComputationKN {
         b_all -= b_co2_verl;
         b_all -= b_co2_induz;
 
+        // ### then rescale the remaining benefit with the corresponding modification:
+
+        b_all *= modifications.nonCo2BenefitsFactor();
+
         // ### then add the CO2 components with the new values:
 
         // co2 Bau
