@@ -177,7 +177,6 @@ class FiguresKMT {
           .width( plotWidth )
           .build();
 
-
       Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
           .name( yName )
           .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -252,4 +251,21 @@ class FiguresKMT {
 
       return new Figure( layout, cbrOverCbrTrace, diagonale, horizontalCbr1, verticalCbr1 );
   }
+
+
+	/** Idee um eine Trennung zu erzeugen... Noch nicht optimal
+	 * @param title
+	 * @return
+	 */
+	static Figure createTextFigure(String title){
+
+		Layout layout = Layout.builder( title )
+				.yAxis(Axis.builder().visible(false).build())
+				.xAxis(Axis.builder().visible(false).build())
+				.width( 1)
+				.height(1)
+				.build();
+
+		return new Figure(layout);
+	}
 }

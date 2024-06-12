@@ -117,6 +117,7 @@ public class RunLocalCsvScrapingKMT {
 
             String pageKMT = MultiPlotUtils.pageTop() + System.lineSeparator() +
                 figureNkv.asJavascript("plot1") + System.lineSeparator() +
+//                FiguresKMT.createTextFigure("Neuer Abschnitt").asJavascript("plot2") + System.lineSeparator() + //Test um mal eine Trennung zu erzeugen... vlt doch anders machen
                 figureCostByPriority.asJavascript("plot2") + System.lineSeparator() +
                 figureNkvByPriority.asJavascript("plot3")+System.lineSeparator() +
                 figureCO2Benefit.asJavascript("plot4") + System.lineSeparator() +
