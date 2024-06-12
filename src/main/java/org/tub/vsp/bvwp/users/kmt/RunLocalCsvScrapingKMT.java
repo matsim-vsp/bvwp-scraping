@@ -75,31 +75,19 @@ public class RunLocalCsvScrapingKMT {
         StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");
         Table table = csvWriter.writeCsv(allStreetBaseData);
 
-//        table = table.where( table.numberColumn( Headers.NKV_INDUZ_CO2 ).isLessThan( 2.) );
 
         table.addColumns(table.numberColumn(Headers.NKV_ORIG )
                               .subtract(table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD ) ).setName(
                 Headers.NKV_EL03_DIFF ) );
 
-//        final Table newTable = table.selectColumns( "nkvDiff", Headers.COST_OVERALL );
-//        LinearModel winsModel = OLS.fit( Formula.lhs("nkvDiff" ), newTable.smile().toDataFrame() );
-//        System.out.println( winsModel );
-//        System.exit(-1);
-        // ===
-
-        { //KMT
+        { //Plotting and table preparation
             String xNameKMT;
             Axis.AxisBuilder xAxisBuilder = Axis.builder();
             {
                 xNameKMT = Headers.CO2_COST_EL03;
                 xAxisBuilder.type(Type.LINEAR);
             }
-//        {
-//            xNameKMT = Headers.NKV_INDUZ_CO2;
-//            xAxisBuilder
-//                             //                         .type( Axis.Type.LOG )
-//                             .autoRange( Axis.AutoRange.REVERSED );
-//        }
+
             table = table.sortDescendingOn(xNameKMT);
             Axis xAxis = xAxisBuilder.title(xNameKMT).build();
             final int plotWidth = 1400;
