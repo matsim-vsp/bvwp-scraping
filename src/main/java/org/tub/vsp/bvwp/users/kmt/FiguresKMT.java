@@ -213,7 +213,7 @@ class FiguresKMT {
           .title( yName )
           .build();
 
-      Layout layout = Layout.builder( xName )
+      Layout layout = Layout.builder( yName + " over " +xName )
           .xAxis( xAxis )
           .yAxis( yAxis )
           .width( plotWidth )
