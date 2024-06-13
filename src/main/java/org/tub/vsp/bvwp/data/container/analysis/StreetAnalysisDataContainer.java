@@ -79,8 +79,8 @@ public class StreetAnalysisDataContainer {
 
         entries.put(Headers.NKV_ORIG, NkvCalculator.calculateNkv( NO_CHANGE, streetBaseData ) );
         entries.put(Headers.NKV_CO2, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_700_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), streetBaseData ) );
-        entries.put(Headers.NKV_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1.75 ), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_700_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1. ), streetBaseData ) );
+//        entries.put(Headers.NKV_CARBON700, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1. ), streetBaseData ) );
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2020to2012, 0, 1, 1. ), streetBaseData ) );
         entries.put(Headers.NKV_EL03, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), streetBaseData ) );
         entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), streetBaseData ) );
