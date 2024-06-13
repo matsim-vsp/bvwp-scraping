@@ -66,8 +66,8 @@ public class RunLocalCsvScrapingKMT {
             .extractAllLocalBaseData("./data/street/all", "A", ".*", "")
             .stream()
 			.map(streetBaseDataContainer -> new StreetAnalysisDataContainer(streetBaseDataContainer,
-          0.
-//          constructionCostsByProject.get(streetBaseDataContainer.getProjectInformation().getProjectNumber())
+//          0.
+          constructionCostsByProject.get(streetBaseDataContainer.getProjectInformation().getProjectNumber())
       ))
             .toList();
 
