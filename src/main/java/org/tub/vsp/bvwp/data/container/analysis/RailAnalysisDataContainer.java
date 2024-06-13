@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.SequencedMap;
 
 import static org.tub.vsp.bvwp.computation.Modifications.NO_CHANGE;
+import static org.tub.vsp.bvwp.computation.Modifications.co2Price2000;
 import static org.tub.vsp.bvwp.computation.Modifications.co2Price700;
-import static org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer.INFLATION_Factor2020to2012;
 
 
 public class RailAnalysisDataContainer {
@@ -61,7 +61,7 @@ public class RailAnalysisDataContainer {
         entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
         entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
         entries.put(Headers.NKV_CARBON700, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
-        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculatorRail.calculateNkv( new Modifications( 2000 * INFLATION_Factor2020to2012, 0, 1, 1 ), baseDataContainer ) );
+        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculatorRail.calculateNkv( new Modifications( co2Price2000, 0, 1, 1 ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03, NkvCalculatorRail.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculatorRail.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03_CARBON700tpr0_INVCOSTTUD, NkvCalculatorRail.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1.75 ), baseDataContainer ) );

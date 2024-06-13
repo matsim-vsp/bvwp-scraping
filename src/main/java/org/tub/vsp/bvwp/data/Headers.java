@@ -92,8 +92,23 @@ public final class Headers{
 	 * NKV bei erhöhtem CO2-Preis (welchem?).
 	 */
 	public static final String NKV_CO2 = "NKV_co2";
-	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
-	public static final String NKV_CO2_700_EN = "BCR_co2_700";
+	public static final String NKV_CO2_2000_EN = "BCR_co2_2000"; //2000 Euro/t -> muss dann noch nach 2012 umgerechnet werden
+	public static final String NKV_CO2_700_EN = "BCR_co2_700"; //700 Euro/t lt UBA für 2030 (Preisstand 2020) -> muss dann noch nach 2012 umgerechnet werden
+	/**
+	 * NKV bei erhöhten Investitionskosten (welchen?).
+	 */
+	public static final String NKV_INVCOSTTUD_EN = "BCR_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+	public static final String NKV_INVCOST150_EN = "BCR_invcost150"; //50% höhere Investmentcosts
+	public static final String NKV_INVCOST200_EN = "BCR_invcost200"; //doppelte Investmentcosts
+	/**
+	 * NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis.
+	 */
+	public static final String NKV_CO2_2000_INVCOSTTUD_EN = "BCR_co2_2000_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+	public static final String NKV_CO2_2000_INVCOST150_EN = "BCR_co2_2000_invcost150"; //50% höhere Investmentcosts
+	public static final String NKV_CO2_2000_INVCOST200_EN = "BCR_co2_2000_invcost200"; //doppelte Investmentcosts
+	public static final String NKV_CO2_700_INVCOSTTUD_EN = "BCR_co2_700_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+	public static final String NKV_CO2_700_INVCOST150_EN = "BCR_co2_700_invcost150"; //50% höhere Investmentcosts
+	public static final String NKV_CO2_700_INVCOST200_EN = "BCR_co2_700_invcost200"; //doppelte Investmentcosts
 	/**
 	 * {@link #NKV_EL03_CARBON215_INVCOSTTUD} - {@link #NKV_ORIG}
 	 */
