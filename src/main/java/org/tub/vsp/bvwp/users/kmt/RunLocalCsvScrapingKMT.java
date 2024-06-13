@@ -237,7 +237,7 @@ public class RunLocalCsvScrapingKMT {
 
         figureNkvChange_Co2_700_InvCostTud.asJavascript("plot6") + System.lineSeparator() +
         figureNkvChange_Co2_700_InvCost150.asJavascript("plot7") + System.lineSeparator() +
-        figureNkvChange_Co2_700_InvCost200.asJavascript("plot7") + System.lineSeparator() +
+        figureNkvChange_Co2_700_InvCost200.asJavascript("plot8") + System.lineSeparator() +
 
         figureNkvChange_Co2_2000_InvCostTud.asJavascript("plot9") + System.lineSeparator() +
         figureNkvChange_Co2_2000_InvCost150.asJavascript("plot10") + System.lineSeparator() +
