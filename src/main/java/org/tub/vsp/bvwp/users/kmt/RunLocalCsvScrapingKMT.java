@@ -93,6 +93,7 @@ public class RunLocalCsvScrapingKMT {
             final int plotWidth = 1400;
 
           kmtPlots_old(xAxis, plotWidth, table, xNameKMT);
+          kmtPlots_Co2values(xAxis, plotWidth, table, xNameKMT);
         }
 
       calculationsAndTableWriting(table);
@@ -212,23 +213,36 @@ public class RunLocalCsvScrapingKMT {
 
   private static void kmtPlots_Co2values(Axis xAxis, int plotWidth, Table table, String xNameKMT)
       throws IOException {
-    Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
-    Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.INVCOST_ORIG );
-    Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.INVCOST_ORIG );
-    Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
-    Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_EN );
+    Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_EN );
     Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_EN );
+
+    Figure figureNkvChange_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOSTTUD_EN );
+    Figure figureNkvChange_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOST150_EN);
+    Figure figureNkvChange_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOST200_EN );
+    Figure figureNkvChange_Co2_700_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOSTTUD_EN);
+    Figure figureNkvChange_Co2_700_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOST150_EN);
+    Figure figureNkvChange_Co2_700_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOST200_EN );
+    Figure figureNkvChange_Co2_2000_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOSTTUD_EN );
+    Figure figureNkvChange_Co2_2000_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST150_EN);
+    Figure figureNkvChange_Co2_2000_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST200_EN);
 
 
     String page = MultiPlotUtils.pageTop() + System.lineSeparator() +
-        figureNkv.asJavascript("plot1") + System.lineSeparator() +
-//                FiguresKMT.createTextFigure("Neuer Abschnitt").asJavascript("plot2") + System.lineSeparator() + //Test um mal eine Trennung zu erzeugen... vlt doch anders machen
-        figureCostByPriority.asJavascript("plot2") + System.lineSeparator() +
-        figureNkvByPriority.asJavascript("plot3")+System.lineSeparator() +
-        figureCO2Benefit.asJavascript("plot4") + System.lineSeparator() +
-        figureNkvChangeCo2_680.asJavascript("plot5") + System.lineSeparator() +
-        figureNkvChangeInduz_2000.asJavascript("plot6") + System.lineSeparator() +
-//                figureNkvChangeInduzCo2.asJavascript("plot7") + System.lineSeparator() +
+        figureNkvChangeCo2_700.asJavascript("plot1") + System.lineSeparator() +
+        figureNkvChangeInduz_2000.asJavascript("plot2") + System.lineSeparator() +
+
+       figureNkvChange_InvCostTud .asJavascript("plot3") + System.lineSeparator() +
+        figureNkvChange_InvCost150.asJavascript("plot4") + System.lineSeparator() +
+        figureNkvChange_InvCost200.asJavascript("plot5") + System.lineSeparator() +
+
+        figureNkvChange_Co2_700_InvCostTud.asJavascript("plot6") + System.lineSeparator() +
+        figureNkvChange_Co2_700_InvCost150.asJavascript("plot7") + System.lineSeparator() +
+        figureNkvChange_Co2_700_InvCost200.asJavascript("plot7") + System.lineSeparator() +
+
+        figureNkvChange_Co2_2000_InvCostTud.asJavascript("plot9") + System.lineSeparator() +
+        figureNkvChange_Co2_2000_InvCost150.asJavascript("plot10") + System.lineSeparator() +
+        figureNkvChange_Co2_2000_InvCost200.asJavascript("plot11") + System.lineSeparator() +
+
         MultiPlotUtils.pageBottom;
 
     File outputFile = Paths.get("EWGT_CO2-Values.html").toFile();
