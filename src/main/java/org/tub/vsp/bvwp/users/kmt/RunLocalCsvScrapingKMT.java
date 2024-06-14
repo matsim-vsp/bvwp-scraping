@@ -107,39 +107,34 @@ public class RunLocalCsvScrapingKMT {
         Einstufung p2 = Einstufung.valueOf(o2.getString(Headers.EINSTUFUNG ) );
         return p1.compareTo(p2);
     };
-    table = table.sortOn(comparator);
+
+    final Table copyOfTable = table.sortOn(comparator);
     NumberFormat format = NumberFormat.getCompactNumberInstance();
     format.setMaximumFractionDigits(0);
-    table.numberColumn(Headers.CO2_COST_EL03 ).setPrintFormatter(format, "n/a" );
+    copyOfTable.numberColumn(Headers.CO2_COST_EL03 ).setPrintFormatter(format, "n/a" );
 
     //Projekte, die bereits vor Änderung NKV <1 haben
-    Table tableBaseKl1 = table.where(table.numberColumn(Headers.NKV_ORIG ).isLessThan(1. ) );
-    Table tableCo2_680_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_700_EN ).isLessThan(1. ) );
-    Table tableCo2_2000_Kl1 = table.where(table.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
-    Table tableIndCo2kl1 = table.where(
-        table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD ).isLessThan(1. ) );
+    Table tableBaseKl1 = copyOfTable.where(copyOfTable.numberColumn(Headers.NKV_ORIG ).isLessThan(1. ) );
+    Table tableIndCo2kl1 = copyOfTable.where(copyOfTable.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD ).isLessThan(1. ) );
 
     { //-- von KN
         System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println(table.summarize(Headers.NKV_ORIG, count, mean, stdDev, min, max )
-            .by(Headers.EINSTUFUNG ) );
-        System.out.println(System.lineSeparator() + "Davon NKV < 1:");
-        System.out.println(
-            tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max )
-                .by(Headers.EINSTUFUNG ) );
+        System.out.println("NKV Original auf Gesamttabelle");
+        System.out.println(copyOfTable.summarize(Headers.NKV_ORIG, count, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println(copyOfTable.summarize(Headers.NKV_ORIG, count, mean, stdDev, min, max ).apply());
+        System.out.println(System.lineSeparator() + "Davon NKV < 1: nach Modifikation.");
+        System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max ).apply() );
 
         System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println(
-            table.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max )
-                .by(Headers.EINSTUFUNG ) );
+        System.out.println(copyOfTable.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println(copyOfTable.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).apply());
         System.out.println(System.lineSeparator() + "Davon NKV < 1:");
-        System.out.println(
-            tableIndCo2kl1.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max )
-                .by(Headers.EINSTUFUNG ) );
-
+        System.out.println(tableIndCo2kl1.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        System.out.println(tableIndCo2kl1.summarize(Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).apply());
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println(
-            table.summarize(
+            copyOfTable.summarize(
                 Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
         System.out.println(System.lineSeparator() + "Davon NKV < 1:");
         System.out.println(
@@ -148,25 +143,27 @@ public class RunLocalCsvScrapingKMT {
     }
 
     {
+        Table tableCo2_700_Kl1 = copyOfTable.where(copyOfTable.numberColumn(Headers.NKV_CO2_700_EN ).isLessThan(1. ) );
+        Table tableCo2_2000_Kl1 = copyOfTable.where(copyOfTable.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
         //KMT
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println("### KMT ###");
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println("All projects");
-        System.out.println(table.summarize(Headers.NKV_ORIG, count ).apply() );
+        System.out.println(copyOfTable.summarize(Headers.NKV_ORIG, count ).apply() );
 
         System.out.println(BvwpUtils.SEPARATOR);
         System.out.println(BvwpUtils.SEPARATOR);
         Table kmtTable = Table.create("Projects with BCR < 1");
         kmtTable.addColumns(DoubleColumn.create("#Projects"
-            , new double[]{table.rowCount()
+            , new double[]{copyOfTable.rowCount()
         }
         ));
         kmtTable.addColumns(DoubleColumn.create("Base"
             , new double[]{tableBaseKl1.rowCount()}
         ));
         kmtTable.addColumns(DoubleColumn.create("CO2_680"
-            , new double[]{tableCo2_680_Kl1.rowCount()}
+            , new double[]{tableCo2_700_Kl1.rowCount()}
         ));
         kmtTable.addColumns(DoubleColumn.create("Co2_2000"
             , new double[]{tableCo2_2000_Kl1.rowCount()}
