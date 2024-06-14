@@ -181,29 +181,35 @@ public class RunLocalCsvScrapingKMT {
             new CsvWriter().write(nkvBelow1_count, options);
         }
 
-//        //versuch mal die eingesparten Kosten auszugeben für die cases.
-//        System.out.println(BvwpUtils.SEPARATOR);
-//        System.out.println(BvwpUtils.SEPARATOR);
-//        {
-//            Table nkvBelow1_costs = Table.create("Projects with BCR < 1 -- safed Investment Costs");
-//            nkvBelow1_costs.addColumns(DoubleColumn.create("#Projects"
-//                    , new double[]{tbl.rowCount()
-//                    }
-//            ));
+        //versuch mal die eingesparten Kosten auszugeben für die cases.
+        System.out.println(BvwpUtils.SEPARATOR);
+        System.out.println(BvwpUtils.SEPARATOR);
+        {
+            Table nkvBelow1_costs = Table.create("Projects with BCR < 1 -- safed Investment Costs");
+//            nkvBelow1_costs = tbl.where(tbl.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
 //
-//            //Erstelle eine Spalte für jeden "Fall"
-//            for (String s : headersKMT) {
-//                Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
-//                nkvBelow1_costs.addColumns(DoubleColumn.create(s, new double[]{tblBelow1.summarize(Headers.INVCOST_ORIG, sum).apply().}));
-//            }
-//            System.out.println(nkvBelow1_costs.print());
-//
-//            var options = CsvWriteOptions.builder("output/NKV_below_1_costsSafed.csv").separator(';').build();
-//            new CsvWriter().write(nkvBelow1_costs, options);
-//
-//            System.out.println(tblBelow1.toString());
-//            System.out.println(tblBelow1.summarize(Headers.INVCOST_ORIG, sum).apply());
-//        }
+//            nkvBelow1_costs.summarize(Headers.INVCOST_ORIG, Headers.CO_2_EQUIVALENTS_EMISSIONS, sum);
+//            System.out.println(nkvBelow1_costs.summarize(Headers.INVCOST_ORIG, Headers.CO_2_EQUIVALENTS_EMISSIONS, sum).apply());
+            nkvBelow1_costs.addColumns(DoubleColumn.create("#Projects"
+                    , new double[]{tbl.rowCount()
+                    }
+            ));
+
+            //Erstelle eine Spalte für jeden "Fall"
+            for (String s : headersKMT) {
+                Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+                nkvBelow1_costs.addColumns(DoubleColumn.create(s, new double[]{(double) tblBelow1.summarize(Headers.INVCOST_ORIG, sum).apply().get(0,0)}));
+            }
+            System.out.println(nkvBelow1_costs.print());
+
+            var options = CsvWriteOptions.builder("output/NKV_below_1_costsSafed.csv").separator(';').build();
+            new CsvWriter().write(nkvBelow1_costs, options);
+
+            //Todo: Noch hinzufügen, dass da vielleicht in Spalte 1 steht, was die Zeile anzeigt (anstatt der 221 Projekte)
+            //Todo: Zeile hinzufügen zu eingsparten Projektanzahl. --> alles in einer Tabelle zusammenfassen??
+            //Todo: ! Zeile einfügen, welceh die relative Abweichung zum Base-Case anzeigt... (x% Projekte / Costen sind "raus")
+            //Todo: CO2-Einsparung ermittlen: Wie kommen wir da auf die CO2-Emissionen? Ist das alles in co2eq? oder welche Werte brauche ich?
+        }
 
     }
   }
