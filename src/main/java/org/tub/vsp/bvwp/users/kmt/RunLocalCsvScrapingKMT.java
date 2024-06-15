@@ -170,7 +170,7 @@ public class RunLocalCsvScrapingKMT {
         //Todo: Eigentlich müsste man aus dem folgenden eine Funktion machen können, mit wenigen übergabe-Infos. Weil inhaltlich ist es 3x das gleiche.
         { //Projektanzahl
             Table nkvBelow1_count = Table.create("Nu of Projects with BCR < 1 ");
-            nkvBelow1_count.addColumns(DoubleColumn.create("# All Projects"
+            nkvBelow1_count.addColumns(DoubleColumn.create("# of all Projects"
                     , new double[]{tbl.rowCount()
                     }
             ));
@@ -190,7 +190,7 @@ public class RunLocalCsvScrapingKMT {
 
         { // Gesparte Investitionskosten - Barwert der Kosten in Mio EUR
             Table nkvBelow1_costs = Table.create("Projects with BCR < 1 -- safed Investment Costs - Barwert (Mio EUR)");
-            nkvBelow1_costs.addColumns(DoubleColumn.create("Costs of all projects"
+            nkvBelow1_costs.addColumns(DoubleColumn.create("Investment costs of all projects (Mio EUR)"
                     , (double) tbl.summarize(Headers.INVCOST_ORIG, sum).apply().get(0,0))
             );
 
@@ -209,7 +209,7 @@ public class RunLocalCsvScrapingKMT {
 
         { // Gesparte CO2 - Emissionen: Aus Verkehr und Lebenszyklusemissionen (t/a)
             Table nkvBelow1_co2safed = Table.create("Projects with BCR < 1 -- safed CO2 emissions -- direct and lifecycle of infrastructure (t/a");
-            nkvBelow1_co2safed.addColumns(DoubleColumn.create("Costs of all projects"
+            nkvBelow1_co2safed.addColumns(DoubleColumn.create("CO2 Emissions of all projects (t/a)"
                     , (double) tbl.summarize(Headers.CO_2_EQUIVALENTS_EMISSIONS, sum).apply().get(0,0))
             );
 
