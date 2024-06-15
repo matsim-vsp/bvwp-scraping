@@ -163,7 +163,12 @@ public class RunLocalCsvScrapingKMT {
         headersKMT.add(Headers.NKV_CO2_2000_INVCOST150_EN);
         headersKMT.add(Headers.NKV_CO2_2000_INVCOST200_EN);
 
-        {
+        //General Todos for all three analysis:
+        //Todo: Zeile hinzufügen zu eingsparten Projektanzahl. --> alles in einer Tabelle zusammenfassen??
+        //Todo: ! Zeile einfügen, welceh die relative Abweichung zum Base-Case anzeigt... (x% Projekte / Costen sind "raus")
+
+        //Todo: Eigentlich müsste man aus dem folgenden eine Funktion machen können, mit wenigen übergabe-Infos. Weil inhaltlich ist es 3x das gleiche.
+        { //Projektanzahl
             Table nkvBelow1_count = Table.create("Nu of Projects with BCR < 1 ");
             nkvBelow1_count.addColumns(DoubleColumn.create("# All Projects"
                     , new double[]{tbl.rowCount()
@@ -181,11 +186,10 @@ public class RunLocalCsvScrapingKMT {
             new CsvWriter().write(nkvBelow1_count, options);
         }
 
-        //versuch mal die eingesparten Kosten auszugeben für die cases.
         System.out.println(BvwpUtils.SEPARATOR);
-        System.out.println(BvwpUtils.SEPARATOR);
-        {
-            Table nkvBelow1_costs = Table.create("Projects with BCR < 1 -- safed Investment Costs");
+
+        { // Gesparte Investitionskosten - Barwert der Kosten in Mio EUR
+            Table nkvBelow1_costs = Table.create("Projects with BCR < 1 -- safed Investment Costs - Barwert (Mio EUR)");
             nkvBelow1_costs.addColumns(DoubleColumn.create("Costs of all projects"
                     , (double) tbl.summarize(Headers.INVCOST_ORIG, sum).apply().get(0,0))
             );
@@ -199,10 +203,25 @@ public class RunLocalCsvScrapingKMT {
 
             var options = CsvWriteOptions.builder("output/NKV_below_1_costsSafed.csv").separator(';').build();
             new CsvWriter().write(nkvBelow1_costs, options);
+        }
 
-            //Todo: Zeile hinzufügen zu eingsparten Projektanzahl. --> alles in einer Tabelle zusammenfassen??
-            //Todo: ! Zeile einfügen, welceh die relative Abweichung zum Base-Case anzeigt... (x% Projekte / Costen sind "raus")
-            //Todo: CO2-Einsparung ermittlen: Wie kommen wir da auf die CO2-Emissionen? Ist das alles in co2eq? oder welche Werte brauche ich?
+        System.out.println(BvwpUtils.SEPARATOR);
+
+        { // Gesparte CO2 - Emissionen: Aus Verkehr und Lebenszyklusemissionen (t/a)
+            Table nkvBelow1_co2safed = Table.create("Projects with BCR < 1 -- safed CO2 emissions -- direct and lifecycle of infrastructure (t/a");
+            nkvBelow1_co2safed.addColumns(DoubleColumn.create("Costs of all projects"
+                    , (double) tbl.summarize(Headers.CO_2_EQUIVALENTS_EMISSIONS, sum).apply().get(0,0))
+            );
+
+            //Erstelle eine Spalte für jeden "Fall"
+            for (String s : headersKMT) {
+                Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+                nkvBelow1_co2safed.addColumns(DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.CO_2_EQUIVALENTS_EMISSIONS, sum).apply().get(0,0)));
+            }
+            System.out.println(nkvBelow1_co2safed.print());
+
+            var options = CsvWriteOptions.builder("output/NKV_below_1_co2Safed.csv").separator(';').build();
+            new CsvWriter().write(nkvBelow1_co2safed, options);
         }
 
     }
