@@ -165,7 +165,7 @@ public class RunLocalCsvScrapingKMT {
 
         {
             Table nkvBelow1_count = Table.create("Nu of Projects with BCR < 1 ");
-            nkvBelow1_count.addColumns(DoubleColumn.create("#Projects"
+            nkvBelow1_count.addColumns(DoubleColumn.create("# All Projects"
                     , new double[]{tbl.rowCount()
                     }
             ));
@@ -177,7 +177,7 @@ public class RunLocalCsvScrapingKMT {
             }
             System.out.println(nkvBelow1_count.print());
 
-            var options = CsvWriteOptions.builder("output/NKV_below_1.csv").separator(';').build();
+            var options = CsvWriteOptions.builder("output/NKV_below_1_projects.csv").separator(';').build();
             new CsvWriter().write(nkvBelow1_count, options);
         }
 
@@ -186,14 +186,9 @@ public class RunLocalCsvScrapingKMT {
         System.out.println(BvwpUtils.SEPARATOR);
         {
             Table nkvBelow1_costs = Table.create("Projects with BCR < 1 -- safed Investment Costs");
-//            nkvBelow1_costs = tbl.where(tbl.numberColumn(Headers.NKV_CO2_2000_EN).isLessThan(1.));
-//
-//            nkvBelow1_costs.summarize(Headers.INVCOST_ORIG, Headers.CO_2_EQUIVALENTS_EMISSIONS, sum);
-//            System.out.println(nkvBelow1_costs.summarize(Headers.INVCOST_ORIG, Headers.CO_2_EQUIVALENTS_EMISSIONS, sum).apply());
-            nkvBelow1_costs.addColumns(DoubleColumn.create("#Projects"
-                    , new double[]{tbl.rowCount()
-                    }
-            ));
+            nkvBelow1_costs.addColumns(DoubleColumn.create("Costs of all projects"
+                    , (double) tbl.summarize(Headers.INVCOST_ORIG, sum).apply().get(0,0))
+            );
 
             //Erstelle eine Spalte für jeden "Fall"
             for (String s : headersKMT) {
@@ -205,7 +200,6 @@ public class RunLocalCsvScrapingKMT {
             var options = CsvWriteOptions.builder("output/NKV_below_1_costsSafed.csv").separator(';').build();
             new CsvWriter().write(nkvBelow1_costs, options);
 
-            //Todo: Noch hinzufügen, dass da vielleicht in Spalte 1 steht, was die Zeile anzeigt (anstatt der 221 Projekte)
             //Todo: Zeile hinzufügen zu eingsparten Projektanzahl. --> alles in einer Tabelle zusammenfassen??
             //Todo: ! Zeile einfügen, welceh die relative Abweichung zum Base-Case anzeigt... (x% Projekte / Costen sind "raus")
             //Todo: CO2-Einsparung ermittlen: Wie kommen wir da auf die CO2-Emissionen? Ist das alles in co2eq? oder welche Werte brauche ich?
