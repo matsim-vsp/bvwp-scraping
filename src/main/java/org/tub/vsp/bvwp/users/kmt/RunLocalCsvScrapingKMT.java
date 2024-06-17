@@ -275,8 +275,11 @@ public class RunLocalCsvScrapingKMT {
     Figure figureNkvChange_Co2_2000_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST150_EN);
     Figure figureNkvChange_Co2_2000_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST200_EN);
 
+      Figure figureNkvChange_InvCost150_200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOST150_EN, Headers.NKV_INVCOST200_EN);
+    Figure figureNkvChange_Co2_700_InvCost150_200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOST150_EN, Headers.NKV_CO2_700_INVCOST200_EN);
+      Figure figureNkvChange_Co2_2000_InvCost150_200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST150_EN, Headers.NKV_CO2_2000_INVCOST200_EN);
 
-    String page = MultiPlotUtils.pageTop() + System.lineSeparator() +
+      String page = MultiPlotUtils.pageTop() + System.lineSeparator() +
         figureNkvChangeCo2_700.asJavascript("plot1") + System.lineSeparator() +
         figureNkvChangeInduz_2000.asJavascript("plot2") + System.lineSeparator() +
 
@@ -292,6 +295,10 @@ public class RunLocalCsvScrapingKMT {
         figureNkvChange_Co2_2000_InvCost150.asJavascript("plot10") + System.lineSeparator() +
         figureNkvChange_Co2_2000_InvCost200.asJavascript("plot11") + System.lineSeparator() +
 
+        //Plot, der beide Inv Kostenveränderungen für alle Projekte enthält
+        figureNkvChange_InvCost150_200.asJavascript("plotA") + System.lineSeparator() +
+        figureNkvChange_Co2_700_InvCost150_200.asJavascript("plotB") + System.lineSeparator() +
+        figureNkvChange_Co2_2000_InvCost150_200.asJavascript("plotC") + System.lineSeparator() +
         MultiPlotUtils.pageBottom;
 
     File outputFile = Paths.get("EWGT_CO2-Values.html").toFile();

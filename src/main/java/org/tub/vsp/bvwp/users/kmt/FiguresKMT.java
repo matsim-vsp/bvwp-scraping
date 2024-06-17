@@ -232,9 +232,10 @@ class FiguresKMT {
       double[] xy1 = new double[]{1., 1.};
 
       Trace diagonale = ScatterTrace.builder( xx, yy )
-          .name(xName + " = " + yName)
-          .mode( Mode.LINE )
-          .build();
+			  .name(xName + " = " + yName)
+			  .mode( Mode.LINE )
+			  .marker( Marker.builder().color( "gray" ).build() )
+			  .build();
 
       Trace horizontalCbr1 = ScatterTrace.builder( xx, xy1 )
           .name(yName + " = 1")
@@ -252,6 +253,91 @@ class FiguresKMT {
       return new Figure( layout, cbrOverCbrTrace, diagonale, horizontalCbr1, verticalCbr1 );
   }
 
+	/**
+	 *  Für NKV vergleich-Plot mit 2  Y-Achsen.
+	 * @param plotWidth
+	 * @param table
+	 * @param xName
+	 * @param yName
+	 * @param yName2
+	 * @return
+	 */
+	static Figure createFigureNkvChange(int plotWidth, Table table, String xName, String yName, String yName2) {
+
+//        String xName = Headers.NKV_NO_CHANGE;
+//        String yName = Headers.NKV_CO2;
+		double maxX = 20.;
+		double maxY = 20.;
+
+		Axis xAxis = Axis.builder()
+				.type( Type.LINEAR )
+				.title( xName )
+				.range(0. ,maxX)
+//                             .autoRange( Axis.AutoRange.REVERSED );
+				.build();
+
+		table = table.sortDescendingOn( xName );
+
+		Axis yAxis = Axis.builder()
+				.type( Type.LINEAR )
+				.range(Double.min(0., 1.1*table.numberColumn(yName).min()) ,maxY)
+//                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+				.title( yName )
+				.build();
+
+		Axis yAxis2 = Axis.builder()
+				.type( Type.LINEAR )
+				.range(Double.min(0., 1.1*table.numberColumn(yName2).min()) ,maxY)
+//                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+				.title( yName2 )
+				.build();
+
+		Layout layout = Layout.builder( yName + " and " +yName2 + " over " +xName )
+				.xAxis( xAxis )
+				.yAxis( yAxis )
+				.yAxis2( yAxis2 )
+				.width( plotWidth )
+				.build();
+
+		Trace cbrOverCbrTrace1 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+				.text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+				.name( yName )
+				.marker( Marker.builder().color( "blue" ).build() )
+				.build();
+
+		Trace cbrOverCbrTrace2 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName2 ) )
+				.text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
+				.name( yName2 )
+				.marker( Marker.builder().color( "red" ).build() )
+				.build();
+
+//        double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
+//        double[] yy = new double[]{0., 1.1* table.numberColumn( xName ).max()};
+		double[] xx = new double[]{0., maxX };
+		double[] yy = new double[]{0., maxY};
+		double[] xy1 = new double[]{1., 1.};
+
+		Trace diagonale = ScatterTrace.builder( xx, yy )
+				.name(xName + " = " + yName)
+				.mode( Mode.LINE )
+				.marker(Marker.builder().color("orange").build())
+				.build();
+
+		Trace horizontalCbr1 = ScatterTrace.builder( xx, xy1 )
+				.name(yName + " = 1")
+				.mode( Mode.LINE )
+				.marker( Marker.builder().color( "gray" ).build() )
+				.build();
+
+		Trace verticalCbr1 = ScatterTrace.builder( xy1, yy )
+				.name(xName + " = 1")
+				.mode( Mode.LINE )
+				.marker( Marker.builder().color( "gray" ).build() )
+				.build();
+
+
+		return new Figure( layout, cbrOverCbrTrace1, cbrOverCbrTrace2, diagonale, horizontalCbr1, verticalCbr1 );
+	}
 
 	/** Idee um eine Trennung zu erzeugen... Noch nicht optimal
 	 * @param title
