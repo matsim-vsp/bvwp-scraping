@@ -203,37 +203,37 @@ public class ComputationKN {
         b_all -= b_co2_induz;
 
         // ### then rescale the remaining benefit with the corresponding modification:
-
-        b_all *= modifications.nonCo2BenefitsFactor();
-
+        {
+            double b_tmp = b_all;
+            b_all *= modifications.nonCo2BenefitsFactor();
+            prn( "b w nonCo2 factor:", b_all, b_tmp );
+        }
         // ### then add the CO2 components with the new values:
 
         // co2 Bau
         {
-//            double b_tmp = b_all;
+            double b_tmp = b_all;
             b_all += modifications.co2Price() / 145. * benefits.co2_infra;
-//            prn("b_co2_infra", b_all, b_tmp);
+            prn("b after co2 infra:", b_all, b_tmp);
         }
 
         // co2 Betrieb
 
-
-//        double bb_tmp = b_all;
         {
-//            double b_tmp = b_all;
+            double b_tmp = b_all;
             b_all += b_co2_reroute / 145. * modifications.co2Price();
-//            prn("co2 after reRoute", b_all, b_tmp);
+            prn("b after co2 reroute:", b_all, b_tmp);
         }
         {
-//            double b_tmp = b_all;
+            double b_tmp = b_all;
             b_all += b_co2_verl / 145. * modifications.co2Price();
-//            prn("co2 after verl", b_all, b_tmp);
+            prn("b after co2 verl:", b_all, b_tmp);
         }
         {
-//            double b_tmp = b_all;
+            double b_tmp = b_all;
             b_all += b_co2_induz / 145. * modifications.co2Price();
             b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145;
-//            prn("co2 after induz", b_all, b_tmp);
+            prn("b after co2 induz", b_all, b_tmp);
         }
 //        prn("b_co2_betrieb", b_all, bb_tmp);
 

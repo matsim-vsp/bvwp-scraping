@@ -89,7 +89,7 @@ class Figures1RailKN{
 			Headers.addCap5( table, NKV_ORIG );
 //			Headers.addCap5( table, NKV_EL03 );
 //			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
-			Headers.addCap5( table, NKV_CARBON700 );
+			Headers.addCap5( table, NKV_CARBON700ptpr0 );
 //			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 
 //			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
@@ -141,7 +141,10 @@ class Figures1RailKN{
 		}
 
 		if ( this.xName != null ){
-			table = table.sortAscendingOn( this.xName );
+			if ( this.xName.contains( "NKV" ) ) {
+				xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
+			} else{
+			}
 		}
 
 		this.xAxis = xAxisBuilder.title( this.xName )
@@ -150,9 +153,10 @@ class Figures1RailKN{
 
 		this.table = table;
 
+		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, NKV_ORIG );
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
 //		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
-		nkvMin = table.doubleColumn( NKV_CARBON700 ).min();
+		nkvMin = table.doubleColumn( NKV_CARBON700ptpr0 ).min();
 
 
 
@@ -259,6 +263,8 @@ class Figures1RailKN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure nkv_orig(){
+		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, NKV_ORIG );
+
 		String yName = NKV_ORIG_CAPPED5;
 		String y2Name = NKV_ORIG_CAPPED5;
 
@@ -355,7 +361,7 @@ class Figures1RailKN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure nkv_el03_carbon700(){
-		String yName = NKV_EL03_CARBON700tpr0;
+		String yName = NKV_EL03_CARBON700ptpr0;
 		String y2Name = NKV_EL03_CARBON700_CAPPED5;
 
 		Axis yAxis = Axis.builder()

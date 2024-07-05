@@ -24,8 +24,8 @@ public class NkvCalculator {
     public Double calculateNkv( Modifications modifications ) {
         return calculateNkv( modifications, this.streetBaseDataContainer );
     }
-    public Double calculateCost_CO2( Modifications modifications ) {
-        return calculateCost_CO2( modifications, this.streetBaseDataContainer );
+    public Double calculateCo2_t( Modifications modifications ) {
+        return calculateCo2_t( modifications, this.streetBaseDataContainer );
     }
 
     // old static methods beyond:
@@ -95,7 +95,7 @@ public class NkvCalculator {
     }
 
     @Deprecated // use instance approach
-    public static Double calculateCost_CO2( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
+    public static Double calculateCo2_t( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
@@ -103,10 +103,10 @@ public class NkvCalculator {
         if (a.isEmpty() || b.isEmpty()) {
             throw new RuntimeException( "co2 costs cannot be computed" );
         }
-        final double co2Costs = -b_co2( modifications, a.get(), b.get() );
+        final double result = -b_co2( modifications, a.get(), b.get() ) / 145.;
 
-        log.warn( TEXT_RED + "project=" + streetBaseDataContainer.getProjectInformation().getProjectNumber() + "; co2Costs=" + co2Costs + TEXT_BLACK );
+        log.warn( TEXT_RED + "project=" + streetBaseDataContainer.getProjectInformation().getProjectNumber() + "; result=" + result + TEXT_BLACK );
 
-        return co2Costs;
+        return result;
     }
 }

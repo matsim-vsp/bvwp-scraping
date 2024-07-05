@@ -11,10 +11,7 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvWriteOptions;
 import tech.tablesaw.io.csv.CsvWriter;
-import tech.tablesaw.plotly.components.Axis;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.components.Marker;
+import tech.tablesaw.plotly.components.*;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
@@ -37,6 +34,9 @@ class Figures1KN{
 	final double nkvCappedMax;
 	final double nkvMin;
 	private static boolean init = true ;
+	Margin defaultMargin;
+
+	static final Font defaultFont = Font.builder().size( 20 ).family( Font.Family.VERDANA ).build();
 	Figures1KN( Table table, String xName ){
 		this.xName = xName;
 		Axis.AxisBuilder xAxisBuilder = Axis.builder();
@@ -88,16 +88,17 @@ class Figures1KN{
 			// ===========================
 			// ===========================
 			Headers.addCap5( table, NKV_EL03_CARBON215_INVCOSTTUD );
-			Headers.addCap5( table, NKV_EL03_CARBON700tpr0_INVCOSTTUD );
+			Headers.addCap5( table, NKV_EL03_CARBON700ptpr0_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
 			Headers.addCap5( table, NKV_ORIG );
 			Headers.addCap5( table, NKV_EL03 );
-			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
-			Headers.addCap5( table, NKV_CARBON700 );
+			Headers.addCap5( table, NKV_EL03_CARBON700ptpr0 );
+			Headers.addCap5( table, NKV_CARBON700ptpr0 );
 			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 
 			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
+			Headers.addCap( 10, table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
 			// ===========================
 			// ===========================
 			{
@@ -114,7 +115,7 @@ class Figures1KN{
 			{
 				DoubleColumn column = DoubleColumn.create( EINSTUFUNG_AS_NUMBER );
 				final double factor = 8.;
-				final double offset = 2.;
+				final double offset = 6.;
 				for( String prio : table.stringColumn( EINSTUFUNG ) ){
 					switch( Einstufung.valueOf( prio ) ){
 						case VBE -> {
@@ -163,9 +164,17 @@ class Figures1KN{
 
 		this.table = table;
 
+		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, NKV_ORIG );
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
-		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
+		nkvMin = table.doubleColumn( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ).min();
 
+		this.defaultMargin = Margin.builder()
+//						.autoExpand( true )
+				      .padding( 0 )
+				      .top( 25 ) // even smaller number swallows the title
+				      .bottom( 100 )
+				      .build();
+		;
 
 
 	}
@@ -332,7 +341,7 @@ class Figures1KN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure nkv_el03_carbon700(){
-		String yName = NKV_EL03_CARBON700tpr0;
+		String yName = NKV_EL03_CARBON700ptpr0;
 		String y2Name = NKV_EL03_CARBON700_CAPPED5;
 
 		Axis yAxis = Axis.builder()
@@ -680,5 +689,81 @@ class Figures1KN{
 		Table tableWb = table.where( table.stringColumn( BAUTYP ).containsString( "KNOTENPUNKT" ) ) ;
 		final Trace traceWb = getTrace( xName, y2Name, tableWb, "Knotenpunkt", "cyan" );
 		return traceWb;
+	}
+	static List<Trace> getTracesByColor( Table table, String xName, String y2Name ){
+		List<Trace> list = new ArrayList<>();
+		list.add( getTraceRed( table, xName, y2Name ) );
+		list.add( getTraceMagenta( table, xName, y2Name ) );
+		list.add( getTraceCyan( table, xName, y2Name ) );
+		list.add( getTraceOrange( table, xName, y2Name ) );
+		return list;
+	}
+	static ScatterTrace diagonalLine( Table table, String xName, String y2Name ){
+		double xMin = table.numberColumn( xName ).min();
+		double yMin = table.numberColumn( y2Name ).min();
+		double overallMin = Math.min( xMin, yMin);
+
+		{
+			var column = table.doubleColumn( xName );
+			for ( int ii=0; ii<column.size(); ii++ ) {
+				if ( Double.isInfinite( column.getDouble( ii ) ) ) {
+					column.set( ii, Double.NaN );
+				}
+			}
+		}
+		{
+			var column = table.doubleColumn( y2Name );
+			for ( int ii=0; ii<column.size(); ii++ ) {
+				if ( Double.isInfinite( column.getDouble( ii ) ) ) {
+					column.setMissing( ii );
+				}
+			}
+		}
+
+		double xMax = table.numberColumn( xName ).max();
+		double yMax = table.numberColumn( y2Name ).max();
+		double overallMax = Math.max( xMax, yMax );
+
+		return ScatterTrace.builder( new double[]{overallMin, overallMax}, new double[]{overallMin, overallMax} ).mode( ScatterTrace.Mode.LINE ).name( "diagonalLine" ).build();
+	}
+	static ScatterTrace diagonalLine2( Table table, String xName, String y2Name ){
+		double xMin = table.numberColumn( xName ).min();
+		double yMin = table.numberColumn( y2Name ).min();
+		double overallMin = Math.max( xMin, yMin);
+
+		{
+			var column = table.doubleColumn( xName );
+			for ( int ii=0; ii<column.size(); ii++ ) {
+				if ( Double.isInfinite( column.getDouble( ii ) ) ) {
+					column.set( ii, Double.NaN );
+				}
+			}
+		}
+		{
+			var column = table.doubleColumn( y2Name );
+			for ( int ii=0; ii<column.size(); ii++ ) {
+				if ( Double.isInfinite( column.getDouble( ii ) ) ) {
+					column.setMissing( ii );
+				}
+			}
+		}
+
+		double xMax = table.numberColumn( xName ).max();
+		double yMax = table.numberColumn( y2Name ).max();
+		double overallMax = Math.min( xMax, yMax );
+
+		return ScatterTrace.builder( new double[]{overallMin, overallMax}, new double[]{overallMin, overallMax} ).mode( ScatterTrace.Mode.LINE ).name( "diagonalLine" ).build();
+	}
+	static ScatterTrace vertialNkvOneLine( Table table, String y2Name ){
+		return ScatterTrace.builder( new double[]{1., 1.}, new double[]{0., 1.1 * table.numberColumn( y2Name ).max()} ).mode( ScatterTrace.Mode.LINE ).name( "NKV=1" ).build();
+	}
+	static ScatterTrace horizontalNkvOneLine( Table table, String x2Name ){
+		return ScatterTrace.builder(  new double[]{0., 1.1 * table.numberColumn( x2Name ).max()}, new double[]{1., 1.} ).mode( ScatterTrace.Mode.LINE ).name( "NKV=1" ).build();
+	}
+	static Axis.AxisBuilder axisBuilder() {
+		return Axis.builder().titleFont( defaultFont );
+	}
+	static Layout.LayoutBuilder layoutBuilder() {
+		return Layout.builder().width( plotWidth ).titleFont( defaultFont );
 	}
 }
