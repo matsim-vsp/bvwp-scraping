@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.costBenefit.StreetCostBenefitMapper;
+import org.tub.vsp.bvwp.data.mapper.environmentalCriteria.StreetEnvironmentalCriteriaMapper;
 import org.tub.vsp.bvwp.data.mapper.physicalEffect.StreetPhysicalEffectMapper;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.StreetProjectInformationMapper;
@@ -72,7 +73,8 @@ public class StreetScraper extends AbstractScraper<StreetBaseDataContainer> {
         return Optional.of(streetBaseDataContainer.setUrl(url)
                                                   .setProjectInformation(StreetProjectInformationMapper.mapDocument(doc))
                                                   .setPhysicalEffect(StreetPhysicalEffectMapper.mapDocument(doc))
-                                                  .setCostBenefitAnalysis(StreetCostBenefitMapper.mapDocument(doc)));
+                                                  .setCostBenefitAnalysis(StreetCostBenefitMapper.mapDocument(doc))
+                                                  .setEnvironmentalCriteria(StreetEnvironmentalCriteriaMapper.mapDocument(doc)));
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {
