@@ -1,5 +1,7 @@
 package org.tub.vsp.bvwp.data.mapper.environmentalCriteria;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
@@ -10,8 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StreetEnvironmentalCriteriaMapper {
+    public static final Logger logger = LogManager.getLogger(StreetEnvironmentalCriteriaMapper.class);
+
     public static StreetEnvironmentalDataContainer mapDocument(Document document) {
         StreetEnvironmentalDataContainer result = new StreetEnvironmentalDataContainer();
+
+        boolean exclude = document.select("p").stream().anyMatch(p -> p.text()
+                                                                       .contains("Die umweltfachliche Beurteilung von Knotenpunkten erfolgt in Form" +
+                                                                               " einer qualitativen Einschätzung."));
+
+        if (exclude) {
+            logger.warn("Excluding environmental criteria for this project");
+            return null;
+        }
 
         Element envTable = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_webprins",
                                              StreetEnvironmentalCriteriaMapper::isEnvironmentalCriteriaTable)
@@ -57,7 +70,7 @@ public class StreetEnvironmentalCriteriaMapper {
     }
 
     private static EnvironmentalCriteria.UmweltBewertung handleBewertung(String bewertung) {
-        if (bewertung.equals("-")) {
+        if (bewertung.equals("-") || bewertung.isBlank()) {
             return null;
         }
         return EnvironmentalCriteria.UmweltBewertung.valueOf(bewertung.toUpperCase());

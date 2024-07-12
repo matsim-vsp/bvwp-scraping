@@ -7,6 +7,6 @@ public record EnvironmentalCriteria(List<Description> description, UmweltBewertu
     }
 
     public enum UmweltBewertung {
-        HOCH, MITTEL, GERING;
+        HOCH, MITTEL, GERING, PLANFESTGESTELLT;
     }
 }
