@@ -26,7 +26,6 @@ public class NkvCalculatorRail{
     @Deprecated // use instance approach
     public static Double calculateNkv(Modifications modifications, RailBaseDataContainer railBaseDataContainer) {
         assert modifications.mehrFzkm() == 0;
-        assert modifications.nonCo2BenefitsFactor() == 1.;
 
         double baukosten_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
         double benefit_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall();

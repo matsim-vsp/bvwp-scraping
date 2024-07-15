@@ -3,12 +3,13 @@ package org.tub.vsp.bvwp.users.kn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
-import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.io.csv.CsvWriteOptions;
+import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
 
@@ -16,7 +17,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -64,137 +65,182 @@ public class RunLocalCsvScrapingKN{
         Table table = csvWriter.writeCsv( allStreetBaseData );
 
         // ===
-        final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, NKV_ORIG);
+        final String NKV_ORIG_CAPPED5 = addCap( 5, table, NKV_ORIG);
         Figures1KN figures1 = new Figures1KN( table, NKV_ORIG_CAPPED5 );
         Figures2KN figures2 = new Figures2KN( table );
 
-        List<Figure> plots1 = new ArrayList<>();
-        List<Figure> plotsZb = new ArrayList<>();
-        List<Figure> plots2 = new ArrayList<>();
+        Map<String,Figure> figures = new LinkedHashMap<>();
 
-//        plots1.add( figures1.invCostTud() );
+//        figures.add( figures1.invCostTud() );
 //
-//        plots1.add( figures1.carbon() );
+//        figures.add( figures1.carbon() );
 //
 //
-//        plots1.add( figures2.fzkmFromTtime_vs_fzkmOrig() );
-//        plots1.add( figures2.fzkmFromTtimeSum_vs_fzkmOrig() );
+//        figures.add( figures2.fzkmFromTtime_vs_fzkmOrig() );
+//        figures.add( figures2.fzkmFromTtimeSum_vs_fzkmOrig() );
 //
-//        plots1.add( figures1.nkv_el03() );
-//        plots1.add( figures1.nkv_carbon700() );
-//        plots1.add( figures1.nkv_el03_carbon700() );
+//        figures.add( figures1.nkv_el03() );
+//        figures.add( figures1.nkv_carbon700() );
+//        figures.add( figures1.nkv_el03_carbon700() );
 //
-//        plots1.add( figures1.elasticities() );
-//        plots1.add( figures1.fzkmDiff() );
-//        plots1.add( figures1.nkv_el03_diff() );
-//        plots1.add( figures1.dtv() );
-//        plots1.add( figures1.fzkmNew() );
+//        figures.add( figures1.elasticities() );
+//        figures.add( figures1.fzkmDiff() );
+//        figures.add( figures1.nkv_el03_diff() );
+//        figures.add( figures1.dtv() );
+//        figures.add( figures1.fzkmNew() );
 
 
         // Induzierter Strassenmehrverkehr:
-        plotsZb.add( figures2.fzkmEl03_vs_fzkmOrig() );
-//        plotsZb.add( figures2.fzkmFromEl03Delta_vs_fzkmOrig() );
-        plotsZb.add( figures2.fzkmFromTtime_vs_fzkmOrig() );
-//        plotsZb.add( figures2.fzkmFromTtimeDelta_vs_fzkmOrig() );
+        figures.put( createHeader1( "Induzierter Strassenmehrverkehr (aus Elastizität 0,3):" ), figures2.fzkmEl03_vs_fzkmOrig() );
+//        figures.add( figures2.fzkmFromEl03Delta_vs_fzkmOrig() );
+        figures.put( createHeader1( "Induzierter Strassenmehrverkehr (aus konstantem Reisezeitbudget):" ), figures2.fzkmFromTtime_vs_fzkmOrig() );
+//        figures.add( figures2.fzkmFromTtimeDelta_vs_fzkmOrig() );
 
 
         // Abhängigkeit von Verkehrsnachfrage:
-        plotsZb.add( figures2.nkvNeu_vs_dtv( NKV_ORIG) );
-//        plotsZb.add( figures2.nkvNeu_vs_dtv( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
+        figures.put( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ORIG ) );
+//        figures.add( figures2.nkvNeu_vs_dtv( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
 
 
         // Veränderung NKV durch ...
 
         // ... Investitionskosten:
-        plotsZb.add( figures2.nkvNew_vs_nkvOrig( 10, NKV_INVCOSTTUD ) );
+        figures.put( createHeader1( "Veränderung NKV durch ..." ) + createHeader2( "... veränderte Investitionskosten (deutl. Minderung NKVs in den meisten Fällen):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_INVCOSTTUD ) );
 
         // ... induzierten Verkehr:
-        plotsZb.add( figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME  ) );
+        figures.put( createHeader2( "... veränderten induz. Strassenmehrverkehr (wenig Änderung):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME ) );
 
         // ... erhöhten CO2-Kosten:
-        plotsZb.add( figures2.nkvNew_vs_nkvOrig( 10, NKV_CARBON700ptpr0 ) );
+        figures.put( createHeader2( "... erhöhte CO2-Kosten (eher wenig Änderung):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_CARBON700ptpr0 ) );
+
+        // ... induz x CO2:
+        figures.put( createHeader2( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten (deutl. Minderung NKVs bei Kombination dieser beiden Einflüsse):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700ptpr0 ));
 
         // ... alle drei:
-        plotsZb.add( figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
+        figures.put( createHeader2( "... veränderte/erhöhte Investitionskosten/induzierten Verkehr/CO2-Kosten (nochmals deutl. Minderung NKVs in den meisten Fällen):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD ) );
 
-        // andere Darstellung "alle drei":
-        plotsZb.addAll( figures2.getFigures( 10, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
+        // ... plus eMob:
+        figures.put( createHeader2( "... zusätzlich Berücksichtigung E-Mobilität:" ),
+                        figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) );
+
+        figures.put( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:"),
+                        figures2.getFigures( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
+//        addHeaderPlusMultipleFigures( figures, createHeader1( "XXX vs. NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:" ),
+//                        figures2.getFigures( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) );
+
+        // ... plus CO2 Preis 2000:
+        figures.put( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten++/E-Mobilität:"),
+                        figures2.getFigures( 10, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
+
+
+        // N pro CO2:
+        table.addColumns( table.doubleColumn( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
+                               .multiply( table.doubleColumn( INVCOST_TUD ) )
+                               .divide( table.doubleColumn( CO2_ELTTIME ) )
+                               .setName( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
+                        );
+
+        figures.put( createDefaultKey( figures ), figures2.nProCo2_vs_nkv( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) );
+
+        figures.put( createDefaultKey( figures ), figures2.getFigures( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
+
+        figures.put( createDefaultKey( figures ), figures2.getFigures( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 1 ) );
 
         // Änlichkeit zwischen carbon cost und Investitionskosten:
-        plotsZb.add( figures2.carbon_vs_invcostTud() );
+        figures.put( createHeader1( "Ähnlichkeit CO2-Kosten und Investitionskosten:" ), figures2.carbon_vs_invcostTud() );
 
         // ###  nicht verwendet:
 
         // changes in investment cost:
-        plots2.add( figures2.invcost_tud_vs_orig() );
+        figures.put( createDefaultKey( figures ), figures2.invcost_tud_vs_orig() );
 
 
 
 
 
 
-//        plots2.add( figures2.cost_VS_nkvOrig() );
+//        figures.add( figures2.cost_VS_nkvOrig() );
 
-//        plots2.add( figures2.costOrigVsCumulativeCostOrig() );
+//        figures.add( figures2.costOrigVsCumulativeCostOrig() );
 
 
-//        plots2.addAll( figures2.getFigures( 5, NKV_ORIG ) );
-//        plots2.addAll( figures2.getFigures( 5, NKV_ELTTIME_CARBON215_INVCOSTTUD ) );
+//        figures.addAll( figures2.getFigures( 5, NKV_ORIG ) );
+//        figures.addAll( figures2.getFigures( 5, NKV_ELTTIME_CARBON215_INVCOSTTUD ) );
 
-//        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
-//        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
-//        plots2.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(Integer.MAX_VALUE ) );
-//        plots2.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
+//        figures.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
+//        figures.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
+//        figures.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(Integer.MAX_VALUE ) );
+//        figures.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
 //
-//        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
-////        plots2.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
-////        plots2.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
-//        plots2.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
+//        figures.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
+////        figures.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
+////        figures.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
+//        figures.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
 //
-//        plots2.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
+//        figures.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
 //
-//        plots2.add( figures2.nco2v_vs_vs_nkvElttimeCarbon700Invcosttud(5 ) );
+//        figures.add( figures2.nco2v_vs_vs_nkvElttimeCarbon700Invcosttud(5 ) );
 
 
         // ===
 
-        StringBuilder page = new StringBuilder( MultiPlotUtils.pageTop() + System.lineSeparator() );
-        for( int ii=0; ii<plots1.size(); ii++ ) {
-            page.append( plots1.get( ii ).asJavascript( "plot" + (ii + 1) ) ).append( System.lineSeparator() );
-        }
-        int index = 1001;
-        for( Figure figure : plotsZb ){
-            page.append( figure.asJavascript( "plot" + index  ) ).append( System.lineSeparator() );
-            index++;
-        }
-        for( int ii=0; ii<plots2.size(); ii++ ) {
-            final char c = (char) (ii + 65); // generate A, B, ... to be backwards compatible with what we had so far.  kai, mar'24
-            page.append( plots2.get( ii ).asJavascript( "plot" + c ) ).append( System.lineSeparator() );
-        }
-        page.append( MultiPlotUtils.pageBottom );
-
-        File outputFile = Paths.get("multiplot.html" ).toFile();
-
-        try ( FileWriter fileWriter = new FileWriter(outputFile)) {
-            fileWriter.write( page.toString() );
+        {
+            File outputFile = Paths.get( "multiplot.html" ).toFile();
+            try( FileWriter fileWriter = new FileWriter( outputFile ) ){
+                fileWriter.write( MultiPlotUtils.createPageV2( figures ) );
+            }
+            new Browser().browse( outputFile );
         }
 
-        new Browser().browse(outputFile );
+        System.exit(-1);
 
         // ===
 
-        Table table2 = table.where( table.stringColumn( Headers.PROJECT_NAME ).containsString( "A61-" ) );
+        Table table2 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
+                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-" ) )
+                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
+                                  );
 
-        Table table3 = Table.create( table2.stringColumn( PROJECT_NAME )
-                        ,table2.numberColumn( Headers.B_OVERALL )
-                        , table2.numberColumn( Headers.INVCOST_ORIG )
-                        , table2.numberColumn( Headers.INVCOST_TUD )
-                        , table2.numberColumn( Headers.NKV_ORIG )
-//                        , table2.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD )
-                        , table2.numberColumn( Headers.NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
-                                   );
+        Table table3 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" )
+                                  );
 
-        System.out.println( table3 );
+        Table table4 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A59-G80" )
+                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A661-G30" ) )
+                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A099-G030" ) )
+                                  );
+
+        Table combined = table2.append( table3 ).append( table4 );
+
+        final Table table2b = createVariousNKVs( table2 );
+        final Table table3b = createVariousNKVs( table3 );
+        final Table table4b = createVariousNKVs( table4 );
+        final Table combinedB = createVariousNKVs( combined );
+
+        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "/dev/stdout" ).separator( ';' ).build() );
+
+        System.out.println();
+
+        System.out.println( table2b );
+        System.out.println();
+        System.out.println( table3b );
+        System.out.println();
+        System.out.println( table4b );
+
+
+        //        {
+//            File tableFile = Paths.get( "table.html" ).toFile();
+//            try( FileWriter fileWriter = new FileWriter( tableFile ) ){
+//                System.out.println("we are here 10");
+//                final String html = table3.write().toString( "csv" );
+//                System.out.println("we are here 20");
+//                System.out.println( html );
+//                System.out.println("we are here 30");
+//                fileWriter.write( html );
+//            }
+//            new Browser().browse( tableFile );
+//        }
+
+//        System.out.println( table3.write().toString("csv") );
 
 //        newTable.write().csv( "a20.csv" );
 
@@ -226,6 +272,39 @@ public class RunLocalCsvScrapingKN{
 //        System.out.println( table.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
 //        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
 //        System.out.println( table2.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+    }
+    private static Table createVariousNKVs( Table table2 ){
+        Table table3 = Table.create( table2.column( PROJECT_NAME )
+                        , table2.column( BAUTYP )
+                        , table2.column( INVCOST_ORIG )
+                        , table2.column( INVCOST_TUD )
+                        , table2.column( NKV_ORIG )
+                        , table2.column( NKV_INVCOSTTUD )
+                        , table2.column( NKV_ELTTIME )
+                        , table2.column( NKV_CARBON700ptpr0 )
+                        , table2.column( NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD )
+                        , table2.column( NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD )
+                        , table2.column( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
+//                        ,table2.numberColumn( Headers.B_OVERALL )
+////                        , table2.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD )
+//                        , table2.numberColumn( Headers.NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
+                                   );
+        return table3;
+    }
+    static String createHeader1( String str ) {
+        return "<h1>" + str + "</h1>";
+    }
+    static String createHeader2( String str ) {
+        return "<h2>" + str + "</h2>";
+    }
+    static void addHeaderPlusMultipleFigures( Map<String,Figure> figuresMap, String str, List<Figure> figuresList ) {
+        figuresMap.put( str, figuresList.removeFirst() );
+        for( Figure figure : figuresList ){
+            figuresMap.put( createDefaultKey( figuresMap ), figure );
+        }
+    }
+    private static String createDefaultKey( Map<String, Figure> figures ){
+        return "<p>Plot Nr. " + figures.size() + ":</p>";
     }
 
 }

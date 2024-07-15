@@ -3,13 +3,13 @@ package org.tub.vsp.bvwp.computation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public record Modifications(double co2Price, double mehrFzkm, double constructionCostFactor, double nonCo2BenefitsFactor) {
-    //TODO nonCo2BenefitsFactor is not used in the codebase
+public record Modifications(double co2Price, double mehrFzkm, double constructionCostFactor, double discountCorrFact, double emobCorrFact) {
 
     private static final Logger log = LogManager.getLogger(Modifications.class);
     public static final double co2PriceBVWP = 145.;
     public static final double co2Price700 = 642.;
     // (700 sind die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012 führt das zu 642.)
+    public static final double co2Price2000 = 2000.*642/700;
     /**
      * Wie {@link #co2Price700}, aber mit 1% Zeitpräferenzrate.
      */
@@ -28,7 +28,7 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
         }
     }
 
-    public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1, 1. );
+    public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1, 1, 1. );
 
     @Override public String toString() {
         return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "]";

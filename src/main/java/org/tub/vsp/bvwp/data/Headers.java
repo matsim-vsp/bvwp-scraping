@@ -26,7 +26,7 @@ public final class Headers{
 	/**
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut PRINS.
 	 */
-	public static final String ADDTL_PKWKM_ORIG = ADDTL_PKWKM + " aus PRINS";
+	public static final String ADDTL_PKWKM_ORIG = ADDTL_PKWKM + " in PRINS";
 	public static final String ADDTL_PKWKM_FROM_TTIME = ADDTL_PKWKM + " aus Reisezeitgewinnen";
 	public static final String ADDTL_PKWKM_FROM_TTIME_DIFF = "addtl_pkwkm_from_ttime_diff";
 
@@ -35,7 +35,7 @@ public final class Headers{
 	 *
 	 * @see org.tub.vsp.bvwp.data.type.Bautyp
 	 */
-	public static final String BAUTYP = "bautyp";
+	public static final String BAUTYP = "Bautyp";
 	/**
 	 * Die (vermutlich negativen) Nutzenbeiträge ("benefits") durch CO2 sowie durch Emissionen, die auf CO2 umgerechnet werden können.  (??)
 	 */
@@ -63,11 +63,11 @@ public final class Headers{
 	/**
 	 * Originale Investitionskosten.
 	 */
-	public static final String INVCOST_ORIG = "investmentCost_orig";
+	public static final String INVCOST_ORIG = "Inv.kosten BVWP 2030";
 	/**
 	 * Investitionskosten nach Berechnung der TUD
 	 */
-	public static final String INVCOST_TUD = "Investitionskosten neu";
+	public static final String INVCOST_TUD = "Inv.kosten neu";
 	/**
 	 * Umrechnung von Emissionen (welchen??) in CO2-Äquivalente.
 	 */
@@ -89,7 +89,7 @@ public final class Headers{
 	/**
 	 * min( 5 , {@link #NKV_ORIG} )
 	 */
-	public static final String NKV_ORIG = "NKV aus PRINS";
+	public static final String NKV_ORIG = "NKV BVWP 2030";
 	/**
 	 * NKV bei erhöhtem CO2-Preis (welchem?).
 	 */
@@ -105,7 +105,7 @@ public final class Headers{
 	 */
 	public static final String NKV_EL03 = "NKV_el03";
 	public static final String NKV_EL03_CAPPED5 = NKV_EL03 + "_capped5";
-	public static final String NKV_CARBON700ptpr0 = "NKV mit erhöhten CO2-Kosten";
+	public static final String NKV_CARBON700ptpr0 = "NKV CO2-Kosten+";
 	public static final String NKV_CARBON700_CAPPED5 = NKV_CARBON700ptpr0 + "_capped5";
 	/**
 	 * Neues NKV mit höherem Mehrverkehr, CO2-Preis 215, sowie höheren Investitionskosten.
@@ -130,14 +130,18 @@ public final class Headers{
 	 * Dies ist da, damit "bubble size" als Funktion der Einstufung geplottet werden kann.
 	 */
 	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
-	public static final String PROJECT_NAME = "project _name";
+	public static final String PROJECT_NAME = "Projektname";
 	public static final String VERKEHRSBELASTUNG_PLANFALL = "DTV_Planfall";
-	public static final String NKV_INVCOSTTUD = "NKV mit erhöhten Baukosten";
-	public static final String NKV_ELTTIME = "NKV mit erhöhtem Straßenmehrverkehr";
+	public static final String NKV_INVCOSTTUD = "NKV mit Inv.kosten+";
+	public static final String NKV_ELTTIME = "NKV mit Straßenmehrverkehr+";
 	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elTtime_carbon215_invcostTud";
-	public static final String NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD = "NKV mit erhöhtem Straßenmehrverkehr/Baukosten/CO2-Preis";
+	public static final String NKV_ELTTIME_CARBON700ptpr0 = "NKV mit  Straßenmehrverkehr+/CO2-Preis+";
+	public static final String NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD = "NKV mit  Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+";
+	public static final String NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+ & EMob";
+	public static final String NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
-	public static final String CO2_ELTTIME = "CO2[mt] bei erhöhem Straßenmehrverkehr";
+	public static final String CO2_ELTTIME = "CO2[Mt] bei Straßenmehrverkehr+";
 
 	public static String capped5Of( String str ) {
 		int cap=5;

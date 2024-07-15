@@ -26,7 +26,7 @@ class Figures2KN extends Figures1KN {
 	}
 	// ========================================================================================
 	// ========================================================================================
-	public Figure nkvNeu_vs_dtv( String whichNKV ){
+	public Figure nkv_vs_dtv( String whichNKV ){
 		String xName = VERKEHRSBELASTUNG_PLANFALL;
 		Axis xAxis = Axis.builder().title(xName ).titleFont( defaultFont ).build();
 
@@ -46,10 +46,10 @@ class Figures2KN extends Figures1KN {
 			traces.add( ScatterTrace.builder( xx, yy ).mode( ScatterTrace.Mode.LINE ).build() );
 		}
 		{
-			traces.add( getTraceCyan( table2, xName, yName ) );
-			traces.add( getTraceMagenta( table2, xName, yName ) );
-			traces.add( getTraceOrange( table2, xName, yName ) );
-			traces.add( getTraceRed( table2, xName, yName ) );
+			traces.addAll( getTraceCyan( table2, xName, yName ) );
+			traces.addAll( getTraceMagenta( table2, xName, yName ) );
+			traces.addAll( getTraceOrange( table2, xName, yName ) );
+			traces.addAll( getTraceRed( table2, xName, yName ) );
 		}
 
 		table2.addColumns( table2.doubleColumn( xName ).power( 2 ).setName( "power2" ) );
@@ -59,7 +59,7 @@ class Figures2KN extends Figures1KN {
 				traces.add( ScatterTrace.builder( new double[]{60_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
 				traces.add( ScatterTrace.builder( new double[]{ 100_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
 			}
-			case NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD -> {
+			case NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD -> {
 				traces.add( ScatterTrace.builder( new double[]{70_000., 110_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
 				traces.add( ScatterTrace.builder( new double[]{ 110_000., 150_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
 			}
@@ -110,14 +110,9 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName  ) );
 
 		traces.add( this.vertialNkvOneLine( yName ) );
-
-		traces.add( getTraceCyan( table2, xName, yName ) );
-		traces.add( getTraceMagenta( table2, xName, yName ) );
-		traces.add( getTraceOrange( table2, xName, yName ) );
-		traces.add( getTraceRed( table2, xName, yName ) );
 
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -229,19 +224,14 @@ class Figures2KN extends Figures1KN {
 		String title = "";
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
+
 		// the nkv=1 line:
 		double[] xx = new double[]{1., 1.};
 		double[] yy = new double[]{0., 1.1* table2.numberColumn( yName ).max() };
-		Trace trace4 = ScatterTrace.builder( xx, yy ).mode( ScatterTrace.Mode.LINE ).name("NKV=1").build();
+		traces.add( ScatterTrace.builder( xx, yy ).mode( ScatterTrace.Mode.LINE ).name("NKV=1").build() );
 
-		final Trace traceCyan = getTraceCyan( table2, xName, yName );
-		final Trace traceMagenta = getTraceMagenta( table2, xName, yName );
-		final Trace traceOrange = getTraceOrange( table2, xName, yName );
-		final Trace traceRed = getTraceRed( table2, xName, yName );
-
-		return new Figure( layout, traceCyan, traceMagenta, traceOrange, traceRed
-				, trace4
-		);
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
 	// ========================================================================================
 	// ========================================================================================
@@ -268,14 +258,9 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
 
 		traces.add( vertialNkvOneLine( y2Name ) );
-
-		traces.add( getTraceCyan( table, xName, y2Name ) );
-		traces.add( getTraceMagenta( table, xName, y2Name ) );
-		traces.add( getTraceOrange( table, xName, y2Name ) );
-		traces.add( getTraceRed( table, xName, y2Name ) );
 
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
@@ -283,7 +268,7 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	public List<Figure> getFigures( int cap, String xNameOrig ){
 		List<Figure> figures = new ArrayList<>();
-		String xName = Headers.cappedOf( cap, xNameOrig );
+//		String xName = Headers.cappedOf( cap, xNameOrig );
 		figures.add( investmentCostTud( cap, xNameOrig ) );
 		figures.add( carbon( cap, xNameOrig ) );
 //		figures.add( cumulativeInvestmentCostTud( cap, xName ) );
@@ -317,6 +302,23 @@ class Figures2KN extends Figures1KN {
 
 	// ========================================================================================
 	// ========================================================================================
+	public Figure nProCo2_vs_nkv( String xName, String yName ){
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().autoRange( Axis.AutoRange.REVERSED );
+
+		Axis.AxisBuilder yAxisBuilder = Axis.builder().titleFont( defaultFont ).title( yName );
+
+		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
+
+		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxisBuilder.build() ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
+//		traces.add( diagonalLine2( table, x2Name, y2Name ) );
+//		traces.add( horizontalNkvOneLine( table, x2Name ) );
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
+	}
+
+	// ========================================================================================
+	// ========================================================================================
 	public Figure carbon_vs_invcostTud(){
 		String xName = INVCOST_TUD;
 		Axis.AxisBuilder xAxisBuilder = Axis.builder();
@@ -336,11 +338,11 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	// ========================================================================================
 	public Figure nco2v_vs_vs_nkvElttimeCarbon700Invcosttud( int cap ){
-		String xName = Headers.cappedOf( cap, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
+		String xName = Headers.cappedOf( cap, NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD );
 		Axis.AxisBuilder xAxisBuilder = Axis.builder().titleFont( defaultFont );
 
 		if ( cap ==Integer.MAX_VALUE ) {
-			xName = NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD;
+			xName = NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD;
 			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
 		} else {
 			xAxisBuilder.range( nkvCappedMax, nkvMin );
@@ -349,14 +351,14 @@ class Figures2KN extends Figures1KN {
 		Table table2 = Table.create( table.stringColumn( PROJECT_NAME )
 				, table.stringColumn( BAUTYP )
 				, table.numberColumn( EINSTUFUNG_AS_NUMBER )
-				, table.doubleColumn( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
+				, table.doubleColumn( NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD )
 				, table.doubleColumn( xName )
 				, table.doubleColumn( INVCOST_TUD )
 				, table.doubleColumn( CO2_COST_EL03 ) // should be ELTTIME!!
 					   );
 
 		final String N_CO2_V = "N-CO2-V";
-		table2.addColumns( table2.doubleColumn( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
+		table2.addColumns( table2.doubleColumn( NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD )
 					 .multiply( table2.doubleColumn( INVCOST_TUD ) )
 					 .divide( table2.doubleColumn( CO2_COST_EL03 ) ).setName( N_CO2_V )
 				 ) ;
@@ -367,17 +369,12 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxisBuilder.title( xName ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
 
 		// the nkv=1 line:
 		double[] xx = new double[]{1., 1.};
 		double[] yy = new double[]{0., 1.1* table2.numberColumn( yName ).max() };
 		traces.add( ScatterTrace.builder( xx, yy ).mode( ScatterTrace.Mode.LINE ).name("NKV=1").build() );
-
-		traces.add( getTraceCyan( table2, xName, yName ) );
-		traces.add( getTraceMagenta( table2, xName, yName ) );
-		traces.add( getTraceOrange( table2, xName, yName ) );
-		traces.add( getTraceRed( table2, xName, yName ) );
 
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
@@ -396,14 +393,9 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder("").xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name  ) );
 
 		traces.add( vertialNkvOneLine( y2Name ) );
-
-		traces.add( getTraceCyan( table, xName, y2Name ) );
-		traces.add( getTraceMagenta( table, xName, y2Name ) );
-		traces.add( getTraceOrange( table, xName, y2Name ) );
-		traces.add( getTraceRed( table, xName, y2Name ) );
 
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -438,17 +430,12 @@ class Figures2KN extends Figures1KN {
 				      .width( plotWidth )
 				      .build();
 
-		List<Trace> traces = new ArrayList<>();
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
 
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .name( String.format( legendFormat, yName ) )
 //					  .build();
-
-		traces.add( getTraceCyan( table, xName, y2Name ) );
-		traces.add( getTraceMagenta( table, xName, y2Name ) );
-		traces.add( getTraceOrange( table, xName, y2Name ) );
-		traces.add( getTraceRed( table, xName, y2Name ) );
 
 		{
 			double[] xx = new double[]{ table.numberColumn( xName ).min(), table.numberColumn( xName ).max() };
@@ -578,7 +565,9 @@ class Figures2KN extends Figures1KN {
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
 		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
-		traces.add( vertialNkvOneLine( table2, yName ) );
+		if ( xName.contains( "NKV" ) ){
+			traces.add( vertialNkvOneLine( table2, yName ) );
+		}
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
 	private Figure carbon( int cap, String xName ){
@@ -598,7 +587,9 @@ class Figures2KN extends Figures1KN {
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
 		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
-		traces.add( vertialNkvOneLine( table2, yName ) );
+		if ( xName.contains( "NKV" ) ){
+			traces.add( vertialNkvOneLine( table2, yName ) );
+		}
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
 	private Figure cumulativeInvestmentCostTud( int cap, String xName ){

@@ -183,16 +183,13 @@ class Figures1RailKN{
 				      .yAxis( yAxis )
 				      .width( plotWidth )
 				      .build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
+
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
 //					  .build();
-
-		final Trace traceCyan = getTraceCyan( table, xName, y2Name );
-		final Trace traceMagenta = getTraceMagenta( table, xName, y2Name );
-		final Trace traceOrange = getTraceOrange( table, xName, y2Name );
-		final Trace traceRed = getTraceRed( table, xName, y2Name );
-
 
 //		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
 //					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -206,13 +203,7 @@ class Figures1RailKN{
 //					   .mode( ScatterTrace.Mode.LINE )
 //					   .build();
 
-		Figure figure2 = new Figure( layout
-//				, trace
-//				, trace3
-				, traceCyan, traceMagenta
-				, traceOrange, traceRed
-//				, trace4
-		);
+		Figure figure2 = new Figure( layout, traces.toArray(new Trace[]{} ) );
 		return figure2;
 	}
 	// ========================================================================================
@@ -228,16 +219,13 @@ class Figures1RailKN{
 				 .build();
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
+
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
 //					  .build();
-
-		final Trace traceCyan = getTraceCyan( table, xName, y2Name );
-		final Trace traceMagenta = getTraceMagenta( table, xName, y2Name );
-		final Trace traceOrange = getTraceOrange( table, xName, y2Name );
-		final Trace traceRed = getTraceRed( table, xName, y2Name );
-
 
 //		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
 //					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -251,13 +239,7 @@ class Figures1RailKN{
 //					   .mode( ScatterTrace.Mode.LINE )
 //					   .build();
 
-		Figure figure2 = new Figure( layout
-//				, trace
-//				, trace3
-				, traceCyan, traceMagenta
-				, traceOrange, traceRed
-//				, trace4
-		);
+		Figure figure2 = new Figure( layout, traces.toArray(new Trace[]{} ) );
 		return figure2;
 	}
 	// ========================================================================================
@@ -278,8 +260,7 @@ class Figures1RailKN{
 
 		List<Trace> traces = new ArrayList<>();
 
-		final Trace traceWb = getTrace( xName, y2Name, table, "null", "cyan" );
-		traces.add( traceWb );
+		traces.addAll( getTraces( xName, y2Name, table, "null", "cyan" ) );
 
 		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
@@ -300,8 +281,8 @@ class Figures1RailKN{
 
 		List<Trace> traces = new ArrayList<>();
 
-		final Trace traceWb = getTrace( xName, y2Name, table, "null", "cyan" );
-		traces.add( traceWb );
+		final List<Trace> traceWb = getTraces( xName, y2Name, table, "null", "cyan" );
+		traces.addAll( traceWb );
 
 		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
@@ -352,8 +333,8 @@ class Figures1RailKN{
 
 		List<Trace> traces = new ArrayList<>();
 
-		final Trace traceWb = getTrace( xName, y2Name, table, "null", "cyan" );
-		traces.add( traceWb );
+		final List<Trace> traceWb = getTraces( xName, y2Name, table, "null", "cyan" );
+		traces.addAll( traceWb );
 
 		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
@@ -379,16 +360,13 @@ class Figures1RailKN{
 				      .yAxis( yAxis )
 				      .width( plotWidth )
 				      .build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
+
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .name( String.format( legendFormat, String.format( "%30s" , yName ) ) )
 //					  .build();
-
-		final Trace traceCyan = getTraceCyan( table, xName, y2Name );
-		final Trace traceMagenta = getTraceMagenta( table, xName, y2Name );
-		final Trace traceOrange = getTraceOrange( table, xName, y2Name );
-		final Trace traceRed = getTraceRed( table, xName, y2Name );
-
 
 //		Trace trace3 = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( y3Name ) )
 //					   .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -402,13 +380,7 @@ class Figures1RailKN{
 //					   .mode( ScatterTrace.Mode.LINE )
 //					   .build();
 
-		Figure figure2 = new Figure( layout
-//				, trace
-//				, trace3
-				, traceCyan, traceMagenta
-				, traceOrange, traceRed
-//				, trace4
-		);
+		Figure figure2 = new Figure( layout, traces.toArray(new Trace[]{} ) );
 		return figure2;
 	}
 	// ========================================================================================
@@ -425,22 +397,18 @@ class Figures1RailKN{
 				      .width( plotWidth )
 				      .build();
 
-		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
+
+		traces.add( ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
 					  .text( table.stringColumn( PROJECT_NAME ).asObjectArray() )
-					  .build();
-
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
-
+					  .build() );
 		//            double[] xx = new double[]{1., 200.};
 		//            Trace trace1 = ScatterTrace.builder( xx, xx )
 		//                                       .mode( ScatterTrace.Mode.LINE )
 		//                                       .build();
 
-		Figure figure = new Figure( layout, trace, traceWb, traceWbp, traceVb, traceVbe );
+		Figure figure = new Figure( layout, traces.toArray(new Trace[]{} ) );
 		return figure;
 	}
 	// ========================================================================================
@@ -508,15 +476,12 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+		List<Trace> traces = getTracesByColor( table, xName, y2Name );
+
+		traces.add( ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
 					  .text( table.stringColumn( PROJECT_NAME ).asObjectArray() )
-					  .build();
-
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
+					  .build() );
 
 //		Trace trace1 = ScatterTrace.builder( new double[]{1,700}, new double[]{ 1 , 700./ComputationKN.LANE_KM_AB * ComputationKN.FZKM_AB*0.3} )
 //					   .mode( ScatterTrace.Mode.LINE )
@@ -525,10 +490,7 @@ class Figures1RailKN{
 //					   .mode( ScatterTrace.Mode.LINE )
 //					   .build();
 
-		return new Figure( layout, trace
-				,traceWb, traceWbp, traceVb, traceVbe
-//				,trace1, trace2
-		);
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 
 	// ========================================================================================
@@ -546,20 +508,14 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+		List<Trace> traces = getTracesByColor( table, xName, y2Name );
+
+		traces.add( ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
 					  .text( table.stringColumn( PROJECT_NAME ).asObjectArray() )
-					  .build();
+					  .build() );
 
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
-
-
-		return new Figure( layout
-				, trace
-				, traceWb, traceWbp, traceVb, traceVbe );
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	// ========================================================================================
 	// ========================================================================================
@@ -571,24 +527,14 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
+		List<Trace> traces = getTracesByColor( table, xName, y2Name );
+
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .name( String.format( legendFormat, yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .build();
 
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
-
-
-		return new Figure( layout
-//				, trace
-				, traceWb
-				,traceWbp
-				, traceVb
-				, traceVbe
-		);
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	public Figure fzkmNew(){
 		String yName = ADDTL_PKWKM_ORIG;
@@ -603,26 +549,14 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
+		List<Trace> traces = getTracesByColor( table, xName, y2Name );
+
+		traces.add( ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 					  .name( String.format( legendFormat, yName ) )
 					  .text( table.stringColumn( PROJECT_NAME ).asObjectArray() )
-					  .build();
+					  .build() );
 
-		final Trace traceWb = getTraceCyan( table, xName, y2Name );
-		final Trace traceWbp = getTraceMagenta( table, xName, y2Name );
-		final Trace traceVb = getTraceOrange( table, xName, y2Name );
-		final Trace traceVbe = getTraceRed( table, xName, y2Name );
-
-//		log.warn( table.where( table.stringColumn( Headers.PROJECT_NAME ).startsWith( "A008" ) ) );
-//		log.warn("here");
-
-		return new Figure( layout
-				, trace
-				, traceWb
-				,traceWbp
-				, traceVb
-				, traceVbe
-		);
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	// ========================================================================================
 	// ========================================================================================
@@ -638,17 +572,12 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
+		List<Trace> traces = getTracesByColor( table, xName, y2Name );
 
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .name( String.format( legendFormat, yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
 //					  .build();
-
-		traces.add( getTraceCyan( table, xName, y2Name ) );
-		traces.add( getTraceMagenta( table, xName, y2Name ) );
-		traces.add( getTraceOrange( table, xName, y2Name ) );
-		traces.add( getTraceRed( table, xName, y2Name ) );
 
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 
