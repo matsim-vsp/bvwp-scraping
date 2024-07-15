@@ -13,9 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.SequencedMap;
 
-import static org.tub.vsp.bvwp.computation.Modifications.NO_CHANGE;
-import static org.tub.vsp.bvwp.computation.Modifications.co2Price2000;
-import static org.tub.vsp.bvwp.computation.Modifications.co2Price700;
+import static org.tub.vsp.bvwp.computation.Modifications.*;
 
 
 public class RailAnalysisDataContainer {
@@ -58,10 +56,11 @@ public class RailAnalysisDataContainer {
         entries.put(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / baseDataContainer.getProjectInformation().getLength() );
 
         entries.put(Headers.NKV_ORIG, NkvCalculatorRail.calculateNkv( NO_CHANGE, baseDataContainer ) );
-        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
-        entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
-        entries.put(Headers.NKV_CARBON700, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1.), baseDataContainer));
-        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculatorRail.calculateNkv( new Modifications( co2Price2000, 0, 1, 1 ), baseDataContainer ) );
+
+        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1, 1. ), baseDataContainer ) );
+        entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1, 1. ), baseDataContainer ) );
+        entries.put(Headers.NKV_CARBON700ptpr0, NkvCalculatorRail.calculateNkv(new Modifications(co2Price700, 0., 1, 1, 1. ), baseDataContainer ) );
+        entries.put(Headers.NKV_CO2_2000_EN, NkvCalculatorRail.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03, NkvCalculatorRail.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculatorRail.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), baseDataContainer ) );
 //        entries.put(Headers.NKV_EL03_CARBON700tpr0_INVCOSTTUD, NkvCalculatorRail.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1.75 ), baseDataContainer ) );
