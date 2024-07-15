@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.type.Benefit;
 import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.Durations;
 
 import java.text.ParseException;
 import java.util.Optional;
@@ -42,5 +43,26 @@ public class CostBenefitMapperUtils {
         }
 
         return new Cost(costs, overallCosts);
+    }
+
+    public static Durations extractDurations(Element table) {
+        double planning;
+        double construction;
+        double maintenance;
+        try {
+            planning = parseNumberWithSuffix(JSoupUtils.getTextFromRowAndCol(table, 1, 1), "Monate") / 12.;
+            construction = parseNumberWithSuffix(JSoupUtils.getTextFromRowAndCol(table, 2, 1), "Monate") / 12.;
+            maintenance = parseNumberWithSuffix(JSoupUtils.getTextFromRowAndCol(table, 3, 1), "Jahre");
+        } catch (ParseException e) {
+            logger.warn("Could not parse duration value from {}", table);
+            return null;
+        }
+
+        return new Durations(planning, construction, maintenance);
+    }
+
+    private static Double parseNumberWithSuffix(String content, String suffix) throws ParseException {
+        assert content.endsWith(suffix);
+        return JSoupUtils.parseDouble(content.split(" ")[0]);
     }
 }

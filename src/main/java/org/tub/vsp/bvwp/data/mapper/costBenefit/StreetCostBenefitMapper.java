@@ -23,14 +23,14 @@ public class StreetCostBenefitMapper {
                 StreetCostBenefitMapper::isBenefitTable);
         Optional<Element> costTable = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_kosten",
                 StreetCostBenefitMapper::isCostTable);
+        Optional<Element> durationsTable = JSoupUtils.getTableByCssKeyAndPredicate(document, "table.table_kosten2",
+                StreetCostBenefitMapper::isDurationsTable);
 
         //We only scrape the cumulated values
         benefit.ifPresent(element -> result.setNb(extractSimpleBenefit(element, "NB"))
                                            .setNbVehicle(extractSimpleBenefit(element, "Fahrzeugvorhaltekosten", 0))
-                                           .setNbPersonnel(extractSimpleBenefit(element, "Betriebsführungskosten " +
-                                                   "(Personal)", 0))
-                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten " +
-                                                   "(Betrieb)", 0))
+                                           .setNbPersonnel(extractSimpleBenefit(element, "Betriebsführungskosten (Personal)", 0))
+                                           .setNbOperations(extractSimpleBenefit(element, "Betriebsführungskosten (Betrieb)", 0))
                                            .setNw(extractSimpleBenefit(element, "NW"))
                                            .setNs(extractSimpleBenefit(element, "NS"))
                                            .setNrz(extractSimpleBenefit(element, "NRZ"))
@@ -45,6 +45,8 @@ public class StreetCostBenefitMapper {
                                            .setOverallBenefit(extractSimpleBenefit(element, "Gesamtnutzen", 0)));
 
         costTable.ifPresent(element -> result.setCost(CostBenefitMapperUtils.extractCosts(element)));
+
+        durationsTable.ifPresent(element -> result.setDurations(CostBenefitMapperUtils.extractDurations(element)));
 
         return result;
     }
@@ -67,6 +69,13 @@ public class StreetCostBenefitMapper {
                       .get(3)
                       .text()
                       .contains("Summe bewertungsrelevanter Investitionskosten");
+    }
+
+    private static boolean isDurationsTable(Element element) {
+        return element.select("tr")
+                      .get(0)
+                      .text()
+                      .contains("Grundlagen der Barwertermittlung");
     }
 
     private static Benefit extractSimpleBenefit(Element table, String key) {

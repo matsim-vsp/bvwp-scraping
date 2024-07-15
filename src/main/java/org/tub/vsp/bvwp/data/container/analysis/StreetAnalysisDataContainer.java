@@ -22,7 +22,6 @@ public class StreetAnalysisDataContainer {
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
     private final double constructionCostTud;
-   static final double INFLATION_Factor2022to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
 
     public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double investmentCostNew ) {
         this.streetBaseData = streetBaseDataContainer;
@@ -93,12 +92,30 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.NKV_ORIG, nkvCalculator.calculateNkv( NO_CHANGE ) );
         entries.put(Headers.NKV_CO2, nkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1, 1. ) ) );
         entries.put(Headers.NKV_CO2_700_EN, nkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1, 1. ) ) );
-        entries.put(Headers.NKV_CO2_2000_EN, nkvCalculator.calculateNkv( new Modifications( 2000 * INFLATION_Factor2022to2012, 0, 1, 1, 1. ) ) );
+        entries.put(Headers.NKV_CO2_2000_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ) ) );
         entries.put(Headers.NKV_EL03, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1, 1. ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON700ptpr0_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( discountCorr*co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON700ptpr0, nkvCalculator.calculateNkv( new Modifications( discountCorr*co2Price700, addtlFzkmBeyondPrinsEl03, 1. ) ) );
+//        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), streetBaseData ) );
+//        entries.put(Headers.NKV_EL03_CARBON700tpr0_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1.75 ), streetBaseData ) );
+//        entries.put(Headers.NKV_EL03_CARBON700tpr0, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1., 1.75 ), streetBaseData ) );
 //        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );
+
+        //Für EWGT Paper KMT
+        //Nur Investitionskosten ändern sich
+        entries.put(Headers.NKV_INVCOSTTUD_EN, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, constructionCostFactor, 1., 1. ), streetBaseData ) );
+        entries.put(Headers.NKV_INVCOST150_EN, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, 1.5, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_INVCOST200_EN, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, 2, 1. , 1.), streetBaseData ) );
+
+        //Investitionskosten und CO2 Preis ändern sich
+        entries.put(Headers.NKV_CO2_700_INVCOSTTUD_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0, constructionCostFactor, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_700_INVCOST150_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0, 1.5, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_700_INVCOST200_EN, NkvCalculator.calculateNkv( new Modifications( co2Price700, 0, 2, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_2000_INVCOSTTUD_EN, NkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, constructionCostFactor, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_2000_INVCOST150_EN, NkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1.5, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_2000_INVCOST200_EN, NkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 2, 1. , 1.), streetBaseData ) );
+
 //
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
 //        entries.put(Headers.CO2_COST_ORIG, Math.max( 1., nkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
@@ -130,7 +147,8 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.CO2_ELTTIME, nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, addtlFzkmFromTtime, 1, 1, 1. ) ) );
 
         entries.put( Headers.NKV_ELTTIME_CARBON2000_INVCOSTTUD, nkvCalculator.calculateNkv(
-                        new Modifications( 2000 * INFLATION_Factor2022to2012, addtlFzkmFromTtime, constructionCostFactor, 1, 1. ) ) );
+                        new Modifications(
+            co2Price2000, addtlFzkmFromTtime, constructionCostFactor, 1, 1. ) ) );
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr " +

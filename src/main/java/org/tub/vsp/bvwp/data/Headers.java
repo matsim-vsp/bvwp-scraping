@@ -94,8 +94,23 @@ public final class Headers{
 	 * NKV bei erhöhtem CO2-Preis (welchem?).
 	 */
 	public static final String NKV_CO2 = "NKV_co2";
-	public static final String NKV_CO2_2000_EN = "BCR_co2_2000";
-	public static final String NKV_CO2_700_EN = "BCR_co2_680";
+	public static final String NKV_CO2_2000_EN = "BCR_co2_2000"; //2000 Euro/t -> muss dann noch nach 2012 umgerechnet werden
+	public static final String NKV_CO2_700_EN = "BCR_co2_700"; //700 Euro/t lt UBA für 2030 (Preisstand 2020) -> muss dann noch nach 2012 umgerechnet werden
+	/**
+	 * NKV bei erhöhten Investitionskosten (welchen?).
+	 */
+	public static final String NKV_INVCOSTTUD_EN = "BCR_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+	public static final String NKV_INVCOST150_EN = "BCR_invcost150"; //50% höhere Investmentcosts
+	public static final String NKV_INVCOST200_EN = "BCR_invcost200"; //doppelte Investmentcosts
+	/**
+	 * NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis.
+	 */
+	public static final String NKV_CO2_2000_INVCOSTTUD_EN = "BCR_co2_2000_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+	public static final String NKV_CO2_2000_INVCOST150_EN = "BCR_co2_2000_invcost150"; //50% höhere Investmentcosts
+	public static final String NKV_CO2_2000_INVCOST200_EN = "BCR_co2_2000_invcost200"; //doppelte Investmentcosts
+	public static final String NKV_CO2_700_INVCOSTTUD_EN = "BCR_co2_700_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+	public static final String NKV_CO2_700_INVCOST150_EN = "BCR_co2_700_invcost150"; //50% höhere Investmentcosts
+	public static final String NKV_CO2_700_INVCOST200_EN = "BCR_co2_700_invcost200"; //doppelte Investmentcosts
 	/**
 	 * {@link #NKV_EL03_CARBON215_INVCOSTTUD} - {@link #NKV_ORIG}
 	 */
@@ -142,6 +157,10 @@ public final class Headers{
 	public static final String NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 	public static final String CO2_ELTTIME = "CO2[Mt] bei Straßenmehrverkehr+";
+
+	public static final String DAUER_PLANUNG = "Planungsdauer_jahre";
+	public static final String DAUER_BAU = "Baudauer_jahre";
+	public static final String DAUER_BETRIEB = "Betriebsdauer_jahre";
 
 	public static String capped5Of( String str ) {
 		int cap=5;

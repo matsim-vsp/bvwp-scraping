@@ -4,21 +4,13 @@
     "projectNumber": "A20-G10-NI-SH",
     "street": "A 20",
     "priority": "VB",
-    "bautyp": "4-streifiger Neubau"
+    "bautyp": "NB4",
+    "length": 161.0,
+    "verkehrsbelastung2030": 19000.0
   },
   "physicalEffect": {
     "emissionsDataContainer": {
       "emissions": {
-        "CO2": {
-          "pkw": 54773.28,
-          "lkw": -6083.34,
-          "kfz": 48689.94
-        },
-        "PM": {
-          "pkw": 3.0,
-          "lkw": -0.13,
-          "kfz": 2.86
-        },
         "CO": {
           "pkw": 1353.13,
           "lkw": -47.28,
@@ -29,15 +21,25 @@
           "lkw": -1.46,
           "kfz": 11.08
         },
-        "NOX": {
-          "pkw": 103.65,
-          "lkw": -36.81,
-          "kfz": 66.85
+        "CO2": {
+          "pkw": 54773.28,
+          "lkw": -6083.34,
+          "kfz": 48689.94
+        },
+        "PM": {
+          "pkw": 3.0,
+          "lkw": -0.13,
+          "kfz": 2.86
         },
         "SO2": {
           "pkw": 0.66,
           "lkw": -0.03,
           "kfz": 0.63
+        },
+        "NOX": {
+          "pkw": 103.65,
+          "lkw": -36.81,
+          "kfz": 66.85
         }
       },
       "co2Overall": 90786.067
@@ -51,6 +53,11 @@
       "overall": 131.53,
       "induced": 143.95,
       "shifted": 9.75
+    },
+    "vehicleHours": {
+      "overall": -12.96,
+      "induced": 1.46,
+      "shifted": 0.13
     }
   },
   "costBenefitAnalysis": {
@@ -99,14 +106,6 @@
       "overall": -398.107
     },
     "na": {
-      "CO2": {
-        "annual": -7.06,
-        "overall": -175.021
-      },
-      "PM": {
-        "annual": -0.306,
-        "overall": -7.581
-      },
       "CO": {
         "annual": -0.081,
         "overall": -2.007
@@ -115,13 +114,21 @@
         "annual": -0.019,
         "overall": -0.467
       },
-      "NOX": {
-        "annual": -1.029,
-        "overall": -25.52
+      "CO2": {
+        "annual": -7.06,
+        "overall": -175.021
+      },
+      "PM": {
+        "annual": -0.306,
+        "overall": -7.581
       },
       "SO2": {
         "annual": -0.008,
         "overall": -0.205
+      },
+      "NOX": {
+        "annual": -1.029,
+        "overall": -25.52
       }
     },
     "nt": {
@@ -139,6 +146,110 @@
     "cost": {
       "cost": 3145.75,
       "overallCosts": 2737.176
+    },
+    "durations": {
+      "planning": 10.0,
+      "construction": 4.0,
+      "operation": 42.0
+    }
+  },
+  "environmentalCriteria": {
+    "naturschutzVorrangflaechen21": {
+      "description": [
+        {
+          "absolute": 1.6,
+          "betroffenheit": 0.01
+        }
+      ],
+      "bewertung": "MITTEL"
+    },
+    "natura2000Gebiete22": {
+      "description": [
+        {
+          "absolute": 4.0,
+          "betroffenheit": 0.0
+        },
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "unzerschnitteneKernraeume23": {
+      "description": [
+        {
+          "absolute": 15.9,
+          "betroffenheit": 0.1
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "unzerschnitteneGrossraeume24": {
+      "description": [
+        {
+          "absolute": 5.9,
+          "betroffenheit": 0.04
+        },
+        {
+          "absolute": 14.0,
+          "betroffenheit": 0.09
+        },
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        },
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "flaechenInanspruchnahme25": {
+      "description": [
+        {
+          "absolute": 870.9,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": null
+    },
+    "ueberschwemmungsgebiete26": {
+      "description": [
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "GERING"
+    },
+    "wasserschutzgebiete27": {
+      "description": [
+        {
+          "absolute": 0.5,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "verkehrsarmeRaeume28": {
+      "description": [
+        {
+          "absolute": 18941.4,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "kulturLandschaftsschutz29": {
+      "description": [
+        {
+          "absolute": 76.7,
+          "betroffenheit": 0.49
+        }
+      ],
+      "bewertung": "HOCH"
     }
   }
 }

@@ -6,14 +6,17 @@ import org.apache.logging.log4j.Logger;
 public record Modifications(double co2Price, double mehrFzkm, double constructionCostFactor, double discountCorrFact, double emobCorrFact) {
 
     private static final Logger log = LogManager.getLogger(Modifications.class);
+    public static final double INFLATION_Factor2020to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
     public static final double co2PriceBVWP = 145.;
     public static final double co2Price700 = 642.;
     // (700 sind die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012 führt das zu 642.)
-    public static final double co2Price2000 = 2000.*642/700;
+    public static final double co2Price2000 = 2000 * INFLATION_Factor2020to2012;
+    // (2000 als Annahme für die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012)
     /**
      * Wie {@link #co2Price700}, aber mit 1% Zeitpräferenzrate.
      */
     public static final double co2Price215 = 197.;
+
 
     //    public static final double co2Price680 = 623.;
     // (haben wir früher mal verwendet)
@@ -31,6 +34,6 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
     public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1, 1, 1. );
 
     @Override public String toString() {
-        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "]";
+        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "; constructionCostFactor" + constructionCostFactor + "; discountCorrFact" + discountCorrFact + "; emobCorrFact=" + emobCorrFact + "]";
     }
 }
