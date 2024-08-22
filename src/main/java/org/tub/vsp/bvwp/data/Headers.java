@@ -139,7 +139,8 @@ public final class Headers{
 	/**
 	 * Originales NKV.
 	 */
-	public static final String NKV_ORIG = "NKV_orig";
+	public static final String NKV_ORIG = "NKV_original";
+	public static final String NKV_ORIG_EN = "BCR_original";
 	/**
 	 * Dies ist da, damit "bubble size" als Funktion der Einstufung geplottet werden kann.
 	 */
