@@ -190,9 +190,73 @@ public class RunLocalCsvScrapingKMT {
 
       System.out.println(BvwpUtils.SEPARATOR);
 
+      { // Gesparte Projektlänge - km
+        Table nkvBelow1_length =
+                Table.create("Projects with BCR < 1 -- saved project length (km)");
+        nkvBelow1_length.addColumns(
+                DoubleColumn.create(
+                        "project length of all projects (km)",
+                        (double) tbl.summarize(Headers.LENGTH, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_length.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.LENGTH, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_length.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_projectLengthSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_length, options);
+      }
+
+      { // Gesparte (zusätzliche( Fahrsteifenlänge - km
+        Table nkvBelow1_length =
+                Table.create("Projects with BCR < 1 -- saved add. lane length (km) -- estimated from project length");
+        nkvBelow1_length.addColumns(
+                DoubleColumn.create(
+                        "add. lane length of all projects (km)",
+                        (double) tbl.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_length.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_length.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addLaneLengthSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_length, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
+      { // Gesparte verkehrsbelastung PLAN
+        Table nkvBelow1_length =
+                Table.create("Projects with BCR < 1 -- saved add. lane length (km) -- estimated from project length");
+        nkvBelow1_length.addColumns(
+                DoubleColumn.create(
+                        "add. lane length of all projects (km)",
+                        (double) tbl.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_length.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_length.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addLaneLengthSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_length, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
       { // Gesparte Investitionskosten - Barwert der Kosten in Mio EUR
         Table nkvBelow1_costs =
-            Table.create("Projects with BCR < 1 -- safed Investment Costs - Barwert (Mio EUR)");
+            Table.create("Projects with BCR < 1 -- saved Investment Costs - Barwert (Mio EUR)");
         nkvBelow1_costs.addColumns(
             DoubleColumn.create(
                 "Investment costs of all projects (Mio EUR)",
@@ -206,7 +270,7 @@ public class RunLocalCsvScrapingKMT {
         }
         System.out.println(nkvBelow1_costs.print());
 
-        var options = CsvWriteOptions.builder("output/NKV_below_1_costsSafed.csv").separator(';').build();
+        var options = CsvWriteOptions.builder("output/NKV_below_1_costsSaved.csv").separator(';').build();
         new CsvWriter().write(nkvBelow1_costs, options);
       }
 
