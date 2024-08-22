@@ -232,19 +232,19 @@ public class RunLocalCsvScrapingKMT {
 
       System.out.println(BvwpUtils.SEPARATOR);
 
-      { // Gesparte verkehrsbelastung PLAN
+      { // Gesparte zusätzliche PKW-km
         Table nkvBelow1_length =
-                Table.create("Projects with BCR < 1 -- saved add. lane length (km) -- estimated from project length");
+                Table.create("Projects with BCR < 1 -- saved add. vkm ");
         nkvBelow1_length.addColumns(
                 DoubleColumn.create(
-                        "add. lane length of all projects (km)",
-                        (double) tbl.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+                        "add. vkm of all projects",
+                        (double) tbl.summarize(Headers.ADDTL_PKWKM_ORIG, sum).apply().get(0, 0)));
 
         // Erstelle eine Spalte für jeden "Fall"
         for (String s : headersKMT) {
           Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
           nkvBelow1_length.addColumns(
-                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_PKWKM_ORIG, sum).apply().get(0, 0)));
         }
         System.out.println(nkvBelow1_length.print());
 
