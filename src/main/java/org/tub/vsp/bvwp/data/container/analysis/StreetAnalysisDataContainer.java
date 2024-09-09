@@ -143,12 +143,14 @@ public class StreetAnalysisDataContainer {
 
         entries.put( Headers.NKV_ELTTIME_CARBON215_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmFromTtime, constructionCostFactor, 1, 1. ) ) );
         entries.put( Headers.NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price2000, addtlFzkmFromTtime, constructionCostFactor, discountCorrFact, emobCorrFact ) ) );
-        // for the 1.15 see "barwert.mw".  kai, jun'24
+
+        entries.put(Headers.CO2_ORIG, nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, 0., 1, 1, 1. ) ) );
+
         entries.put(Headers.CO2_ELTTIME, nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, addtlFzkmFromTtime, 1, 1, 1. ) ) );
 
-        entries.put( Headers.NKV_ELTTIME_CARBON2000_INVCOSTTUD, nkvCalculator.calculateNkv(
-                        new Modifications(
-            co2Price2000, addtlFzkmFromTtime, constructionCostFactor, 1, 1. ) ) );
+        entries.put(Headers.CO2_ELTTIME_EMOB, nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, addtlFzkmFromTtime, 1, 1, emobCorrFact ) ) );
+
+        entries.put( Headers.NKV_ELTTIME_CARBON2000_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price2000, addtlFzkmFromTtime, constructionCostFactor, 1, 1. ) ) );
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
             this.remarks.add("Eher geringer Benefit pro km ... erzeugt dann ueber die El pro km relativ viel Verkehr " +
