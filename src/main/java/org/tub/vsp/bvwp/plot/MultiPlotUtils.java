@@ -1,8 +1,9 @@
 package org.tub.vsp.bvwp.plot;
 
+import org.apache.commons.math3.util.Pair;
 import tech.tablesaw.plotly.components.Figure;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Bausteine, die für die Erstellung der Multiplots benötigt werden.
@@ -42,7 +43,7 @@ public class MultiPlotUtils {
 
 	public static final String pageBottom = "</body>" + System.lineSeparator() + "</html>";
 
-	public static String createPageV2( Map<String,Figure> figures ) {
+	public static String createPageV2( List<Pair<String, Figure>> figures ) {
 		StringBuilder result = new StringBuilder( "<html>" + System.lineSeparator()
 									  + "<head>" + System.lineSeparator()
 									  + "    <title>Multi-plot test</title>" + System.lineSeparator()
@@ -53,19 +54,23 @@ public class MultiPlotUtils {
 
 		// append the html that references each individual plot:
 		{
-			int ii = 0;
-			for( Map.Entry<String, Figure> entry : figures.entrySet() ){
-				result.append( entry.getKey() ).append( "<div id='plot" ).append( ii ).append( "'>" ).append( System.lineSeparator() );
-				ii++;
+			for ( int ii=0; ii<figures.size(); ii++ ) {
+				final Pair<String, Figure> entry = figures.get( ii );
+				result.append( entry.getFirst() );
+				if ( entry.getValue()!= null ){
+					result.append( "<div id='plot" ).append( ii ).append( "'>" );
+				}
+				result.append( System.lineSeparator() );
 			}
 		}
 
 		// append the figures themselves:
 		{
-			int ii = 0;
-			for( Figure figure : figures.values() ){
-				result.append( figure.asJavascript( "plot" + ii ) ).append( System.lineSeparator() );
-				ii++;
+			for ( int ii=0; ii<figures.size(); ii++ ) {
+				final Figure figure = figures.get( ii ).getSecond();
+				if ( figure != null ){
+					result.append( figure.asJavascript( "plot" + ii ) ).append( System.lineSeparator() );
+				}
 			}
 		}
 

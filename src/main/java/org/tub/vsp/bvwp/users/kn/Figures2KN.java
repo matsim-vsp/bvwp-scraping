@@ -281,14 +281,14 @@ class Figures2KN extends Figures1KN {
 	public Figure nkvNew_vs_nkvOrig( int cap, String yName ){
 		String xName = NKV_ORIG;
 		String x2Name = Headers.addCap( cap, table, NKV_ORIG );
-		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().autoRange( Axis.AutoRange.REVERSED ).zeroLineWidth( 0 ).zeroLineColor( "white" );
 //		xAxisBuilder.range( 0, 50 );
 
 		Table table2 = table.sortDescendingOn( x2Name ); // cannot remember why this is necessary
 
 		String y2Name = Headers.addCap( cap, table2, yName );
 
-		Axis yAxis = Axis.builder().titleFont( defaultFont ).title( yName )
+		Axis yAxis = Axis.builder().titleFont( defaultFont ).title( yName ).zeroLineWidth( 0 ).zeroLineColor( "white" )
 //				 .range(-5,50)
 				 .build();
 
@@ -297,6 +297,7 @@ class Figures2KN extends Figures1KN {
 		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, x2Name, y2Name ) );
 		traces.add( diagonalLine2( table2, x2Name, y2Name ) );
 		traces.add( horizontalNkvOneLine( table2, x2Name ) );
+		traces.add( vertialNkvOneLine( table2, y2Name ) );
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
 
@@ -548,8 +549,8 @@ class Figures2KN extends Figures1KN {
 		traces.addAll( getTracesByColor( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
-	private Figure investmentCostTud( int cap, String xName ){
-		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+	Figure investmentCostTud( int cap, String xName ){
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
 
 		if ( cap ==Integer.MAX_VALUE ) {
 			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
@@ -570,8 +571,32 @@ class Figures2KN extends Figures1KN {
 		}
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
-	private Figure carbon( int cap, String xName ){
-		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+	Figure carbonOrig( int cap, String xName ){
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
+
+		if ( xName.contains( "Nutzen_pro" )){
+			xAxisBuilder.range( 6000, 0 );
+		} else if ( cap ==Integer.MAX_VALUE ) {
+			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
+		} else {
+			xAxisBuilder.range( nkvCappedMax, nkvMin );
+		}
+
+		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
+
+		String yName = CO2_ORIG;
+		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
+
+		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		if ( xName.contains( "NKV" ) ){
+			traces.add( vertialNkvOneLine( table2, yName ) );
+		}
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
+	}
+	Figure carbon( int cap, String xName ){
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
 
 		if ( cap ==Integer.MAX_VALUE ) {
 			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
@@ -582,6 +607,28 @@ class Figures2KN extends Figures1KN {
 		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
 
 		String yName = CO2_ELTTIME;
+		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
+
+		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		if ( xName.contains( "NKV" ) ){
+			traces.add( vertialNkvOneLine( table2, yName ) );
+		}
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
+	}
+	Figure carbonWithEmob( int cap, String xName ){
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
+
+		if ( cap ==Integer.MAX_VALUE ) {
+			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
+		} else {
+			xAxisBuilder.range( nkvCappedMax, nkvMin );
+		}
+
+		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
+
+		String yName = CO2_ELTTIME_EMOB;
 		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
@@ -673,7 +720,7 @@ class Figures2KN extends Figures1KN {
 
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
-	private Figure cumBenefitVsCumCost( String nkvToUseOrig ){
+	Figure cumBenefitVsCumCost( String nkvToUseOrig ){
 		String nkvToUse = Headers.cappedOf( 30, nkvToUseOrig );
 		Headers.addCap( 30, table, nkvToUseOrig );
 

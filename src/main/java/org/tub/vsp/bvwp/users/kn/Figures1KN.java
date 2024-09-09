@@ -593,20 +593,20 @@ class Figures1KN{
 	}
 	static List<Trace> getTraces( String xName, String y2Name, Table table, String nameInLegend, String color ){
 
-		Table tableA20 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" ) );
-		Table tableA14 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" ) );
-		Table tableA39 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) );
-		Table tableA008 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A008-" ) );
 //
-		Table tableTmp = table.dropWhere( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
-							      .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-" ) )
-							      .or( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" ) )
-							      .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
-						    );
 
 		List<Trace> traces = new ArrayList<>();
-
-		traces.add( ScatterTrace.builder( tableTmp.numberColumn( xName ), tableTmp.numberColumn( y2Name ) )
+		{
+			Table tableTmp = table.dropWhere( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-" ) )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" ) )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A6-G60" ) )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A45-G50" ) )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A52-G30" ) )
+							       .or( table.stringColumn( PROJECT_NAME ).startsWith( "A003-" ) )
+							);
+			traces.add( ScatterTrace.builder( tableTmp.numberColumn( xName ), tableTmp.numberColumn( y2Name ) )
 					.text( tableTmp.stringColumn( PROJECT_NAME ).asObjectArray() )
 					.name( String.format( legendFormat, nameInLegend ) )
 					.marker( Marker.builder().color( color )
@@ -614,43 +614,97 @@ class Figures1KN{
 						       .size( tableTmp.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
 						       .sizeMode( Marker.SizeMode.DIAMETER ).build() )
 					.build() );
-		traces.add( ScatterTrace.builder( tableA20.numberColumn( xName ), tableA20.numberColumn( y2Name ) )
-					.text( tableA20.stringColumn( PROJECT_NAME ).asObjectArray() )
-					.name( String.format( legendFormat, nameInLegend ) )
-					.marker( Marker.builder().color( color )
-						       .size( 40 )
+		}{
+			Table tableProject = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A003-" ) );
+			traces.add( ScatterTrace.builder( tableProject.numberColumn( xName ), tableProject.numberColumn( y2Name ) )
+						.text( tableProject.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A003-" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
+//						       .size( tableA20.doubleColumn( EINSTUFUNG_AS_NUMBER ) ) // yyyy this should be rescued!!
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.X ).build() )
+						.build() );
+		}{
+			Table tableProject = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A52-G30" ) );
+			traces.add( ScatterTrace.builder( tableProject.numberColumn( xName ), tableProject.numberColumn( y2Name ) )
+						.text( tableProject.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A52-G30" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 20 )
 //						       .size( tableA20.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
-						       .sizeMode( Marker.SizeMode.DIAMETER )
-						       .symbol( Symbol.TRIANGLE_NW).build() )
-					.build() );
-		traces.add( ScatterTrace.builder( tableA14.numberColumn( xName ), tableA14.numberColumn( y2Name ) )
-					.text( tableA14.stringColumn( PROJECT_NAME ).asObjectArray() )
-					.name( String.format( legendFormat, nameInLegend ) )
-					.marker( Marker.builder().color( color )
-						       .size( 40 )
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.STAR_TRIANGLE_DOWN ).build() )
+						.build() );
+		}{
+			Table tableProject = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A45-G50" ) );
+			traces.add( ScatterTrace.builder( tableProject.numberColumn( xName ), tableProject.numberColumn( y2Name ) )
+						.text( tableProject.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A45-G50" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
+//						       .size( tableA20.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.TRIANGLE_LEFT ).build() )
+						.build() );
+		}{
+			Table tableProject = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A6-G60" ) );
+			traces.add( ScatterTrace.builder( tableProject.numberColumn( xName ), tableProject.numberColumn( y2Name ) )
+						.text( tableProject.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A6-G60" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
+//						       .size( tableA20.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.TRIANGLE_DOWN ).build() )
+						.build() );
+		}{
+			Table tableA20 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" ) );
+			traces.add( ScatterTrace.builder( tableA20.numberColumn( xName ), tableA20.numberColumn( y2Name ) )
+						.text( tableA20.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A20" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
+//						       .size( tableA20.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.TRIANGLE_NW ).build() )
+						.build() );
+		}{
+			Table tableA14 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" ) );
+			traces.add( ScatterTrace.builder( tableA14.numberColumn( xName ), tableA14.numberColumn( y2Name ) )
+						.text( tableA14.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A14" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
 //						       .size( tableA14.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
-						       .sizeMode( Marker.SizeMode.DIAMETER )
-						       .symbol( Symbol.TRIANGLE_RIGHT).build() )
-					.build() );
-		traces.add( ScatterTrace.builder( tableA39.numberColumn( xName ), tableA14.numberColumn( y2Name ) )
-					.text( tableA39.stringColumn( PROJECT_NAME ).asObjectArray() )
-					.name( String.format( legendFormat, nameInLegend ) )
-					.marker( Marker.builder().color( color )
-						       .size( 40 )
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.TRIANGLE_RIGHT ).build() )
+						.build() );
+		}
+		{
+			Table tableA39 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) );
+			traces.add( ScatterTrace.builder( tableA39.numberColumn( xName ), tableA39.numberColumn( y2Name ) )
+						.text( tableA39.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A39" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
 //						       .size( tableA39.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
-						       .sizeMode( Marker.SizeMode.DIAMETER )
-						       .symbol( Symbol.TRIANGLE_LEFT).build() )
-					.build() );
-		traces.add( ScatterTrace.builder( tableA008.numberColumn( xName ), tableA008.numberColumn( y2Name ) )
-					.text( tableA008.stringColumn( PROJECT_NAME ).asObjectArray() )
-					.name( String.format( legendFormat, nameInLegend ) )
-					.marker( Marker.builder().color( color )
-						       .size( 40 )
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.STAR ).build() )
+						.build() );
+		}
+		{
+			Table tableA008 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A008-" ) );
+			traces.add( ScatterTrace.builder( tableA008.numberColumn( xName ), tableA008.numberColumn( y2Name ) )
+						.text( tableA008.stringColumn( PROJECT_NAME ).asObjectArray() )
+						.name( String.format( legendFormat, "A8" ) )
+						.marker( Marker.builder().color( color )
+							       .size( 40 )
 //						       .size( tableA008.doubleColumn( EINSTUFUNG_AS_NUMBER ) )
-						       .sizeMode( Marker.SizeMode.DIAMETER )
-						       .symbol( Symbol.TRIANGLE_SE).build() )
-					.build() );
-
+							       .sizeMode( Marker.SizeMode.DIAMETER )
+							       .symbol( Symbol.TRIANGLE_SE ).build() )
+						.build() );
+		}
 		return traces;
 	}
 	static List<Trace> getTraceOrange( Table table, String xName, String y2Name ){

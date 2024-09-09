@@ -265,25 +265,25 @@ public class ComputationKN {
 
         // -- b_co2 calculation is now done "by hand".  I.e. take pkwkm, multiply with emissions per km (obtained
         // from co2_pkwkm / pkwkm), and then multiply b_per_co2:
-        double b_co2_induz = amounts.pkwkm_induz * amounts.co2_per_pkwkm * b_per_co2;
-        double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
-        double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
+        final double b_co2_induz = amounts.pkwkm_induz * amounts.co2_per_pkwkm * b_per_co2;
+        final double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
+        final double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
+        final double b_co2_addtlInduz = modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2;
 
         {
-            co2 += b_co2_reroute / 145. * modifications.co2Price();
+            co2 += b_co2_reroute / 145. * modifications.co2Price() * modifications.emobCorrFact();
         }
         {
-            co2 += b_co2_verl / 145. * modifications.co2Price();
+            co2 += b_co2_verl / 145. * modifications.co2Price() * modifications.emobCorrFact();
         }
         {
-            co2 += b_co2_induz / 145. * modifications.co2Price();
+            co2 += b_co2_induz / 145. * modifications.co2Price() * modifications.emobCorrFact();
 
-            co2 += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 / 145. * modifications.co2Price();
-			// mehrFzkm are those which are on top of PRINS.  We do same calculation as with the other co2 contribs, except that this one here is currently on one line.
+            co2 += b_co2_addtlInduz / 145. * modifications.co2Price() * modifications.emobCorrFact();
+            // mehrFzkm are those which are on top of PRINS
         }
 
 		return co2;
-		// The result will be negative.  We return positive so we can logplot it. yyyyyy really??? -- no longer
 
 		// Note that this really says nothing about old vs new co2 price, or old vs new addl traffic.  That all depends on the settings in "modifications".
     }

@@ -1,5 +1,6 @@
 package org.tub.vsp.bvwp.users.kn;
 
+import org.apache.commons.math3.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
@@ -17,10 +18,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
 
@@ -69,90 +67,100 @@ public class RunLocalCsvScrapingKN{
         Figures1KN figures1 = new Figures1KN( table, NKV_ORIG_CAPPED5 );
         Figures2KN figures2 = new Figures2KN( table );
 
-        Map<String,Figure> figures = new LinkedHashMap<>();
+        List<Pair<String,Figure>> figures = new ArrayList<>();
 
-//        figures.add( figures1.invCostTud() );
-//
-//        figures.add( figures1.carbon() );
-//
-//
-//        figures.add( figures2.fzkmFromTtime_vs_fzkmOrig() );
-//        figures.add( figures2.fzkmFromTtimeSum_vs_fzkmOrig() );
-//
-//        figures.add( figures1.nkv_el03() );
-//        figures.add( figures1.nkv_carbon700() );
-//        figures.add( figures1.nkv_el03_carbon700() );
-//
-//        figures.add( figures1.elasticities() );
-//        figures.add( figures1.fzkmDiff() );
-//        figures.add( figures1.nkv_el03_diff() );
-//        figures.add( figures1.dtv() );
-//        figures.add( figures1.fzkmNew() );
-
-
-        // Induzierter Strassenmehrverkehr:
-        figures.put( createHeader1( "Induzierter Strassenmehrverkehr (aus Elastizität 0,3):" ), figures2.fzkmEl03_vs_fzkmOrig() );
-//        figures.add( figures2.fzkmFromEl03Delta_vs_fzkmOrig() );
-        figures.put( createHeader1( "Induzierter Strassenmehrverkehr (aus konstantem Reisezeitbudget):" ), figures2.fzkmFromTtime_vs_fzkmOrig() );
-//        figures.add( figures2.fzkmFromTtimeDelta_vs_fzkmOrig() );
-
-
-        // Abhängigkeit von Verkehrsnachfrage:
-        figures.put( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ORIG ) );
-//        figures.add( figures2.nkvNeu_vs_dtv( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
-
-
-        // Veränderung NKV durch ...
-
-        // ... Investitionskosten:
-        figures.put( createHeader1( "Veränderung NKV durch ..." ) + createHeader2( "... veränderte Investitionskosten (deutl. Minderung NKVs in den meisten Fällen):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_INVCOSTTUD ) );
-
-        // ... induzierten Verkehr:
-        figures.put( createHeader2( "... veränderten induz. Strassenmehrverkehr (wenig Änderung):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME ) );
-
-        // ... erhöhten CO2-Kosten:
-        figures.put( createHeader2( "... erhöhte CO2-Kosten (eher wenig Änderung):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_CARBON700ptpr0 ) );
-
-        // ... induz x CO2:
-        figures.put( createHeader2( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten (deutl. Minderung NKVs bei Kombination dieser beiden Einflüsse):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700ptpr0 ));
-
-        // ... alle drei:
-        figures.put( createHeader2( "... veränderte/erhöhte Investitionskosten/induzierten Verkehr/CO2-Kosten (nochmals deutl. Minderung NKVs in den meisten Fällen):" ), figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD ) );
-
-        // ... plus eMob:
-        figures.put( createHeader2( "... zusätzlich Berücksichtigung E-Mobilität:" ),
-                        figures2.nkvNew_vs_nkvOrig( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) );
-
-        figures.put( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:"),
-                        figures2.getFigures( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
-//        addHeaderPlusMultipleFigures( figures, createHeader1( "XXX vs. NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:" ),
-//                        figures2.getFigures( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) );
-
-        // ... plus CO2 Preis 2000:
-        figures.put( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten++/E-Mobilität:"),
-                        figures2.getFigures( 10, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
-
+        figures.add(Pair.create( createHeader1( "New plots" ), null ) );
 
         // N pro CO2:
+        table.addColumns( table.doubleColumn( NKV_ORIG )
+                               .multiply( table.doubleColumn( INVCOST_ORIG ) )
+                               .divide( table.doubleColumn( CO2_ORIG ) )
+                               .setName( NProCo2_ORIG )
+                        );
+
         table.addColumns( table.doubleColumn( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
                                .multiply( table.doubleColumn( INVCOST_TUD ) )
                                .divide( table.doubleColumn( CO2_ELTTIME ) )
                                .setName( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
                         );
 
-        figures.put( createDefaultKey( figures ), figures2.nProCo2_vs_nkv( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) );
+//        figures.add( Pair.create( createDefaultKey( figures ), figures2.nProCo2_vs_nkv( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
 
-        figures.put( createDefaultKey( figures ), figures2.getFigures( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
+        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonOrig( Integer.MAX_VALUE, NProCo2_ORIG ) ) );
 
-        figures.put( createDefaultKey( figures ), figures2.getFigures( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 1 ) );
+//        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonOrig( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+
+        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbon( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+
+        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonWithEmob( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+
+        figures.add( Pair.create( createHeader2( "Inv.Kosten vs Nutzen_pro_CO2") , figures2.investmentCostTud( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+
+
+
+
+        // Induzierter Strassenmehrverkehr:
+        figures.add( Pair.create( createHeader1( "Induzierter Strassenmehrverkehr (aus Elastizität 0,3):" ), figures2.fzkmEl03_vs_fzkmOrig() ) );
+//        figures.add( figures2.fzkmFromEl03Delta_vs_fzkmOrig() );
+        figures.add( Pair.create( createHeader1( "Induzierter Strassenmehrverkehr (aus konstantem Reisezeitbudget):" ), figures2.fzkmFromTtime_vs_fzkmOrig() ) );
+//        figures.add( figures2.fzkmFromTtimeDelta_vs_fzkmOrig() );
+
+
+        // Abhängigkeit von Verkehrsnachfrage:
+        figures.add( Pair.create( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ORIG ) ) );
+//        figures.add( figures2.nkvNeu_vs_dtv( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
+
+        Map<String,String> nkvs = new LinkedHashMap<>();
+
+        nkvs.put( "... veränderte Investitionskosten:", NKV_INVCOSTTUD );
+        nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
+        nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700ptpr0 );
+        nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700ptpr0 );
+        nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD );
+        nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD );
+        nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD );
+
+        figures.add( Pair.create( createHeader1( "Veränderung NKV durch ..." ), null ) );
+        for( Map.Entry<String, String> entry : nkvs.entrySet() ){
+            figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.nkvNew_vs_nkvOrig( 5, entry.getValue() ) ) );
+        }
+
+        figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
+        figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( 5, NKV_ORIG ) ) );
+        for( Map.Entry<String, String> entry : nkvs.entrySet() ){
+            figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( 5, entry.getValue() ) ) );
+        }
+
+        figures.add( Pair.create( createHeader1( "CO2 vs. NKV mit ... " ), null ) );
+        figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( 5, NKV_ORIG ) ) );
+        for( Map.Entry<String, String> entry : nkvs.entrySet() ){
+            figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( 5, entry.getValue() ) ) );
+        }
+
+        figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) ) );
+
+        figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+
+        figures.add( Pair.create( createHeader1( "Further material ..." ), null ) );
+
+
+//        figures.add( Pair.create( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:"),
+//                        figures2.getFigures( 5, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
+////        addHeaderPlusMultipleFigures( figures, createHeader1( "XXX vs. NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:" ),
+////                        figures2.getFigures( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) );
+//
+//        // ... plus CO2 Preis 2000:
+//        figures.add( Pair.create( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten++/E-Mobilität:"),
+//                        figures2.getFigures( 5, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
+
 
         // Änlichkeit zwischen carbon cost und Investitionskosten:
-        figures.put( createHeader1( "Ähnlichkeit CO2-Kosten und Investitionskosten:" ), figures2.carbon_vs_invcostTud() );
+        figures.add( Pair.create( createHeader1( "Ähnlichkeit CO2-Kosten und Investitionskosten:" ), figures2.carbon_vs_invcostTud() ) );
 
         // ###  nicht verwendet:
 
         // changes in investment cost:
-        figures.put( createDefaultKey( figures ), figures2.invcost_tud_vs_orig() );
+        figures.add( Pair.create( createDefaultKey( figures ), figures2.invcost_tud_vs_orig() ) );
 
 
 
@@ -297,13 +305,13 @@ public class RunLocalCsvScrapingKN{
     static String createHeader2( String str ) {
         return "<h2>" + str + "</h2>";
     }
-    static void addHeaderPlusMultipleFigures( Map<String,Figure> figuresMap, String str, List<Figure> figuresList ) {
-        figuresMap.put( str, figuresList.removeFirst() );
+    static void addHeaderPlusMultipleFigures( List<Pair<String,Figure>> figuresMap, String str, List<Figure> figuresList ) {
+        figuresMap.add( Pair.create( str, figuresList.removeFirst() ) );
         for( Figure figure : figuresList ){
-            figuresMap.put( createDefaultKey( figuresMap ), figure );
+            figuresMap.add( Pair.create( createDefaultKey( figuresMap ), figure ) );
         }
     }
-    private static String createDefaultKey( Map<String, Figure> figures ){
+    private static String createDefaultKey( List<Pair<String, Figure>> figures ){
         return "<p>Plot Nr. " + figures.size() + ":</p>";
     }
 

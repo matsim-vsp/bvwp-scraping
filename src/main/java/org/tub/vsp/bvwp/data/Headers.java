@@ -154,9 +154,12 @@ public final class Headers{
 	public static final String NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD = "NKV mit  Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+";
 	public static final String NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+ & EMob";
 	public static final String NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
 	public static final String NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
+	public static final String CO2_ORIG = "CO2[Mt] lt. BVWP'30";
 	public static final String CO2_ELTTIME = "CO2[Mt] bei Straßenmehrverkehr+";
+	public static final String CO2_ELTTIME_EMOB = "CO2[Mt] bei Straßenmehrverkehr+ & EMob";
 
 	public static final String DAUER_PLANUNG = "Planungsdauer_jahre";
 	public static final String DAUER_BAU = "Baudauer_jahre";
