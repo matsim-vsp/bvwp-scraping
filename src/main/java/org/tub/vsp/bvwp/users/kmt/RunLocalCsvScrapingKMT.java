@@ -14,7 +14,6 @@ import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.io.Destination;
 import tech.tablesaw.io.csv.CsvWriteOptions;
 import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Axis;
@@ -80,7 +79,7 @@ public class RunLocalCsvScrapingKMT {
 
     table.addColumns(
         table
-            .numberColumn(Headers.NKV_ORIG)
+            .numberColumn(Headers.NKV_ORIG_EN)
             .subtract(table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD))
             .setName(Headers.NKV_EL03_DIFF)
     );
@@ -98,7 +97,7 @@ public class RunLocalCsvScrapingKMT {
       final int plotWidth = 1400;
 
       kmtPlots_old(xAxis, plotWidth, table, xNameKMT);
-      kmtPlots_Co2values(xAxis, plotWidth, table, xNameKMT);
+      kmtPlots_Co2values(plotWidth, table);
     }
 
     calculationsAndTableWriting(table);
@@ -120,15 +119,15 @@ public class RunLocalCsvScrapingKMT {
     tbl.numberColumn(Headers.CO2_COST_EL03).setPrintFormatter(format, "n/a");
 
     // Projekte, die bereits vor Änderung NKV <1 haben
-    Table tableBaseKl1 = tbl.where(tbl.numberColumn(Headers.NKV_ORIG).isLessThan(1.));
+    Table tableBaseKl1 = tbl.where(tbl.numberColumn(Headers.NKV_ORIG_EN).isLessThan(1.));
     Table tableIndCo2kl1 =
         tbl.where(tbl.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD).isLessThan(1.));
 
     { // -- von KN
       System.out.println(BvwpUtils.SEPARATOR);
       System.out.println("NKV Original auf Gesamttabelle");
-      System.out.println(tbl.summarize(Headers.NKV_ORIG, count, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
-      System.out.println(tbl.summarize(Headers.NKV_ORIG, count, mean, stdDev, min, max).apply());
+      System.out.println(tbl.summarize(Headers.NKV_ORIG_EN, count, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
+      System.out.println(tbl.summarize(Headers.NKV_ORIG_EN, count, mean, stdDev, min, max).apply());
       System.out.println(System.lineSeparator() + "Davon NKV < 1: nach Modifikation.");
       System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
       System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max).apply());
@@ -151,7 +150,7 @@ public class RunLocalCsvScrapingKMT {
       System.out.println(BvwpUtils.SEPARATOR);
 
       List<String> headersKMT = new LinkedList<>();
-      headersKMT.add(Headers.NKV_ORIG);
+      headersKMT.add(Headers.NKV_ORIG_EN);
       headersKMT.add(Headers.NKV_CO2_700_EN);
       headersKMT.add(Headers.NKV_CO2_2000_EN);
       headersKMT.add(Headers.NKV_INVCOSTTUD_EN);
@@ -190,9 +189,97 @@ public class RunLocalCsvScrapingKMT {
 
       System.out.println(BvwpUtils.SEPARATOR);
 
+      { // Gesparte Projektlänge - km
+        Table nkvBelow1_length =
+                Table.create("Projects with BCR < 1 -- saved project length (km)");
+        nkvBelow1_length.addColumns(
+                DoubleColumn.create(
+                        "project length of all projects (km)",
+                        (double) tbl.summarize(Headers.LENGTH, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_length.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.LENGTH, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_length.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_projectLengthSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_length, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
+      { // Gesparte (zusätzliche( Fahrsteifenlänge - km
+        Table nkvBelow1_length =
+                Table.create("Projects with BCR < 1 -- saved add. lane length (km) -- estimated from project length");
+        nkvBelow1_length.addColumns(
+                DoubleColumn.create(
+                        "add. lane length of all projects (km)",
+                        (double) tbl.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_length.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_LANE_KM, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_length.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addLaneLengthSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_length, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
+      { // Gesparte zusätzliche vkm PERSONENverkehr
+        Table nkvBelow1_PkwKm =
+                Table.create("Projects with BCR < 1 -- saved add. vkm PERSONENverkehr (Mio PKW-km/a)");
+        nkvBelow1_PkwKm.addColumns(
+                DoubleColumn.create(
+                        "add. PKW-km/a of all projects",
+                        (double) tbl.summarize(Headers.ADDTL_PKWKM_ORIG, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_PkwKm.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_PKWKM_ORIG, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_PkwKm.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addPkwKmhSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_PkwKm, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
+      { // Gesparte zusätzliche vkm Güterverkehr
+        Table nkvBelow1_LkwKm =
+                Table.create("Projects with BCR < 1 -- saved add. vkm GÜTERverkehr (Mio LKW-km/a)");
+        nkvBelow1_LkwKm.addColumns(
+                DoubleColumn.create(
+                        "add. LKW-km/a of all projects",
+                        (double) tbl.summarize(Headers.ADDTL_LKWKM_ORIG, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_LkwKm.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_LKWKM_ORIG, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_LkwKm.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addLkwKmhSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_LkwKm, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
       { // Gesparte Investitionskosten - Barwert der Kosten in Mio EUR
         Table nkvBelow1_costs =
-            Table.create("Projects with BCR < 1 -- safed Investment Costs - Barwert (Mio EUR)");
+            Table.create("Projects with BCR < 1 -- saved Investment Costs - Barwert (Mio EUR)");
         nkvBelow1_costs.addColumns(
             DoubleColumn.create(
                 "Investment costs of all projects (Mio EUR)",
@@ -206,7 +293,7 @@ public class RunLocalCsvScrapingKMT {
         }
         System.out.println(nkvBelow1_costs.print());
 
-        var options = CsvWriteOptions.builder("output/NKV_below_1_costsSafed.csv").separator(';').build();
+        var options = CsvWriteOptions.builder("output/NKV_below_1_costsSaved.csv").separator(';').build();
         new CsvWriter().write(nkvBelow1_costs, options);
       }
 
@@ -244,8 +331,8 @@ public class RunLocalCsvScrapingKMT {
     Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.INVCOST_ORIG);
     Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.INVCOST_ORIG);
     Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
-    Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_EN);
-    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_EN);
+    Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_EN);
+    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_EN);
     //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
     //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
@@ -282,40 +369,40 @@ public class RunLocalCsvScrapingKMT {
     new Browser().browse(outputFileKMT);
   }
 
-  private static void kmtPlots_Co2values(Axis xAxis, int plotWidth, Table table, String xNameKMT)
+  private static void kmtPlots_Co2values(int plotWidth, Table table)
       throws IOException {
-    Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_EN);
-    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_EN);
+    Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_EN);
+    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_EN);
 
-    Figure figureNkvChange_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOSTTUD_EN);
-    Figure figureNkvChange_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOST150_EN);
-    Figure figureNkvChange_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_INVCOST200_EN);
-    Figure figureNkvChange_Co2_700_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOSTTUD_EN);
-    Figure figureNkvChange_Co2_700_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOST150_EN);
-    Figure figureNkvChange_Co2_700_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_700_INVCOST200_EN);
-    Figure figureNkvChange_Co2_2000_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOSTTUD_EN);
-    Figure figureNkvChange_Co2_2000_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST150_EN);
-    Figure figureNkvChange_Co2_2000_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST200_EN);
+    Figure figureNkvChange_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_INVCOSTTUD_EN);
+    Figure figureNkvChange_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_INVCOST150_EN);
+    Figure figureNkvChange_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_INVCOST200_EN);
+    Figure figureNkvChange_Co2_700_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_INVCOSTTUD_EN);
+    Figure figureNkvChange_Co2_700_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_INVCOST150_EN);
+    Figure figureNkvChange_Co2_700_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_INVCOST200_EN);
+    Figure figureNkvChange_Co2_2000_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_INVCOSTTUD_EN);
+    Figure figureNkvChange_Co2_2000_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_INVCOST150_EN);
+    Figure figureNkvChange_Co2_2000_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_INVCOST200_EN);
 
     Figure figureNkvChange_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
             plotWidth,
             table,
-            Headers.NKV_ORIG,
+            Headers.NKV_ORIG_EN,
             Headers.NKV_INVCOST150_EN,
             Headers.NKV_INVCOST200_EN);
     Figure figureNkvChange_Co2_700_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
             plotWidth,
             table,
-            Headers.NKV_ORIG,
+            Headers.NKV_ORIG_EN,
             Headers.NKV_CO2_700_INVCOST150_EN,
             Headers.NKV_CO2_700_INVCOST200_EN);
     Figure figureNkvChange_Co2_2000_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
             plotWidth,
             table,
-            Headers.NKV_ORIG,
+            Headers.NKV_ORIG_EN,
             Headers.NKV_CO2_2000_INVCOST150_EN,
             Headers.NKV_CO2_2000_INVCOST200_EN);
 

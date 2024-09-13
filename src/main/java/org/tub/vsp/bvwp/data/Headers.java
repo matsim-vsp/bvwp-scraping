@@ -13,6 +13,7 @@ public final class Headers{
 	 * = {@link #ADDTL_PKWKM_EL03} - {@link #ADDTL_PKWKM_ORIG}
 	 */
 	public static final String ADDTL_PKWKM = "zusätzliche Pkw-km";
+	public static final String ADDTL_LKWKM = "zusätzliche Lkw-km";
 	public static final String ADDTL_PKWKM_EL03_DIFF = "addtl_pkwkm_el03_diff";
 	/**
 	 * Der "induzierte" (Mehr-)Verkehr laut PRINS.
@@ -26,9 +27,12 @@ public final class Headers{
 	/**
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut PRINS.
 	 */
+	//Personenverkehr
 	public static final String ADDTL_PKWKM_ORIG = ADDTL_PKWKM + " in PRINS";
 	public static final String ADDTL_PKWKM_FROM_TTIME = ADDTL_PKWKM + " aus Reisezeitgewinnen";
 	public static final String ADDTL_PKWKM_FROM_TTIME_DIFF = "addtl_pkwkm_from_ttime_diff";
+	//Güterverkehr
+	public static final String ADDTL_LKWKM_ORIG = ADDTL_LKWKM + " in PRINS";
 
 	/**
 	 * So etwas wie "Neubau", "Knotenpunkt(projekt)", Erweiterung auf 6 oder 8 Spuren.
@@ -89,7 +93,7 @@ public final class Headers{
 	/**
 	 * min( 5 , {@link #NKV_ORIG} )
 	 */
-	public static final String NKV_ORIG = "NKV BVWP 2030";
+	public static final String NKV_ORIG_CAPPED5 = "NKV_orig_capped5";
 	/**
 	 * NKV bei erhöhtem CO2-Preis (welchem?).
 	 */
@@ -141,6 +145,9 @@ public final class Headers{
 	/**
 	 * Originales NKV.
 	 */
+	public static final String NKV_ORIG = "NKV BVWP 2030";
+	public static final String NKV_ORIG_EN = "BCR_original";
+
 	/**
 	 * Dies ist da, damit "bubble size" als Funktion der Einstufung geplottet werden kann.
 	 */
