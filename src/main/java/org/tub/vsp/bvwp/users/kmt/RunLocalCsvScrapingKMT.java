@@ -14,7 +14,6 @@ import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.io.Destination;
 import tech.tablesaw.io.csv.CsvWriteOptions;
 import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Axis;
@@ -98,7 +97,7 @@ public class RunLocalCsvScrapingKMT {
       final int plotWidth = 1400;
 
       kmtPlots_old(xAxis, plotWidth, table, xNameKMT);
-      kmtPlots_Co2values(xAxis, plotWidth, table, xNameKMT);
+      kmtPlots_Co2values(plotWidth, table);
     }
 
     calculationsAndTableWriting(table);
@@ -234,24 +233,46 @@ public class RunLocalCsvScrapingKMT {
 
       System.out.println(BvwpUtils.SEPARATOR);
 
-      { // Gesparte zusätzliche PKW-km
-        Table nkvBelow1_length =
-                Table.create("Projects with BCR < 1 -- saved add. PKW-km (Mio PKW-km/a)");
-        nkvBelow1_length.addColumns(
+      { // Gesparte zusätzliche vkm PERSONENverkehr
+        Table nkvBelow1_PkwKm =
+                Table.create("Projects with BCR < 1 -- saved add. vkm PERSONENverkehr (Mio PKW-km/a)");
+        nkvBelow1_PkwKm.addColumns(
                 DoubleColumn.create(
-                        "add. vkm of all projects",
+                        "add. PKW-km/a of all projects",
                         (double) tbl.summarize(Headers.ADDTL_PKWKM_ORIG, sum).apply().get(0, 0)));
 
         // Erstelle eine Spalte für jeden "Fall"
         for (String s : headersKMT) {
           Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
-          nkvBelow1_length.addColumns(
+          nkvBelow1_PkwKm.addColumns(
                   DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_PKWKM_ORIG, sum).apply().get(0, 0)));
         }
-        System.out.println(nkvBelow1_length.print());
+        System.out.println(nkvBelow1_PkwKm.print());
 
-        var options = CsvWriteOptions.builder("output/NKV_below_1_addLaneLengthSaved.csv").separator(';').build();
-        new CsvWriter().write(nkvBelow1_length, options);
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addPkwKmhSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_PkwKm, options);
+      }
+
+      System.out.println(BvwpUtils.SEPARATOR);
+
+      { // Gesparte zusätzliche vkm Güterverkehr
+        Table nkvBelow1_LkwKm =
+                Table.create("Projects with BCR < 1 -- saved add. vkm GÜTERverkehr (Mio LKW-km/a)");
+        nkvBelow1_LkwKm.addColumns(
+                DoubleColumn.create(
+                        "add. LKW-km/a of all projects",
+                        (double) tbl.summarize(Headers.ADDTL_LKWKM_ORIG, sum).apply().get(0, 0)));
+
+        // Erstelle eine Spalte für jeden "Fall"
+        for (String s : headersKMT) {
+          Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
+          nkvBelow1_LkwKm.addColumns(
+                  DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.ADDTL_LKWKM_ORIG, sum).apply().get(0, 0)));
+        }
+        System.out.println(nkvBelow1_LkwKm.print());
+
+        var options = CsvWriteOptions.builder("output/NKV_below_1_addLkwKmhSaved.csv").separator(';').build();
+        new CsvWriter().write(nkvBelow1_LkwKm, options);
       }
 
       System.out.println(BvwpUtils.SEPARATOR);
@@ -348,7 +369,7 @@ public class RunLocalCsvScrapingKMT {
     new Browser().browse(outputFileKMT);
   }
 
-  private static void kmtPlots_Co2values(Axis xAxis, int plotWidth, Table table, String xNameKMT)
+  private static void kmtPlots_Co2values(int plotWidth, Table table)
       throws IOException {
     Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_EN);
     Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_EN);
