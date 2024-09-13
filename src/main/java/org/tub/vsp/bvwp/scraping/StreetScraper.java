@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.mapper.costBenefit.StreetCostBenefitMapper;
+import org.tub.vsp.bvwp.data.mapper.environmentalCriteria.StreetEnvironmentalCriteriaMapper;
 import org.tub.vsp.bvwp.data.mapper.physicalEffect.StreetPhysicalEffectMapper;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.StreetProjectInformationMapper;
@@ -53,6 +54,11 @@ public class StreetScraper extends AbstractScraper<StreetBaseDataContainer> {
                     .filter(file -> !file.getName().matches("A20-G10-SH.html")) // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'24
 //                    .filter(file -> !file.getName().matches("A57-G10-NW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
 //                    .filter(file -> !file.getName().matches("A81-G50-BW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
+                    .filter(file -> !file.getName().matches("A61-G10-RP-T2-RP.html")) // benefits and costs for T1 and T2 are same; there are no revised investment costs from TUD for T2
+                    .filter(file -> !file.getName().matches("A3-G30-HE-T05-HE.html")) // benefits and costs for T04 and T05 are same; there are no revised investment costs from TUD for T05
+                    .filter(file -> !file.getName().matches("A3-G30-HE-T08-HE.html")) // benefits and costs for T06 and T06 are same; there are no revised investment costs from TUD for T08
+                    .filter(file -> !file.getName().matches("A40-G30-NW-T4-NW.html")) // dto
+                    .filter(file -> !file.getName().matches("A003-G061-BY.html")) // dto
                     .filter(file -> !file.getName().matches( regexToExclude ))
                     .map(this::extractLocalBaseData)
                     .filter(Optional::isPresent)
@@ -72,7 +78,8 @@ public class StreetScraper extends AbstractScraper<StreetBaseDataContainer> {
         return Optional.of(streetBaseDataContainer.setUrl(url)
                                                   .setProjectInformation(StreetProjectInformationMapper.mapDocument(doc))
                                                   .setPhysicalEffect(StreetPhysicalEffectMapper.mapDocument(doc))
-                                                  .setCostBenefitAnalysis(StreetCostBenefitMapper.mapDocument(doc)));
+                                                  .setCostBenefitAnalysis(StreetCostBenefitMapper.mapDocument(doc))
+                                                  .setEnvironmentalCriteria(StreetEnvironmentalCriteriaMapper.mapDocument(doc)));
     }
 
     private boolean checkIfProjectIsScrapable(Document doc) {

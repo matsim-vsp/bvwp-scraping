@@ -210,6 +210,8 @@ public class RunLocalCsvScrapingKMT {
         new CsvWriter().write(nkvBelow1_length, options);
       }
 
+      System.out.println(BvwpUtils.SEPARATOR);
+
       { // Gesparte (zusätzliche( Fahrsteifenlänge - km
         Table nkvBelow1_length =
                 Table.create("Projects with BCR < 1 -- saved add. lane length (km) -- estimated from project length");
@@ -234,7 +236,7 @@ public class RunLocalCsvScrapingKMT {
 
       { // Gesparte zusätzliche PKW-km
         Table nkvBelow1_length =
-                Table.create("Projects with BCR < 1 -- saved add. vkm ");
+                Table.create("Projects with BCR < 1 -- saved add. PKW-km (Mio PKW-km/a)");
         nkvBelow1_length.addColumns(
                 DoubleColumn.create(
                         "add. vkm of all projects",

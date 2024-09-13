@@ -16,30 +16,30 @@
           "lkw": -47.28,
           "kfz": 1305.85
         },
+        "HC": {
+          "pkw": 12.54,
+          "lkw": -1.46,
+          "kfz": 11.08
+        },
         "CO2": {
           "pkw": 54773.28,
           "lkw": -6083.34,
           "kfz": 48689.94
-        },
-        "SO2": {
-          "pkw": 0.66,
-          "lkw": -0.03,
-          "kfz": 0.63
         },
         "PM": {
           "pkw": 3.0,
           "lkw": -0.13,
           "kfz": 2.86
         },
+        "SO2": {
+          "pkw": 0.66,
+          "lkw": -0.03,
+          "kfz": 0.63
+        },
         "NOX": {
           "pkw": 103.65,
           "lkw": -36.81,
           "kfz": 66.85
-        },
-        "HC": {
-          "pkw": 12.54,
-          "lkw": -1.46,
-          "kfz": 11.08
         }
       },
       "co2Overall": 90786.067
@@ -110,25 +110,25 @@
         "annual": -0.081,
         "overall": -2.007
       },
+      "HC": {
+        "annual": -0.019,
+        "overall": -0.467
+      },
       "CO2": {
         "annual": -7.06,
         "overall": -175.021
-      },
-      "SO2": {
-        "annual": -0.008,
-        "overall": -0.205
       },
       "PM": {
         "annual": -0.306,
         "overall": -7.581
       },
+      "SO2": {
+        "annual": -0.008,
+        "overall": -0.205
+      },
       "NOX": {
         "annual": -1.029,
         "overall": -25.52
-      },
-      "HC": {
-        "annual": -0.019,
-        "overall": -0.467
       }
     },
     "nt": {
@@ -151,6 +151,105 @@
       "planning": 10.0,
       "construction": 4.0,
       "operation": 42.0
+    }
+  },
+  "environmentalCriteria": {
+    "naturschutzVorrangflaechen21": {
+      "description": [
+        {
+          "absolute": 1.6,
+          "betroffenheit": 0.01
+        }
+      ],
+      "bewertung": "MITTEL"
+    },
+    "natura2000Gebiete22": {
+      "description": [
+        {
+          "absolute": 4.0,
+          "betroffenheit": 0.0
+        },
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "unzerschnitteneKernraeume23": {
+      "description": [
+        {
+          "absolute": 15.9,
+          "betroffenheit": 0.1
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "unzerschnitteneGrossraeume24": {
+      "description": [
+        {
+          "absolute": 5.9,
+          "betroffenheit": 0.04
+        },
+        {
+          "absolute": 14.0,
+          "betroffenheit": 0.09
+        },
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        },
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "flaechenInanspruchnahme25": {
+      "description": [
+        {
+          "absolute": 870.9,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": null
+    },
+    "ueberschwemmungsgebiete26": {
+      "description": [
+        {
+          "absolute": 0.0,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "GERING"
+    },
+    "wasserschutzgebiete27": {
+      "description": [
+        {
+          "absolute": 0.5,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "verkehrsarmeRaeume28": {
+      "description": [
+        {
+          "absolute": 18941.4,
+          "betroffenheit": 0.0
+        }
+      ],
+      "bewertung": "HOCH"
+    },
+    "kulturLandschaftsschutz29": {
+      "description": [
+        {
+          "absolute": 76.7,
+          "betroffenheit": 0.49
+        }
+      ],
+      "bewertung": "HOCH"
     }
   }
 }
