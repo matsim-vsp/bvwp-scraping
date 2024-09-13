@@ -168,8 +168,8 @@ public class StreetCsvWriter {
         record.add(Headers.DAUER_BAU, baseDataContainer.getCostBenefitAnalysis().getDurations().construction());
         record.add(Headers.DAUER_BETRIEB, baseDataContainer.getCostBenefitAnalysis().getDurations().operation());
 
-        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
-        record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers().induced() ).orElse(0. ) );
+        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getVehicleKilometersPV().overall());
+        record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometersPV().induced() ).orElse(0. ) );
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 

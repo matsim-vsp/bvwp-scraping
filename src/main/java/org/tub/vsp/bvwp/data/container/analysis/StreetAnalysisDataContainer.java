@@ -65,7 +65,7 @@ public class StreetAnalysisDataContainer {
         entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
 
         double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.3 * ComputationKN.FZKM_AB;
-        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getVehicleKilometers().overall();
+        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getVehicleKilometersPV().overall();
         // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 
 //        logger.info("addtlFzkmBeyondPrinsEl03=" + addtlFzkmBeyondPrinsEl03);
@@ -125,7 +125,7 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.INVCOST_TUD, this.constructionCostTud );
 
         double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL = 50; // km/h
-        double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;
+        double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getVehicleHoursPV().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;
         entries.put( Headers.ADDTL_PKWKM_FROM_TTIME, addtlFzkmFromTtime );
 
         // Beiträge einzeln:

@@ -25,13 +25,16 @@ public class StreetPhysicalEffectMapper {
         }
 
         JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Fahrzeugeinsatzzeiten im PV" )
-                                  .ifPresent( i -> physicalEffectDataContainer.setVehicleHours( extractEffect( table.get(), i ) ) );
+                                  .ifPresent( i -> physicalEffectDataContainer.setVehicleHoursPV( extractEffectPV( table.get(), i ) ) );
 
         JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Reisezeit im PV")
-                  .ifPresent(i -> physicalEffectDataContainer.setTravelTimes(extractEffect(table.get(), i)));
+                  .ifPresent(i -> physicalEffectDataContainer.setTravelTimesPV(extractEffectPV(table.get(), i)));
 
         JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Betriebsleistung im Personenverkehr")
-                  .ifPresent(i -> physicalEffectDataContainer.setVehicleKilometers(extractEffect(table.get(), i)));
+                  .ifPresent(i -> physicalEffectDataContainer.setVehicleKilometersPV(extractEffectPV(table.get(), i)));
+
+        JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Betriebsleistung Güterverkehr (GV)")
+                .ifPresent(i -> physicalEffectDataContainer.setVehicleKilometersGV(extractEffectGV(table.get(), i)));
 
         return physicalEffectDataContainer;
     }
@@ -45,7 +48,13 @@ public class StreetPhysicalEffectMapper {
         return Optional.empty();
     }
 
-    private static StreetPhysicalEffectDataContainer.Effect extractEffect(Element table, int firsRow) {
+    /**
+     * Extract the Physical Effects Data for Person transport
+     * @param table
+     * @param firsRow
+     * @return
+     */
+    private static StreetPhysicalEffectDataContainer.Effect extractEffectPV(Element table, int firsRow) {
         Double overall = JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
         Double induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
@@ -54,5 +63,15 @@ public class StreetPhysicalEffectMapper {
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
                 .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);
         return new StreetPhysicalEffectDataContainer.Effect(overall, induced, shifted);
+    }
+
+    /**
+     * Extract the Physical Effects Data for Goods transport
+     * @param table
+     * @param firsRow
+     * @return
+     */
+    private static Double extractEffectGV(Element table, int firsRow) {
+        return JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
     }
 }
