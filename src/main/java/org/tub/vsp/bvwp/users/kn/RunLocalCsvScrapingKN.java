@@ -205,7 +205,7 @@ public class RunLocalCsvScrapingKN{
         // ===
 
         Table table2 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
-                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-" ) )
+                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A003-" ) )
                              .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
                                   );
 
