@@ -8,12 +8,13 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
     private static final Logger log = LogManager.getLogger(Modifications.class);
     public static final double INFLATION_Factor2020to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
     public static final double co2PriceBVWP = 145.;
-    public static final double co2Price700 = 642.;
+    public static final double co2Price796 = 796.;
+    // (895 Eu_2021/t neuer BMDV-Wert.  Evtl. Ausstoss 2040 statt 2030, aber das macht ja nichts.  Rückgerechnet nach 2021 ergibt das 796.)
     // (700 sind die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012 führt das zu 642.)
     public static final double co2Price2000 = 2000 * INFLATION_Factor2020to2012;
     // (2000 als Annahme für die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012)
     /**
-     * Wie {@link #co2Price700}, aber mit 1% Zeitpräferenzrate.
+     * Wie {@link #co2Price796}, aber mit 1% Zeitpräferenzrate.
      */
     public static final double co2Price215 = 197.;
 

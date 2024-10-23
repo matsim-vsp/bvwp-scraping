@@ -120,8 +120,8 @@ public final class Headers{
 	 */
 	public static final String NKV_EL03 = "NKV_el03";
 	public static final String NKV_EL03_CAPPED5 = NKV_EL03 + "_capped5";
-	public static final String NKV_CARBON700ptpr0 = "NKV CO2-Kosten+";
-	public static final String NKV_CARBON700_CAPPED5 = NKV_CARBON700ptpr0 + "_capped5";
+	public static final String NKV_CARBON700 = "NKV CO2-Kosten+";
+	public static final String NKV_CARBON700_CAPPED5 = NKV_CARBON700 + "_capped5";
 	/**
 	 * Neues NKV mit höherem Mehrverkehr, CO2-Preis 215, sowie höheren Investitionskosten.
 	 */
@@ -150,12 +150,14 @@ public final class Headers{
 	public static final String NKV_INVCOSTTUD = "NKV mit Inv.kosten+";
 	public static final String NKV_ELTTIME = "NKV mit Straßenmehrverkehr+";
 	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elTtime_carbon215_invcostTud";
-	public static final String NKV_ELTTIME_CARBON700ptpr0 = "NKV mit  Straßenmehrverkehr+/CO2-Preis+";
-	public static final String NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD = "NKV mit  Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+";
-	public static final String NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+ & EMob";
-	public static final String NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NKV_ELTTIME_CARBON700 = "NKV mit  Straßenmehrverkehr+/CO2-Preis+";
+	public static final String NKV_ELTTIME_CARBON700_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+";
+	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+ & EMob";
+	public static final String NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_20pctLessTraffic = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD + "& 20pctLessTraffic";
+	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_10pctLessTraffic = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD + "& 10pctLessTraffic";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
-	public static final String NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 	public static final String CO2_ORIG = "CO2[Mt] lt. BVWP'30";
 	public static final String CO2_ELTTIME = "CO2[Mt] bei Straßenmehrverkehr+";

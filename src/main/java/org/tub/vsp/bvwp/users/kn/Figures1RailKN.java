@@ -89,7 +89,7 @@ class Figures1RailKN{
 			Headers.addCap5( table, NKV_ORIG );
 //			Headers.addCap5( table, NKV_EL03 );
 //			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
-			Headers.addCap5( table, NKV_CARBON700ptpr0 );
+			Headers.addCap5( table, NKV_CARBON700 );
 //			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 
 //			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
@@ -156,7 +156,7 @@ class Figures1RailKN{
 		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, NKV_ORIG );
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
 //		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
-		nkvMin = table.doubleColumn( NKV_CARBON700ptpr0 ).min();
+		nkvMin = table.doubleColumn( NKV_CARBON700 ).min();
 
 
 

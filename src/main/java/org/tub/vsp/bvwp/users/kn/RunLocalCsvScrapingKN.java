@@ -8,7 +8,10 @@ import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
+import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.NumberColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvWriteOptions;
 import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Figure;
@@ -18,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.NumberFormat;
 import java.util.*;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
@@ -78,10 +82,26 @@ public class RunLocalCsvScrapingKN{
                                .setName( NProCo2_ORIG )
                         );
 
-        table.addColumns( table.doubleColumn( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
+        table.addColumns( table.doubleColumn( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD )
                                .multiply( table.doubleColumn( INVCOST_TUD ) )
                                .divide( table.doubleColumn( CO2_ELTTIME ) )
-                               .setName( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
+                               .setName( NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD )
+                        );
+
+        // === weniger Verkehr:
+        table.addColumns( table.doubleColumn( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD )
+                               .subtract(
+                                               table.doubleColumn( VERKEHRSBELASTUNG_PLANFALL )
+                                                    .multiply( 0.2 ) // 20% less traffic
+                                                    .multiply( 10./30000 ) // this is roughly the slope of NKV(new) vs DTV
+                                        ).setName( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_20pctLessTraffic )
+                        );
+        table.addColumns( table.doubleColumn( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD )
+                               .subtract(
+                                               table.doubleColumn( VERKEHRSBELASTUNG_PLANFALL )
+                                                    .multiply( 0.1 ) // 20% less traffic
+                                                    .multiply( 10./30000 ) // this is roughly the slope of NKV(new) vs DTV
+                                        ).setName( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_10pctLessTraffic )
                         );
 
 //        figures.add( Pair.create( createDefaultKey( figures ), figures2.nProCo2_vs_nkv( NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
@@ -90,11 +110,11 @@ public class RunLocalCsvScrapingKN{
 
 //        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonOrig( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
 
-        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbon( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbon( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
-        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonWithEmob( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+        figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonWithEmob( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
-        figures.add( Pair.create( createHeader2( "Inv.Kosten vs Nutzen_pro_CO2") , figures2.investmentCostTud( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+        figures.add( Pair.create( createHeader2( "Inv.Kosten vs Nutzen_pro_CO2") , figures2.investmentCostTud( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
 
 
@@ -108,22 +128,28 @@ public class RunLocalCsvScrapingKN{
 
         // Abhängigkeit von Verkehrsnachfrage:
         figures.add( Pair.create( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ORIG ) ) );
+        figures.add( Pair.create( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 //        figures.add( figures2.nkvNeu_vs_dtv( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
+
+        // ===
+        // ===
 
         Map<String,String> nkvs = new LinkedHashMap<>();
 
         nkvs.put( "... veränderte Investitionskosten:", NKV_INVCOSTTUD );
         nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
-        nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700ptpr0 );
-        nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700ptpr0 );
-        nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD );
-        nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD );
-        nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD );
+        nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700 );
+        nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
+        nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700_INVCOSTTUD );
+        nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
+        nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD );
 
         figures.add( Pair.create( createHeader1( "Veränderung NKV durch ..." ), null ) );
         for( Map.Entry<String, String> entry : nkvs.entrySet() ){
             figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.nkvNew_vs_nkvOrig( 5, entry.getValue() ) ) );
         }
+
+        // ---
 
         figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
         figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( 5, NKV_ORIG ) ) );
@@ -131,15 +157,17 @@ public class RunLocalCsvScrapingKN{
             figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( 5, entry.getValue() ) ) );
         }
 
+        // ---
+
         figures.add( Pair.create( createHeader1( "CO2 vs. NKV mit ... " ), null ) );
         figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( 5, NKV_ORIG ) ) );
         for( Map.Entry<String, String> entry : nkvs.entrySet() ){
             figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( 5, entry.getValue() ) ) );
         }
 
-        figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) ) );
+        figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD ) ) );
 
-        figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ) ) );
+        figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
         figures.add( Pair.create( createHeader1( "Further material ..." ), null ) );
 
@@ -200,12 +228,12 @@ public class RunLocalCsvScrapingKN{
             new Browser().browse( outputFile );
         }
 
-        System.exit(-1);
+//        System.exit(-1);
 
         // ===
 
         Table table2 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
-                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A003-" ) )
+                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-G010" ) )
                              .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
                                   );
 
@@ -213,8 +241,12 @@ public class RunLocalCsvScrapingKN{
                                   );
 
         Table table4 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A59-G80" )
-                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A661-G30" ) )
-                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A099-G030" ) )
+//                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A661-G30" ) )
+                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A099-G030" ) )
+//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A5-G20" ) )
+//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A3-G70" ) )
+                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A8-G40" ) )
+                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A67-G10" ) )
                                   );
 
         Table combined = table2.append( table3 ).append( table4 );
@@ -224,7 +256,14 @@ public class RunLocalCsvScrapingKN{
         final Table table4b = createVariousNKVs( table4 );
         final Table combinedB = createVariousNKVs( combined );
 
-        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "/dev/stdout" ).separator( ';' ).build() );
+        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "/dev/stdout" ).separator( ';' ).usePrintFormatters( true ).build() );
+
+        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "table.csv" ).separator( ';' ).usePrintFormatters( true ).build() );
+
+        final Table all = createVariousNKVs( table );
+        new CsvWriter().write( all, CsvWriteOptions.builder( "all.csv" ).separator( ';' ).usePrintFormatters( true ).build() );
+
+        System.exit(-1);
 
         System.out.println();
 
@@ -289,14 +328,31 @@ public class RunLocalCsvScrapingKN{
                         , table2.column( NKV_ORIG )
                         , table2.column( NKV_INVCOSTTUD )
                         , table2.column( NKV_ELTTIME )
-                        , table2.column( NKV_CARBON700ptpr0 )
-                        , table2.column( NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD )
-                        , table2.column( NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD )
-                        , table2.column( NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD )
+                        , table2.column( NKV_CARBON700 )
+                        , table2.column( NKV_ELTTIME_CARBON700_INVCOSTTUD )
+                        , table2.column( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD )
+                        , table2.column( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD )
+                        , table2.column( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_10pctLessTraffic )
+                        , table2.column( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_20pctLessTraffic )
 //                        ,table2.numberColumn( Headers.B_OVERALL )
 ////                        , table2.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD )
 //                        , table2.numberColumn( Headers.NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD )
                                    );
+
+        for( Column<?> column : table3.columns() ){
+            if ( column.name().startsWith( "NKV" ) ) {
+                NumberFormat format = NumberFormat.getNumberInstance( Locale.GERMAN );
+                format.setMaximumFractionDigits( 1 );
+                format.setMinimumFractionDigits( 1 );
+                ((DoubleColumn) column).setPrintFormatter( format, "n/a" );
+            } else if ( column instanceof NumberColumn ){
+                NumberFormat format = NumberFormat.getNumberInstance( Locale.GERMAN );
+//                format.setMaximumFractionDigits( 1 );
+//                format.setMinimumFractionDigits( 1 );
+                ((DoubleColumn) column).setPrintFormatter( format, "n/a" );
+            }
+        }
+
         return table3;
     }
     static String createHeader1( String str ) {

@@ -30,11 +30,11 @@ class Figures2KN extends Figures1KN {
 		String xName = VERKEHRSBELASTUNG_PLANFALL;
 		Axis xAxis = Axis.builder().title(xName ).titleFont( defaultFont ).build();
 
-		String yName = Headers.addCap( 10, table, whichNKV );
+		String yName = Headers.addCap( 20, table, whichNKV );
 
 		Table table2 = table.sortAscendingOn( xName ); // cannot remember why this is necessary
 
-		Axis yAxis = Figures1KN.axisBuilder().title( yName ).build(); // cannot use a a logarithmic y axis since it removes nkv < 1
+		Axis yAxis = Figures1KN.axisBuilder().title( whichNKV ).build(); // cannot use a a logarithmic y axis since it removes nkv < 1
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
@@ -59,9 +59,13 @@ class Figures2KN extends Figures1KN {
 				traces.add( ScatterTrace.builder( new double[]{60_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
 				traces.add( ScatterTrace.builder( new double[]{ 100_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
 			}
-			case NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD -> {
+			case NKV_ELTTIME_CARBON700_INVCOSTTUD -> {
 				traces.add( ScatterTrace.builder( new double[]{70_000., 110_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
 				traces.add( ScatterTrace.builder( new double[]{ 110_000., 150_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
+			}
+			case NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD -> {
+				traces.add( ScatterTrace.builder( new double[]{70_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
+				traces.add( ScatterTrace.builder( new double[]{ 110_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
 			}
 			default -> throw new IllegalStateException( "Unexpected value: " + whichNKV );
 		}
@@ -339,11 +343,11 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	// ========================================================================================
 	public Figure nco2v_vs_vs_nkvElttimeCarbon700Invcosttud( int cap ){
-		String xName = Headers.cappedOf( cap, NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD );
+		String xName = Headers.cappedOf( cap, NKV_ELTTIME_CARBON700_INVCOSTTUD );
 		Axis.AxisBuilder xAxisBuilder = Axis.builder().titleFont( defaultFont );
 
 		if ( cap ==Integer.MAX_VALUE ) {
-			xName = NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD;
+			xName = NKV_ELTTIME_CARBON700_INVCOSTTUD;
 			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
 		} else {
 			xAxisBuilder.range( nkvCappedMax, nkvMin );
@@ -352,14 +356,14 @@ class Figures2KN extends Figures1KN {
 		Table table2 = Table.create( table.stringColumn( PROJECT_NAME )
 				, table.stringColumn( BAUTYP )
 				, table.numberColumn( EINSTUFUNG_AS_NUMBER )
-				, table.doubleColumn( NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD )
+				, table.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD )
 				, table.doubleColumn( xName )
 				, table.doubleColumn( INVCOST_TUD )
 				, table.doubleColumn( CO2_COST_EL03 ) // should be ELTTIME!!
 					   );
 
 		final String N_CO2_V = "N-CO2-V";
-		table2.addColumns( table2.doubleColumn( NKV_ELTTIME_CARBON700ptpr0_INVCOSTTUD )
+		table2.addColumns( table2.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD )
 					 .multiply( table2.doubleColumn( INVCOST_TUD ) )
 					 .divide( table2.doubleColumn( CO2_COST_EL03 ) ).setName( N_CO2_V )
 				 ) ;
