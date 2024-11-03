@@ -285,7 +285,9 @@ class Figures2KN extends Figures1KN {
 	public Figure nkvNew_vs_nkvOrig( int cap, String yName ){
 		String xName = NKV_ORIG;
 		String x2Name = Headers.addCap( cap, table, NKV_ORIG );
-		Axis.AxisBuilder xAxisBuilder = Axis.builder().autoRange( Axis.AutoRange.REVERSED ).zeroLineWidth( 0 ).zeroLineColor( "white" );
+		Axis.AxisBuilder xAxisBuilder = Axis.builder()
+//						    .autoRange( Axis.AutoRange.REVERSED )
+						    .zeroLineWidth( 0 ).zeroLineColor( "white" );
 //		xAxisBuilder.range( 0, 50 );
 
 		Table table2 = table.sortDescendingOn( x2Name ); // cannot remember why this is necessary

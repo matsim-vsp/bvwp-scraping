@@ -724,10 +724,10 @@ class Figures1KN{
 	}
 	static List<Trace> getTracesByColor( Table table, String xName, String y2Name ){
 		List<Trace> list = new ArrayList<>();
-		list.addAll( getTraceRed( table, xName, y2Name ) );
-		list.addAll( getTraceMagenta( table, xName, y2Name ) );
+//		list.addAll( getTraceRed( table, xName, y2Name ) );
+//		list.addAll( getTraceMagenta( table, xName, y2Name ) );
 		list.addAll( getTraceCyan( table, xName, y2Name ) );
-		list.addAll( getTraceOrange( table, xName, y2Name ) );
+//		list.addAll( getTraceOrange( table, xName, y2Name ) );
 		return list;
 	}
 	static ScatterTrace diagonalLine( Table table, String xName, String y2Name ){

@@ -69,7 +69,7 @@ public class RunLocalCsvScrapingKN{
         Table table = csvWriter.writeCsv( allStreetBaseData );
 
         // ===
-        final String NKV_ORIG_CAPPED5 = addCap( 5, table, NKV_ORIG);
+        final String NKV_ORIG_CAPPED5 = addCap( 5, table, NKV_ORIG );
         Figures1KN figures1 = new Figures1KN( table, NKV_ORIG_CAPPED5 );
         Figures2KN figures2 = new Figures2KN( table );
 
@@ -133,12 +133,15 @@ public class RunLocalCsvScrapingKN{
 
         // ===
         // ===
+        final int cap = 100;
         {
             Map<String, String> nkvs = new LinkedHashMap<>();
 
+            nkvs.put("... gegen sich selbst:", NKV_ORIG );
             nkvs.put( "... veränderte Investitionskosten:", NKV_INVCOSTTUD );
-            nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
             nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700 );
+            nkvs.put("... erhöhte CO2-Kosten + eMob:", NKV_CARBON700_EMOB );
+            nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
             nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
             nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700_INVCOSTTUD );
             nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
@@ -146,23 +149,23 @@ public class RunLocalCsvScrapingKN{
 
             figures.add( Pair.create( createHeader1( "Veränderung NKV durch ..." ), null ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.nkvNew_vs_nkvOrig( 5, entry.getValue() ) ) );
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.nkvNew_vs_nkvOrig( cap, entry.getValue() ) ) );
             }
 
             // ---
 
             figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
-            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( 5, NKV_ORIG ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( cap, NKV_ORIG ) ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( 5, entry.getValue() ) ) );
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( cap, entry.getValue() ) ) );
             }
 
             // ---
 
             figures.add( Pair.create( createHeader1( "CO2 vs. NKV mit ... " ), null ) );
-            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( 5, NKV_ORIG ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( cap, NKV_ORIG ) ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( 5, entry.getValue() ) ) );
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( cap, entry.getValue() ) ) );
             }
         }
 
@@ -290,6 +293,14 @@ public class RunLocalCsvScrapingKN{
 
                 System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
                 System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
+
+                System.out.println( BvwpUtils.SEPARATOR );
+            }
+            {
+                System.out.println( BvwpUtils.SEPARATOR );
+
+                Table table2 = table.where( table.stringColumn( BAUTYP ).containsString( "KNOTENPUNKT" ) ) ;
+                System.out.println( table2 );
 
                 System.out.println( BvwpUtils.SEPARATOR );
             }

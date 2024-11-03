@@ -32,7 +32,7 @@ public class NkvCalculator {
     private static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
 //        log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
-        Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
+        Optional<BenefitsAndBaukosten> b = benefitsFromStreetBaseData(streetBaseDataContainer );
 
         if (a.isEmpty()) {
             log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl());
@@ -43,9 +43,7 @@ public class NkvCalculator {
             return null;
         }
 
-        double baukosten = streetBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
-
-        return nkvOhneKR_induz(modifications, a.get(), b.get(), baukosten, streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall());
+        return nkvOhneKR_induz(modifications, a.get(), b.get(), streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );
     }
 
 
@@ -80,16 +78,17 @@ public class NkvCalculator {
         return optional;
     }
 
-    private static Optional<Benefits> benefitsFromStreetBaseData(StreetBaseDataContainer streetBaseDataContainer) {
+    private static Optional<BenefitsAndBaukosten> benefitsFromStreetBaseData( StreetBaseDataContainer streetBaseDataContainer ) {
         // @formatter:off
         return Optional.ofNullable(streetBaseDataContainer).map(StreetBaseDataContainer::getCostBenefitAnalysis)
-                       .map(cb -> new Benefits(
+                       .map(cb -> new BenefitsAndBaukosten(
                                        cb.getNbOperations().overall(), // fzkm
                                        cb.getNrz().overall(), // rz
                                        cb.getNi().overall(), // impl
                                        cb.getNl().overall(), // co2_infra
                                        cb.getNa().get(Emission.CO2).overall(), // co2_betrieb
-                                       cb.getOverallBenefit().overall() // benefit
+                                       cb.getOverallBenefit().overall(), // benefit
+                                       cb.getCost().overallCosts()
                        ));
         // @formatter:on
     }
@@ -98,7 +97,7 @@ public class NkvCalculator {
     public static Double calculateCo2_t( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
-        Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
+        Optional<BenefitsAndBaukosten> b = benefitsFromStreetBaseData(streetBaseDataContainer );
 
         if (a.isEmpty() || b.isEmpty()) {
             throw new RuntimeException( "co2 costs cannot be computed" );
