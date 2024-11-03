@@ -29,8 +29,7 @@ public class NkvCalculator {
     }
 
     // old static methods beyond:
-    @Deprecated // use instance approach
-    public static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
+    private static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
 //        log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<Benefits> b = benefitsFromStreetBaseData(streetBaseDataContainer);
@@ -52,15 +51,15 @@ public class NkvCalculator {
 
     private static Optional<Amounts> amountsFromStreetBaseData(StreetBaseDataContainer streetBaseDataContainer) {
 
-        StreetPhysicalEffectDataContainer.Effect tt = streetBaseDataContainer.getPhysicalEffect().getTravelTimes();
+        StreetPhysicalEffectDataContainer.PEffect tt = streetBaseDataContainer.getPhysicalEffect().getTravelTimes();
 
-        StreetPhysicalEffectDataContainer.Effect vkm = streetBaseDataContainer.getPhysicalEffect()
-                                                                              .getVehicleKilometers();
+        StreetPhysicalEffectDataContainer.PEffect pVehicleKilometers = streetBaseDataContainer.getPhysicalEffect().getPVehicleKilometers();
 
-        VehicleEmissions vehicleEmissions = streetBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer()
-                                                                   .emissions().get(Emission.CO2);
+        Double lVehicleKilometers = streetBaseDataContainer.getPhysicalEffect().getLVehicleKilometers();
 
-        if (tt == null || vkm == null || vehicleEmissions == null) {
+        VehicleEmissions vehicleEmissions = streetBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer().emissions().get(Emission.CO2);
+
+        if (tt == null || pVehicleKilometers == null || vehicleEmissions == null) {
             return Optional.empty();
         }
 
@@ -68,9 +67,10 @@ public class NkvCalculator {
         // uncomment to see argument names
 
         final Amounts amounts = new Amounts(
-                vkm.overall(), Optional.ofNullable(vkm.induced()).orElse(0.), vkm.shifted(), // pkwkm
+                pVehicleKilometers.overall(), Optional.ofNullable(pVehicleKilometers.induced()).orElse(0.), pVehicleKilometers.shifted(), // pkwkm
                 tt.overall(), Optional.ofNullable(tt.induced()).orElse(0.), tt.shifted(), // pers_h
-                vehicleEmissions.pkw(), vehicleEmissions.kfz() // co2
+                        lVehicleKilometers, // lkwkm
+                        vehicleEmissions.pkw(), vehicleEmissions.lkw(), vehicleEmissions.kfz() // co2
         );
         final Optional<Amounts> optional = Optional.of(amounts);
         if (optional.isEmpty()) {

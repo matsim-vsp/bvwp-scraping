@@ -39,7 +39,7 @@ public class StreetCsvWriter {
     }
 
     public Table writeCsv(List<StreetAnalysisDataContainer> analysisDataContainers) {
-        logger.info("Writing csv.");
+        logger.info("Writing csv and generating table ...");
         List<String> headers = getHeaders(analysisDataContainers, table);
 
         //make sure that the directory exists
@@ -63,16 +63,16 @@ public class StreetCsvWriter {
                 logger.info("Writing csv record for {}", analysisDataContainer.getStreetBaseDataContainer().getUrl());
                 final List<Object> csvRecord = getCsvRecord(analysisDataContainer, table);
                 csvPrinter.printRecord(csvRecord);
-                {
-                    StringBuilder strb = new StringBuilder();
-                    for (int ii = 2; ii < csvRecord.size(); ii++) {
-                        strb.append(csvRecord.get(ii)).append(";");
-                    }
-                    System.out.println(strb);
-                }
+//                {
+//                    StringBuilder strb = new StringBuilder();
+//                    for (int ii = 2; ii < csvRecord.size(); ii++) {
+//                        strb.append(csvRecord.get(ii)).append(";");
+//                    }
+//                    System.out.println(strb);
+//                }
             }
             csvPrinter.flush();
-            logger.info("Finished writing csv.");
+            logger.info("Finished writing csv and generating table.");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -168,8 +168,8 @@ public class StreetCsvWriter {
         record.add(Headers.DAUER_BAU, baseDataContainer.getCostBenefitAnalysis().getDurations().construction());
         record.add(Headers.DAUER_BETRIEB, baseDataContainer.getCostBenefitAnalysis().getDurations().operation());
 
-        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall());
-        record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getVehicleKilometers().induced() ).orElse(0. ) );
+        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getPVehicleKilometers().overall() );
+        record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPVehicleKilometers().induced() ).orElse(0. ) );
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
@@ -186,10 +186,10 @@ public class StreetCsvWriter {
 //        }
 
         //overall benefit and cost
-        record.add(Headers.B_OVERALL, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis())
-                                              .map(StreetCostBenefitAnalysisDataContainer::getOverallBenefit)
-                                              .map(Benefit::overall)
-                                              .orElse(null));
+        record.add(Headers.B_OVERALL_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
+                                                   .map(StreetCostBenefitAnalysisDataContainer::getOverallBenefit)
+                                                   .map(Benefit::overall)
+                                                   .orElse(null));
         record.add(Headers.INVCOST_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
 						 .map(StreetCostBenefitAnalysisDataContainer::getCost)
 						 .map(Cost::overallCosts)
@@ -269,7 +269,7 @@ public class StreetCsvWriter {
 //            headers.add(colName + "-overall");
 //        }
 
-        headers.addDoubleColumn(Headers.B_OVERALL);
+        headers.addDoubleColumn(Headers.B_OVERALL_ORIG );
         headers.addDoubleColumn(Headers.INVCOST_ORIG );
 
         for (String s : analysisDataContainers.getFirst()

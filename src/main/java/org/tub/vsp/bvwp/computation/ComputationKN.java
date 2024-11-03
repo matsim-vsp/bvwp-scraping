@@ -12,6 +12,9 @@ public class ComputationKN {
     public static final double FZKM_AB = 221000;
     public static final double LANE_KM_AB = 60000.;
 
+    enum CO2_PER_KM { typicalValues, fromPrins };
+    private static final CO2_PER_KM co2PerKm = CO2_PER_KM.fromPrins;
+
     static final class Amounts {
         private final double rz;
         private final double rz_induz;
@@ -19,24 +22,52 @@ public class ComputationKN {
         private final double pkwkm_all;
         private final double pkwkm_induz;
         private final double pkwkm_verl;
+        private final double co2_pkw;
+        private final double co2_lkw;
         private final double co2_kfz;
         private final double pkwkm_reroute;
         private final double co2_per_pkwkm;
+        private final double lkwkm_all;
+        public final double co2_per_lkwkm;
 
-        Amounts(double pkwkm_all, double pkwkm_induz, double pkwkm_verl, double pers_h, double pers_h_induz,
-                double pers_h_verl, double co2_pkw, double co2_kfz) {
+        Amounts( double pkwkm_all, double pkwkm_induz, double pkwkm_verl,
+                 double pers_h, double pers_h_induz, double pers_h_verl,
+                 double lkwkmAll,
+                 double co2_pkw, double co2_lkw, double co2_kfz
+               ) {
 
             this.rz = pers_h;
             this.rz_induz = pers_h_induz;
             this.rz_verl = pers_h_verl;
+
             this.pkwkm_all = pkwkm_all;
             this.pkwkm_induz = pkwkm_induz;
             this.pkwkm_verl = pkwkm_verl;
-            this.co2_kfz = co2_kfz;
             this.pkwkm_reroute = pkwkm_all - pkwkm_induz - pkwkm_verl;
-//			this.co2_per_pkwkm = co2_pkw / pkwkm_all;
-            this.co2_per_pkwkm = 0.1 / 1000 * 1000_000; // 100g/km converted to tons/km, but then the unit in
-            // bvwp-projekte is mio pkw-km.
+
+            lkwkm_all = lkwkmAll;
+
+            this.co2_pkw = co2_pkw;
+            this.co2_lkw = co2_lkw;
+            this.co2_kfz = co2_kfz;
+
+
+            switch ( co2PerKm ) {
+                case typicalValues -> {
+                    this.co2_per_pkwkm = 0.1 / 1000 * 1_000_000;
+                    // 100g/km = 0.1kg/km converted to tons/km, but then the unit in bvwp-projekte is mio pkw-km.
+
+                    this.co2_per_lkwkm = 2. / 1000 * 1_000_000;
+                    // approx. 121g per transported ton x 20t/Lkw
+                }
+                case fromPrins -> {
+                    this.co2_per_pkwkm = co2_pkw / pkwkm_all;
+                    this.co2_per_lkwkm = co2_lkw / lkwkm_all;
+                }
+                default -> throw new IllegalStateException( "Unexpected value: " + co2PerKm );
+            }
+
+//            log.info( "co2 per pkwkm [t/mio-km=g/km]=" + (this.co2_pkw/this.pkwkm_all) + "; co2 per lkwkm=" + (this.co2_lkw/this.lkwkm_all) );
         }
 
         public double getPkwkm_induz() {
@@ -182,7 +213,7 @@ public class ComputationKN {
         // ### preparations:
 
         double b_per_co2 = benefits.co2_betrieb / amounts.co2_kfz;
-        // (this divides all (negative) co2 benefits by all fzkm, including LKW.  We just need (discounted) benefits
+        // (this divides all (negative) co2 benefits by all emissions, including LKW.  We just need (discounted) benefits
         // of ton co2, indep of where it comes from.)
 
         // -- b_co2 calculation is now done "by hand".  I.e. take pkwkm, multiply with emissions per km (obtained
@@ -190,6 +221,8 @@ public class ComputationKN {
         double b_co2_induz = amounts.pkwkm_induz * amounts.co2_per_pkwkm * b_per_co2;
         double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
         double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
+
+        double b_co2_lkw = amounts.lkwkm_all * amounts.co2_per_lkwkm * b_per_co2;
 
 
         // ### first deduct the CO2 components so that we can afterwards re-scale the other material according to changed discount rate:
@@ -201,6 +234,7 @@ public class ComputationKN {
         b_all -= b_co2_reroute;
         b_all -= b_co2_verl;
         b_all -= b_co2_induz;
+        b_all -= b_co2_lkw;
 
         // ### then re-add the CO2 components with the new values:
 
@@ -227,8 +261,15 @@ public class ComputationKN {
         {
             double b_tmp = b_all;
             b_all += b_co2_induz / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-            b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+//            b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+            b_all += modifications.mehrFzkm() * 100 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+            // 100 t / 1 mio km = 100g/km
             prn("b after co2 induz", b_all, b_tmp);
+        }
+        {
+            double b_tmp = b_all;
+            b_all += b_co2_lkw / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+            prn("b after co2 lkw", b_all, b_tmp);
         }
 //        prn("b_co2_betrieb", b_all, bb_tmp);
 

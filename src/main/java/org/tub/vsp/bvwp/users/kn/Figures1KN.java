@@ -25,7 +25,7 @@ import static org.tub.vsp.bvwp.data.Headers.*;
 
 class Figures1KN{
 	private static final Logger log = LogManager.getLogger( Figures1KN.class );
-	static final int plotWidth = 2000;
+	static final int plotWidth = 1500;
 	static final String legendFormat = "%30s";
 	static final String dotSizeString = "largest = VB-E; large = VB; small = WB*; tiny = WB";
 	final Table table;
@@ -475,7 +475,7 @@ class Figures1KN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure carbon(){
-		String yName = CO2_COST_ORIG;
+		String yName = B_CO2_ORIG;
 		String y2Name = CO2_COST_EL03;
 
 		Axis yAxis = Axis.builder().title( yName ).type( Axis.Type.LOG ).build();

@@ -4,16 +4,17 @@ import org.apache.commons.math3.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
+import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
+import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.NumberColumn;
+import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
-import tech.tablesaw.io.csv.CsvWriteOptions;
-import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.display.Browser;
 
@@ -25,6 +26,7 @@ import java.text.NumberFormat;
 import java.util.*;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
+import static tech.tablesaw.aggregate.AggregateFunctions.count;
 
 public class RunLocalCsvScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
@@ -62,7 +64,7 @@ public class RunLocalCsvScrapingKN{
                                                                               ))
                                                                               .toList();
 
-        logger.info( "Writing csv" );
+        logger.info( "Writing csv and generating table:" );
         StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
         Table table = csvWriter.writeCsv( allStreetBaseData );
 
@@ -117,8 +119,6 @@ public class RunLocalCsvScrapingKN{
         figures.add( Pair.create( createHeader2( "Inv.Kosten vs Nutzen_pro_CO2") , figures2.investmentCostTud( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
 
-
-
         // Induzierter Strassenmehrverkehr:
         figures.add( Pair.create( createHeader1( "Induzierter Strassenmehrverkehr (aus Elastizität 0,3):" ), figures2.fzkmEl03_vs_fzkmOrig() ) );
 //        figures.add( figures2.fzkmFromEl03Delta_vs_fzkmOrig() );
@@ -133,54 +133,45 @@ public class RunLocalCsvScrapingKN{
 
         // ===
         // ===
+        {
+            Map<String, String> nkvs = new LinkedHashMap<>();
 
-        Map<String,String> nkvs = new LinkedHashMap<>();
+            nkvs.put( "... veränderte Investitionskosten:", NKV_INVCOSTTUD );
+            nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
+            nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700 );
+            nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
+            nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700_INVCOSTTUD );
+            nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
+            nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD );
 
-        nkvs.put( "... veränderte Investitionskosten:", NKV_INVCOSTTUD );
-        nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
-        nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700 );
-        nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
-        nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700_INVCOSTTUD );
-        nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
-        nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD );
+            figures.add( Pair.create( createHeader1( "Veränderung NKV durch ..." ), null ) );
+            for( Map.Entry<String, String> entry : nkvs.entrySet() ){
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.nkvNew_vs_nkvOrig( 5, entry.getValue() ) ) );
+            }
 
-        figures.add( Pair.create( createHeader1( "Veränderung NKV durch ..." ), null ) );
-        for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-            figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.nkvNew_vs_nkvOrig( 5, entry.getValue() ) ) );
-        }
+            // ---
 
-        // ---
+            figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( 5, NKV_ORIG ) ) );
+            for( Map.Entry<String, String> entry : nkvs.entrySet() ){
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( 5, entry.getValue() ) ) );
+            }
 
-        figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
-        figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( 5, NKV_ORIG ) ) );
-        for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-            figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( 5, entry.getValue() ) ) );
-        }
+            // ---
 
-        // ---
-
-        figures.add( Pair.create( createHeader1( "CO2 vs. NKV mit ... " ), null ) );
-        figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( 5, NKV_ORIG ) ) );
-        for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-            figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( 5, entry.getValue() ) ) );
+            figures.add( Pair.create( createHeader1( "CO2 vs. NKV mit ... " ), null ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( 5, NKV_ORIG ) ) );
+            for( Map.Entry<String, String> entry : nkvs.entrySet() ){
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( 5, entry.getValue() ) ) );
+            }
         }
 
         figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD ) ) );
 
         figures.add( Pair.create( createHeader2( "cumulative ..." ), figures2.cumBenefitVsCumCost( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
+        // ===
         figures.add( Pair.create( createHeader1( "Further material ..." ), null ) );
-
-
-//        figures.add( Pair.create( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:"),
-//                        figures2.getFigures( 5, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
-////        addHeaderPlusMultipleFigures( figures, createHeader1( "XXX vs. NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten/E-Mobilität:" ),
-////                        figures2.getFigures( 10, NKV_ELTTIME_CARBON700ptpr0_EMOB_INVCOSTTUD ) );
-//
-//        // ... plus CO2 Preis 2000:
-//        figures.add( Pair.create( createHeader1( "Inv.Kosten vs NKV mit veränderten/erhöhten Investitionskosten/induziertem Verkehr/CO2-Kosten++/E-Mobilität:"),
-//                        figures2.getFigures( 5, NKV_ELTTIME_CARBON2000ptpr0_EMOB_INVCOSTTUD ).get( 0 ) );
-
 
         // Änlichkeit zwischen carbon cost und Investitionskosten:
         figures.add( Pair.create( createHeader1( "Ähnlichkeit CO2-Kosten und Investitionskosten:" ), figures2.carbon_vs_invcostTud() ) );
@@ -191,31 +182,133 @@ public class RunLocalCsvScrapingKN{
         figures.add( Pair.create( createDefaultKey( figures ), figures2.invcost_tud_vs_orig() ) );
 
 
+        // ===
 
+        // an example of how to format a column:
+//        {
+//            NumberFormat format1 = NumberFormat.getCompactNumberInstance();
+//        format1.setMaximumFractionDigits( 5 );
+//        format1.setMinimumFractionDigits( 5 );
+//            table.numberColumn( Headers.CO2_COST_EL03 ).setPrintFormatter( format0, "n/a" );
+//        }
 
+        {
+            Comparator<Row> einstufComparator = Comparator.comparing( o -> Einstufung.valueOf( o.getString( EINSTUFUNG ) ) );
 
+            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( table.summarize( Headers.NKV_ORIG, count ).apply() );
+            System.out.println( BvwpUtils.SEPARATOR );
 
-//        figures.add( figures2.cost_VS_nkvOrig() );
-
-//        figures.add( figures2.costOrigVsCumulativeCostOrig() );
-
-
-//        figures.addAll( figures2.getFigures( 5, NKV_ORIG ) );
-//        figures.addAll( figures2.getFigures( 5, NKV_ELTTIME_CARBON215_INVCOSTTUD ) );
-
-//        figures.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( 5) );
-//        figures.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(5 ) );
-//        figures.add( figures2.cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud(Integer.MAX_VALUE ) );
-//        figures.add( figures2.invcosttud_vs_nkvEl03Cprice215Invcosttud( Integer.MAX_VALUE) );
+//            {
+//                System.out.println( BvwpUtils.SEPARATOR );
 //
-//        figures.add( figures2.invcosttud_vs_nkvElttimeCarbon700Invcosttud(5) );
-////        figures.add( figures2.invcost50_vs_NkvEl03Cprice700InvcostTud() );
-////        figures.add( figures2.cumcost50_vs_nkvEl03Cprice700InvcostTud() );
-//        figures.add( figures2.invcosttud_vs_nkvElttimeCarbon2000Invcosttud() );
+//                final String name = NKV_ORIG;
+//                Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 //
-//        figures.add( figures2.carbon_vs_nkvEl03Cprice215Invcost50Capped5() );
+//                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+//                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
 //
-//        figures.add( figures2.nco2v_vs_vs_nkvElttimeCarbon700Invcosttud(5 ) );
+//                System.out.println( BvwpUtils.SEPARATOR );
+//            }
+//            {
+//                System.out.println( BvwpUtils.SEPARATOR );
+//
+//                final String name = NKV_INVCOST38;
+//                Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
+//
+//                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+//                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
+//
+//                System.out.println( BvwpUtils.SEPARATOR );
+//            }
+//            {
+//                System.out.println( BvwpUtils.SEPARATOR );
+//
+//                final String name = NKV_INVCOST82;
+//                Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
+//
+//                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+//                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
+//
+//                System.out.println( table2.where( table2.stringColumn( EINSTUFUNG ).isEqualTo( Einstufung.VBE.name() ) ) );
+//
+//                System.out.println( BvwpUtils.SEPARATOR );
+//            }
+            {
+                final String name = NKV_CARBON700 ;
+                Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
+
+                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
+                System.out.println( BvwpUtils.SEPARATOR );
+            }
+            {
+                NumberFormat format1 = NumberFormat.getNumberInstance( Locale.GERMAN );
+                format1.setMaximumFractionDigits( 1 );
+                format1.setMinimumFractionDigits( 1 );
+
+                final DoubleColumn multiplied = table.numberColumn( B_CO2_ORIG ).multiply( 4.49 );
+                multiplied.setPrintFormatter( format1,"n/a" );
+                final DoubleColumn bCo2Revised = table.numberColumn( B_OVERALL_ORIG ).add( table.numberColumn( B_CO2_ORIG ).multiply( 4.49 ) ).setName( "b_overall_revised" );
+                bCo2Revised.setPrintFormatter( format1,"n/a" );
+                Table table2 = Table.create( table.stringColumn( LINK )
+                                , table.numberColumn( B_OVERALL_ORIG )
+                                , table.numberColumn( B_CO2_ORIG )
+                                , multiplied
+                                , bCo2Revised
+                                , table.numberColumn( INVCOST_ORIG )
+                                , table.numberColumn( NKV_ORIG )
+                                , table.numberColumn( NKV_CARBON700 )
+                                , bCo2Revised.divide( table.numberColumn( INVCOST_ORIG ) ).setName( "NKV revised")
+                                           );
+                Table table3 = table2.sortAscendingOn( "NKV revised" );
+                logger.info( "\n" + table3.print(55*2) );
+            }
+
+//            System.exit(-1);
+            {
+                final String name = NKV_CARBON700_EMOB ;
+                Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
+
+                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
+                System.out.println( BvwpUtils.SEPARATOR );
+            }
+
+
+            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( table.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
+            System.out.println( BvwpUtils.SEPARATOR );
+            {
+                System.out.println( BvwpUtils.SEPARATOR );
+
+                final String name = NKV_CARBON700_EMOB_INVCOST80;
+                Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
+
+                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
+
+                System.out.println( BvwpUtils.SEPARATOR );
+            }
+
+            // falls wir per Kategorien sortieren wollen:
+//            System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( Headers.EINSTUFUNG ).sortOn( einstufComparator ).print() );
+
+
+//            System.out.println( BvwpUtils.SEPARATOR );
+//            System.out.println( table.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by( Headers.EINSTUFUNG ) );
+//            System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:" );
+//            System.out.println( table2.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by( Headers.EINSTUFUNG ) );
+
+//        System.out.println(BvwpUtils.SEPARATOR);
+//        System.out.println( table.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
+//        System.out.println( table2.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+        }
+        // ===
 
 
         // ===
@@ -228,50 +321,48 @@ public class RunLocalCsvScrapingKN{
             new Browser().browse( outputFile );
         }
 
-//        System.exit(-1);
-
         // ===
 
-        Table table2 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
-                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-G010" ) )
-                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
-                                  );
-
-        Table table3 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" )
-                                  );
-
-        Table table4 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A59-G80" )
-//                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A661-G30" ) )
-                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A099-G030" ) )
-//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A5-G20" ) )
-//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A3-G70" ) )
-                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A8-G40" ) )
-                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A67-G10" ) )
-                                  );
-
-        Table combined = table2.append( table3 ).append( table4 );
-
-        final Table table2b = createVariousNKVs( table2 );
-        final Table table3b = createVariousNKVs( table3 );
-        final Table table4b = createVariousNKVs( table4 );
-        final Table combinedB = createVariousNKVs( combined );
-
-        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "/dev/stdout" ).separator( ';' ).usePrintFormatters( true ).build() );
-
-        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "table.csv" ).separator( ';' ).usePrintFormatters( true ).build() );
-
-        final Table all = createVariousNKVs( table );
-        new CsvWriter().write( all, CsvWriteOptions.builder( "all.csv" ).separator( ';' ).usePrintFormatters( true ).build() );
-
-        System.exit(-1);
-
-        System.out.println();
-
-        System.out.println( table2b );
-        System.out.println();
-        System.out.println( table3b );
-        System.out.println();
-        System.out.println( table4b );
+//        Table table2 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
+//                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-G010" ) )
+//                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A39-" ) )
+//                                  );
+//
+//        Table table3 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A14-" )
+//                                  );
+//
+//        Table table4 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A59-G80" )
+////                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A661-G30" ) )
+//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A099-G030" ) )
+////                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A5-G20" ) )
+////                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A3-G70" ) )
+//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A8-G40" ) )
+//                                         .or( table.stringColumn( PROJECT_NAME ).startsWith( "A67-G10" ) )
+//                                  );
+//
+//        Table combined = table2.append( table3 ).append( table4 );
+//
+//        final Table table2b = createVariousNKVs( table2 );
+//        final Table table3b = createVariousNKVs( table3 );
+//        final Table table4b = createVariousNKVs( table4 );
+//        final Table combinedB = createVariousNKVs( combined );
+//
+//        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "/dev/stdout" ).separator( ';' ).usePrintFormatters( true ).build() );
+//
+//        new CsvWriter().write( combinedB, CsvWriteOptions.builder( "table.csv" ).separator( ';' ).usePrintFormatters( true ).build() );
+//
+//        final Table all = createVariousNKVs( table );
+//        new CsvWriter().write( all, CsvWriteOptions.builder( "all.csv" ).separator( ';' ).usePrintFormatters( true ).build() );
+//
+//        System.exit(-1);
+//
+//        System.out.println();
+//
+//        System.out.println( table2b );
+//        System.out.println();
+//        System.out.println( table3b );
+//        System.out.println();
+//        System.out.println( table4b );
 
 
         //        {
@@ -299,26 +390,6 @@ public class RunLocalCsvScrapingKN{
 //	    return p1.compareTo( p2 );
 //	};
 //        table = table.sortOn( comparator );
-//        NumberFormat format = NumberFormat.getCompactNumberInstance();
-//        format.setMaximumFractionDigits( 0 );
-//        table.numberColumn( Headers.CO2_COST_EL03 ).setPrintFormatter( format, "n/a" );
-
-//        Table table2 = table.where( table.numberColumn( Headers.NKV_EL03_CARBON215_INVCOSTTUD ).isLessThan( 1. ) );
-//
-//        System.out.println(BvwpUtils.SEPARATOR);
-//        System.out.println( table.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ).print() );
-//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-//        System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by(Headers.EINSTUFUNG ) );
-//
-//        System.out.println(BvwpUtils.SEPARATOR);
-//        System.out.println( table.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-//        System.out.println( table2.summarize( Headers.INVCOST_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-//
-//        System.out.println(BvwpUtils.SEPARATOR);
-//        System.out.println( table.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-//        System.out.println( System.lineSeparator() + "Davon müssen folgende nachbewertet werden:");
-//        System.out.println( table2.summarize( Headers.CO2_COST_EL03, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
     }
     private static Table createVariousNKVs( Table table2 ){
         Table table3 = Table.create( table2.column( PROJECT_NAME )

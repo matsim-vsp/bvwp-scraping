@@ -107,7 +107,7 @@ public class RailTableCreator {
 		record.add(Headers.LENGTH, baseDataContainer.getProjectInformation().getLength());
 
 		//overall benefit and cost
-		record.add(Headers.B_OVERALL, baseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall());
+		record.add(Headers.B_OVERALL_ORIG, baseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );
 		record.add(Headers.INVCOST_ORIG, baseDataContainer.getCostBenefitAnalysis().getCost().overallCosts());
 
 		// (yy warum diese aufwändige Syntax?  kai, feb'24)
@@ -158,7 +158,7 @@ public class RailTableCreator {
 //            headers.add(colName + "-overall");
 //        }
 
-		table.addColumns(DoubleColumn.create(Headers.B_OVERALL));
+		table.addColumns(DoubleColumn.create(Headers.B_OVERALL_ORIG ) );
 		table.addColumns(DoubleColumn.create(Headers.INVCOST_ORIG));
 
 		for (String s : analysisDataContainers.getFirst()

@@ -16,9 +16,9 @@ import java.util.SequencedMap;
 import static org.tub.vsp.bvwp.computation.Modifications.*;
 
 public class StreetAnalysisDataContainer {
-    Logger logger = LogManager.getLogger(StreetAnalysisDataContainer.class);
+    private static final Logger logger = LogManager.getLogger(StreetAnalysisDataContainer.class);
     private final StreetBaseDataContainer streetBaseData;
-    private double constructionCostFactor;
+    private final double constructionCostFactor;
     private final SequencedMap<String, Double> entries = new LinkedHashMap<>();
     private final List<String> remarks = new ArrayList<>();
     private final double constructionCostTud;
@@ -26,10 +26,11 @@ public class StreetAnalysisDataContainer {
     public StreetAnalysisDataContainer(StreetBaseDataContainer streetBaseDataContainer, double investmentCostNew ) {
         this.streetBaseData = streetBaseDataContainer;
         this.constructionCostTud = investmentCostNew;
-        constructionCostFactor = investmentCostNew / streetBaseData.getCostBenefitAnalysis().getCost().overallCosts();
-        if ( constructionCostFactor < 0. ) {
-            constructionCostFactor = 1.;
+        double tmp = investmentCostNew / streetBaseData.getCostBenefitAnalysis().getCost().overallCosts();
+        if ( tmp < 0. ) {
+            tmp = 1.;
         }
+        constructionCostFactor = tmp;
         this.addComputations();
 
         logger.info(this.streetBaseData.getUrl());
@@ -65,7 +66,7 @@ public class StreetAnalysisDataContainer {
         entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
 
         double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.3 * ComputationKN.FZKM_AB;
-        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getVehicleKilometers().overall();
+        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getPVehicleKilometers().overall();
         // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 
 //        logger.info("addtlFzkmBeyondPrinsEl03=" + addtlFzkmBeyondPrinsEl03);
@@ -75,6 +76,7 @@ public class StreetAnalysisDataContainer {
 //        entries.put("rz/km", streetBaseDataContainer.getPhysicalEffect().getTravelTimes().overall() /
 //        streetBaseDataContainer.getProjectInformation().getLength() );
         entries.put(Headers.B_PER_KM, streetBaseData.getCostBenefitAnalysis().getOverallBenefit().overall() / streetBaseData.getProjectInformation().getLength() );
+        entries.put( Headers.B_CO2_ORIG, streetBaseData.getCostBenefitAnalysis().getCo2EquivalentBenefit().overall() );
 
 //        if ( !streetBaseData.getProjectInformation().getProjectNumber().contains( "A20" ) ) {
 //            return;
@@ -86,11 +88,12 @@ public class StreetAnalysisDataContainer {
         // Nach neuerer Überlegung lassen wir alles andere bei 1.7% , und schieben nur co2 um diesen Faktor nach oben.
 
         final double emobCorrFact = 0.1;
+        // Ist mir im Moment nicht klar, warum dieser Wert rauskommt.  yyyyyy ??????
 
         NkvCalculator nkvCalculator = new NkvCalculator( streetBaseData );
 
         entries.put(Headers.NKV_ORIG, nkvCalculator.calculateNkv( NO_CHANGE ) );
-        entries.put(Headers.NKV_CO2, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
+//        entries.put(Headers.NKV_CO2, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
         entries.put(Headers.NKV_CO2_700_EN, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
         entries.put(Headers.NKV_CO2_2000_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ) ) );
         entries.put(Headers.NKV_EL03, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1, 1. ) ) );
@@ -104,17 +107,17 @@ public class StreetAnalysisDataContainer {
 
         //Für EWGT Paper KMT
         //Nur Investitionskosten ändern sich
-        entries.put(Headers.NKV_INVCOSTTUD_EN, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, constructionCostFactor, 1., 1. ), streetBaseData ) );
-        entries.put(Headers.NKV_INVCOST150_EN, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, 1.5, 1. , 1.), streetBaseData ) );
-        entries.put(Headers.NKV_INVCOST200_EN, NkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, 2, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_INVCOSTTUD_EN, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, constructionCostFactor, 1., 1. ) ) );
+        entries.put(Headers.NKV_INVCOST150_EN, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, 1.5, 1. , 1.) ) );
+        entries.put(Headers.NKV_INVCOST200_EN, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0, 2, 1. , 1.) ) );
 
         //Investitionskosten und CO2 Preis ändern sich
-        entries.put(Headers.NKV_CO2_700_INVCOSTTUD_EN, NkvCalculator.calculateNkv( new Modifications( co2Price796, 0, constructionCostFactor, 1. , 1.), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_700_INVCOST150_EN, NkvCalculator.calculateNkv( new Modifications( co2Price796, 0, 1.5, 1. , 1.), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_700_INVCOST200_EN, NkvCalculator.calculateNkv( new Modifications( co2Price796, 0, 2, 1. , 1.), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_2000_INVCOSTTUD_EN, NkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, constructionCostFactor, 1. , 1.), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_2000_INVCOST150_EN, NkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1.5, 1. , 1.), streetBaseData ) );
-        entries.put(Headers.NKV_CO2_2000_INVCOST200_EN, NkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 2, 1. , 1.), streetBaseData ) );
+        entries.put(Headers.NKV_CO2_700_INVCOSTTUD_EN, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0, constructionCostFactor, 1. , 1.) ) );
+        entries.put(Headers.NKV_CO2_700_INVCOST150_EN, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0, 1.5, 1. , 1.) ) );
+        entries.put(Headers.NKV_CO2_700_INVCOST200_EN, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0, 2, 1. , 1.) ) );
+        entries.put(Headers.NKV_CO2_2000_INVCOSTTUD_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, constructionCostFactor, 1. , 1.) ) );
+        entries.put(Headers.NKV_CO2_2000_INVCOST150_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1.5, 1. , 1.) ) );
+        entries.put(Headers.NKV_CO2_2000_INVCOST200_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 2, 1. , 1.) ) );
 
 //
         entries.put(Headers.ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
@@ -128,16 +131,21 @@ public class StreetAnalysisDataContainer {
         entries.put( Headers.ADDTL_PKWKM_FROM_TTIME, addtlFzkmFromTtime );
 
         // Beiträge einzeln:
+        entries.put( Headers.NKV_INVCOST38, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0., 1.38, 1, 1. ) ) );
+        entries.put( Headers.NKV_INVCOST82, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0., 1.82, 1, 1. ) ) );
         entries.put( Headers.NKV_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, 0., constructionCostFactor, 1, 1. ) ) );
         entries.put( Headers.NKV_ELTTIME, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmFromTtime, 1, 1, 1. ) ) );
         entries.put(Headers.NKV_CARBON700, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
 
+        // CO2-Preis und eMob kombiniert:
+        entries.put(Headers.NKV_CARBON700_EMOB, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, emobCorrFact ) ) );
+        // ... + Investitionskosten80%:
+        entries.put(Headers.NKV_CARBON700_EMOB_INVCOST80, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1.82, 1, emobCorrFact ) ) );
+
         // Induz. Strassenmehrverkehr und CO2-Preis kombiniert:
         entries.put( Headers.NKV_ELTTIME_CARBON700, nkvCalculator.calculateNkv( new Modifications( co2Price796, addtlFzkmFromTtime, 1., 1., 1. ) ) );
-
         // ... + Investitionskosten:
         entries.put( Headers.NKV_ELTTIME_CARBON700_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price796, addtlFzkmFromTtime, constructionCostFactor, 1., 1. ) ) );
-
         // ... + eMob:
         entries.put( Headers.NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price796, addtlFzkmFromTtime, constructionCostFactor, 1, emobCorrFact ) ) );
 

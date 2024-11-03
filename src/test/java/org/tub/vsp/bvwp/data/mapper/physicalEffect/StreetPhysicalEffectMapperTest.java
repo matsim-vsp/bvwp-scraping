@@ -16,10 +16,10 @@ class StreetPhysicalEffectMapperTest {
         StreetPhysicalEffectDataContainer physicalEffectDataContainer =
                 new StreetPhysicalEffectMapper().mapDocument(LocalFileAccessor.getLocalDocument("a20.html"));
 
-        Assertions.assertEquals(physicalEffectDataContainer.getVehicleKilometers(),
-                new StreetPhysicalEffectDataContainer.Effect(131.53, 143.95, 9.75));
+        Assertions.assertEquals(physicalEffectDataContainer.getPVehicleKilometers(),
+                new StreetPhysicalEffectDataContainer.PEffect(131.53, 143.95, 9.75) );
         Assertions.assertEquals(physicalEffectDataContainer.getTravelTimes(),
-                new StreetPhysicalEffectDataContainer.Effect(-18.56, 1.99, 0.2));
+                new StreetPhysicalEffectDataContainer.PEffect(-18.56, 1.99, 0.2) );
 
         //emissions are tested in EmissionsMapperTest
     }
@@ -30,11 +30,11 @@ class StreetPhysicalEffectMapperTest {
                 new StreetPhysicalEffectMapper().mapDocument(LocalFileAccessor.getLocalDocument("A003-G20-HE-T2-HE" +
                         ".html"));
 
-        Assertions.assertEquals(physicalEffectDataContainer.getVehicleKilometers(),
-                new StreetPhysicalEffectDataContainer.Effect(0.0, null, 0.0));
+        Assertions.assertEquals(physicalEffectDataContainer.getPVehicleKilometers(),
+                new StreetPhysicalEffectDataContainer.PEffect(0.0, null, 0.0) );
 
         Assertions.assertEquals(physicalEffectDataContainer.getTravelTimes(),
-                new StreetPhysicalEffectDataContainer.Effect(-0.61, null, 0.0));
+                new StreetPhysicalEffectDataContainer.PEffect(-0.61, null, 0.0) );
 
         Map<Emission, VehicleEmissions> emissions = physicalEffectDataContainer.getEmissionsDataContainer().emissions();
         Assertions.assertEquals(emissions.size(), 6);

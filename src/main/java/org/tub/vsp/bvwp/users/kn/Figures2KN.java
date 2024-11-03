@@ -250,7 +250,7 @@ class Figures2KN extends Figures1KN {
 				 .build();
 
 
-		String yName = CO2_COST_ORIG;
+		String yName = B_CO2_ORIG;
 		String y2Name = CO2_COST_EL03;
 
 		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
@@ -738,7 +738,7 @@ class Figures2KN extends Figures1KN {
 
 		tableTmp = tableTmp.sortDescendingOn( nkvToUse ); // necessary to get cumulations right
 
-		System.out.println( tableTmp.print() );
+//		System.out.println( tableTmp.print() );
 
 		// add cumulative benefits row:
 		String yName = "cumulative_" + BENEFIT;

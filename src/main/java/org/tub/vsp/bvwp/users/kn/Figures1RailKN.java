@@ -496,7 +496,7 @@ class Figures1RailKN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure carbon(){
-		String yName = CO2_COST_ORIG;
+		String yName = B_CO2_ORIG;
 		String y2Name = CO2_COST_EL03;
 
 		Axis yAxis = Axis.builder().title( yName ).type( Axis.Type.LOG ).build();

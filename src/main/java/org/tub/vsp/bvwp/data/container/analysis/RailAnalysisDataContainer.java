@@ -57,7 +57,7 @@ public class RailAnalysisDataContainer {
 
         entries.put(Headers.NKV_ORIG, NkvCalculatorRail.calculateNkv( NO_CHANGE, baseDataContainer ) );
 
-        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications( co2Price796, 0., 1, 1, 1. ), baseDataContainer ) );
+//        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications( co2Price796, 0., 1, 1, 1. ), baseDataContainer ) );
         entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv(new Modifications( co2Price796, 0., 1, 1, 1. ), baseDataContainer ) );
         entries.put(Headers.NKV_CARBON700, NkvCalculatorRail.calculateNkv(new Modifications( co2Price796, 0., 1, 1, 1. ), baseDataContainer ) );
         entries.put(Headers.NKV_CO2_2000_EN, NkvCalculatorRail.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ), baseDataContainer ) );

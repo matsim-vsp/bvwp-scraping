@@ -6,9 +6,10 @@ import java.util.Objects;
 
 public class StreetPhysicalEffectDataContainer {
     private StreetEmissionsDataContainer emissionsDataContainer;
-    private Effect travelTimes;
-    private Effect vehicleKilometers;
-    private Effect vehicleHours;
+    private PEffect travelTimes;
+    private PEffect pVehicleKilometers;
+    private PEffect vehicleHours;
+    private Double lVehicleKilometers;
 
     public StreetEmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
@@ -23,20 +24,27 @@ public class StreetPhysicalEffectDataContainer {
         return this;
     }
 
-    public Effect getTravelTimes() {
+    public PEffect getTravelTimes() {
         return travelTimes;
     }
 
-    public void setTravelTimes(Effect travelTimes) {
+    public void setTravelTimes( PEffect travelTimes ) {
         this.travelTimes = travelTimes;
     }
 
-    public Effect getVehicleKilometers() {
-        return vehicleKilometers;
+    public PEffect getPVehicleKilometers() {
+        return pVehicleKilometers;
     }
 
-    public void setVehicleKilometers(Effect vehicleKilometers) {
-        this.vehicleKilometers = vehicleKilometers;
+    public void setPVehicleKilometers( PEffect pVehicleKilometers ) {
+        this.pVehicleKilometers = pVehicleKilometers;
+    }
+    public Double getLVehicleKilometers() {
+        return lVehicleKilometers;
+    }
+
+    public void setLVehicleKilometers( Double lVehicleKilometers ) {
+        this.lVehicleKilometers = lVehicleKilometers;
     }
 
     @Override
@@ -56,24 +64,24 @@ public class StreetPhysicalEffectDataContainer {
         if (!Objects.equals(travelTimes, that.travelTimes)) {
             return false;
         }
-        return Objects.equals(vehicleKilometers, that.vehicleKilometers);
+        return Objects.equals( pVehicleKilometers, that.pVehicleKilometers );
     }
 
     @Override
     public int hashCode() {
         int result = emissionsDataContainer != null ? emissionsDataContainer.hashCode() : 0;
         result = 31 * result + (travelTimes != null ? travelTimes.hashCode() : 0);
-        result = 31 * result + (vehicleKilometers != null ? vehicleKilometers.hashCode() : 0);
+        result = 31 * result + (pVehicleKilometers != null ? pVehicleKilometers.hashCode() : 0);
         return result;
     }
-    public void setVehicleHours( Effect vehicleHours ){
+    public void setVehicleHours( PEffect vehicleHours ){
         this.vehicleHours = vehicleHours;
     }
-    public Effect getVehicleHours(){
+    public PEffect getVehicleHours(){
         return vehicleHours;
     }
 
-    public static final record Effect(Double overall, Double induced, Double shifted) {
+    public static final record PEffect(Double overall, Double induced, Double shifted) {
 
     }
 }
