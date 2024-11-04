@@ -133,7 +133,7 @@ public class RunLocalCsvScrapingKN{
 
         // ===
         // ===
-        final int cap = 100;
+        final int cap = 10;
         {
             Map<String, String> nkvs = new LinkedHashMap<>();
 

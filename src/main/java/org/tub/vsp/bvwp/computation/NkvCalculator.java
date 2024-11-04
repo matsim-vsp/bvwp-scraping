@@ -36,11 +36,13 @@ public class NkvCalculator {
 
         if (a.isEmpty()) {
             log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl());
-            return null;
+//            return null;
+            throw new RuntimeException();
         }
         if (b.isEmpty()) {
             log.warn("benefits container is empty for project=" + streetBaseDataContainer.getUrl());
-            return null;
+//            return null;
+            throw new RuntimeException();
         }
 
         return nkvOhneKR_induz(modifications, a.get(), b.get(), streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );

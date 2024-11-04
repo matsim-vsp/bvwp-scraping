@@ -3,6 +3,8 @@ package org.tub.vsp.bvwp.computation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static org.tub.vsp.bvwp.BvwpUtils.assertNotNaN;
+
 public class ComputationKN {
     // yyyyyy Einbau von Jahreswerten (z.B. Elektrifizierung über Zeit).  Voraussetzung: Ich kann die Diskontierung
     // nachbauen.
@@ -221,23 +223,47 @@ public class ComputationKN {
         // -- b_co2 calculation is now done "by hand".  I.e. take pkwkm, multiply with emissions per km (obtained
         // from co2_pkwkm / pkwkm), and then multiply b_per_co2:
         double b_co2_induz = amounts.pkwkm_induz * amounts.co2_per_pkwkm * b_per_co2;
+        if ( amounts.pkwkm_induz==0. ) {
+            b_co2_induz=0.;
+        }
         double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
+        if ( amounts.pkwkm_verl==0. ) {
+            b_co2_verl=0.;
+        }
         double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
+        if ( amounts.pkwkm_reroute==0. ) {
+            b_co2_reroute=0.;
+        }
 
         double b_co2_lkw = amounts.lkwkm_all * amounts.co2_per_lkwkm * b_per_co2;
-
+        if ( amounts.lkwkm_all==0 ) {
+            // in this case, co2_per_lkwkm is infty, and the multiplication is NaN.  But in reality, the value is just zero.
+            b_co2_lkw = 0;
+        }
+        if ( assertNotNaN( "b_co2_lkw", b_co2_lkw ) ) {
+            log.info( "lkwkm_all=" + amounts.lkwkm_all + "; co2_per_lkwkm=" + amounts.co2_per_lkwkm + "; b_per_co2=" + b_per_co2 );
+        }
 
         // ### first deduct the CO2 components so that we can afterwards re-scale the other material according to changed discount rate:
+        {
+            double b_tmp = b_all;
 
-        // --- for infra:
-        b_all -= benefits.co2_infra;
+            // --- for infra:
+            assertNotNaN( "co2_infra", benefits.co2_infra );
+            b_all -= benefits.co2_infra;
 
-        // --- for operations:
-        b_all -= b_co2_reroute;
-        b_all -= b_co2_verl;
-        b_all -= b_co2_induz;
-        b_all -= b_co2_lkw;
+            // --- for operations:
+            assertNotNaN( "b_co2_reroute", b_co2_reroute );
+            b_all -= b_co2_reroute;
+            assertNotNaN( "b_co2_verl", b_co2_verl );
+            b_all -= b_co2_verl;
+            assertNotNaN( "b_co2_induz", b_co2_induz );
+            b_all -= b_co2_induz;
+            assertNotNaN( "b_co2_lkw", b_co2_lkw );
+            b_all -= b_co2_lkw;
 
+            prn( "b after deductions:", b_all, b_tmp );
+        }
         // ### then re-add the CO2 components with the new values:
 
         // co2 Bau
@@ -280,16 +306,20 @@ public class ComputationKN {
 
         // ### finally compute the nkv and return it:
         final double nkv = b_all / baukosten;
-//        String colorString = ConsoleColors.TEXT_BLACK;
-//        if (nkv < 1) {
-//            colorString = ConsoleColors.TEXT_RED;
-//        }
-//		log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK );
+        if ( Double.isNaN( nkv ) ){
+            String colorString = ConsoleColors.TEXT_BLACK;
+            if( Double.isNaN( nkv ) ){
+                colorString = ConsoleColors.TEXT_RED;
+            }
+            log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK  + "; b_all=" + b_all + "; baukosten=" + baukosten );
+        }
         return nkv;
     }
 
     private static void prn(String msg, double b_all, double b_tmp) {
-//		log.info(String.format( "%1$20s: Korrektur = %2$5.0f; bb = %3$5.0f", msg, b_all - b_tmp, b_all ) );
+        if ( Double.isNaN( b_all ) || Double.isNaN( b_tmp ) ){
+            log.info( String.format( "%1$20s: before = %2$5.0f; corr = %3$5.0f; after = %4$5.0f", msg, b_tmp, b_all - b_tmp, b_all ) );
+        }
     }
 
     static Double b_co2(Modifications modifications, Amounts amounts, BenefitsAndBaukosten benefits ) {

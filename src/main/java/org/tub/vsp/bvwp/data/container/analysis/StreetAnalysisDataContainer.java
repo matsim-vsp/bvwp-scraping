@@ -88,11 +88,16 @@ public class StreetAnalysisDataContainer {
         // Nach neuerer Überlegung lassen wir alles andere bei 1.7% , und schieben nur co2 um diesen Faktor nach oben.
 
         final double emobCorrFact = 0.1;
-        // Ist mir im Moment nicht klar, warum dieser Wert rauskommt.  yyyyyy ??????
+        // Ist mir im Moment nicht klar, warum dieser Wert rauskommt.
+        // --> Siehe "zweiterZB.mw" im unotrans nextcloud.
 
         NkvCalculator nkvCalculator = new NkvCalculator( streetBaseData );
 
         entries.put(Headers.NKV_ORIG, nkvCalculator.calculateNkv( NO_CHANGE ) );
+//        if ( true ){
+//            return;
+//        }
+
 //        entries.put(Headers.NKV_CO2, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
         entries.put(Headers.NKV_CO2_700_EN, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
         entries.put(Headers.NKV_CO2_2000_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ) ) );

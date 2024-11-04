@@ -4,19 +4,21 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.input.BOMInputStream;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
 import tech.tablesaw.api.Table;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
 public class BvwpUtils{
+	private static Logger log = LogManager.getLogger( BvwpUtils.class );
 
 	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
 
@@ -113,5 +115,12 @@ public class BvwpUtils{
 		}
 
 		return resultMap;
+	}
+	public static boolean assertNotNaN( String msg, double val ) {
+		if ( Double.isNaN( val ) ) {
+			log.warn( "not a regular number: " + msg + "=" + val );
+			return true;
+		}
+		return false;
 	}
 }
