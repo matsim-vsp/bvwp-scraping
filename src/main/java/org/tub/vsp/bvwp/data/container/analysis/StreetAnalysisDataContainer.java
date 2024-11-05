@@ -154,6 +154,8 @@ public class StreetAnalysisDataContainer {
         // ... + eMob:
         entries.put( Headers.NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price796, addtlFzkmFromTtime, constructionCostFactor, 1, emobCorrFact ) ) );
 
+        entries.put( Headers.NKV_ELTTIME_CARBON700_EMOB, nkvCalculator.calculateNkv( new Modifications( co2Price796, addtlFzkmFromTtime, 1., 1, emobCorrFact ) ) );
+
         entries.put( Headers.NKV_ELTTIME_CARBON215_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmFromTtime, constructionCostFactor, 1, 1. ) ) );
         entries.put( Headers.NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price2000, addtlFzkmFromTtime, constructionCostFactor, 1, emobCorrFact ) ) );
 

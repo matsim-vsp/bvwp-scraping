@@ -32,7 +32,7 @@ public class NkvCalculator {
     private static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
 //        log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
-        Optional<BenefitsAndBaukosten> b = benefitsFromStreetBaseData(streetBaseDataContainer );
+        Optional<BenefitsAndInvestmentCosts> b = benefitsFromStreetBaseData(streetBaseDataContainer );
 
         if (a.isEmpty()) {
             log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl());
@@ -80,10 +80,10 @@ public class NkvCalculator {
         return optional;
     }
 
-    private static Optional<BenefitsAndBaukosten> benefitsFromStreetBaseData( StreetBaseDataContainer streetBaseDataContainer ) {
+    private static Optional<BenefitsAndInvestmentCosts> benefitsFromStreetBaseData( StreetBaseDataContainer streetBaseDataContainer ) {
         // @formatter:off
         return Optional.ofNullable(streetBaseDataContainer).map(StreetBaseDataContainer::getCostBenefitAnalysis)
-                       .map(cb -> new BenefitsAndBaukosten(
+                       .map(cb -> new BenefitsAndInvestmentCosts(
                                        cb.getNbOperations().overall(), // fzkm
                                        cb.getNrz().overall(), // rz
                                        cb.getNi().overall(), // impl
@@ -99,7 +99,7 @@ public class NkvCalculator {
     public static Double calculateCo2_t( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
         log.warn("modifications=" + modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
-        Optional<BenefitsAndBaukosten> b = benefitsFromStreetBaseData(streetBaseDataContainer );
+        Optional<BenefitsAndInvestmentCosts> b = benefitsFromStreetBaseData(streetBaseDataContainer );
 
         if (a.isEmpty() || b.isEmpty()) {
             throw new RuntimeException( "co2 costs cannot be computed" );

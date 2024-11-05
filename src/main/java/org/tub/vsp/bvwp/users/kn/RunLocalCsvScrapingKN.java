@@ -45,17 +45,15 @@ public class RunLocalCsvScrapingKN{
 
         String positivListe = BvwpUtils.getPositivListe();
 
-        StreetScraper scraper = new StreetScraper();
-
-        logger.info( "Starting scraping" );
 
         String filePath = "../../shared-svn/";
         Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTudFile(filePath );
 
         final String regexToExclude = "(A...B.*)|(A....B.*)"; // Bundesstrassen, die von Autobahnen ausgehen.
 
+        logger.info( "Starting scraping" );
         // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
-        List<StreetAnalysisDataContainer> allStreetBaseData = scraper
+        List<StreetAnalysisDataContainer> allStreetBaseData = new StreetScraper()
                                                                               .extractAllLocalBaseData( "./data/street/all", "A", ".*", regexToExclude )
                                                                               .stream()
                                                                               .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(
@@ -65,8 +63,7 @@ public class RunLocalCsvScrapingKN{
                                                                               .toList();
 
         logger.info( "Writing csv and generating table:" );
-        StreetCsvWriter csvWriter = new StreetCsvWriter( "output/street_data.csv" );
-        Table table = csvWriter.writeCsv( allStreetBaseData );
+        Table table = new StreetCsvWriter( "output/street_data.csv" ).writeCsv( allStreetBaseData );
 
         // ===
         final String NKV_ORIG_CAPPED5 = addCap( 5, table, NKV_ORIG );
@@ -136,16 +133,21 @@ public class RunLocalCsvScrapingKN{
         final int cap = 10;
         {
             Map<String, String> nkvs = new LinkedHashMap<>();
+            {
+                nkvs.put( "... Investitionskosten+:", NKV_INVCOSTTUD );
+                nkvs.put( "... CO2-Kosten+:", NKV_CARBON700 );
+                nkvs.put( "... CO2-Kosten+ &  eMob+:", NKV_CARBON700_EMOB );
+                nkvs.put( "... CO2-Kosten+ & eMob+ & Inv.Kosten+:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
+                // ---
+                nkvs.put( "... induz. Strassenmehrverkehr+:", NKV_ELTTIME );
+//                nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
+                nkvs.put( "... induz. Str.mehrverkehr+, CO2-Preis+, E-Mob+:", NKV_ELTTIME_CARBON700_EMOB );
+                nkvs.put( "... induz. Str.mehrverkehr+, CO2-Preis+, E-Mob+, Inv.Kosten+:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
+//                nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700_INVCOSTTUD );
+//                nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD );
+            }
 
-            nkvs.put("... gegen sich selbst:", NKV_ORIG );
-            nkvs.put( "... veränderte Investitionskosten:", NKV_INVCOSTTUD );
-            nkvs.put( "... erhöhte CO2-Kosten:", NKV_CARBON700 );
-            nkvs.put("... erhöhte CO2-Kosten + eMob:", NKV_CARBON700_EMOB );
-            nkvs.put( "... veränderten induz. Strassenmehrverkehr:", NKV_ELTTIME );
-            nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
-            nkvs.put( "... zusätzlich veränderte Investitionskosten:", NKV_ELTTIME_CARBON700_INVCOSTTUD );
-            nkvs.put( "... zusätzlich Berücksichtigung E-Mobilität:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
-            nkvs.put( "... zusätzlich CO2-Preis jetzt auf 2000:", NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD );
+            // ---
 
             figures.add( Pair.create( createHeader1( "Veränderung NKV durch ..." ), null ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
@@ -186,6 +188,7 @@ public class RunLocalCsvScrapingKN{
 
 
         // ===
+        // ===
 
         // an example of how to format a column:
 //        {
@@ -198,9 +201,9 @@ public class RunLocalCsvScrapingKN{
         {
             Comparator<Row> einstufComparator = Comparator.comparing( o -> Einstufung.valueOf( o.getString( EINSTUFUNG ) ) );
 
-            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( BvwpUtils.SEPARATOR_AT_START );
             System.out.println( table.summarize( Headers.NKV_ORIG, count ).apply() );
-            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( BvwpUtils.SEPARATOR_AT_START );
 
 //            {
 //                System.out.println( BvwpUtils.SEPARATOR );
@@ -241,10 +244,10 @@ public class RunLocalCsvScrapingKN{
                 final String name = NKV_CARBON700 ;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_START );
                 System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
                 System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_START );
             }
             {
                 NumberFormat format1 = NumberFormat.getNumberInstance( Locale.GERMAN );
@@ -274,19 +277,19 @@ public class RunLocalCsvScrapingKN{
                 final String name = NKV_CARBON700_EMOB ;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_START );
                 System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
                 System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_START );
             }
 
 
-            System.out.println( BvwpUtils.SEPARATOR );
-            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( BvwpUtils.SEPARATOR_AT_START );
+            System.out.println( BvwpUtils.SEPARATOR_AT_START );
             System.out.println( table.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
-            System.out.println( BvwpUtils.SEPARATOR );
+            System.out.println( BvwpUtils.SEPARATOR_AT_START );
             {
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_START );
 
                 final String name = NKV_CARBON700_EMOB_INVCOST80;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
@@ -294,16 +297,17 @@ public class RunLocalCsvScrapingKN{
                 System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
                 System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
 
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_END );
             }
             {
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_START );
 
-                Table table2 = table.where( table.stringColumn( BAUTYP ).containsString( "KNOTENPUNKT" ) ) ;
-                System.out.println( table2 );
+                Table table2 = table.where( table.stringColumn( PROJECT_NAME ).containsString( "A20" ) ) ;
+                System.out.println( table2.print() );
 
-                System.out.println( BvwpUtils.SEPARATOR );
+                System.out.println( BvwpUtils.SEPARATOR_AT_END );
             }
+            System.exit(-1);
 
             // falls wir per Kategorien sortieren wollen:
 //            System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( Headers.EINSTUFUNG ).sortOn( einstufComparator ).print() );
@@ -322,17 +326,6 @@ public class RunLocalCsvScrapingKN{
         // ===
 
 
-        // ===
-
-        {
-            File outputFile = Paths.get( "multiplot.html" ).toFile();
-            try( FileWriter fileWriter = new FileWriter( outputFile ) ){
-                fileWriter.write( MultiPlotUtils.createPageV2( figures ) );
-            }
-            new Browser().browse( outputFile );
-        }
-
-        // ===
 
 //        Table table2 = table.where( table.stringColumn( PROJECT_NAME ).startsWith( "A20-" )
 //                             .or( table.stringColumn( PROJECT_NAME ).startsWith( "A008-G010" ) )
@@ -401,6 +394,23 @@ public class RunLocalCsvScrapingKN{
 //	    return p1.compareTo( p2 );
 //	};
 //        table = table.sortOn( comparator );
+
+
+        // ===
+        // ===
+        // (Plotting is at the end so I can use System.exit(...) to stop earlier.)
+
+        {
+            File outputFile = Paths.get( "multiplot.html" ).toFile();
+            try( FileWriter fileWriter = new FileWriter( outputFile ) ){
+                fileWriter.write( MultiPlotUtils.createPageV2( figures ) );
+            }
+            new Browser().browse( outputFile );
+        }
+
+        // ===
+
+
     }
     private static Table createVariousNKVs( Table table2 ){
         Table table3 = Table.create( table2.column( PROJECT_NAME )

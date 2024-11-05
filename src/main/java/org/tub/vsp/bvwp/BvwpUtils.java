@@ -20,7 +20,8 @@ import java.util.Optional;
 public class BvwpUtils{
 	private static Logger log = LogManager.getLogger( BvwpUtils.class );
 
-	public static final String SEPARATOR = System.lineSeparator() + "===========================================";
+	public static final String SEPARATOR_AT_END = System.lineSeparator() + "===========================================";
+	public static final String SEPARATOR_AT_START = "===========================================" ; // tablesaw print() seems to add an empty line
 
 //	private static final String CONSTRUCTION_COST_COLUMN = "BMF.Gesamtprojektkosten2022-Preis_2022-zusammengefasst_zu_NKA-Projekten";
 	private static final String INVESTMENT_COST_COLUMN = "NKA.Summe bewertungsrelevanter Investitionskosten-Barwert_skalliert";

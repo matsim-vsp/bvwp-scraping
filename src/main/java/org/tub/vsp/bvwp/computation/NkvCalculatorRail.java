@@ -27,7 +27,7 @@ public class NkvCalculatorRail{
     public static Double calculateNkv(Modifications modifications, RailBaseDataContainer railBaseDataContainer) {
         assert modifications.mehrFzkm() == 0;
 
-        double baukosten_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.constructionCostFactor();
+        double baukosten_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getCost().overallCosts() * modifications.investmentCostFactor();
         double benefit_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall();
         double co2_infra_MioEur = railBaseDataContainer.getCostBenefitAnalysis().getNl().overall();
         double co2_betrieb_t = railBaseDataContainer.getPhysicalEffect().getEmissionsDataContainer().emissions().get(Emission.CO2);

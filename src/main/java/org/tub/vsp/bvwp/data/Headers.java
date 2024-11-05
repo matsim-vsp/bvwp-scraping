@@ -140,6 +140,7 @@ public final class Headers{
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elTtime_carbon215_invcostTud";
 	public static final String NKV_ELTTIME_CARBON700 = "NKV mit  Straßenmehrverkehr+/CO2-Preis+";
+	public static final String NKV_ELTTIME_CARBON700_EMOB = "NKV mit Straßenmehrverkehr+/CO2-Preis+ & EMob+";
 	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+ & EMob";
 	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_10pctLessTraffic = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD + "& 10pctLessTraffic";
 	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_20pctLessTraffic = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD + "& 20pctLessTraffic";

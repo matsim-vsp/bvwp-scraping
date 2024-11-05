@@ -77,16 +77,16 @@ public class ComputationKN {
         }
     }
 
-    static final class BenefitsAndBaukosten{
+    static final class BenefitsAndInvestmentCosts{
         private final double fzkm;
         private final double rz;
         private final double impl;
         private final double co2_infra;
         private final double co2_betrieb;
         private final double all;
-        private final double baukosten;
+        private final double investmentCosts;
 
-        BenefitsAndBaukosten( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all, double baukosten ) {
+        BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all, double investmentCosts ) {
             // yyyyyy ist alles noch ganz schön unklar benannt!!
             this.fzkm = fzkm;
             this.rz = rz;
@@ -94,7 +94,7 @@ public class ComputationKN {
             this.co2_infra = co2_infra;
             this.co2_betrieb = co2_betrieb;
             this.all = all;
-            this.baukosten = baukosten;
+            this.investmentCosts = investmentCosts;
         }
     }
 
@@ -157,7 +157,7 @@ public class ComputationKN {
 
     }
      */
-    static double nkv( Modifications modifications, Amounts amounts, BenefitsAndBaukosten benefits ) {
+    static double nkv( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
         double b_all = benefits.all;
         prn("start", b_all, 0.);
 
@@ -211,7 +211,7 @@ public class ComputationKN {
 
     }
 
-    static double nkvOhneKR_induz( Modifications modifications, Amounts amounts, BenefitsAndBaukosten benefits, double b_all ) {
+    static double nkvOhneKR_induz( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits, double b_all ) {
         prn("incoming", b_all, b_all);
 
         // ### preparations:
@@ -301,17 +301,17 @@ public class ComputationKN {
         }
 //        prn("b_co2_betrieb", b_all, bb_tmp);
 
-        // ### baukosten:
-        final double baukosten = benefits.baukosten * modifications.constructionCostFactor();
+        // ### investmentCosts:
+        final double investmentCosts = benefits.investmentCosts * modifications.investmentCostFactor();
 
         // ### finally compute the nkv and return it:
-        final double nkv = b_all / baukosten;
+        final double nkv = b_all / investmentCosts;
         if ( Double.isNaN( nkv ) ){
             String colorString = ConsoleColors.TEXT_BLACK;
             if( Double.isNaN( nkv ) ){
                 colorString = ConsoleColors.TEXT_RED;
             }
-            log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK  + "; b_all=" + b_all + "; baukosten=" + baukosten );
+            log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK  + "; b_all=" + b_all + "; investmentCosts=" + investmentCosts );
         }
         return nkv;
     }
@@ -322,7 +322,7 @@ public class ComputationKN {
         }
     }
 
-    static Double b_co2(Modifications modifications, Amounts amounts, BenefitsAndBaukosten benefits ) {
+    static Double b_co2(Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
         // yyyyyy for the time being this returns the benefits since they are easier to compute.  !!!!
 
         double co2 = 0.;

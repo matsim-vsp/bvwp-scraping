@@ -3,7 +3,7 @@ package org.tub.vsp.bvwp.computation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public record Modifications(double co2Price, double mehrFzkm, double constructionCostFactor, double discountCorrFact, double emobCorrFact) {
+public record Modifications(double co2Price, double mehrFzkm, double investmentCostFactor, double discountCorrFact, double emobCorrFact) {
 
     private static final Logger log = LogManager.getLogger(Modifications.class);
     public static final double INFLATION_Factor2020to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
@@ -35,6 +35,6 @@ public record Modifications(double co2Price, double mehrFzkm, double constructio
     public static final Modifications NO_CHANGE = new Modifications(co2PriceBVWP, 0., 1, 1, 1. );
 
     @Override public String toString() {
-        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "; constructionCostFactor" + constructionCostFactor + "; discountCorrFact" + discountCorrFact + "; emobCorrFact=" + emobCorrFact + "]";
+        return "[co2Price=" + co2Price + "; mehrFzkm=" + mehrFzkm + "; investmentCostFactor=" + investmentCostFactor + "; discountCorrFact=" + discountCorrFact + "; emobCorrFact=" + emobCorrFact + "]";
     }
 }

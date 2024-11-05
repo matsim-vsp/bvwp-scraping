@@ -15,7 +15,7 @@ class ComputationKNTest {
 
         Amounts amounts = new Amounts(131.53, 143.95, 9.75, -18.56, 1.46, 0.13,
                         -25., 54_773.28, -25.,48_689.94 );
-        BenefitsAndBaukosten benefits = new BenefitsAndBaukosten(-785.233, 2555.429, 1025.464, -151.319, -175.021
+        BenefitsAndInvestmentCosts benefits = new BenefitsAndInvestmentCosts(-785.233, 2555.429, 1025.464, -151.319, -175.021
                 , 5305.683, 2737.176 );
         {
             double nkv = nkv(new Modifications(co2PriceBVWP, 0., 1, 1., 1. ), amounts, benefits );
