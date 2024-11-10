@@ -45,7 +45,7 @@ public class NkvCalculator {
             throw new RuntimeException();
         }
 
-        return nkvOhneKR_induz(modifications, a.get(), b.get(), streetBaseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );
+        return nkvOhneKR_induz(modifications, a.get(), b.get(), b.get().all );
     }
 
 

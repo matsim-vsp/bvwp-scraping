@@ -18,19 +18,19 @@ public class ComputationKN {
     private static final CO2_PER_KM co2PerKm = CO2_PER_KM.fromPrins;
 
     static final class Amounts {
-        private final double rz;
-        private final double rz_induz;
-        private final double rz_verl;
-        private final double pkwkm_all;
-        private final double pkwkm_induz;
-        private final double pkwkm_verl;
-        private final double co2_pkw;
-        private final double co2_lkw;
-        private final double co2_kfz;
-        private final double pkwkm_reroute;
-        private final double co2_per_pkwkm;
-        private final double lkwkm_all;
-        public final double co2_per_lkwkm;
+        final double rz;
+        final double rz_induz;
+        final double rz_verl;
+        final double pkwkm_all;
+        final double pkwkm_induz;
+        final double pkwkm_verl;
+        final double co2_pkw;
+        final double co2_lkw;
+        final double co2_kfz;
+        final double pkwkm_reroute;
+        final double co2_per_pkwkm;
+        final double lkwkm_all;
+        final double co2_per_lkwkm;
 
         Amounts( double pkwkm_all, double pkwkm_induz, double pkwkm_verl,
                  double pers_h, double pers_h_induz, double pers_h_verl,
@@ -72,19 +72,16 @@ public class ComputationKN {
 //            log.info( "co2 per pkwkm [t/mio-km=g/km]=" + (this.co2_pkw/this.pkwkm_all) + "; co2 per lkwkm=" + (this.co2_lkw/this.lkwkm_all) );
         }
 
-        public double getPkwkm_induz() {
-            return pkwkm_induz;
-        }
     }
 
     static final class BenefitsAndInvestmentCosts{
-        private final double fzkm;
-        private final double rz;
-        private final double impl;
-        private final double co2_infra;
-        private final double co2_betrieb;
-        private final double all;
-        private final double investmentCosts;
+        final double fzkm;
+        final double rz;
+        final double impl;
+        final double co2_infra;
+        final double co2_betrieb;
+        final double all;
+        final double investmentCosts;
 
         BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all, double investmentCosts ) {
             // yyyyyy ist alles noch ganz schön unklar benannt!!
@@ -157,62 +154,62 @@ public class ComputationKN {
 
     }
      */
-    static double nkv( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
-        double b_all = benefits.all;
-        prn("start", b_all, 0.);
-
-        double m_induzFactor = 1.;
-        if (amounts.pkwkm_induz > 0.) {
-            m_induzFactor = 1. + modifications.mehrFzkm() / amounts.pkwkm_induz;
-        }
-
-        // Zeitwert
-//		double zw = benefits.rz / amounts.rz;
-        double zw = -5.5 * 25;
-
-        // Distanzkosten
-//		double distCost = benefits.fzkm / amounts.pkwkm_all;
-        double distCost = -0.24 * 25;
-        {
-            double b_tmp = b_all;
-            b_all -= amounts.pkwkm_induz * distCost;
-            b_all += amounts.pkwkm_induz * distCost * m_induzFactor;
-            prn("rv_fzkm", b_all, b_tmp);
-        }
-        // rv_zeit
-        {
-            double b_tmp = b_all;
-            b_all -= amounts.rz_induz * zw;
-            b_all += amounts.rz_induz * zw * m_induzFactor;
-            prn("rv_zeit", b_all, b_tmp);
-        }
-        // impl Nutzen
-
-        // -- differentiate b_impl by induz and verl so that we can multiply only the induz part.
-        // -- we do this by computing the relative b_RV shares and then use that to multiply b.impl.
-
-        // (1) approximiere die b_rv:
-        double b_rv_induz = amounts.rz_induz * zw + amounts.pkwkm_induz * distCost;
-        double b_rv_verl = amounts.rz_verl * zw + amounts.pkwkm_verl * distCost;
-
-        // (2)
-        double b_impl_induz = benefits.impl * b_rv_induz / (b_rv_induz + b_rv_verl);
-        if (b_rv_induz == 0.) {
-            b_impl_induz = 0.;
-        }
-        {
-            double b_tmp = b_all;
-            b_all -= b_impl_induz;
-            b_all += b_impl_induz * m_induzFactor;
-            prn("b_impl", b_all, b_tmp);
-        }
-
-        return nkvOhneKR_induz(modifications, amounts, benefits, b_all );
-
-    }
+//    static double nkv( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
+//        double b_all = benefits.all;
+//        prn("start", b_all, 0.);
+//
+//        double m_induzFactor = 1.;
+//        if (amounts.pkwkm_induz > 0.) {
+//            m_induzFactor = 1. + modifications.mehrFzkm() / amounts.pkwkm_induz;
+//        }
+//
+//        // Zeitwert
+////		double zw = benefits.rz / amounts.rz;
+//        double zw = -5.5 * 25;
+//
+//        // Distanzkosten
+////		double distCost = benefits.fzkm / amounts.pkwkm_all;
+//        double distCost = -0.24 * 25;
+//        {
+//            double b_tmp = b_all;
+//            b_all -= amounts.pkwkm_induz * distCost;
+//            b_all += amounts.pkwkm_induz * distCost * m_induzFactor;
+//            prn("rv_fzkm", b_all, b_tmp);
+//        }
+//        // rv_zeit
+//        {
+//            double b_tmp = b_all;
+//            b_all -= amounts.rz_induz * zw;
+//            b_all += amounts.rz_induz * zw * m_induzFactor;
+//            prn("rv_zeit", b_all, b_tmp);
+//        }
+//        // impl Nutzen
+//
+//        // -- differentiate b_impl by induz and verl so that we can multiply only the induz part.
+//        // -- we do this by computing the relative b_RV shares and then use that to multiply b.impl.
+//
+//        // (1) approximiere die b_rv:
+//        double b_rv_induz = amounts.rz_induz * zw + amounts.pkwkm_induz * distCost;
+//        double b_rv_verl = amounts.rz_verl * zw + amounts.pkwkm_verl * distCost;
+//
+//        // (2)
+//        double b_impl_induz = benefits.impl * b_rv_induz / (b_rv_induz + b_rv_verl);
+//        if (b_rv_induz == 0.) {
+//            b_impl_induz = 0.;
+//        }
+//        {
+//            double b_tmp = b_all;
+//            b_all -= b_impl_induz;
+//            b_all += b_impl_induz * m_induzFactor;
+//            prn("b_impl", b_all, b_tmp);
+//        }
+//
+//        return nkvOhneKR_induz(modifications, amounts, benefits, b_all );
+//
+//    }
 
     static double nkvOhneKR_induz( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits, double b_all ) {
-        prn("incoming", b_all, b_all);
+        prn("=== incoming", b_all, b_all);
 
         // ### preparations:
 
@@ -262,7 +259,7 @@ public class ComputationKN {
             assertNotNaN( "b_co2_lkw", b_co2_lkw );
             b_all -= b_co2_lkw;
 
-            prn( "b after deductions:", b_all, b_tmp );
+            prn( "initial deductions:", b_all, b_tmp );
         }
         // ### then re-add the CO2 components with the new values:
 
@@ -270,7 +267,7 @@ public class ComputationKN {
         {
             double b_tmp = b_all;
             b_all += modifications.co2Price() / 145. * benefits.co2_infra;
-            prn("b after co2 infra:", b_all, b_tmp);
+            prn("co2 infra:", b_all, b_tmp);
         }
 
         // co2 Betrieb
@@ -279,12 +276,12 @@ public class ComputationKN {
         {
             double b_tmp = b_all;
             b_all += b_co2_reroute / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact();
-            prn("b after co2 reroute:", b_all, b_tmp);
+            prn("co2 reroute:", b_all, b_tmp);
         }
         {
             double b_tmp = b_all;
             b_all += b_co2_verl / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact();
-            prn("b after co2 verl:", b_all, b_tmp);
+            prn("co2 verl:", b_all, b_tmp);
         }
         {
             double b_tmp = b_all;
@@ -292,12 +289,23 @@ public class ComputationKN {
 //            b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
             b_all += modifications.mehrFzkm() * 100 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
             // 100 t / 1 mio km = 100g/km
-            prn("b after co2 induz", b_all, b_tmp);
+
+            // Problem ist, dass wir den (negativen) CO2-Benefit pro induzierten Fzkm nicht kennen.  PRINS weist nur Deltas der CO2-Emissionen sowie
+            // der Fzkm aus.  Wenn man das durcheinander dividiert, dann sind die Resultate "all over the place".  Eine Begründung könnte sein, dass
+            // z.B. viele Fze vorher Landstrasse und jetzt BAB fahren, und daher anders emittieren, obwohl sie die gleichen Fzkm fahren.  Daher werden
+            // die Emissionen des zusätzlichen induzierten Verkehrs "separat" gerechnet ... mit 100g/km.  kai, nov'24
+
+            // yy Das bedeutet aber auch, wenn ich es richtig sehe, dass wir die obige Rechnung gar nicht mehr brauchen.  Sondern wir können gleich
+            // die Werte aus PRINS für b_co2_infra und b_co2_betrieb mit den Korrekturfaktoren multiplizieren und fertig; sollte das gleiche
+            // rauskommen.  (Das ist vllt auch das, was Richard in seiner Email schreibt?? yyyy) Und zusätzlich induzierten Verkehr schlagen wir
+            // zusätzlich drauf. kai, nov'24
+
+            prn("co2 induz", b_all, b_tmp);
         }
         {
             double b_tmp = b_all;
             b_all += b_co2_lkw / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-            prn("b after co2 lkw", b_all, b_tmp);
+            prn("co2 lkw", b_all, b_tmp);
         }
 //        prn("b_co2_betrieb", b_all, bb_tmp);
 
@@ -317,7 +325,8 @@ public class ComputationKN {
     }
 
     private static void prn(String msg, double b_all, double b_tmp) {
-        if ( Double.isNaN( b_all ) || Double.isNaN( b_tmp ) ){
+//        if ( Double.isNaN( b_all ) || Double.isNaN( b_tmp ) )
+        {
             log.info( String.format( "%1$20s: before = %2$5.0f; corr = %3$5.0f; after = %4$5.0f", msg, b_tmp, b_all - b_tmp, b_all ) );
         }
     }
@@ -325,11 +334,11 @@ public class ComputationKN {
     static Double b_co2(Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
         // yyyyyy for the time being this returns the benefits since they are easier to compute.  !!!!
 
-        double co2 = 0.;
+        double b_co2 = 0.;
 
         // co2 Bau
         {
-			co2 += benefits.co2_infra / 145. * modifications.co2Price() ;
+			b_co2 += benefits.co2_infra / 145. * modifications.co2Price() ;
         }
 
         // co2 Betrieb
@@ -346,21 +355,21 @@ public class ComputationKN {
         final double b_co2_addtlInduz = modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2;
 
         {
-            co2 += b_co2_reroute / 145. * modifications.co2Price() * modifications.emobCorrFact();
+            b_co2 += b_co2_reroute / 145. * modifications.co2Price() * modifications.emobCorrFact();
         }
         {
-            co2 += b_co2_verl / 145. * modifications.co2Price() * modifications.emobCorrFact();
+            b_co2 += b_co2_verl / 145. * modifications.co2Price() * modifications.emobCorrFact();
         }
         {
-            co2 += b_co2_induz / 145. * modifications.co2Price() * modifications.emobCorrFact();
+            b_co2 += b_co2_induz / 145. * modifications.co2Price() * modifications.emobCorrFact();
 
-            co2 += b_co2_addtlInduz / 145. * modifications.co2Price() * modifications.emobCorrFact();
+            b_co2 += b_co2_addtlInduz / 145. * modifications.co2Price() * modifications.emobCorrFact();
             // mehrFzkm are those which are on top of PRINS
         }
 
-		return co2;
+        return b_co2;
 
-		// Note that this really says nothing about old vs new co2 price, or old vs new addl traffic.  That all depends on the settings in "modifications".
+        // Note that this really says nothing about old vs new co2 price, or old vs new addl traffic.  That all depends on the settings in "modifications".
     }
 
     /**
