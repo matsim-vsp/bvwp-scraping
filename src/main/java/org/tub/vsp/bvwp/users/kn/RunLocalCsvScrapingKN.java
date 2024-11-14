@@ -4,19 +4,23 @@ import org.apache.commons.math3.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
-import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
+import tech.tablesaw.aggregate.AggregateFunctions;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.NumberColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
+import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
+import tech.tablesaw.plotly.components.Layout;
+import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.display.Browser;
+import tech.tablesaw.plotly.traces.BarTrace;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -26,7 +30,6 @@ import java.text.NumberFormat;
 import java.util.*;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
-import static tech.tablesaw.aggregate.AggregateFunctions.count;
 
 public class RunLocalCsvScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalCsvScrapingKN.class );
@@ -72,6 +75,60 @@ public class RunLocalCsvScrapingKN{
 
         List<Pair<String,Figure>> figures = new ArrayList<>();
 
+        figures.add( Pair.create( createHeader1( "Abc" ), null ) );
+        String str;
+
+        str = NKV_ORIG;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+
+        str = NKV_CARBON700;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+
+        str = NKV_CARBON700_EMOB;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+
+        str = NKV_ELTTIME;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+
+        str = NKV_ELTTIME_CARBON700;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+
+        str = NKV_ELTTIME_CARBON700_EMOB;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+//
+        str = NKV_INVCOSTTUD;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_TUD ) ) ) ;
+
+        str = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_TUD ) ) ) ;
+
+        str = NKV_INVCOSTTUD_CARBON700_EMOB;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_TUD) ) ) ;
+
+
+
+
+
+
+
         figures.add(Pair.create( createHeader1( "New plots" ), null ) );
 
         // N pro CO2:
@@ -113,7 +170,7 @@ public class RunLocalCsvScrapingKN{
 
         figures.add( Pair.create( createHeader2( "CO2 vs Nutzen_pro_CO2" ), figures2.carbonWithEmob( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 
-        figures.add( Pair.create( createHeader2( "Inv.Kosten vs Nutzen_pro_CO2") , figures2.investmentCostTud( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
+        figures.add( Pair.create( createHeader2( "Inv.Kosten vs Nutzen_pro_CO2") , figures2.investmentCost( Integer.MAX_VALUE, NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD, INVCOST_TUD ) ) );
 
 
         // Induzierter Strassenmehrverkehr:
@@ -130,7 +187,7 @@ public class RunLocalCsvScrapingKN{
 
         // ===
         // ===
-        final int cap = 10;
+        final int cap = 5;
         {
             Map<String, String> nkvs = new LinkedHashMap<>();
             {
@@ -157,9 +214,10 @@ public class RunLocalCsvScrapingKN{
             // ---
 
             figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
-            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCostTud( cap, NKV_ORIG ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCost( cap, NKV_ORIG, INVCOST_ORIG ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCost( cap, NKV_ORIG, INVCOST_TUD ) ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
-                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCostTud( cap, entry.getValue() ) ) );
+                figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCost( cap, entry.getValue(), INVCOST_TUD ) ) );
             }
 
             // ---
@@ -201,9 +259,9 @@ public class RunLocalCsvScrapingKN{
         {
             Comparator<Row> einstufComparator = Comparator.comparing( o -> Einstufung.valueOf( o.getString( EINSTUFUNG ) ) );
 
-            System.out.println( BvwpUtils.SEPARATOR_AT_START );
-            System.out.println( table.summarize( Headers.NKV_ORIG, count ).apply() );
-            System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//            System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//            System.out.println( table.summarize( Headers.NKV_ORIG, count ).apply() );
+//            System.out.println( BvwpUtils.SEPARATOR_AT_START );
 
 //            {
 //                System.out.println( BvwpUtils.SEPARATOR );
@@ -244,10 +302,10 @@ public class RunLocalCsvScrapingKN{
                 final String name = NKV_CARBON700 ;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
-                System.out.println( BvwpUtils.SEPARATOR_AT_START );
-                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
-                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
-                System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+//                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_START );
             }
             {
                 NumberFormat format1 = NumberFormat.getNumberInstance( Locale.GERMAN );
@@ -269,7 +327,7 @@ public class RunLocalCsvScrapingKN{
                                 , bCo2Revised.divide( table.numberColumn( INVCOST_ORIG ) ).setName( "NKV revised")
                                            );
                 Table table3 = table2.sortAscendingOn( "NKV revised" );
-                logger.info( "\n" + table3.print(55*2) );
+//                logger.info( "\n" + table3.print(55*2) );
             }
 
 //            System.exit(-1);
@@ -277,37 +335,36 @@ public class RunLocalCsvScrapingKN{
                 final String name = NKV_CARBON700_EMOB ;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
-                System.out.println( BvwpUtils.SEPARATOR_AT_START );
-                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
-                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
-                System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+//                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).apply() );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_START );
             }
 
 
-            System.out.println( BvwpUtils.SEPARATOR_AT_START );
-            System.out.println( BvwpUtils.SEPARATOR_AT_START );
-            System.out.println( table.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
-            System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//            System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//            System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//            System.out.println( table.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
+//            System.out.println( BvwpUtils.SEPARATOR_AT_START );
             {
-                System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_START );
 
                 final String name = NKV_CARBON700_EMOB_INVCOST80;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
-                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
-                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
-
-                System.out.println( BvwpUtils.SEPARATOR_AT_END );
+//                System.out.println( System.lineSeparator() + "Bei Verwendung von " + name + " müssen folgende nachbewertet werden:" );
+//                System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( EINSTUFUNG ).sortOn( einstufComparator ) );
+//
+//                System.out.println( BvwpUtils.SEPARATOR_AT_END );
             }
             {
-                System.out.println( BvwpUtils.SEPARATOR_AT_START );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_START );
 
                 Table table2 = table.where( table.stringColumn( PROJECT_NAME ).containsString( "A20" ) ) ;
-                System.out.println( table2.print() );
+//                System.out.println( table2.print() );
 
-                System.out.println( BvwpUtils.SEPARATOR_AT_END );
+//                System.out.println( BvwpUtils.SEPARATOR_AT_END );
             }
-            System.exit(-1);
 
             // falls wir per Kategorien sortieren wollen:
 //            System.out.println( table2.summarize( Headers.NKV_ORIG, count ).by( Headers.EINSTUFUNG ).sortOn( einstufComparator ).print() );
@@ -411,6 +468,115 @@ public class RunLocalCsvScrapingKN{
         // ===
 
 
+    }
+    private static Figure barChartFigureInvKosten( Table table, String whichNkv, String whichInvCost ){
+        Table table2 = Table.create( table.column( PROJECT_NAME ), table.column( whichNkv ), table.column(whichInvCost), table.column( EINSTUFUNG ), table.column(EINSTUFUNG_AS_NUMBER) )
+                            .sortDescendingOn( EINSTUFUNG_AS_NUMBER );
+        table = null;
+
+        String whichInvCostMrd = whichInvCost + " [Mrd Eu]";
+        table2.addColumns( table2.numberColumn( whichInvCost ).divide( 1000 ).setName( whichInvCostMrd ) );
+
+        Axis yAxis = Axis.builder().title( INVCOST_ORIG_MRD ).build();
+        Layout layout = Layout.builder().barMode( Layout.BarMode.STACK ).yAxis( yAxis ).title( whichNkv ).build();
+
+        List<BarTrace> traces = new ArrayList<>();
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isLessThan( 0.95 ) )
+                             .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "NKV<0.95", "red" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 0.95, 2.-Double.MIN_VALUE ) )
+                             .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "0.95<=NKV<2", "orange" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 2., 3.-Double.MIN_VALUE ) )
+                             .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "2<=NKV<3", "yellow" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 3., 4.-Double.MIN_VALUE ) )
+                             .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "3<=NKV<4", "AAAAFF" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 4., 5.-Double.MIN_VALUE ) )
+                             .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "4<=NKV<5", "8888FF" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isGreaterThanOrEqualTo(5. ) )
+                             .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "5<=NKV", "6666FF" ) );
+        }
+
+        final Figure figure = new Figure( layout, traces.toArray( new BarTrace[0] ) );
+        return figure;
+    }
+    private static BarTrace generateBarTrace( Table t3, String x, String whichColumn, String name, String color ){
+        return BarTrace.builder( t3.categoricalColumn( EINSTUFUNG ), t3.numberColumn( x + whichColumn + "]" ) )
+                       .orientation( BarTrace.Orientation.VERTICAL )
+                       .name( name )
+                       .marker( Marker.builder().color( color ).build() )
+                       .build();
+    }
+    private static Figure barChartFigureAnzahlProjekte( Table table, String whichNkv ){
+        Table table2 = Table.create( table.column( PROJECT_NAME ), table.column( whichNkv ), table.column( EINSTUFUNG ), table.column(EINSTUFUNG_AS_NUMBER) )
+                            .sortDescendingOn( EINSTUFUNG_AS_NUMBER );
+        System.out.println( table2.print() );
+        table = null;
+
+        Axis yAxis = Axis.builder().title( "Anzahl Projekte" ).build();
+        Layout layout = Layout.builder().barMode( Layout.BarMode.RELATIVE ).yAxis( yAxis ).title( whichNkv ).build();
+
+        List<BarTrace> traces = new ArrayList<>();
+        {
+            Table t3 = table2.where( table.numberColumn( whichNkv ).isLessThan( 0.95 ) )
+                             .summarize( whichNkv, AggregateFunctions.count ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Count [", whichNkv, "NKV<0.95", "red" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 1., 2.-Double.MIN_VALUE ) )
+                             .summarize( whichNkv, AggregateFunctions.count ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Count [", whichNkv, "0.95<=NKV<2", "orange" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 2., 3.-Double.MIN_VALUE ) )
+                             .summarize( whichNkv, AggregateFunctions.count ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Count [", whichNkv, "2<=NKV<3", "yellow" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 3., 4.-Double.MIN_VALUE ) )
+                             .summarize( whichNkv, AggregateFunctions.count ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Count [", whichNkv, "3<=NKV<4", "AAAAFF" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 4., 5.-Double.MIN_VALUE ) )
+                             .summarize( whichNkv, AggregateFunctions.count ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Count [", whichNkv, "4<=NKV<5", "8888FF" ) );
+        }
+        {
+            Table t3 = table2.where( table2.numberColumn( whichNkv ).isGreaterThanOrEqualTo(5. ) )
+                             .summarize( whichNkv, AggregateFunctions.count ).by( EINSTUFUNG );
+
+            traces.add( generateBarTrace( t3, "Count [", whichNkv, "5<=NKV", "6666FF" ) );
+        }
+
+        final Figure figure = new Figure( layout, traces.toArray( new BarTrace[0] ) );
+        return figure;
     }
     private static Table createVariousNKVs( Table table2 ){
         Table table3 = Table.create( table2.column( PROJECT_NAME )

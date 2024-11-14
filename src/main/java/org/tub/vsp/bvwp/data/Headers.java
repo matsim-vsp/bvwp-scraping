@@ -83,6 +83,7 @@ public final class Headers{
 	 * Originale Investitionskosten.
 	 */
 	public static final String INVCOST_ORIG = "Inv.kosten BVWP 2030";
+	public static final String INVCOST_ORIG_MRD = "Inv.kosten BVWP 2030 [Mrd]";
 	/**
 	 * Investitionskosten nach Berechnung der TUD
 	 */
@@ -136,15 +137,15 @@ public final class Headers{
 	 */
 	public static final String NKV_EL03_DIFF = "NKV_el03_Diff";
 	public static final String NKV_ELTTIME = "NKV mit Straßenmehrverkehr+";
-	public static final String NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++/EMob";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elTtime_carbon215_invcostTud";
 	public static final String NKV_ELTTIME_CARBON700 = "NKV mit  Straßenmehrverkehr+/CO2-Preis+";
-	public static final String NKV_ELTTIME_CARBON700_EMOB = "NKV mit Straßenmehrverkehr+/CO2-Preis+ & EMob+";
-	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+ & EMob";
+	public static final String NKV_ELTTIME_CARBON700_EMOB = "NKV mit Straßenmehrverkehr+/CO2-Preis+/EMob+";
+	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis+/EMob";
 	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_10pctLessTraffic = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD + "& 10pctLessTraffic";
 	public static final String NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD_20pctLessTraffic = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD + "& 20pctLessTraffic";
-	public static final String NKV_ELTTIME_CARBON700_INVCOSTTUD = "NKV mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis+";
+	public static final String NKV_ELTTIME_CARBON700_INVCOSTTUD = "NKV mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis+";
 	public static final String NKV_INDUZ_CO2_EN = "BCR_induzCo2";
 	public static final String NKV_INDUZ_EN = "BCR_induz";
 	public static final String NKV_INVCOST150_EN = "BCR_invcost150"; //50% höhere Investmentcosts
@@ -152,13 +153,15 @@ public final class Headers{
 	public static final String NKV_INVCOST38 = "NKV mit Inv.kosten+38%";
 	public static final String NKV_INVCOST82 = "NKV mit Inv.kosten+82%";
 	public static final String NKV_INVCOSTTUD = "NKV mit Inv.kosten+";
+	public static final String NKV_INVCOSTTUD_CARBON700 = NKV_INVCOSTTUD + "/CO2-Preis+";
+	public static final String NKV_INVCOSTTUD_CARBON700_EMOB = NKV_INVCOSTTUD_CARBON700 + "/EMob";
 	/**
 	 * NKV bei erhöhten Investitionskosten (welchen?).
 	 */
 	public static final String NKV_INVCOSTTUD_EN = "BCR_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
 	public static final String NKV_NO_CHANGE_EN = "BCR";
 	public static final String NKV_ORIG = "NKV BVWP 2030";
-	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Straßenmehrverkehr+/CO2-Preis++ & EMob";
+	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++ & EMob";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
 	public static final String PROJECT_NAME = "Projektname";
 	public static final String VERKEHRSBELASTUNG_PLANFALL = "DTV_Planfall";

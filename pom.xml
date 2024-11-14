@@ -12,6 +12,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <tablesaw.version>0.43.1</tablesaw.version>
     </properties>
     <dependencies>
 
@@ -37,17 +38,17 @@
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
-            <version>0.43.1</version>
+            <version>${tablesaw.version}</version>
         </dependency>
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-jsplot</artifactId>
-            <version>0.43.1</version>
+            <version>${tablesaw.version}</version>
         </dependency>
         <dependency>
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-html</artifactId>
-            <version>0.43.1</version>
+            <version>${tablesaw.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>

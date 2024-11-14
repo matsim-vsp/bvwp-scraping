@@ -87,7 +87,7 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	public Figure invcosttud_vs_nkvEl03Cprice215Invcosttud( int cap ){
 		String xName = Headers.cappedOf( cap, NKV_EL03_CARBON215_INVCOSTTUD );
-		return investmentCostTud( cap, xName );
+		return investmentCost( cap, xName, INVCOST_TUD );
 	}
 	// ========================================================================================
 	// ========================================================================================
@@ -273,7 +273,7 @@ class Figures2KN extends Figures1KN {
 	public List<Figure> getFigures( int cap, String xNameOrig ){
 		List<Figure> figures = new ArrayList<>();
 //		String xName = Headers.cappedOf( cap, xNameOrig );
-		figures.add( investmentCostTud( cap, xNameOrig ) );
+		figures.add( investmentCost( cap, xNameOrig, INVCOST_TUD ) );
 		figures.add( carbon( cap, xNameOrig ) );
 //		figures.add( cumulativeInvestmentCostTud( cap, xName ) );
 		figures.add( cumBenefitVsCumCost( xNameOrig ) );
@@ -286,7 +286,7 @@ class Figures2KN extends Figures1KN {
 		String xName = NKV_ORIG;
 		String x2Name = Headers.addCap( cap, table, NKV_ORIG );
 		Axis.AxisBuilder xAxisBuilder = Axis.builder()
-//						    .autoRange( Axis.AutoRange.REVERSED )
+						    .autoRange( Axis.AutoRange.REVERSED )
 						    .zeroLineWidth( 0 ).zeroLineColor( "white" );
 //		xAxisBuilder.range( 0, 50 );
 
@@ -555,7 +555,7 @@ class Figures2KN extends Figures1KN {
 		traces.addAll( getTracesByColor( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
-	Figure investmentCostTud( int cap, String xName ){
+	Figure investmentCost( int cap, String xName, String yName ){
 		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
 
 		if ( cap ==Integer.MAX_VALUE ) {
@@ -566,7 +566,6 @@ class Figures2KN extends Figures1KN {
 
 		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
 
-		String yName = INVCOST_TUD;
 		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
