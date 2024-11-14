@@ -5,11 +5,11 @@ import org.apache.logging.log4j.Logger;
 
 import static org.tub.vsp.bvwp.BvwpUtils.assertNotNaN;
 
-public class ComputationKN {
+public class ComputationKNUntilNov24{
     // yyyyyy Einbau von Jahreswerten (z.B. Elektrifizierung über Zeit).  Voraussetzung: Ich kann die Diskontierung
     // nachbauen.
 
-    private static final Logger log = LogManager.getLogger(ComputationKN.class);
+    private static final Logger log = LogManager.getLogger( ComputationKNUntilNov24.class );
 
     public static final double FZKM_AB = 221000;
     public static final double LANE_KM_AB = 60000.;
@@ -95,6 +95,118 @@ public class ComputationKN {
         }
     }
 
+    /*
+    public static void main(String[] args) {
+        log.warn("need to either only compute pkw, or include lkw into computation!");
+
+        // A20 "Elbquerung":
+        {
+            log.info("=== A20 (Elbquerung):");
+            Amounts amounts = new Amounts(131.53, 143.95, 9.75, -18.56, 1.46, 0.13, 54_773.28, 48_689.94);
+            Benefits benefits = new Benefits(-785.233, 2555.429, 1025.464, -151.319, -175.021, 5305.683);
+            double baukosten = 2737.176;
+            log.info("--- orig:");
+            nkv(new Modifications(145, 0., 1 ), amounts, benefits, baukosten );
+            log.info("--- co2 price:");
+            nkv(new Modifications(5. * 145, 0., 1 ), amounts, benefits, baukosten );
+            log.info("--- induz:");
+            nkv(new Modifications(145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten );
+            log.info("--- induz wo b_impl:");
+            nkvOhneKR_induz(new Modifications(145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten,
+                    benefits.all);
+            log.info("--- both:");
+            nkv(new Modifications(5. * 145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten );
+            log.info("--- both wo b_impl:");
+            nkvOhneKR_induz(new Modifications(5. * 145, amounts.pkwkm_induz * 4., 1 ), amounts, benefits, baukosten,
+                    benefits.all);
+            log.info("===");
+        }
+        // A8-G40-BW Ausbau:
+        {
+            log.info("=== A8-G40-BW:");
+            final Amounts amounts = new Amounts(2.31, 0., 0., -4.42, 0., 0., 1_981.64, 2_037.89);
+            final Benefits benefits = new Benefits(-21.838, 532., 0., -6.473, -6.682, 1067.523);
+            final double baukosten = 34.735;
+            nkvOhneKR_induz(new Modifications(145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
+            nkvOhneKR_induz(new Modifications(5. * 145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
+            nkvOhneKR_induz(new Modifications(145., 38 - 2.31, 1 ), amounts, benefits, baukosten, benefits.all );
+            nkvOhneKR_induz(new Modifications(5. * 145., 38 - 2.31, 1 ), amounts, benefits, baukosten, benefits.all );
+            log.info("===");
+        }
+        // A59 Ausbau bei Bonn rechtsrheinisch
+        {
+            log.info("=== A59:");
+            final Amounts amounts = new Amounts(7.09, 0., 0., -1.33, 0., 0., 7_337.53, 7_707.91);
+            final Benefits benefits = new Benefits(-88.090, 202.416, 0., -3.797, -29.699, 197.074);
+            final double baukosten = 34.735;
+            log.info("--- orig:");
+            nkvOhneKR_induz(new Modifications(145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
+            log.info("--- induz offset:");
+            nkvOhneKR_induz(new Modifications(145., 19.9 - amounts.pkwkm_all, 1 ), amounts, benefits, baukosten,
+                    benefits.all);
+            log.info("--- co2 price:");
+            nkvOhneKR_induz(new Modifications(5. * 145., 0., 1 ), amounts, benefits, baukosten, benefits.all );
+            log.info("--- induz offset & co2 price:");
+            nkvOhneKR_induz(new Modifications(5. * 145., 19.9 - amounts.pkwkm_all, 1 ), amounts, benefits, baukosten,
+                    benefits.all);
+            log.info("===");
+        }
+
+    }
+     */
+//    static double nkv( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
+//        double b_all = benefits.all;
+//        prn("start", b_all, 0.);
+//
+//        double m_induzFactor = 1.;
+//        if (amounts.pkwkm_induz > 0.) {
+//            m_induzFactor = 1. + modifications.mehrFzkm() / amounts.pkwkm_induz;
+//        }
+//
+//        // Zeitwert
+////		double zw = benefits.rz / amounts.rz;
+//        double zw = -5.5 * 25;
+//
+//        // Distanzkosten
+////		double distCost = benefits.fzkm / amounts.pkwkm_all;
+//        double distCost = -0.24 * 25;
+//        {
+//            double b_tmp = b_all;
+//            b_all -= amounts.pkwkm_induz * distCost;
+//            b_all += amounts.pkwkm_induz * distCost * m_induzFactor;
+//            prn("rv_fzkm", b_all, b_tmp);
+//        }
+//        // rv_zeit
+//        {
+//            double b_tmp = b_all;
+//            b_all -= amounts.rz_induz * zw;
+//            b_all += amounts.rz_induz * zw * m_induzFactor;
+//            prn("rv_zeit", b_all, b_tmp);
+//        }
+//        // impl Nutzen
+//
+//        // -- differentiate b_impl by induz and verl so that we can multiply only the induz part.
+//        // -- we do this by computing the relative b_RV shares and then use that to multiply b.impl.
+//
+//        // (1) approximiere die b_rv:
+//        double b_rv_induz = amounts.rz_induz * zw + amounts.pkwkm_induz * distCost;
+//        double b_rv_verl = amounts.rz_verl * zw + amounts.pkwkm_verl * distCost;
+//
+//        // (2)
+//        double b_impl_induz = benefits.impl * b_rv_induz / (b_rv_induz + b_rv_verl);
+//        if (b_rv_induz == 0.) {
+//            b_impl_induz = 0.;
+//        }
+//        {
+//            double b_tmp = b_all;
+//            b_all -= b_impl_induz;
+//            b_all += b_impl_induz * m_induzFactor;
+//            prn("b_impl", b_all, b_tmp);
+//        }
+//
+//        return nkvOhneKR_induz(modifications, amounts, benefits, b_all );
+//
+//    }
 
     static double nkvOhneKR_induz( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits, double b_all ) {
         prn("=== incoming", b_all, b_all);

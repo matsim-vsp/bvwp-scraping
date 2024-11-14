@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.tub.vsp.bvwp.computation.ComputationKN.*;
+import static org.tub.vsp.bvwp.computation.Modifications.co2Price796;
 import static org.tub.vsp.bvwp.computation.Modifications.co2PriceBVWP;
 
 class ComputationKNTest {
@@ -26,26 +27,26 @@ class ComputationKNTest {
             Assertions.assertEquals( nkv_orig, nkv, 0.001 );
         }
 
-//        // doppelte Investitionskosten:
-//        {
-//            double nkv = nkvOhneKR_induz(new Modifications( co2PriceBVWP, 0., 2., 1., 1. ), amounts, benefits, benefits.all );
-//            Assertions.assertEquals(nkv_orig/2, nkv, 0.001);
-//        }
-//
-//        // neuer CO2-Preis:
-//        {
-//            double nkv = nkvOhneKR_induz(new Modifications( co2Price796, 0., 1., 1., 1. ), amounts, benefits, benefits.all  );
-//            final double delta_nkv = (benefits.co2_betrieb + benefits.co2_infra) * (co2Price796 / co2PriceBVWP - 1.) / benefits.investmentCosts;
-//            Assertions.assertEquals(nkv_orig+delta_nkv, nkv, 0.001);
-//        }
-//        // neuer CO2-Preis & eMob:
-//        {
-//            double nkv = nkvOhneKR_induz(new Modifications( co2Price796, 0., 1., 1., 0.1 ), amounts, benefits, benefits.all  );
-//            final double delta_b = -benefits.co2_infra - benefits.co2_betrieb + benefits.co2_infra*co2Price796/co2PriceBVWP + benefits.co2_betrieb*0.1*co2Price796/co2PriceBVWP;
-//            final double delta_nkv = delta_b / benefits.investmentCosts;
-//            log.info( "delta_b=" + delta_b + "; delta_nkv=" + delta_nkv );
-//            Assertions.assertEquals(nkv_orig+delta_nkv, nkv, 0.001);
-//        }
+        // doppelte Investitionskosten:
+        {
+            double nkv = nkvOhneKR_induz(new Modifications( co2PriceBVWP, 0., 2., 1., 1. ), amounts, benefits, benefits.all );
+            Assertions.assertEquals(nkv_orig/2, nkv, 0.001);
+        }
+
+        // neuer CO2-Preis:
+        {
+            double nkv = nkvOhneKR_induz(new Modifications( co2Price796, 0., 1., 1., 1. ), amounts, benefits, benefits.all  );
+            final double delta_nkv = (benefits.co2_betrieb + benefits.co2_infra) * (co2Price796 / co2PriceBVWP - 1.) / benefits.investmentCosts;
+            Assertions.assertEquals(nkv_orig+delta_nkv, nkv, 0.001);
+        }
+        // neuer CO2-Preis & eMob:
+        {
+            double nkv = nkvOhneKR_induz(new Modifications( co2Price796, 0., 1., 1., 0.1 ), amounts, benefits, benefits.all  );
+            final double delta_b = -benefits.co2_infra - benefits.co2_betrieb + benefits.co2_infra*co2Price796/co2PriceBVWP + benefits.co2_betrieb*0.1*co2Price796/co2PriceBVWP;
+            final double delta_nkv = delta_b / benefits.investmentCosts;
+            log.info( "delta_b=" + delta_b + "; delta_nkv=" + delta_nkv );
+            Assertions.assertEquals(nkv_orig+delta_nkv, nkv, 0.001);
+        }
 
         // induced traffic alone:
         {
