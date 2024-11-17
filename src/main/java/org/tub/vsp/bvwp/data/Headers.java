@@ -82,12 +82,13 @@ public final class Headers{
 	/**
 	 * Originale Investitionskosten.
 	 */
-	public static final String INVCOST_ORIG = "Inv.kosten BVWP 2030";
-	public static final String INVCOST_ORIG_MRD = "Inv.kosten BVWP 2030 [Mrd]";
-	/**
-	 * Investitionskosten nach Berechnung der TUD
-	 */
-	public static final String INVCOST_TUD = "Inv.kosten neu";
+	public static final String INVCOST_BARWERT_ORIG = "Inv.kosten BVWP 2030 Barwert";
+	public static final String INVCOST_SUM_ORIG = "Inv.kosten BVWP 2030 Summe";
+//	/**
+//	 * Investitionskosten nach Berechnung der TUD
+//	 */
+	public static final String INVCOST_TUD = "Inv.kosten TUD";
+//	public static final String INVCOST_PLUS83 = "Inv.kosten+83%";
 	/**
 	 * Länge des Projektes.
 	 */
@@ -96,14 +97,11 @@ public final class Headers{
 	 * URL des Projektes.
 	 */
 	public static final String LINK = "URL";
-	public static final String NKV_CARBON700 = "NKV CO2-Kosten+";
-	public static final String NKV_CARBON700_EMOB = NKV_CARBON700 + " & EMob";
 	public static final String NKV_CARBON700_EMOB_INVCOST80 = "NKV mit Inv.Kosten+/CO2-Preis+ & EMob";
-	public static final String NKV_CARBON700_CAPPED5 = NKV_CARBON700 + "_capped5";
+	public static final String NKV_CARBON700_CAPPED5 = HeadersKN.NKV_CARBON700 + "_capped5";
 	/**
 	 * NKV bei erhöhtem CO2-Preis (welchem?).
 	 */
-//	public static final String NKV_CO2 = "NKV_co2";
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000"; //2000 Euro/t -> muss dann noch nach 2012 umgerechnet werden
 	public static final String NKV_CO2_2000_INVCOST150_EN = "BCR_co2_2000_invcost150"; //50% höhere Investmentcosts
 	public static final String NKV_CO2_2000_INVCOST200_EN = "BCR_co2_2000_invcost200"; //doppelte Investmentcosts
@@ -133,10 +131,9 @@ public final class Headers{
 	public static final String NKV_EL03_CARBON700ptpr0_INVCOSTTUD = "NKV_el03_carbon700tpr0_invcostTud";
 	public static final String NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5 = NKV_EL03_CARBON700ptpr0_INVCOSTTUD + "_capped5";
 	/**
-	 * {@link #NKV_EL03_CARBON215_INVCOSTTUD} - {@link #NKV_ORIG}
+	 * {@link #NKV_EL03_CARBON215_INVCOSTTUD} - {@link HeadersKN#NKV_ORIG}
 	 */
 	public static final String NKV_EL03_DIFF = "NKV_el03_Diff";
-	public static final String NKV_ELTTIME = "NKV mit Straßenmehrverkehr+";
 	public static final String NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "NKV mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++/EMob";
 	public static final String NKV_ELTTIME_CARBON2000_INVCOSTTUD = "NKV_elTtime_carbon2000_invcostTud";
 	public static final String NKV_ELTTIME_CARBON215_INVCOSTTUD = "NKV_elTtime_carbon215_invcostTud";
@@ -160,7 +157,6 @@ public final class Headers{
 	 */
 	public static final String NKV_INVCOSTTUD_EN = "BCR_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
 	public static final String NKV_NO_CHANGE_EN = "BCR";
-	public static final String NKV_ORIG = "NKV BVWP 2030";
 	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++ & EMob";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
 	public static final String PROJECT_NAME = "Projektname";
@@ -192,4 +188,10 @@ public final class Headers{
 		table.addColumns( newColumn );
 		return newColumnName;
 	}
+
+	public enum InvKosten {InvestitionsKostenOrig, InvestitionsKostenTud, InvestitionsKostenPlus83pct}
+	public static String addInvestmentCostToString( String str, InvKosten invKosten ) {
+		return str + "_" + invKosten.name();
+	}
+	// addInvestmentKost(table) geht nicht, weil das eine "modification" ist, und also dort gerechnet werden muss.  kai, nov'24
 }

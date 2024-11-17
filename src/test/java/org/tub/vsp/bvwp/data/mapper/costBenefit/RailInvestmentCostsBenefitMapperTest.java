@@ -7,12 +7,12 @@ import org.tub.vsp.bvwp.data.container.base.rail.RailBenefitFreightDataContainer
 import org.tub.vsp.bvwp.data.container.base.rail.RailBenefitPassengerDataContainer;
 import org.tub.vsp.bvwp.data.container.base.rail.RailCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.InvestmentCosts;
 
 import java.io.IOException;
 
 
-class RailCostBenefitMapperTest {
+class RailInvestmentCostsBenefitMapperTest{
     @Test
     void testPassengerBenefits_rrx() throws IOException {
         RailCostBenefitAnalysisDataContainer railCostBenefit =
@@ -75,7 +75,7 @@ class RailCostBenefitMapperTest {
         RailCostBenefitAnalysisDataContainer railCostBenefit =
                 RailCostBenefitMapper.mapDocument(LocalFileAccessor.getLocalDocument("2-003-v01.html"));
 
-        Assertions.assertEquals(new Cost(2360.7, 2036.5), railCostBenefit.getCost());
+        Assertions.assertEquals(new InvestmentCosts(2360.7, 2036.5), railCostBenefit.getCost() );
     }
 
     @Test

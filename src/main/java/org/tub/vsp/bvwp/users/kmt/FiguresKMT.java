@@ -2,6 +2,7 @@ package org.tub.vsp.bvwp.users.kmt;
 
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
@@ -34,9 +35,9 @@ class FiguresKMT {
 
   static Figure createFigureCostByPriority(int plotWidth, Table table, String xName) {
     Figure figure3;
-    String yName = Headers.INVCOST_ORIG;
-    String y3Name = Headers.INVCOST_ORIG;
-    String y2Name = Headers.INVCOST_ORIG;
+    String yName = Headers.INVCOST_BARWERT_ORIG;
+    String y3Name = Headers.INVCOST_BARWERT_ORIG;
+    String y2Name = Headers.INVCOST_BARWERT_ORIG;
 
     double maxX = table.numberColumn(xName).max();
     Axis xAxis =
@@ -83,7 +84,7 @@ class FiguresKMT {
 
   static Figure createFigureNkvByPriority(Axis xAxis, int plotWidth, Table table, String xName) {
     Figure figure2;
-    String yName = Headers.NKV_ORIG;
+    String yName = HeadersKN.NKV_ORIG;
     //		String y3Name = Headers.NKV_CO2_680_EN;
     String y2Name = Headers.NKV_EL03_CARBON215_INVCOSTTUD;
 
@@ -126,7 +127,7 @@ class FiguresKMT {
 
   static Figure createFigureNkv(Axis xAxis, int plotWidth, Table table, String xName) {
     Figure figure2;
-    String yName = Headers.NKV_ORIG;
+    String yName = HeadersKN.NKV_ORIG;
     String y3Name = Headers.NKV_CO2_700_EN;
     //        String y2Name = Headers.NKV_INDUZ_CO2;
 

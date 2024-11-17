@@ -10,7 +10,7 @@ import org.tub.vsp.bvwp.data.container.base.rail.RailBenefitFreightDataContainer
 import org.tub.vsp.bvwp.data.container.base.rail.RailBenefitPassengerDataContainer;
 import org.tub.vsp.bvwp.data.container.base.rail.RailCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.InvestmentCosts;
 
 import java.util.Optional;
 
@@ -59,8 +59,8 @@ public class RailCostBenefitMapper {
             setOverallBenefit(table, result);
         });
 
-        Cost cost = costTable.map(CostBenefitMapperUtils::extractCosts).orElse(null);
-        result.setCost(cost);
+        InvestmentCosts investmentCosts = costTable.map(CostBenefitMapperUtils::extractCosts ).orElse(null );
+        result.setCost( investmentCosts );
 
         return result;
     }

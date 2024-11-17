@@ -53,7 +53,7 @@ class ComputationKNTest {
             final Modifications modifications = new Modifications( co2PriceBVWP, amounts.pkwkm_induz * 4., 1, 1., 1. );
             double nkv = nkvOhneKR_induz( modifications, amounts, benefits, benefits.all );
             // not sure if we can do the full manual computation.  according to new approach, the CO2 for the additional fzkm is computed independently from the rest.  In consequence, these are:
-            double additional_co2_from_induz = modifications.mehrFzkm() * 100; // mio km * 100g/km * ton/1000000g = 100 tons
+            double additional_co2_from_induz = modifications.mehrFzkm() * 200; // mio km * 200g/km * ton/1000000g = 200 tons
 
             double discounted_benefits_per_ton_over_30_years = benefits.co2_betrieb / amounts.co2_kfz;
 

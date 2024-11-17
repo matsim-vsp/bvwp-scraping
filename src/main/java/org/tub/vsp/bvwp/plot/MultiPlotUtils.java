@@ -60,7 +60,6 @@ public class MultiPlotUtils {
 				if ( entry.getValue()!= null ){
 					result.append( "<div id='plot" ).append( ii ).append( "'>" );
 				}
-				result.append( System.lineSeparator() );
 			}
 		}
 

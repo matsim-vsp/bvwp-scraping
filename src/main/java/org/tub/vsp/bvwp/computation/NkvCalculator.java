@@ -90,7 +90,7 @@ public class NkvCalculator {
                                        cb.getNl().overall(), // co2_infra
                                        cb.getNa().get(Emission.CO2).overall(), // co2_betrieb
                                        cb.getOverallBenefit().overall(), // benefit
-                                       cb.getCost().overallCosts()
+                                       cb.getCost().barwert()
                        ));
         // @formatter:on
     }

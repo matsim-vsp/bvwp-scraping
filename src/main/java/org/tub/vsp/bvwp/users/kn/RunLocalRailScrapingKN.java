@@ -3,6 +3,7 @@ package org.tub.vsp.bvwp.users.kn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.RailAnalysisDataContainer;
 import org.tub.vsp.bvwp.io.RailTableCreator;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
@@ -35,7 +36,7 @@ public class RunLocalRailScrapingKN{
 
         // ===
 
-        Figures1RailKN figures1 = new Figures1RailKN( table, Headers.addCap( 5, table, Headers.NKV_ORIG ) );
+        Figures1RailKN figures1 = new Figures1RailKN( table, Headers.addCap( 5, table, HeadersKN.NKV_ORIG ) );
 //        Figures2KN figures2 = new Figures2KN( table );
 
         List<Figure> plots1 = new ArrayList<>();

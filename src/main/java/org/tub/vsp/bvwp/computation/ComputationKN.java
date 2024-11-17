@@ -1,9 +1,8 @@
 package org.tub.vsp.bvwp.computation;
 
+import com.ibm.icu.impl.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static org.tub.vsp.bvwp.BvwpUtils.assertNotNaN;
 
 public class ComputationKN {
     // yyyyyy Einbau von Jahreswerten (z.B. Elektrifizierung über Zeit).  Voraussetzung: Ich kann die Diskontierung
@@ -103,115 +102,28 @@ public class ComputationKN {
 
         double b_per_co2 = benefits.co2_betrieb / amounts.co2_kfz;
         // (this divides all (negative) co2 benefits by all emissions, including LKW.  We just need (discounted) benefits
-        // of ton co2, indep of where it comes from.)
+        // per ton co2, indep of where this comes from.)
 
-        // -- b_co2 calculation is now done "by hand".  I.e. take pkwkm, multiply with emissions per km (obtained
-        // from co2_pkwkm / pkwkm), and then multiply b_per_co2:
-        double b_co2_induz = amounts.pkwkm_induz * amounts.co2_per_pkwkm * b_per_co2;
-        if ( amounts.pkwkm_induz==0. ) {
-            b_co2_induz=0.;
-        }
-        double b_co2_verl = amounts.pkwkm_verl * amounts.co2_per_pkwkm * b_per_co2;
-        if ( amounts.pkwkm_verl==0. ) {
-            b_co2_verl=0.;
-        }
-        double b_co2_reroute = amounts.pkwkm_reroute * amounts.co2_per_pkwkm * b_per_co2;
-        if ( amounts.pkwkm_reroute==0. ) {
-            b_co2_reroute=0.;
-        }
+        // corrections:
+        b_all -= benefits.co2_infra;
+        b_all += benefits.co2_infra * modifications.co2Price()/145. ;
 
-        double b_co2_lkw = amounts.lkwkm_all * amounts.co2_per_lkwkm * b_per_co2;
-        if ( amounts.lkwkm_all==0 ) {
-            // in this case, co2_per_lkwkm is infty, and the multiplication is NaN.  But in reality, the value is just zero.
-            b_co2_lkw = 0;
-        }
-        if ( assertNotNaN( "b_co2_lkw", b_co2_lkw ) ) {
-            log.info( "lkwkm_all=" + amounts.lkwkm_all + "; co2_per_lkwkm=" + amounts.co2_per_lkwkm + "; b_per_co2=" + b_per_co2 );
-        }
+        b_all -= benefits.co2_betrieb;
+        b_all += benefits.co2_betrieb * modifications.co2Price()/145. * modifications.emobCorrFact() ;
 
-        // ### first deduct the CO2 components so that we can afterwards re-scale the other material according to changed discount rate:
-        {
-            double b_tmp = b_all;
+        b_all += modifications.mehrFzkm() * 200 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+        // 200 t / 1 mio km = 200g/km
 
-            // --- for infra:
-            assertNotNaN( "co2_infra", benefits.co2_infra );
-            b_all -= benefits.co2_infra;
+        // Problem ist, dass wir den (negativen) CO2-Benefit pro induzierten Fzkm nicht kennen.  PRINS weist nur Deltas der CO2-Emissionen sowie
+        // der Fzkm aus.  Wenn man das durcheinander dividiert, dann sind die Resultate "all over the place".  Eine Begründung könnte sein, dass
+        // z.B. viele Fze vorher Landstrasse und jetzt BAB fahren, und daher anders emittieren, obwohl sie die gleichen Fzkm fahren.  Daher werden
+        // die Emissionen des zusätzlichen induzierten Verkehrs "separat" gerechnet ... mit 200g/km.  kai, nov'24
 
-            // --- for operations:
-            assertNotNaN( "b_co2_reroute", b_co2_reroute );
-            b_all -= b_co2_reroute;
-            assertNotNaN( "b_co2_verl", b_co2_verl );
-            b_all -= b_co2_verl;
-            assertNotNaN( "b_co2_induz", b_co2_induz );
-            b_all -= b_co2_induz;
-            assertNotNaN( "b_co2_lkw", b_co2_lkw );
-            b_all -= b_co2_lkw;
+        Assert.assrt( modifications.discountCorrFact()==1 );  // m.E. anderen Weg nicht mehr verfolgt
+        b_all *= modifications.discountCorrFact();
 
-            prn( "initial deductions:", b_all, b_tmp );
-        }
-        // ### then re-add the CO2 components with the new values:
-
-        // co2 Bau
-        {
-            double b_tmp = b_all;
-            b_all += modifications.co2Price() / 145. * benefits.co2_infra;
-            prn("co2 infra:", b_all, b_tmp);
-        }
-
-        // co2 Betrieb
-        final double operationsCorrFactor = modifications.co2Price() / 145. * modifications.discountCorrFact() * modifications.emobCorrFact();
-
-        {
-            double b_tmp = b_all;
-            b_all += b_co2_reroute / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact();
-            prn("co2 reroute:", b_all, b_tmp);
-        }
-        {
-            double b_tmp = b_all;
-            b_all += b_co2_verl / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact();
-            prn("co2 verl:", b_all, b_tmp);
-        }
-        {
-            double b_tmp = b_all;
-            b_all += b_co2_induz / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-//            b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-            b_all += modifications.mehrFzkm() * 200 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-            // 100 t / 1 mio km = 100g/km
-
-            // Problem ist, dass wir den (negativen) CO2-Benefit pro induzierten Fzkm nicht kennen.  PRINS weist nur Deltas der CO2-Emissionen sowie
-            // der Fzkm aus.  Wenn man das durcheinander dividiert, dann sind die Resultate "all over the place".  Eine Begründung könnte sein, dass
-            // z.B. viele Fze vorher Landstrasse und jetzt BAB fahren, und daher anders emittieren, obwohl sie die gleichen Fzkm fahren.  Daher werden
-            // die Emissionen des zusätzlichen induzierten Verkehrs "separat" gerechnet ... mit 100g/km.  kai, nov'24
-
-            // yy Das bedeutet aber auch, wenn ich es richtig sehe, dass wir die obige Rechnung gar nicht mehr brauchen.  Sondern wir können gleich
-            // die Werte aus PRINS für b_co2_infra und b_co2_betrieb mit den Korrekturfaktoren multiplizieren und fertig; sollte das gleiche
-            // rauskommen.  (Das ist vllt auch das, was Richard in seiner Email schreibt?? yyyy) Und zusätzlich induzierten Verkehr schlagen wir
-            // zusätzlich drauf. kai, nov'24
-
-            prn("co2 induz", b_all, b_tmp);
-        }
-        {
-            double b_tmp = b_all;
-            b_all += b_co2_lkw / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-            prn("co2 lkw", b_all, b_tmp);
-        }
-//        prn("b_co2_betrieb", b_all, bb_tmp);
-
-        // ### investmentCosts:
-        final double investmentCosts = benefits.investmentCosts * modifications.investmentCostFactor();
-
-        // ### finally compute the nkv and return it:
-        final double nkv = b_all / investmentCosts;
-        if ( Double.isNaN( nkv ) ){
-            String colorString = ConsoleColors.TEXT_BLACK;
-            if( Double.isNaN( nkv ) ){
-                colorString = ConsoleColors.TEXT_RED;
-            }
-            log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK  + "; b_all=" + b_all + "; investmentCosts=" + investmentCosts );
-        }
-        return nkv;
+        return b_all / ( benefits.investmentCosts * modifications.investmentCostFactor() );
     }
-
     private static void prn(String msg, double b_all, double b_tmp) {
 //        if ( Double.isNaN( b_all ) || Double.isNaN( b_tmp ) )
         {

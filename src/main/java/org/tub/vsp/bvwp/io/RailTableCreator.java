@@ -108,7 +108,8 @@ public class RailTableCreator {
 
 		//overall benefit and cost
 		record.add(Headers.B_OVERALL_ORIG, baseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() );
-		record.add(Headers.INVCOST_ORIG, baseDataContainer.getCostBenefitAnalysis().getCost().overallCosts());
+//		record.add(Headers.INVCOST_BARWERT_ORIG, baseDataContainer.getCostBenefitAnalysis().getCost().barwert() );
+//		record.add(Headers.INVCOST_SUM_ORIG, baseDataContainer.getCostBenefitAnalysis().getCost().cost() );
 
 		// (yy warum diese aufwändige Syntax?  kai, feb'24)
 		// --> da sowohl getCostBenefitAnalysis, getCost als auch overallCosts null zurückgeben können, wenn die
@@ -159,7 +160,7 @@ public class RailTableCreator {
 //        }
 
 		table.addColumns(DoubleColumn.create(Headers.B_OVERALL_ORIG ) );
-		table.addColumns(DoubleColumn.create(Headers.INVCOST_ORIG));
+//		table.addColumns(DoubleColumn.create(Headers.INVCOST_BARWERT_ORIG ) );
 
 		for (String s : analysisDataContainers.getFirst()
 						      .getColumns()

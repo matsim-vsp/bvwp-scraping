@@ -4,6 +4,7 @@ import org.apache.commons.math3.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
+import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
@@ -68,8 +69,11 @@ public class RunLocalCsvScrapingKN{
         logger.info( "Writing csv and generating table:" );
         Table table = new StreetCsvWriter( "output/street_data.csv" ).writeCsv( allStreetBaseData );
 
+        final String PLUS_110_PCT = "plus110pct";
+        table.addColumns( table.numberColumn( INVCOST_SUM_ORIG ).multiply( 2.1 ).setName( PLUS_110_PCT ) );
+
         // ===
-        final String NKV_ORIG_CAPPED5 = addCap( 5, table, NKV_ORIG );
+        final String NKV_ORIG_CAPPED5 = addCap( 5, table, HeadersKN.NKV_ORIG );
         Figures1KN figures1 = new Figures1KN( table, NKV_ORIG_CAPPED5 );
         Figures2KN figures2 = new Figures2KN( table );
 
@@ -78,50 +82,66 @@ public class RunLocalCsvScrapingKN{
         figures.add( Pair.create( createHeader1( "Abc" ), null ) );
         String str;
 
-        str = NKV_ORIG;
+        str = HeadersKN.NKV_ORIG;
         figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_SUM_ORIG ) ) ) ;
+        // (yyyy man müsste eigentlich hier und folgend die haushaltsrelevanten Kosten nehmen!)
 
-        str = NKV_CARBON700;
+        str = HeadersKN.NKV_CARBON700;
         figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_SUM_ORIG ) ) ) ;
 
-        str = NKV_CARBON700_EMOB;
+        str = HeadersKN.NKV_CARBON700_EMOB;
         figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_SUM_ORIG ) ) ) ;
 
-        str = NKV_ELTTIME;
+        str = HeadersKN.NKV_ELTTIME;
         figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_SUM_ORIG ) ) ) ;
+
+        str = NKV_INVCOSTTUD;
+        figures.add( Pair.create( createHeader2( str ), null ));
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, PLUS_110_PCT ) ) ) ;
+
+        // ### combination of ELTTIME and CARBON700:
 
         str = NKV_ELTTIME_CARBON700;
         figures.add( Pair.create( createHeader2( str ), null ));
 //        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_SUM_ORIG ) ) ) ;
 
-        str = NKV_ELTTIME_CARBON700_EMOB;
-        figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_ORIG ) ) ) ;
-//
-        str = NKV_INVCOSTTUD;
-        figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_TUD ) ) ) ;
 
-        str = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD;
-        figures.add( Pair.create( createHeader2( str ), null ));
-//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_TUD ) ) ) ;
+        // ### BMDV:
 
         str = NKV_INVCOSTTUD_CARBON700_EMOB;
         figures.add( Pair.create( createHeader2( str ), null ));
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, PLUS_110_PCT ) ) ) ;
+
+        // ### Sensitivities of BMDV:
+
+        // BMDV + mehr induzierter Strassenverkehr:
+        str = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD;
+        figures.add( Pair.create( createHeader2( str ), null ));
 //        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
-        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, INVCOST_TUD) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, PLUS_110_PCT ) ) ) ;
+
+        // BMDV + weniger Verkehrsnachfrage
+        str = NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD;
+        figures.add( Pair.create( createHeader2( str ), null ));
+//        figures.add( Pair.create( createHeader2( "" ), barChartFigureAnzahlProjekte( table, str ) ) ) ;
+        figures.add( Pair.create( createHeader2( "" ), barChartFigureInvKosten( table, str, PLUS_110_PCT ) ) ) ;
+
+        // BMDV + CO2Preis2000:
+
+        // BMDV + weniger eMob:
+
+        // BMDV + weniger eMob zusammen mit mehr induziertem Strassenverkehr:
 
 
 
@@ -132,8 +152,8 @@ public class RunLocalCsvScrapingKN{
         figures.add(Pair.create( createHeader1( "New plots" ), null ) );
 
         // N pro CO2:
-        table.addColumns( table.doubleColumn( NKV_ORIG )
-                               .multiply( table.doubleColumn( INVCOST_ORIG ) )
+        table.addColumns( table.doubleColumn( HeadersKN.NKV_ORIG )
+                               .multiply( table.doubleColumn( INVCOST_BARWERT_ORIG ) )
                                .divide( table.doubleColumn( CO2_ORIG ) )
                                .setName( NProCo2_ORIG )
                         );
@@ -181,7 +201,7 @@ public class RunLocalCsvScrapingKN{
 
 
         // Abhängigkeit von Verkehrsnachfrage:
-        figures.add( Pair.create( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ORIG ) ) );
+        figures.add( Pair.create( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( HeadersKN.NKV_ORIG ) ) );
         figures.add( Pair.create( createHeader1( "Abhängigkeit NKV von Verkehrsmenge:" ), figures2.nkv_vs_dtv( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD ) ) );
 //        figures.add( figures2.nkvNeu_vs_dtv( NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD ) );
 
@@ -192,11 +212,11 @@ public class RunLocalCsvScrapingKN{
             Map<String, String> nkvs = new LinkedHashMap<>();
             {
                 nkvs.put( "... Investitionskosten+:", NKV_INVCOSTTUD );
-                nkvs.put( "... CO2-Kosten+:", NKV_CARBON700 );
-                nkvs.put( "... CO2-Kosten+ &  eMob+:", NKV_CARBON700_EMOB );
+                nkvs.put( "... CO2-Kosten+:", HeadersKN.NKV_CARBON700 );
+                nkvs.put( "... CO2-Kosten+ &  eMob+:", HeadersKN.NKV_CARBON700_EMOB );
                 nkvs.put( "... CO2-Kosten+ & eMob+ & Inv.Kosten+:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
                 // ---
-                nkvs.put( "... induz. Strassenmehrverkehr+:", NKV_ELTTIME );
+                nkvs.put( "... induz. Strassenmehrverkehr+:", HeadersKN.NKV_ELTTIME );
 //                nkvs.put( "... Kombination induz. Strassenmehrverkehr + erh. CO2-Kosten:", NKV_ELTTIME_CARBON700 );
                 nkvs.put( "... induz. Str.mehrverkehr+, CO2-Preis+, E-Mob+:", NKV_ELTTIME_CARBON700_EMOB );
                 nkvs.put( "... induz. Str.mehrverkehr+, CO2-Preis+, E-Mob+, Inv.Kosten+:", NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD );
@@ -214,8 +234,8 @@ public class RunLocalCsvScrapingKN{
             // ---
 
             figures.add( Pair.create( createHeader1( "Inv.Kosten vs. NKV mit ... " ), null ) );
-            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCost( cap, NKV_ORIG, INVCOST_ORIG ) ) );
-            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCost( cap, NKV_ORIG, INVCOST_TUD ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCost( cap, HeadersKN.NKV_ORIG, INVCOST_BARWERT_ORIG ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.investmentCost( cap, HeadersKN.NKV_ORIG, INVCOST_TUD ) ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
                 figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.investmentCost( cap, entry.getValue(), INVCOST_TUD ) ) );
             }
@@ -223,7 +243,7 @@ public class RunLocalCsvScrapingKN{
             // ---
 
             figures.add( Pair.create( createHeader1( "CO2 vs. NKV mit ... " ), null ) );
-            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( cap, NKV_ORIG ) ) );
+            figures.add( Pair.create( createHeader2( "... originalem NKV:" ), figures2.carbonWithEmob( cap, HeadersKN.NKV_ORIG ) ) );
             for( Map.Entry<String, String> entry : nkvs.entrySet() ){
                 figures.add( Pair.create( createHeader2( entry.getKey() ), figures2.carbonWithEmob( cap, entry.getValue() ) ) );
             }
@@ -299,7 +319,7 @@ public class RunLocalCsvScrapingKN{
 //                System.out.println( BvwpUtils.SEPARATOR );
 //            }
             {
-                final String name = NKV_CARBON700 ;
+                final String name = HeadersKN.NKV_CARBON700 ;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
 //                System.out.println( BvwpUtils.SEPARATOR_AT_START );
@@ -321,10 +341,10 @@ public class RunLocalCsvScrapingKN{
                                 , table.numberColumn( B_CO2_ORIG )
                                 , multiplied
                                 , bCo2Revised
-                                , table.numberColumn( INVCOST_ORIG )
-                                , table.numberColumn( NKV_ORIG )
-                                , table.numberColumn( NKV_CARBON700 )
-                                , bCo2Revised.divide( table.numberColumn( INVCOST_ORIG ) ).setName( "NKV revised")
+                                , table.numberColumn( INVCOST_BARWERT_ORIG )
+                                , table.numberColumn( HeadersKN.NKV_ORIG )
+                                , table.numberColumn( HeadersKN.NKV_CARBON700 )
+                                , bCo2Revised.divide( table.numberColumn( INVCOST_BARWERT_ORIG ) ).setName( "NKV revised" )
                                            );
                 Table table3 = table2.sortAscendingOn( "NKV revised" );
 //                logger.info( "\n" + table3.print(55*2) );
@@ -332,7 +352,7 @@ public class RunLocalCsvScrapingKN{
 
 //            System.exit(-1);
             {
-                final String name = NKV_CARBON700_EMOB ;
+                final String name = HeadersKN.NKV_CARBON700_EMOB ;
                 Table table2 = table.where( table.numberColumn( name ).isLessThan( 1. ) );
 
 //                System.out.println( BvwpUtils.SEPARATOR_AT_START );
@@ -469,15 +489,47 @@ public class RunLocalCsvScrapingKN{
 
 
     }
-    private static Figure barChartFigureInvKosten( Table table, String whichNkv, String whichInvCost ){
-        Table table2 = Table.create( table.column( PROJECT_NAME ), table.column( whichNkv ), table.column(whichInvCost), table.column( EINSTUFUNG ), table.column(EINSTUFUNG_AS_NUMBER) )
+    private static Figure barChartFigureInvKosten( Table table, String whichNkv, String welcheHhrelKosten ){
+
+//        // figure out which investment costs are used within the NKV:
+//        InvKosten whichInvCost = null;
+//        for( InvKosten value : InvKosten.values() ){
+//            if ( whichNkv.contains( value.name() ) ) {
+//                whichInvCost = value;
+//            }
+//        }
+//        if ( whichNkv.equals( HeadersKN.NKV_ORIG ) ) {
+//            whichInvCost = InvKosten.InvestitionsKostenOrig;
+//        }
+//        if( whichNkv.contains( "Inv.kosten+" ) ) {
+//            whichInvCost = InvKosten.InvestitionsKostenPlus83pct;
+//        }
+//        if ( whichInvCost==null ) {
+//            logger.info( "Type of investment cost not in key; use orig. Barwert and hoping for the best; whichInvCost=" + whichInvCost + "; whichNkv=" + whichNkv );
+//            whichInvCost = InvKosten.InvestitionsKostenOrig;
+//        }
+//
+//        DoubleColumn investmentCostColumn;
+//        switch( whichInvCost ) {
+//            case InvestitionsKostenOrig -> {
+//                investmentCostColumn = table.doubleColumn( INVCOST_SUM_ORIG ); // nominelle Baukosten zum Zeitpunkt BVWP
+//            }
+//            case InvestitionsKostenPlus83pct -> {
+//                investmentCostColumn = table.doubleColumn( INVCOST_SUM_ORIG ).multiply( 2.11 );  // Baukostensteigerung in nominal terms!
+//            }
+//            default -> throw new IllegalStateException( "Unexpected value: " + whichInvCost );
+//        }
+//
+//
+        Table table2 = Table.create( table.column( PROJECT_NAME ), table.column( whichNkv ), table.column( welcheHhrelKosten ), table.column( EINSTUFUNG ), table.column(EINSTUFUNG_AS_NUMBER) )
                             .sortDescendingOn( EINSTUFUNG_AS_NUMBER );
+        //noinspection ReassignedVariable
         table = null;
 
-        String whichInvCostMrd = whichInvCost + " [Mrd Eu]";
-        table2.addColumns( table2.numberColumn( whichInvCost ).divide( 1000 ).setName( whichInvCostMrd ) );
+        String whichInvCostMrd = welcheHhrelKosten + " [Mrd Eu]";
+        table2.addColumns( table2.numberColumn( welcheHhrelKosten ).divide( 1000 ).setName( whichInvCostMrd ) );
 
-        Axis yAxis = Axis.builder().title( INVCOST_ORIG_MRD ).build();
+        Axis yAxis = Axis.builder().title( whichInvCostMrd ).build();
         Layout layout = Layout.builder().barMode( Layout.BarMode.STACK ).yAxis( yAxis ).title( whichNkv ).build();
 
         List<BarTrace> traces = new ArrayList<>();
@@ -583,12 +635,12 @@ public class RunLocalCsvScrapingKN{
     private static Table createVariousNKVs( Table table2 ){
         Table table3 = Table.create( table2.column( PROJECT_NAME )
                         , table2.column( BAUTYP )
-                        , table2.column( INVCOST_ORIG )
+                        , table2.column( INVCOST_BARWERT_ORIG )
                         , table2.column( INVCOST_TUD )
-                        , table2.column( NKV_ORIG )
+                        , table2.column( HeadersKN.NKV_ORIG )
                         , table2.column( NKV_INVCOSTTUD )
-                        , table2.column( NKV_ELTTIME )
-                        , table2.column( NKV_CARBON700 )
+                        , table2.column( HeadersKN.NKV_ELTTIME )
+                        , table2.column( HeadersKN.NKV_CARBON700 )
                         , table2.column( NKV_ELTTIME_CARBON700_INVCOSTTUD )
                         , table2.column( NKV_ELTTIME_CARBON700_EMOB_INVCOSTTUD )
                         , table2.column( NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD )

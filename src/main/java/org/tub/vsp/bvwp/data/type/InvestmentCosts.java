@@ -2,7 +2,7 @@ package org.tub.vsp.bvwp.data.type;
 
 import java.util.Objects;
 
-public record Cost(Double cost, Double overallCosts) {
+public record InvestmentCosts(Double sum, Double barwert) {
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -12,18 +12,18 @@ public record Cost(Double cost, Double overallCosts) {
             return false;
         }
 
-        Cost cost1 = (Cost) o;
+        InvestmentCosts investmentCosts1 = (InvestmentCosts) o;
 
-        if (!Objects.equals(cost, cost1.cost)) {
+        if (!Objects.equals( sum, investmentCosts1.sum )) {
             return false;
         }
-        return Objects.equals(overallCosts, cost1.overallCosts);
+        return Objects.equals( barwert, investmentCosts1.barwert );
     }
 
     @Override
     public int hashCode() {
-        int result = cost != null ? cost.hashCode() : 0;
-        result = 31 * result + (overallCosts != null ? overallCosts.hashCode() : 0);
+        int result = sum != null ? sum.hashCode() : 0;
+        result = 31 * result + (barwert != null ? barwert.hashCode() : 0);
         return result;
     }
 }

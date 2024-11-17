@@ -3,7 +3,7 @@ package org.tub.vsp.bvwp.data.container.base.rail;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.InvestmentCosts;
 
 import java.util.Objects;
 
@@ -16,7 +16,7 @@ public class RailCostBenefitAnalysisDataContainer {
     private Benefit nl;
 
     private Benefit overallBenefit;
-    private Cost cost;
+    private InvestmentCosts investmentCosts;
 
     public RailBenefitPassengerDataContainer getPassengerBenefits() {
         return passengerBenefits;
@@ -45,12 +45,12 @@ public class RailCostBenefitAnalysisDataContainer {
         return this;
     }
 
-    public Cost getCost() {
-        return cost;
+    public InvestmentCosts getCost() {
+        return investmentCosts;
     }
 
-    public RailCostBenefitAnalysisDataContainer setCost(Cost cost) {
-        this.cost = cost;
+    public RailCostBenefitAnalysisDataContainer setCost( InvestmentCosts investmentCosts ) {
+        this.investmentCosts = investmentCosts;
         return this;
     }
 
@@ -86,7 +86,7 @@ public class RailCostBenefitAnalysisDataContainer {
         if (!Objects.equals(overallBenefit, that.overallBenefit)) {
             return false;
         }
-        return Objects.equals(cost, that.cost);
+        return Objects.equals( investmentCosts, that.investmentCosts );
     }
 
     @Override
@@ -95,7 +95,7 @@ public class RailCostBenefitAnalysisDataContainer {
         result = 31 * result + (freightBenefits != null ? freightBenefits.hashCode() : 0);
         result = 31 * result + (nl != null ? nl.hashCode() : 0);
         result = 31 * result + (overallBenefit != null ? overallBenefit.hashCode() : 0);
-        result = 31 * result + (cost != null ? cost.hashCode() : 0);
+        result = 31 * result + (investmentCosts != null ? investmentCosts.hashCode() : 0);
         return result;
     }
 }

@@ -9,7 +9,7 @@ import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.container.base.street.StreetCostBenefitAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.InvestmentCosts;
 import org.tub.vsp.bvwp.data.type.Emission;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
@@ -82,26 +82,13 @@ public class StreetCsvWriter {
     private static class Record {
         private final Row row;
         private final List<Object> record = new ArrayList<>();
-        private final Table table;
         int ii = 0;
 
         private Record(Table table) {
             this.row = table.appendRow();
-            this.table = table;
         }
 
-        //        private Record add( String str ) {
-//            row.setString( ii, str );
-//            record.add( str );
-//            ii++;
-//            return this;
-//        }
         private Record add(String key, String str) {
-
-//            if ( !table.columnNames().contains( key ) ) {
-//                table.addColumns( StringColumn.create( key ) );
-//            }
-            // not working (I think)
 
             row.setString(key, str);
             record.add(str);
@@ -109,22 +96,7 @@ public class StreetCsvWriter {
             return this;
         }
 
-        //        private Record add( Double dbl ) {
-//            if ( dbl != null ){
-//                row.setDouble( ii, dbl );
-//            } else {
-//                row.setDouble( ii, Double.NaN );
-//            }
-//            record.add( dbl );
-//            ii++;
-//            return this;
-//        }
         private Record add(String key, Double dbl) {
-
-//            if ( !table.columnNames().contains( key ) ) {
-//                table.addColumns( DoubleColumn.create( key ) );
-//            }
-            // not working (I think)
 
             if (dbl != null) {
                 row.setDouble(key, dbl);
@@ -135,6 +107,7 @@ public class StreetCsvWriter {
             ii++;
             return this;
         }
+
 //        private Record addAll( Iterable<?> objs ) {
 //            for( Object obj : objs ){
 //                if ( obj==null ) {
@@ -190,10 +163,14 @@ public class StreetCsvWriter {
                                                    .map(StreetCostBenefitAnalysisDataContainer::getOverallBenefit)
                                                    .map(Benefit::overall)
                                                    .orElse(null));
-        record.add(Headers.INVCOST_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
-						 .map(StreetCostBenefitAnalysisDataContainer::getCost)
-						 .map(Cost::overallCosts)
-						 .orElse(null));
+        record.add(Headers.INVCOST_BARWERT_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
+                                                         .map(StreetCostBenefitAnalysisDataContainer::getCost)
+                                                         .map( InvestmentCosts::barwert )
+                                                         .orElse(null));
+        record.add(Headers.INVCOST_SUM_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
+                                                         .map(StreetCostBenefitAnalysisDataContainer::getCost)
+                                                         .map( InvestmentCosts::sum )
+                                                         .orElse(null));
         // (yy warum diese aufwändige Syntax?  kai, feb'24)
         // --> da sowohl getCostBenefitAnalysis, getCost als auch overallCosts null zurückgeben können, wenn die
         // Daten nicht vorhanden sind. So spart man sich null checks (paul, feb'24)
@@ -270,7 +247,8 @@ public class StreetCsvWriter {
 //        }
 
         headers.addDoubleColumn(Headers.B_OVERALL_ORIG );
-        headers.addDoubleColumn(Headers.INVCOST_ORIG );
+        headers.addDoubleColumn(Headers.INVCOST_BARWERT_ORIG );
+        headers.addDoubleColumn(Headers.INVCOST_SUM_ORIG );
 
         for (String s : analysisDataContainers.getFirst()
                                               .getColumns()

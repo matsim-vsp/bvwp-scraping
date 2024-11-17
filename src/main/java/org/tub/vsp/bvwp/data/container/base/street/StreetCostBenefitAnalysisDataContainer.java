@@ -3,7 +3,7 @@ package org.tub.vsp.bvwp.data.container.base.street;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.InvestmentCosts;
 import org.tub.vsp.bvwp.data.type.Durations;
 import org.tub.vsp.bvwp.data.type.Emission;
 
@@ -29,7 +29,7 @@ public class StreetCostBenefitAnalysisDataContainer {
     private Benefit nt;
     private Benefit nz;
     private Benefit overallBenefit;
-    private Cost cost;
+    private InvestmentCosts investmentCosts;
 
     private Durations durations;
 
@@ -151,12 +151,12 @@ public class StreetCostBenefitAnalysisDataContainer {
         return this;
     }
 
-    public Cost getCost() {
-        return cost;
+    public InvestmentCosts getCost() {
+        return investmentCosts;
     }
 
-    public StreetCostBenefitAnalysisDataContainer setCost(Cost cost) {
-        this.cost = cost;
+    public StreetCostBenefitAnalysisDataContainer setCost( InvestmentCosts investmentCosts ) {
+        this.investmentCosts = investmentCosts;
         return this;
     }
 
@@ -232,7 +232,8 @@ public class StreetCostBenefitAnalysisDataContainer {
         }
 
         StreetCostBenefitAnalysisDataContainer that = (StreetCostBenefitAnalysisDataContainer) o;
-        return Objects.equals(nb, that.nb) && Objects.equals(nbOperations, that.nbOperations) && Objects.equals(nbPersonnel, that.nbPersonnel) && Objects.equals(nbVehicle, that.nbVehicle) && Objects.equals(nw, that.nw) && Objects.equals(ns, that.ns) && Objects.equals(nrz, that.nrz) && Objects.equals(ntz, that.ntz) && Objects.equals(ni, that.ni) && Objects.equals(nl, that.nl) && Objects.equals(ng, that.ng) && Objects.equals(na, that.na) && Objects.equals(nt, that.nt) && Objects.equals(nz, that.nz) && Objects.equals(overallBenefit, that.overallBenefit) && Objects.equals(cost, that.cost) && Objects.equals(durations, that.durations);
+        return Objects.equals(nb, that.nb) && Objects.equals(nbOperations, that.nbOperations) && Objects.equals(nbPersonnel, that.nbPersonnel) && Objects.equals(nbVehicle, that.nbVehicle) && Objects.equals(nw, that.nw) && Objects.equals(ns, that.ns) && Objects.equals(nrz, that.nrz) && Objects.equals(ntz, that.ntz) && Objects.equals(ni, that.ni) && Objects.equals(nl, that.nl) && Objects.equals(ng, that.ng) && Objects.equals(na, that.na) && Objects.equals(nt, that.nt) && Objects.equals(nz, that.nz) && Objects.equals(overallBenefit, that.overallBenefit) && Objects.equals(
+                        investmentCosts, that.investmentCosts ) && Objects.equals(durations, that.durations );
     }
 
     @Override
@@ -252,7 +253,7 @@ public class StreetCostBenefitAnalysisDataContainer {
         result = 31 * result + Objects.hashCode(nt);
         result = 31 * result + Objects.hashCode(nz);
         result = 31 * result + Objects.hashCode(overallBenefit);
-        result = 31 * result + Objects.hashCode(cost);
+        result = 31 * result + Objects.hashCode( investmentCosts );
         result = 31 * result + Objects.hashCode(durations);
         return result;
     }

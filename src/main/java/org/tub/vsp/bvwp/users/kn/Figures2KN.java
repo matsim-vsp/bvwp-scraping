@@ -3,6 +3,7 @@ package org.tub.vsp.bvwp.users.kn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.HeadersKN;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.io.csv.CsvWriteOptions;
@@ -55,7 +56,7 @@ class Figures2KN extends Figures1KN {
 		table2.addColumns( table2.doubleColumn( xName ).power( 2 ).setName( "power2" ) );
 
 		switch ( whichNKV ) {
-			case NKV_ORIG -> {
+			case HeadersKN.NKV_ORIG -> {
 				traces.add( ScatterTrace.builder( new double[]{60_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
 				traces.add( ScatterTrace.builder( new double[]{ 100_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
 			}
@@ -167,7 +168,7 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	public Figure costOrigVsCumulativeCostOrig(){
 
-		String xName = Headers.addCap( 5, table, NKV_ORIG );
+		String xName = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
 
 		Axis xAxis = Axis.builder().title(xName).titleFont( defaultFont ).autoRange( Axis.AutoRange.REVERSED )
 				 .showZeroLine( false )
@@ -176,12 +177,12 @@ class Figures2KN extends Figures1KN {
 				 .range( nkvCappedMax, nkvMin )
 				 .build();
 
-		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( INVCOST_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
+		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( INVCOST_BARWERT_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
 
 		DoubleColumn cumulativeCost = DoubleColumn.create( "cumulative_cost" );
 		{
 			double sum = 0.;
-			for( Double cost : table2.doubleColumn( INVCOST_ORIG ) ){
+			for( Double cost : table2.doubleColumn( INVCOST_BARWERT_ORIG ) ){
 				sum += cost;
 				cumulativeCost.append( sum );
 			}
@@ -203,7 +204,7 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	// ========================================================================================
 	public Figure cost_VS_nkvOrig(){
-		String xName = Headers.addCap( 5, table, NKV_ORIG );
+		String xName = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
 
 		Axis xAxis = Axis.builder().titleFont( defaultFont ).title(xName).autoRange( Axis.AutoRange.REVERSED )
 //				 .visible( false )
@@ -216,7 +217,7 @@ class Figures2KN extends Figures1KN {
 
 		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
 
-		String yName = INVCOST_ORIG;
+		String yName = INVCOST_BARWERT_ORIG;
 		Axis yAxis = Axis.builder().titleFont( defaultFont ).title( yName )
 //				 .showZeroLine( false )
 //				 .showLine( false )
@@ -283,8 +284,8 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	// ========================================================================================
 	public Figure nkvNew_vs_nkvOrig( int cap, String yName ){
-		String xName = NKV_ORIG;
-		String x2Name = Headers.addCap( cap, table, NKV_ORIG );
+		String xName = HeadersKN.NKV_ORIG;
+		String x2Name = Headers.addCap( cap, table, HeadersKN.NKV_ORIG );
 		Axis.AxisBuilder xAxisBuilder = Axis.builder()
 						    .autoRange( Axis.AutoRange.REVERSED )
 						    .zeroLineWidth( 0 ).zeroLineColor( "white" );
@@ -415,7 +416,7 @@ class Figures2KN extends Figures1KN {
 	// ################################################################
 	// ################################################################
 	Figure invcost_tud_vs_orig(){
-		String xName = INVCOST_ORIG;
+		String xName = INVCOST_BARWERT_ORIG;
 
 		String yName = INVCOST_TUD;
 //		String y3Name = Headers.COST_OVERALL;

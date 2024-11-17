@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Element;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.type.Benefit;
-import org.tub.vsp.bvwp.data.type.Cost;
+import org.tub.vsp.bvwp.data.type.InvestmentCosts;
 import org.tub.vsp.bvwp.data.type.Durations;
 
 import java.text.ParseException;
@@ -31,7 +31,7 @@ public class CostBenefitMapperUtils {
         return Optional.of(new Benefit(annualBenefits, overallBenefits));
     }
 
-    public static Cost extractCosts(Element table) {
+    public static InvestmentCosts extractCosts( Element table ) {
         Double costs;
         Double overallCosts;
         try {
@@ -42,7 +42,7 @@ public class CostBenefitMapperUtils {
             return null;
         }
 
-        return new Cost(costs, overallCosts);
+        return new InvestmentCosts(costs, overallCosts);
     }
 
     public static Durations extractDurations(Element table) {
