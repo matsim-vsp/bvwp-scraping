@@ -175,7 +175,7 @@ public class ComputationKN {
             double b_tmp = b_all;
             b_all += b_co2_induz / 145. * modifications.co2Price() * modifications.discountCorrFact() * modifications.emobCorrFact() ;
 //            b_all += modifications.mehrFzkm() * amounts.co2_per_pkwkm * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-            b_all += modifications.mehrFzkm() * 100 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+            b_all += modifications.mehrFzkm() * 200 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
             // 100 t / 1 mio km = 100g/km
 
             // Problem ist, dass wir den (negativen) CO2-Benefit pro induzierten Fzkm nicht kennen.  PRINS weist nur Deltas der CO2-Emissionen sowie

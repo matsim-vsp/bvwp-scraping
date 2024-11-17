@@ -482,7 +482,9 @@ public class RunLocalCsvScrapingKN{
 
         List<BarTrace> traces = new ArrayList<>();
         {
-            Table t3 = table2.where( table2.numberColumn( whichNkv ).isLessThan( 0.95 ) )
+            final Table tTmp = table2.where( table2.numberColumn( whichNkv ).isLessThan( 0.95 ) );
+            System.out.println( tTmp.print(55));
+            Table t3 = tTmp
                              .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( EINSTUFUNG );
 
             traces.add( generateBarTrace( t3, "Sum [", whichInvCostMrd, "NKV<0.95", "red" ) );
