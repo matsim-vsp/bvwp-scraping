@@ -33,6 +33,9 @@ import static tech.tablesaw.aggregate.AggregateFunctions.*;
 public class RunLocalCsvScrapingKMT {
   private static final Logger logger = LogManager.getLogger(RunLocalCsvScrapingKMT.class);
 
+  static final int plotWidth = 1400;
+
+
   public static void main(String[] args) throws IOException {
     Locale.setDefault(Locale.US);
 
@@ -95,10 +98,9 @@ public class RunLocalCsvScrapingKMT {
 
       table = table.sortDescendingOn(xNameKMT);
       Axis xAxis = xAxisBuilder.title(xNameKMT).build();
-      final int plotWidth = 1400;
 
-      kmtPlots_old(xAxis, plotWidth, table, xNameKMT);
-      kmtPlots_Co2values(xAxis, plotWidth, table, xNameKMT);
+      kmtPlots_old(xAxis, table, xNameKMT);
+      kmtPlots_Co2values(table);
     }
 
     calculationsAndTableWriting(table);
@@ -238,14 +240,14 @@ public class RunLocalCsvScrapingKMT {
     }
   }
 
-  private static void kmtPlots_old(Axis xAxis, int plotWidth, Table table, String xNameKMT)
+  private static void kmtPlots_old(Axis xAxis, Table table, String xNameKMT)
       throws IOException {
-    Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, plotWidth, table, xNameKMT);
-    Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(plotWidth, table, Headers.INVCOST_BARWERT_ORIG );
-    Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, plotWidth, table, Headers.INVCOST_BARWERT_ORIG );
-    Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, plotWidth, table, xNameKMT);
-    Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_EN );
-    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_EN );
+    Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, xNameKMT);
+    Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(RunLocalCsvScrapingKMT.plotWidth, table, Headers.INVCOST_BARWERT_ORIG );
+    Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, Headers.INVCOST_BARWERT_ORIG );
+    Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, xNameKMT);
+    Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_EN );
+    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_EN );
     //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
     //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
@@ -282,38 +284,38 @@ public class RunLocalCsvScrapingKMT {
     new Browser().browse(outputFileKMT);
   }
 
-  private static void kmtPlots_Co2values(Axis xAxis, int plotWidth, Table table, String xNameKMT)
+  private static void kmtPlots_Co2values(Table table)
       throws IOException {
-    Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_EN );
-    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_EN );
+    Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_EN );
+    Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_EN );
 
-    Figure figureNkvChange_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_INVCOSTTUD_EN );
-    Figure figureNkvChange_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_INVCOST150_EN );
-    Figure figureNkvChange_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_INVCOST200_EN );
-    Figure figureNkvChange_Co2_700_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_INVCOSTTUD_EN );
-    Figure figureNkvChange_Co2_700_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_INVCOST150_EN );
-    Figure figureNkvChange_Co2_700_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_INVCOST200_EN );
-    Figure figureNkvChange_Co2_2000_InvCostTud = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_INVCOSTTUD_EN );
-    Figure figureNkvChange_Co2_2000_InvCost150 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST150_EN );
-    Figure figureNkvChange_Co2_2000_InvCost200 = FiguresKMT.createFigureNkvChange(plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST200_EN );
+    Figure figureNkvChange_InvCostTud = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_INVCOSTTUD_EN );
+    Figure figureNkvChange_InvCost150 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_INVCOST150_EN );
+    Figure figureNkvChange_InvCost200 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_INVCOST200_EN );
+    Figure figureNkvChange_Co2_700_InvCostTud = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_INVCOSTTUD_EN );
+    Figure figureNkvChange_Co2_700_InvCost150 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_INVCOST150_EN );
+    Figure figureNkvChange_Co2_700_InvCost200 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_INVCOST200_EN );
+    Figure figureNkvChange_Co2_2000_InvCostTud = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_INVCOSTTUD_EN );
+    Figure figureNkvChange_Co2_2000_InvCost150 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST150_EN );
+    Figure figureNkvChange_Co2_2000_InvCost200 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_INVCOST200_EN );
 
     Figure figureNkvChange_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
-            plotWidth,
+                RunLocalCsvScrapingKMT.plotWidth,
             table,
             HeadersKN.NKV_ORIG,
             Headers.NKV_INVCOST150_EN,
             Headers.NKV_INVCOST200_EN);
     Figure figureNkvChange_Co2_700_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
-            plotWidth,
+                RunLocalCsvScrapingKMT.plotWidth,
             table,
             HeadersKN.NKV_ORIG,
             Headers.NKV_CO2_700_INVCOST150_EN,
             Headers.NKV_CO2_700_INVCOST200_EN);
     Figure figureNkvChange_Co2_2000_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
-            plotWidth,
+                RunLocalCsvScrapingKMT.plotWidth,
             table,
             HeadersKN.NKV_ORIG,
             Headers.NKV_CO2_2000_INVCOST150_EN,
