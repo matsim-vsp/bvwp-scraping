@@ -79,18 +79,18 @@ public class ComputationKN {
         final double impl;
         final double co2_infra;
         final double co2_betrieb;
-        final double all;
-        final double investmentCosts;
+        final double benefit_all;
+        final double investmentCosts_Barwert;
 
-        BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all, double investmentCosts ) {
+        BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double benefit_all, double investmentCosts_barwert ) {
             // yyyyyy ist alles noch ganz schön unklar benannt!!
             this.fzkm = fzkm;
             this.rz = rz;
             this.impl = impl;
             this.co2_infra = co2_infra;
             this.co2_betrieb = co2_betrieb;
-            this.all = all;
-            this.investmentCosts = investmentCosts;
+            this.benefit_all = benefit_all;
+            this.investmentCosts_Barwert = investmentCosts_barwert;
         }
     }
 
@@ -122,7 +122,7 @@ public class ComputationKN {
         Assert.assrt( modifications.discountCorrFact()==1 );  // m.E. anderen Weg nicht mehr verfolgt
         b_all *= modifications.discountCorrFact();
 
-        return b_all / ( benefits.investmentCosts * modifications.investmentCostFactor() );
+        return b_all / ( benefits.investmentCosts_Barwert * modifications.investmentCostFactor() );
     }
     private static void prn(String msg, double b_all, double b_tmp) {
 //        if ( Double.isNaN( b_all ) || Double.isNaN( b_tmp ) )

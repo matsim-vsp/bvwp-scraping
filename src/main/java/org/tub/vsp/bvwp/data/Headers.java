@@ -80,7 +80,7 @@ public final class Headers{
 	 */
 	public static final String EINSTUFUNG_AS_NUMBER = "einstufungAsNumber";
 	/**
-	 * Originale Investitionskosten.
+	 * Originale Investitionskosten ("Summe bewertungsrelevanter Investitionskosten").
 	 */
 	public static final String INVCOST_BARWERT_ORIG = "Inv.kosten BVWP 2030 Barwert";
 	public static final String INVCOST_SUM_ORIG = "Inv.kosten BVWP 2030 Summe";

@@ -164,11 +164,11 @@ public class StreetCsvWriter {
                                                    .map(Benefit::overall)
                                                    .orElse(null));
         record.add(Headers.INVCOST_BARWERT_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
-                                                         .map(StreetCostBenefitAnalysisDataContainer::getCost)
+                                                         .map(StreetCostBenefitAnalysisDataContainer::getInvCost)
                                                          .map( InvestmentCosts::barwert )
                                                          .orElse(null));
         record.add(Headers.INVCOST_SUM_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
-                                                         .map(StreetCostBenefitAnalysisDataContainer::getCost)
+                                                         .map(StreetCostBenefitAnalysisDataContainer::getInvCost)
                                                          .map( InvestmentCosts::sum )
                                                          .orElse(null));
         // (yy warum diese aufwändige Syntax?  kai, feb'24)

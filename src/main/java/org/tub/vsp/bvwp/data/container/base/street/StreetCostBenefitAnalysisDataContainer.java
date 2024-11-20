@@ -151,7 +151,7 @@ public class StreetCostBenefitAnalysisDataContainer {
         return this;
     }
 
-    public InvestmentCosts getCost() {
+    public InvestmentCosts getInvCost() {
         return investmentCosts;
     }
 

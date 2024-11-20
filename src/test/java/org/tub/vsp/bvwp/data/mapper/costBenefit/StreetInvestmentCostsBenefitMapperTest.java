@@ -27,7 +27,7 @@ class StreetInvestmentCostsBenefitMapperTest{
         Assertions.assertEquals(new Benefit(-16.059, -398.107), result.getNg());
         Assertions.assertEquals(new Benefit(0.136, 3.363), result.getNt());
         Assertions.assertEquals(new Benefit(29.997, 743.646), result.getNz());
-        Assertions.assertEquals(new InvestmentCosts(3145.75, 2737.176), result.getCost() );
+        Assertions.assertEquals(new InvestmentCosts(3145.75, 2737.176), result.getInvCost() );
 
         Assertions.assertEquals(new Durations(120. / 12., 48. / 12., 42.), result.getDurations());
     }

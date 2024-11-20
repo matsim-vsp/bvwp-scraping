@@ -31,18 +31,24 @@ public class CostBenefitMapperUtils {
         return Optional.of(new Benefit(annualBenefits, overallBenefits));
     }
 
+    /**
+     * Extrahiert die Summe der bewertungsrelevanten Investitionskosten aus der Kostentabelle im NKA-Teil (Abschnitt 1.7)
+     * Sowohl als reine Summe, als auch als Barwert.
+     * @param table
+     * @return
+     */
     public static InvestmentCosts extractCosts( Element table ) {
-        Double costs;
-        Double overallCosts;
+        Double invCosts_sum;
+        Double invCost_sum_barwert;
         try {
-            costs = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 1));
-            overallCosts = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 2));
+            invCosts_sum = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 1)); //Summe bewertungsrelevanter Investitionskosten
+            invCost_sum_barwert = JSoupUtils.parseDouble(JSoupUtils.getTextFromRowAndCol(table, 3, 2)); // Summe bewertungsrelevanter Investitionskosten BARWERT
         } catch (ParseException e) {
             logger.warn("Could not parse benefit value from {}", table);
             return null;
         }
 
-        return new InvestmentCosts(costs, overallCosts);
+        return new InvestmentCosts(invCosts_sum, invCost_sum_barwert);
     }
 
     public static Durations extractDurations(Element table) {

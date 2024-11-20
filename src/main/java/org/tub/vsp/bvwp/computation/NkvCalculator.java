@@ -45,7 +45,7 @@ public class NkvCalculator {
             throw new RuntimeException();
         }
 
-        return nkvOhneKR_induz(modifications, a.get(), b.get(), b.get().all );
+        return nkvOhneKR_induz(modifications, a.get(), b.get(), b.get().benefit_all);
     }
 
 
@@ -90,7 +90,7 @@ public class NkvCalculator {
                                        cb.getNl().overall(), // co2_infra
                                        cb.getNa().get(Emission.CO2).overall(), // co2_betrieb
                                        cb.getOverallBenefit().overall(), // benefit
-                                       cb.getCost().barwert()
+                                       cb.getInvCost().barwert() //barwert der bewertungsrelevanten Investitionskosten
                        ));
         // @formatter:on
     }

@@ -28,7 +28,7 @@ public class StreetAnalysisDataContainer {
 
         entries.put( INVCOST_TUD, investmentCostTud);
 
-        double tmp = investmentCostTud / streetBaseData.getCostBenefitAnalysis().getCost().barwert();
+        double tmp = investmentCostTud / streetBaseData.getCostBenefitAnalysis().getInvCost().barwert();
         if ( tmp < 0. ) {
             tmp = 1.;
         }
