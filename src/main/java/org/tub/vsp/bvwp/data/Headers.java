@@ -121,7 +121,7 @@ public final class Headers{
 	public static final String NKV_CO2_700_INVCOSTTUD_EN = "BCR_co2_700_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
 
 
-	public static final String NKV_CO2_796 = "BKV_co2_796";
+	public static final String NKV_CO2_796 = "NKV_co2_796";
 
 	/**
 	 * Neues NKV bei erhöhter Abschätzung für Mehrverkehr.
