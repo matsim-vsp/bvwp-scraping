@@ -10,10 +10,7 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class RailTableCreator {
 	private static final Logger logger = LogManager.getLogger(StreetCsvWriter.class);
@@ -83,11 +80,7 @@ public class RailTableCreator {
 //            }
 			// not working (I think)
 
-			if (dbl != null) {
-				row.setDouble(key, dbl);
-			} else {
-				row.setDouble(key, Double.NaN);
-			}
+            row.setDouble(key, Objects.requireNonNullElse(dbl, Double.NaN));
 			record.add(dbl);
 			ii++;
 			return this;

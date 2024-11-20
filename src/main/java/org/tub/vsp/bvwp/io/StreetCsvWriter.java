@@ -98,11 +98,7 @@ public class StreetCsvWriter {
 
         private Record add(String key, Double dbl) {
 
-            if (dbl != null) {
-                row.setDouble(key, dbl);
-            } else {
-                row.setDouble(key, Double.NaN);
-            }
+            row.setDouble(key, Objects.requireNonNullElse(dbl, Double.NaN));
             record.add(dbl);
             ii++;
             return this;
