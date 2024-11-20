@@ -77,18 +77,18 @@ public class RunLocalCsvScrapingKMT {
     StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");
     Table table = csvWriter.writeCsv(allStreetBaseData);
 
-    table.addColumns(
-        table
-            .numberColumn(Headers.NKV_ORIG)
-            .subtract(table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD))
-            .setName(Headers.NKV_EL03_DIFF)
-    );
+//    table.addColumns(
+//        table
+//            .numberColumn(Headers.NKV_ORIG)
+//            .subtract(table.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD))
+//            .setName(Headers.NKV_EL03_DIFF)
+//    );
 
     { // Plotting and table preparation
       String xNameKMT;
       Axis.AxisBuilder xAxisBuilder = Axis.builder();
       {
-        xNameKMT = Headers.CO2_COST_EL03;
+        xNameKMT = Headers.B_CO2_ORIG;
         xAxisBuilder.type(Type.LINEAR);
       }
 
@@ -96,7 +96,7 @@ public class RunLocalCsvScrapingKMT {
       Axis xAxis = xAxisBuilder.title(xNameKMT).build();
       final int plotWidth = 1400;
 
-      kmtPlots_old(xAxis, plotWidth, table, xNameKMT);
+    //  kmtPlots_old(xAxis, plotWidth, table, xNameKMT);
       kmtPlots_Co2values(xAxis, plotWidth, table, xNameKMT);
     }
 
