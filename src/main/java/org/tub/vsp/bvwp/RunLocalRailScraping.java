@@ -13,7 +13,7 @@ import java.util.List;
 public class RunLocalRailScraping {
     private static final Logger logger = LogManager.getLogger(RunLocalRailScraping.class);
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         RailScraper scraper = new RailScraper();
 
         logger.info("Starting scraping");
