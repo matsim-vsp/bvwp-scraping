@@ -77,7 +77,7 @@ public enum Bautyp {
 				return NB3;
 			}
 		}
-		log.error( "cannot find Bautyp for description=" + description );
+		log.error("cannot find Bautyp for description={}", description);
 
 		throw new RuntimeException( "cannot find Bautyp for description=" + description );
 	}

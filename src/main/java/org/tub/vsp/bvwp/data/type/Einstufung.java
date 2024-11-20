@@ -29,7 +29,7 @@ public enum Einstufung{
                 return v;
             }
         }
-        log.warn( "description=" + description );
+        log.warn("description={}", description);
         throw new RuntimeException( "unknown Einstufung=" + description );
 //        return UNDEFINED;
     }

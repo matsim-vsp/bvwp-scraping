@@ -35,12 +35,12 @@ public class NkvCalculator {
         Optional<BenefitsAndInvestmentCosts> b = benefitsFromStreetBaseData(streetBaseDataContainer );
 
         if (a.isEmpty()) {
-            log.warn("amounts container is empty for project=" + streetBaseDataContainer.getUrl());
+            log.warn("amounts container is empty for project={}", streetBaseDataContainer.getUrl());
 //            return null;
             throw new RuntimeException();
         }
         if (b.isEmpty()) {
-            log.warn("benefits container is empty for project=" + streetBaseDataContainer.getUrl());
+            log.warn("benefits container is empty for project={}", streetBaseDataContainer.getUrl());
 //            return null;
             throw new RuntimeException();
         }
@@ -97,7 +97,7 @@ public class NkvCalculator {
 
     @Deprecated // use instance approach
     public static Double calculateCo2_t( Modifications modifications, StreetBaseDataContainer streetBaseDataContainer ) {
-        log.warn("modifications=" + modifications);
+        log.warn("modifications={}", modifications);
         Optional<Amounts> a = amountsFromStreetBaseData(streetBaseDataContainer);
         Optional<BenefitsAndInvestmentCosts> b = benefitsFromStreetBaseData(streetBaseDataContainer );
 
@@ -106,7 +106,7 @@ public class NkvCalculator {
         }
         final double result = -b_co2( modifications, a.get(), b.get() ) / 145.;
 
-        log.warn( TEXT_RED + "project=" + streetBaseDataContainer.getProjectInformation().getProjectNumber() + "; result=" + result + TEXT_BLACK );
+        log.warn(TEXT_RED + "project={}; result={}" + TEXT_BLACK, streetBaseDataContainer.getProjectInformation().getProjectNumber(), result);
 
         return result;
     }

@@ -119,7 +119,7 @@ public class BvwpUtils{
 	}
 	public static boolean assertNotNaN( String msg, double val ) {
 		if ( Double.isNaN( val ) ) {
-			log.warn( "not a regular number: " + msg + "=" + val );
+			log.warn("not a regular number: {}={}", msg, val);
 			return true;
 		}
 		return false;

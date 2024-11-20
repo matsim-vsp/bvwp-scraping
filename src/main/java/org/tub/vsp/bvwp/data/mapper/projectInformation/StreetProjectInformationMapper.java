@@ -44,22 +44,22 @@ public class StreetProjectInformationMapper {
 //        logger.warn( ConsoleColors.TEXT_RED + "project=" + projectNumber + "; verkehrsbelastungPlanfall=" + verkehrsbelastungPlanfall + ConsoleColors.TEXT_BLACK ) ;
 
         if ( projectNumber.contains( "A008-G010-BY" ) ){
-            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn("projectNumber={}; einstufung={}", projectNumber, einstufung);
             logger.warn( "Project has NKV in main project but the Einstufungen VBE, VBE, VBE, WBP in the subprojects.  Setting the main project to VBE." );
             einstufung = Einstufung.VBE.name();
         }
         if ( projectNumber.contains( "A21-G20-SH-NI" ) ) {
-            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn("projectNumber={}; einstufung={}", projectNumber, einstufung);
             logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP, WBP, WBP in the subprojects.  Setting the main project to VB (!)." );
             einstufung = Einstufung.VB.name();
         }
         if ( projectNumber.contains( "A98-G110-BW" ) ) {
-            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn("projectNumber={}; einstufung={}", projectNumber, einstufung);
             logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP in the subprojects.  Setting the main project to VB." );
             einstufung = Einstufung.VB.name();
         }
         if ( projectNumber.contains( "A006-G015-BY" ) ) {
-            logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
+            logger.warn("projectNumber={}; einstufung={}", projectNumber, einstufung);
             logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP in the subprojects.  Setting the main project to VB." );
             einstufung = Einstufung.VB.name();
         }
@@ -72,7 +72,7 @@ public class StreetProjectInformationMapper {
                                      .setEinstufung( Einstufung.getFromString(einstufung ) )
                                      .setVerkehrsbelastungPlanfall( JSoupUtils.parseDouble( verkehrsbelastungPlanfall ) );
         } catch (ParseException e) {
-            logger.error( "projectNumber=" + projectNumber );
+            logger.error("projectNumber={}", projectNumber);
             throw new RuntimeException(e);
         }
     }

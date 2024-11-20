@@ -86,7 +86,7 @@ public class StreetScraper extends AbstractScraper<StreetBaseDataContainer> {
         boolean sieheHauptprojekt = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis").contains("siehe Hauptprojekt");
         String extractedInformation = ProjectInformationMapperUtils.extractInformation(doc, 2, "Nutzen-Kosten-Verhältnis");
         boolean sieheTeilprojekt = extractedInformation.contains("siehe Teilprojekt");
-        logger.warn("extractedInformation=" + extractedInformation + "; sieheTeilprojekt=" + sieheTeilprojekt);
+        logger.warn("extractedInformation={}; sieheTeilprojekt={}", extractedInformation, sieheTeilprojekt);
 
 
 //        boolean isNoPartialProject = !doc.select("div.right").select("h1").text().contains("Teilprojekt");

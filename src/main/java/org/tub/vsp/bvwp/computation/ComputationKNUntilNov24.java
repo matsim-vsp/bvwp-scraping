@@ -222,7 +222,7 @@ public class ComputationKNUntilNov24{
             b_co2_lkw = 0;
         }
         if ( assertNotNaN( "b_co2_lkw", b_co2_lkw ) ) {
-            log.info( "lkwkm_all=" + amounts.lkwkm_all + "; co2_per_lkwkm=" + amounts.co2_per_lkwkm + "; b_per_co2=" + b_per_co2 );
+            log.info("lkwkm_all={}; co2_per_lkwkm={}; b_per_co2={}", amounts.lkwkm_all, amounts.co2_per_lkwkm, b_per_co2);
         }
 
         // ### first deduct the CO2 components so that we can afterwards re-scale the other material according to changed discount rate:
@@ -303,7 +303,7 @@ public class ComputationKNUntilNov24{
             if( Double.isNaN( nkv ) ){
                 colorString = ConsoleColors.TEXT_RED;
             }
-            log.info( "\t\t\t\t\tnkv=" + colorString + nkv + ConsoleColors.TEXT_BLACK  + "; b_all=" + b_all + "; investmentCosts=" + investmentCosts );
+            log.info("\t\t\t\t\tnkv={}{}" + ConsoleColors.TEXT_BLACK + "; b_all={}; investmentCosts={}", colorString, nkv, b_all, investmentCosts);
         }
         return nkv;
     }
