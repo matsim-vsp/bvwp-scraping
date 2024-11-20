@@ -9,7 +9,7 @@ import org.tub.vsp.bvwp.JSoupUtils;
 import java.util.Optional;
 
 public class ProjectInformationMapperUtils {
-    private static final Logger logger = LogManager.getLogger(RailProjectInformationMapper.class);
+    private static final Logger logger = LogManager.getLogger(ProjectInformationMapperUtils.class);
 
     //mapping information from the grunddaten table. There are two tables with the same class, so we need to specify
     //the index

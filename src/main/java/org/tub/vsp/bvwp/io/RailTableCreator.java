@@ -13,7 +13,7 @@ import tech.tablesaw.api.Table;
 import java.util.*;
 
 public class RailTableCreator {
-	private static final Logger logger = LogManager.getLogger(StreetCsvWriter.class);
+	private static final Logger logger = LogManager.getLogger(RailTableCreator.class);
 
 	private final Table table;
 

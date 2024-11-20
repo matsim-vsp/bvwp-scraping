@@ -13,7 +13,7 @@ import java.text.ParseException;
 import static org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils.extractInformation;
 
 public class StreetProjectInformationMapper {
-    private static final Logger logger = LogManager.getLogger(StreetProjectInformationDataContainer.class);
+    private static final Logger logger = LogManager.getLogger(StreetProjectInformationMapper.class);
 
     public static StreetProjectInformationDataContainer mapDocument(Document document) {
         StreetProjectInformationDataContainer projectInformation = new StreetProjectInformationDataContainer();
