@@ -117,7 +117,7 @@ public class JSoupUtils {
             return Optional.empty();
         }
 
-        return Optional.of(list.get(0));
+        return Optional.of(list.getFirst());
     }
 
     private static boolean anyRowContainsText(Element element, String textToContain) {

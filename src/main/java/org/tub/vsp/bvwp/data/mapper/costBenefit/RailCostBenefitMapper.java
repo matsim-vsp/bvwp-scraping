@@ -202,21 +202,21 @@ public class RailCostBenefitMapper {
 
     private static boolean isPassengerBenefitTable(Element element) {
         return element.select("tr")
-                      .get(0)
+                      .getFirst()
                       .text()
                       .contains("Nutzenkomponenten des Personenverkehrs");
     }
 
     private static boolean isFreightBenefitTable(Element element) {
         return element.select("tr")
-                      .get(0)
+                      .getFirst()
                       .text()
                       .contains("Nutzenkomponenten des Güterverkehrs");
     }
 
     private static boolean isOtherBenefitTable(Element element) {
         return element.select("tr")
-                      .get(0)
+                      .getFirst()
                       .text()
                       .contains("Sonstige Nutzenkomponenten");
     }

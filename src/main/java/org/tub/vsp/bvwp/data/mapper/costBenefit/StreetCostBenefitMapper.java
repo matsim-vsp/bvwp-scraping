@@ -73,7 +73,7 @@ public class StreetCostBenefitMapper {
 
     private static boolean isDurationsTable(Element element) {
         return element.select("tr")
-                      .get(0)
+                      .getFirst()
                       .text()
                       .contains("Grundlagen der Barwertermittlung");
     }
