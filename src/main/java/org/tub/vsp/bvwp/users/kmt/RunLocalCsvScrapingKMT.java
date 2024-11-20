@@ -53,8 +53,6 @@ public class RunLocalCsvScrapingKMT {
             + " der Nutzen mit impl und co2Price sogar nach oben?");
     logger.warn("===========");
 
-    String positivListe = BvwpUtils.getPositivListe();
-
     StreetScraper scraper = new StreetScraper();
 
     logger.info("Starting scraping");
@@ -62,12 +60,8 @@ public class RunLocalCsvScrapingKMT {
     String filePath = "../shared-svn/";
     Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTudFile(filePath);
 
-    final String regexToExclude =
-        "(A...B.*)|(A....B.*)"; // Bundesstrassen, die von Autobahnen ausgehen.
-
     // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und
     // die Werte gleich dort eintragen.  kai, feb'24
-
     List<StreetAnalysisDataContainer> allStreetBaseData =
         scraper.extractAllLocalBaseData("./data/street/all", "A", ".*", "").stream()
             .map( streetBaseDataContainer ->
@@ -123,8 +117,7 @@ public class RunLocalCsvScrapingKMT {
 
     // Projekte, die bereits vor Änderung NKV <1 haben
     Table tableBaseKl1 = tbl.where(tbl.numberColumn( HeadersKN.NKV_ORIG ).isLessThan(1. ) );
-    Table tableIndCo2kl1 =
-        tbl.where(tbl.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD).isLessThan(1.));
+    Table tableIndCo2kl1 = tbl.where(tbl.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD).isLessThan(1.));
 
     { // -- von KN
       System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
@@ -248,19 +241,13 @@ public class RunLocalCsvScrapingKMT {
     Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, xNameKMT);
     Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_EN );
     Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_EN );
-    //            Figure figureNkvChangeInduzCo2 = Figures.createFigureNkvChange(plotWidth, table,
-    //                Headers.NKV_NO_CHANGE, Headers.NKV_INDUZ_CO2);
 
     String pageKMT =
         MultiPlotUtils.pageTop()
             + System.lineSeparator()
             + figureNkv.asJavascript("plot1")
             + System.lineSeparator()
-            +
-            //                FiguresKMT.createTextFigure("Neuer Abschnitt").asJavascript("plot2") +
-            // System.lineSeparator() + //Test um mal eine Trennung zu erzeugen... vlt doch anders
-            // machen
-            figureCostByPriority.asJavascript("plot2")
+            + figureCostByPriority.asJavascript("plot2")
             + System.lineSeparator()
             + figureNkvByPriority.asJavascript("plot3")
             + System.lineSeparator()
@@ -270,10 +257,7 @@ public class RunLocalCsvScrapingKMT {
             + System.lineSeparator()
             + figureNkvChangeInduz_2000.asJavascript("plot6")
             + System.lineSeparator()
-            +
-            //                figureNkvChangeInduzCo2.asJavascript("plot7") + System.lineSeparator()
-            // +
-            MultiPlotUtils.pageBottom;
+            + MultiPlotUtils.pageBottom;
 
     File outputFileKMT = Paths.get("multiplotKMT.html").toFile();
 
@@ -284,8 +268,7 @@ public class RunLocalCsvScrapingKMT {
     new Browser().browse(outputFileKMT);
   }
 
-  private static void kmtPlots_Co2values(Table table)
-      throws IOException {
+  private static void kmtPlots_Co2values(Table table) throws IOException {
     Figure figureNkvChangeCo2_700 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_700_EN );
     Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.NKV_ORIG, Headers.NKV_CO2_2000_EN );
 

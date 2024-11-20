@@ -8,7 +8,7 @@ import java.util.List;
 
 public class RunCsvWriting {
     public static void main(String[] args) {
-        String filePath = "../../shared-svn/";
+//        String filePath = "../../shared-svn/";
 //        Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTudFile(filePath );
 
         List<StreetAnalysisDataContainer> allStreetBaseData =

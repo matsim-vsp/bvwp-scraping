@@ -27,6 +27,7 @@ public class BvwpUtils{
 
 	private BvwpUtils(){} // do not instantiate
 
+	// Projekte, die in der Postivliste erschienen sind und daher durch eine Beschleunigung von Genehmigungsverfahren schneller / prioritär(?) umzusetzen sind.
 	public static String getPositivListe(){
 	    return projectString( "BW", "A5" )
 				   + projectString( "BW", "A6" )
