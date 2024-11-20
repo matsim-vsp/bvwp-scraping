@@ -81,7 +81,7 @@ public class StreetPhysicalEffectDataContainer {
         return vehicleHours;
     }
 
-    public static final record PEffect(Double overall, Double induced, Double shifted) {
+    public record PEffect(Double overall, Double induced, Double shifted) {
 
     }
 }
