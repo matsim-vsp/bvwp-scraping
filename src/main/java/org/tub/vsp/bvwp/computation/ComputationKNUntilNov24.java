@@ -14,7 +14,8 @@ public class ComputationKNUntilNov24{
     public static final double FZKM_AB = 221000;
     public static final double LANE_KM_AB = 60000.;
 
-    enum CO2_PER_KM { typicalValues, fromPrins };
+    enum CO2_PER_KM { typicalValues, fromPrins }
+
     private static final CO2_PER_KM co2PerKm = CO2_PER_KM.fromPrins;
 
     static final class Amounts {

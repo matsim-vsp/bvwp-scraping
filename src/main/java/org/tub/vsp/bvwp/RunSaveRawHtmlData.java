@@ -24,12 +24,8 @@ public class RunSaveRawHtmlData {
     public static void main(String[] args) throws IOException {
         List<String> projectUrls;
         switch( mode ) {
-            case ROAD -> {
-                projectUrls = new StreetScraper().getProjectUrls();
-            }
-            case RAIL -> {
-                projectUrls = new RailScraper().getProjectUrls();
-            }
+            case ROAD -> projectUrls = new StreetScraper().getProjectUrls();
+            case RAIL -> projectUrls = new RailScraper().getProjectUrls();
             default -> throw new IllegalStateException( "Unexpected value: " + mode );
         }
 
@@ -45,12 +41,8 @@ public class RunSaveRawHtmlData {
 
         final File file;
         switch( mode ) {
-            case ROAD -> {
-                file = new File("data/street/all" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
-            }
-            case RAIL -> {
-                file = new File("data/rail/all/" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
-            }
+            case ROAD -> file = new File("data/street/all" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
+            case RAIL -> file = new File("data/rail/all/" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
             default -> throw new IllegalStateException( "Unexpected value: " + mode );
         }
 

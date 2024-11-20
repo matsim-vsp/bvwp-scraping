@@ -119,25 +119,13 @@ class Figures1KN{
 				final double offset = 6.;
 				for( String prio : table.stringColumn( EINSTUFUNG ) ){
 					switch( Einstufung.valueOf( prio ) ){
-						case VBE -> {
-							column.append( 3. * factor + offset );
-						}
-						case VB -> {
-							column.append( 2. * factor + offset );
-						}
-						case WBP -> {
-							column.append( 1. * factor + offset );
-						}
-						case WB -> {
-							column.append( offset );
-						}
-//					case UNDEFINED -> {
-//						column.append( 2. );
-//					}
-						default -> {
-							column.append( offset );
-//						throw new IllegalStateException( "Unexpected value: " + prio );
-						}
+						case VBE -> column.append( 3. * factor + offset );
+						case VB -> column.append( 2. * factor + offset );
+						case WBP -> column.append( 1. * factor + offset );
+						case WB -> column.append( offset );
+//					case UNDEFINED -> column.append( 2. );
+						default -> //						throw new IllegalStateException( "Unexpected value: " + prio );
+                                column.append( offset );
 					}
 				}
 				table.addColumns( column );
@@ -175,10 +163,9 @@ class Figures1KN{
 				      .top( 25 ) // even smaller number swallows the title
 				      .bottom( 100 )
 				      .build();
-		;
 
 
-	}
+    }
 	// ========================================================================================
 	// ========================================================================================
 	Figure nkv_el03_diff(){
