@@ -75,25 +75,8 @@ public class ComputationKNUntilNov24{
 
     }
 
-    static final class BenefitsAndInvestmentCosts{
-        final double fzkm;
-        final double rz;
-        final double impl;
-        final double co2_infra;
-        final double co2_betrieb;
-        final double all;
-        final double investmentCosts;
-
-        BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double all, double investmentCosts ) {
-            // yyyyyy ist alles noch ganz schön unklar benannt!!
-            this.fzkm = fzkm;
-            this.rz = rz;
-            this.impl = impl;
-            this.co2_infra = co2_infra;
-            this.co2_betrieb = co2_betrieb;
-            this.all = all;
-            this.investmentCosts = investmentCosts;
-        }
+    record BenefitsAndInvestmentCosts(double fzkm,double rz,double impl,double co2_infra,double co2_betrieb,double all,double investmentCosts){
+        // yyyyyy ist alles noch ganz schön unklar benannt!!
     }
 
     /*
