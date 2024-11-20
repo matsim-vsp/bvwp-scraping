@@ -18,8 +18,10 @@ class StreetPhysicalEffectMapperTest {
 
         Assertions.assertEquals(physicalEffectDataContainer.getPVehicleKilometers(),
                 new StreetPhysicalEffectDataContainer.PEffect(131.53, 143.95, 9.75) );
-        Assertions.assertEquals(physicalEffectDataContainer.getTravelTimes(),
+        Assertions.assertEquals(physicalEffectDataContainer.getPTravelTimes(),
                 new StreetPhysicalEffectDataContainer.PEffect(-18.56, 1.99, 0.2) );
+
+        Assertions.assertEquals(physicalEffectDataContainer.getLVehicleKilometers(), -10.11);
 
         //emissions are tested in EmissionsMapperTest
     }
@@ -33,8 +35,10 @@ class StreetPhysicalEffectMapperTest {
         Assertions.assertEquals(physicalEffectDataContainer.getPVehicleKilometers(),
                 new StreetPhysicalEffectDataContainer.PEffect(0.0, null, 0.0) );
 
-        Assertions.assertEquals(physicalEffectDataContainer.getTravelTimes(),
+        Assertions.assertEquals(physicalEffectDataContainer.getPTravelTimes(),
                 new StreetPhysicalEffectDataContainer.PEffect(-0.61, null, 0.0) );
+
+        Assertions.assertEquals(physicalEffectDataContainer.getLVehicleKilometers(), 0);
 
         Map<Emission, VehicleEmissions> emissions = physicalEffectDataContainer.getEmissionsDataContainer().emissions();
         Assertions.assertEquals(emissions.size(), 6);

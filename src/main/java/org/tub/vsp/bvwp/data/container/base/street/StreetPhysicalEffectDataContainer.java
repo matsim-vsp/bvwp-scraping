@@ -6,10 +6,10 @@ import java.util.Objects;
 
 public class StreetPhysicalEffectDataContainer {
     private StreetEmissionsDataContainer emissionsDataContainer;
-    private PEffect travelTimes;
-    private PEffect pVehicleKilometers;
-    private PEffect vehicleHours;
-    private Double lVehicleKilometers;
+    private PEffect pVehicleHours; //Personenverkehr
+    private PEffect pVehicleKilometers; //Personenverkehr
+    private PEffect lVehicleHours; //Güterverkehr (Lkw)
+    private Double lVehicleKilometers; //Güterverkehr (Lkw)
 
     public StreetEmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
@@ -24,12 +24,12 @@ public class StreetPhysicalEffectDataContainer {
         return this;
     }
 
-    public PEffect getTravelTimes() {
-        return travelTimes;
+    public PEffect getPTravelTimes() {
+        return pVehicleHours;
     }
 
-    public void setTravelTimes( PEffect travelTimes ) {
-        this.travelTimes = travelTimes;
+    public void setPVehicleHours(PEffect pVehicleHours) {
+        this.pVehicleHours = pVehicleHours;
     }
 
     public PEffect getPVehicleKilometers() {
@@ -61,7 +61,7 @@ public class StreetPhysicalEffectDataContainer {
         if (!Objects.equals(emissionsDataContainer, that.emissionsDataContainer)) {
             return false;
         }
-        if (!Objects.equals(travelTimes, that.travelTimes)) {
+        if (!Objects.equals(pVehicleHours, that.pVehicleHours)) {
             return false;
         }
         return Objects.equals( pVehicleKilometers, that.pVehicleKilometers );
@@ -70,15 +70,15 @@ public class StreetPhysicalEffectDataContainer {
     @Override
     public int hashCode() {
         int result = emissionsDataContainer != null ? emissionsDataContainer.hashCode() : 0;
-        result = 31 * result + (travelTimes != null ? travelTimes.hashCode() : 0);
+        result = 31 * result + (pVehicleHours != null ? pVehicleHours.hashCode() : 0);
         result = 31 * result + (pVehicleKilometers != null ? pVehicleKilometers.hashCode() : 0);
         return result;
     }
-    public void setVehicleHours( PEffect vehicleHours ){
-        this.vehicleHours = vehicleHours;
+    public void setlVehicleHours(PEffect lVehicleHours){
+        this.lVehicleHours = lVehicleHours;
     }
-    public PEffect getVehicleHours(){
-        return vehicleHours;
+    public PEffect getlVehicleHours(){
+        return lVehicleHours;
     }
 
     public record PEffect(Double overall, Double induced, Double shifted) {

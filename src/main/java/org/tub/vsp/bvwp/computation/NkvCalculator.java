@@ -51,7 +51,7 @@ public class NkvCalculator {
 
     private static Optional<Amounts> amountsFromStreetBaseData(StreetBaseDataContainer streetBaseDataContainer) {
 
-        StreetPhysicalEffectDataContainer.PEffect tt = streetBaseDataContainer.getPhysicalEffect().getTravelTimes();
+        StreetPhysicalEffectDataContainer.PEffect tt = streetBaseDataContainer.getPhysicalEffect().getPTravelTimes();
 
         StreetPhysicalEffectDataContainer.PEffect pVehicleKilometers = streetBaseDataContainer.getPhysicalEffect().getPVehicleKilometers();
 

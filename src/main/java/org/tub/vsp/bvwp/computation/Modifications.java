@@ -10,6 +10,7 @@ public record Modifications(double co2Price, double mehrFzkm, double investmentC
     public static final double co2PriceBVWP = 145.;
     public static final double co2Price796 = 796.;
     // (895 Eu_2021/t neuer BMDV-Wert.  Evtl. Ausstoss 2040 statt 2030, aber das macht ja nichts.  Rückgerechnet nach 2021 ergibt das 796.)
+    public static final double co2Price700 = 642.; //Braucht KMT noch für EWGT paper, daher nun wieder drin,
     // (700 sind die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012 führt das zu 642.)
     public static final double co2Price2000 = 2000 * INFLATION_Factor2020to2012;
     // (2000 als Annahme für die Klimakosten von in 2030 erzeugten CO2-Emissionen, zum Preisstand 2020.  Rückgerechnet nach 2012)

@@ -84,7 +84,7 @@ class FiguresKMT {
 
   static Figure createFigureNkvByPriority(Axis xAxis, int plotWidth, Table table, String xName) {
     Figure figure2;
-    String yName = HeadersKN.NKV_ORIG;
+    String yName = Headers.NKV_ORIG_EN;
     //		String y3Name = Headers.NKV_CO2_680_EN;
     String y2Name = Headers.NKV_EL03_CARBON215_INVCOSTTUD;
 
@@ -127,7 +127,7 @@ class FiguresKMT {
 
   static Figure createFigureNkv(Axis xAxis, int plotWidth, Table table, String xName) {
     Figure figure2;
-    String yName = HeadersKN.NKV_ORIG;
+    String yName = Headers.NKV_ORIG_EN;
     String y3Name = Headers.NKV_CO2_700_EN;
     //        String y2Name = Headers.NKV_INDUZ_CO2;
 

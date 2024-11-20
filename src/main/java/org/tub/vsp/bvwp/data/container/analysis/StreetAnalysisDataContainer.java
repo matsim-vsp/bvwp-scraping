@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.computation.ComputationKN;
 import org.tub.vsp.bvwp.computation.Modifications;
 import org.tub.vsp.bvwp.computation.NkvCalculator;
+import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 
 import java.util.ArrayList;
@@ -95,15 +96,13 @@ public class StreetAnalysisDataContainer {
 
         NkvCalculator nkvCalculator = new NkvCalculator( streetBaseData );
 
-        entries.put( NKV_ORIG, nkvCalculator.calculateNkv( NO_CHANGE ) );
-//        if ( true ){
-//            return;
-//        }
+        entries.put(Headers.NKV_ORIG, nkvCalculator.calculateNkv( NO_CHANGE ) );
+        entries.put(Headers.NKV_ORIG_EN, nkvCalculator.calculateNkv(NO_CHANGE));
+        entries.put( Headers.NKV_CO2_796, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
 
-//        entries.put(Headers.NKV_CO2, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
-        entries.put( NKV_CO2_700_EN, nkvCalculator.calculateNkv( new Modifications( co2Price796, 0., 1, 1, 1. ) ) );
-        entries.put( NKV_CO2_2000_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ) ) );
-        entries.put( NKV_EL03, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1, 1. ) ) );
+        entries.put(Headers.NKV_CO2_700_EN, nkvCalculator.calculateNkv( new Modifications( co2Price700, 0., 1, 1, 1. ) ) );
+        entries.put(Headers.NKV_CO2_2000_EN, nkvCalculator.calculateNkv( new Modifications( co2Price2000, 0, 1, 1, 1. ) ) );
+        entries.put(Headers.NKV_EL03, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1, 1, 1. ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON700ptpr0_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( discountCorr*co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON700ptpr0, nkvCalculator.calculateNkv( new Modifications( discountCorr*co2Price700, addtlFzkmBeyondPrinsEl03, 1. ) ) );
@@ -129,13 +128,13 @@ public class StreetAnalysisDataContainer {
 //
         entries.put( ADDTL_PKWKM_EL03, addtlFzkmFromElasticity03 );
 //        entries.put(Headers.CO2_COST_ORIG, Math.max( 1., nkvCalculator.calculateCost_CO2( NO_CHANGE, streetBaseData ) ) );
-//        entries.put(Headers.CO2_COST_EL03, Math.max( 1., nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1 ) ) ) );
+        entries.put(Headers.CO2_COST_EL03, Math.max( 1., nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1,1,1  ) ) ) );
 //         ("max(1,...)" so that they become visible on logplot.  find other solution!
 
 //        entries.put( INVCOST_TUD, this.constructionCostTud );
 
         double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL = 50; // km/h
-        double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;
+        double addtlFzkmFromTtime = - streetBaseData.getPhysicalEffect().getPTravelTimes().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL;
         entries.put( ADDTL_PKWKM_FROM_TTIME, addtlFzkmFromTtime );
 
         // Beiträge einzeln:

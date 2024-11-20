@@ -137,8 +137,9 @@ public class StreetCsvWriter {
         record.add(Headers.DAUER_BAU, baseDataContainer.getCostBenefitAnalysis().getDurations().construction());
         record.add(Headers.DAUER_BETRIEB, baseDataContainer.getCostBenefitAnalysis().getDurations().operation());
 
-        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getPVehicleKilometers().overall() );
+        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getPVehicleKilometers().overall());
         record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPVehicleKilometers().induced() ).orElse(0. ) );
+        record.add(Headers.ADDTL_LKWKM_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getLVehicleKilometers() ).orElse(0. ) );
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
@@ -230,6 +231,7 @@ public class StreetCsvWriter {
         headers.addDoubleColumn( Headers.ADDTL_PKWKM_ORIG );
         headers.addDoubleColumn(Headers.ADDTL_PKWKM_INDUZ_ORIG );
 //        headers.addDoubleColumn( Headers.PKWKM_INDUZ_NEU ); // added by automagic
+        headers.addDoubleColumn( Headers.ADDTL_LKWKM_ORIG );
         headers.addDoubleColumn(Headers.B_FZKM);
 
         headers.addDoubleColumn(Headers.CO_2_EQUIVALENTS_EMISSIONS);

@@ -25,10 +25,10 @@ public class StreetPhysicalEffectMapper {
         }
 
         JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Fahrzeugeinsatzzeiten im PV" )
-                                  .ifPresent( i -> physicalEffectDataContainer.setVehicleHours( extractEffect( table.get(), i ) ) );
+                                  .ifPresent( i -> physicalEffectDataContainer.setlVehicleHours( extractEffect( table.get(), i ) ) );
 
         JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Reisezeit im PV")
-                  .ifPresent(i -> physicalEffectDataContainer.setTravelTimes(extractEffect(table.get(), i)));
+                  .ifPresent(i -> physicalEffectDataContainer.setPVehicleHours(extractEffect(table.get(), i)));
 
         JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Betriebsleistung im Personenverkehr")
                   .ifPresent(i -> physicalEffectDataContainer.setPVehicleKilometers(extractEffect(table.get(), i ) ) );

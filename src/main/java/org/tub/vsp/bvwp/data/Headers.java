@@ -13,22 +13,25 @@ public final class Headers{
 	 * = {@link #ADDTL_PKWKM_EL03} - {@link #ADDTL_PKWKM_ORIG}
 	 */
 	public static final String ADDTL_PKWKM = "zusätzliche Pkw-km";
-	/**
-	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut unserer eigenen Abschätzung.  Wird immer mal mit anderen Elastizitäten gerechnet, so
-	 * dass sich die Werte immer mal ändern.
-	 */
-	public static final String ADDTL_PKWKM_EL03 = ADDTL_PKWKM + " aus Elastizität 0,3";
+	public static final String ADDTL_LKWKM = "zusätzliche Lkw-km";
 	public static final String ADDTL_PKWKM_EL03_DIFF = "addtl_pkwkm_el03_diff";
-	public static final String ADDTL_PKWKM_FROM_TTIME = ADDTL_PKWKM + " aus Reisezeitgewinnen";
-	public static final String ADDTL_PKWKM_FROM_TTIME_DIFF = "addtl_pkwkm_from_ttime_diff";
 	/**
 	 * Der "induzierte" (Mehr-)Verkehr laut PRINS.
 	 */
 	public static final String ADDTL_PKWKM_INDUZ_ORIG = "addtl_pkwkm_induz";
 	/**
+	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut unserer eigenen Abschätzung.  Wird immer mal mit anderen Elastizitäten gerechnet, so
+	 * dass sich die Werte immer mal ändern.
+	 */
+	public static final String ADDTL_PKWKM_EL03 = ADDTL_PKWKM + " aus Elastizität 0,3";
+	public static final String ADDTL_PKWKM_FROM_TTIME = ADDTL_PKWKM + " aus Reisezeitgewinnen";
+	public static final String ADDTL_PKWKM_FROM_TTIME_DIFF = "addtl_pkwkm_from_ttime_diff";
+	/**
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut PRINS.
 	 */
 	public static final String ADDTL_PKWKM_ORIG = ADDTL_PKWKM + " in PRINS";
+	//Güterverkehr
+	public static final String ADDTL_LKWKM_ORIG = ADDTL_LKWKM + " in PRINS";
 	/**
 	 * So etwas wie "Neubau", "Knotenpunkt(projekt)", Erweiterung auf 6 oder 8 Spuren.
 	 *
@@ -99,20 +102,27 @@ public final class Headers{
 	public static final String LINK = "URL";
 	public static final String NKV_CARBON700_EMOB_INVCOST80 = "NKV mit Inv.Kosten+/CO2-Preis+ & EMob";
 	public static final String NKV_CARBON700_CAPPED5 = HeadersKN.NKV_CARBON700 + "_capped5";
+
+
 	/**
-	 * NKV bei erhöhtem CO2-Preis (welchem?).
+	 * KMT: NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis von 2000 Euro.
 	 */
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000"; //2000 Euro/t -> muss dann noch nach 2012 umgerechnet werden
 	public static final String NKV_CO2_2000_INVCOST150_EN = "BCR_co2_2000_invcost150"; //50% höhere Investmentcosts
 	public static final String NKV_CO2_2000_INVCOST200_EN = "BCR_co2_2000_invcost200"; //doppelte Investmentcosts
-	/**
-	 * NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis.
-	 */
 	public static final String NKV_CO2_2000_INVCOSTTUD_EN = "BCR_co2_2000_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+
+	/**
+	 * KMT: NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis von 700 Euro.
+	 */
 	public static final String NKV_CO2_700_EN = "BCR_co2_700"; //700 Euro/t lt UBA für 2030 (Preisstand 2020) -> muss dann noch nach 2012 umgerechnet werden
 	public static final String NKV_CO2_700_INVCOST150_EN = "BCR_co2_700_invcost150"; //50% höhere Investmentcosts
 	public static final String NKV_CO2_700_INVCOST200_EN = "BCR_co2_700_invcost200"; //doppelte Investmentcosts
 	public static final String NKV_CO2_700_INVCOSTTUD_EN = "BCR_co2_700_invcostTud"; // Projektspezifische erhöhte Investitionskosten (siehe TUD-Liste)
+
+
+	public static final String NKV_CO2_796 = "BKV_co2_796";
+
 	/**
 	 * Neues NKV bei erhöhter Abschätzung für Mehrverkehr.
 	 */
@@ -159,6 +169,12 @@ public final class Headers{
 	public static final String NKV_NO_CHANGE_EN = "BCR";
 	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++ & EMob";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
+	/**
+	 * Originales NKV.
+	 */
+	public static final String NKV_ORIG = "NKV BVWP 2030";
+	public static final String NKV_ORIG_EN = "BCR_original";
+
 	public static final String PROJECT_NAME = "Projektname";
 	public static final String VERKEHRSBELASTUNG_PLANFALL = "DTV_Planfall";
 
