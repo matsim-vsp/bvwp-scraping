@@ -467,8 +467,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-		traces.addAll( getTracesByColor( table, xName, y2Name ) );
+        List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -484,8 +483,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-		traces.addAll( getTracesByColor( table, xName, y2Name ) );
+        List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -509,8 +507,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-		traces.addAll( getTracesByColor( table2, x2Name, y2Name ) );
+        List<Trace> traces = new ArrayList<>(getTracesByColor(table2, x2Name, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	public Figure fzkmFromEl03Delta_vs_fzkmOrig(){
@@ -533,8 +530,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-		traces.addAll( getTracesByColor( table2, xName, y2Name ) );
+        List<Trace> traces = new ArrayList<>(getTracesByColor(table2, xName, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	public Figure fzkmFromTtimeSum_vs_fzkmOrig(){
@@ -552,8 +548,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-		traces.addAll( getTracesByColor( table, xName, y2Name ) );
+        List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	Figure investmentCost( int cap, String xName, String yName ){

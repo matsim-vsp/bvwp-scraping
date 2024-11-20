@@ -259,9 +259,7 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-
-		traces.addAll( getTraces( xName, y2Name, table, "null", "cyan" ) );
+        List<Trace> traces = new ArrayList<>(getTraces(xName, y2Name, table, "null", "cyan"));
 
 		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
@@ -280,10 +278,8 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-
-		final List<Trace> traceWb = getTraces( xName, y2Name, table, "null", "cyan" );
-		traces.addAll( traceWb );
+        final List<Trace> traceWb = getTraces( xName, y2Name, table, "null", "cyan" );
+        List<Trace> traces = new ArrayList<>(traceWb);
 
 		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
@@ -332,10 +328,8 @@ class Figures1RailKN{
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>();
-
-		final List<Trace> traceWb = getTraces( xName, y2Name, table, "null", "cyan" );
-		traces.addAll( traceWb );
+        final List<Trace> traceWb = getTraces( xName, y2Name, table, "null", "cyan" );
+        List<Trace> traces = new ArrayList<>(traceWb);
 
 		Figure figure2 = new Figure( layout, traces.toArray(new Trace[0]) );
 		return figure2;
