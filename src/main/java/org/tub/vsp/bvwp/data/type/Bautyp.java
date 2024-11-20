@@ -4,13 +4,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public enum Bautyp {
-//	NB2_4 ("2-streifiger Neubau / 4-streifiger Neubau"),
+	//	NB2_4 ("2-streifiger Neubau / 4-streifiger Neubau"),
 	// z.B. https://bvwp-projekte.de/strasse/A25_B5-G20-SH/A25_B5-G20-SH.html .
 	// Eher eine Ortsumgehung ("B5").
 //	NB3_4 ("3-streifiger Neubau / 4-streifiger Neubau"),
 	// z.B. https://bvwp-projekte.de/strasse/A46-B7-G41-NW/A46-B7-G41-NW.html .
 	// Lückenschluss, der teilweise als Bundesstrasse ("B7") realisiert wird.
-NB2( "2-streifiger Neubau"),
+	NB2( "2-streifiger Neubau"),
 	NB2_NB3( "2-streifiger Neubau / 3-streifiger Neubau"),
 	NB2_NB4( "2-streifiger Neubau / 4-streifiger Neubau"),
 	NB3( "3-streifiger Neubau"),
@@ -25,7 +25,7 @@ NB2( "2-streifiger Neubau"),
 	EW6("Erweiterung auf 6 Fahrstreifen"),
 	EW8("Erweiterung auf 8 Fahrstreifen"),
 	EW6_EW8("Erweiterung auf 6 Fahrstreifen / Erweiterung auf 8 Fahrstreifen"),
-//	EW8_EW9("Erweiterung auf 8 Fahrstreifen / Erweiterung auf 9 Fahrstreifen"),
+	//	EW8_EW9("Erweiterung auf 8 Fahrstreifen / Erweiterung auf 9 Fahrstreifen"),
 	KNOTENPUNKT("Aus / Neubau eines Knotenpunktes"),
 	KNOTENPUNKT_EW4( "Aus / Neubau eines Knotenpunktes / Erweiterung auf 4 Fahrstreifen"),
 	KNOTENPUNKT_EW6( "Aus / Neubau eines Knotenpunktes / Erweiterung auf 6 Fahrstreifen"),
@@ -48,34 +48,38 @@ NB2( "2-streifiger Neubau"),
 				return v;
 			}
 		}
-		if ( description.equals( "Erweiterung auf 8 Fahrstreifen /"  ) ) {
-			// m.E. Typo in A7-G60-HE.  Evtl. fehlt da auch Text, aber das wissen wir (ohne weitere Recherche) nicht. kai, feb'24
-			return EW8;
-		}
-		if ( description.equals( "2-streifiger Neubau / Erweiterung auf 4 Fahrstreifen" ) ) {
-			// Im AB-Bereich ist das nur https://bvwp-projekte.de/strasse/A98-G110-BW/A98-G110-BW.html ,
-			// und die ist wohl erst NB einer Art Bundesstrasse, die im zweiten TP dann gedoppelt wird.  kai, feb'24
-			return NB4;
-		}
-		if ( description.equals( "Erweiterung auf 8 Fahrstreifen / Erweiterung auf 9 Fahrstreifen" ) ) {
-			return EW8;
-		}
-		if ( description.equals( "Erweiterung auf 4 Fahrstreifen / 4-streifiger Neubau" ) ) {
-			return NB4_EW4;
-		}
-		if ( description.equals( "2/3-streifiger Neubau / 4-streifiger Neubau" ) ) {
-			return NB3;
-		}
-		if ( description.equals( "3/4-streifiger Neubau / Erweiterung auf 4 Fahrstreifen" ) ) {
-			return NB4_EW4;
-		}
-		if ( description.equals( "3-streifiger Neubau / 4-streifiger Neubau" ) ) {
-			return NB3;
+		switch (description) {
+			case "Erweiterung auf 8 Fahrstreifen /" -> {
+				// m.E. Typo in A7-G60-HE.  Evtl. fehlt da auch Text, aber das wissen wir (ohne weitere Recherche) nicht. kai, feb'24
+				return EW8;
+				// m.E. Typo in A7-G60-HE.  Evtl. fehlt da auch Text, aber das wissen wir (ohne weitere Recherche) nicht. kai, feb'24
+			}
+			case "2-streifiger Neubau / Erweiterung auf 4 Fahrstreifen" -> {
+				// Im AB-Bereich ist das nur https://bvwp-projekte.de/strasse/A98-G110-BW/A98-G110-BW.html ,
+				// und die ist wohl erst NB einer Art Bundesstrasse, die im zweiten TP dann gedoppelt wird.  kai, feb'24
+				return NB4;
+				// Im AB-Bereich ist das nur https://bvwp-projekte.de/strasse/A98-G110-BW/A98-G110-BW.html ,
+				// und die ist wohl erst NB einer Art Bundesstrasse, die im zweiten TP dann gedoppelt wird.  kai, feb'24
+			}
+			case "Erweiterung auf 8 Fahrstreifen / Erweiterung auf 9 Fahrstreifen" -> {
+				return EW8;
+			}
+			case "Erweiterung auf 4 Fahrstreifen / 4-streifiger Neubau" -> {
+				return NB4_EW4;
+			}
+			case "2/3-streifiger Neubau / 4-streifiger Neubau" -> {
+				return NB3;
+			}
+			case "3/4-streifiger Neubau / Erweiterung auf 4 Fahrstreifen" -> {
+				return NB4_EW4;
+			}
+			case "3-streifiger Neubau / 4-streifiger Neubau" -> {
+				return NB3;
+			}
 		}
 		log.error( "cannot find Bautyp for description=" + description );
-//		Thread.dumpStack();
+
 		throw new RuntimeException( "cannot find Bautyp for description=" + description );
-//		return null;
 	}
 
-	}
+}
