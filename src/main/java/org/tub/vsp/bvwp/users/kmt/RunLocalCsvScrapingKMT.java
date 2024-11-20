@@ -284,24 +284,18 @@ public class RunLocalCsvScrapingKMT {
 
     Figure figureNkvChange_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
-                RunLocalCsvScrapingKMT.plotWidth,
-            table,
-            HeadersKN.NKV_ORIG,
-            Headers.NKV_INVCOST150_EN,
+                table,
+                Headers.NKV_INVCOST150_EN,
             Headers.NKV_INVCOST200_EN);
     Figure figureNkvChange_Co2_700_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
-                RunLocalCsvScrapingKMT.plotWidth,
-            table,
-            HeadersKN.NKV_ORIG,
-            Headers.NKV_CO2_700_INVCOST150_EN,
+                table,
+                Headers.NKV_CO2_700_INVCOST150_EN,
             Headers.NKV_CO2_700_INVCOST200_EN);
     Figure figureNkvChange_Co2_2000_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
-                RunLocalCsvScrapingKMT.plotWidth,
-            table,
-            HeadersKN.NKV_ORIG,
-            Headers.NKV_CO2_2000_INVCOST150_EN,
+                table,
+                Headers.NKV_CO2_2000_INVCOST150_EN,
             Headers.NKV_CO2_2000_INVCOST200_EN);
 
     String page =

@@ -34,8 +34,6 @@ public class CostBenefitMapperUtils {
     /**
      * Extrahiert die Summe der bewertungsrelevanten Investitionskosten aus der Kostentabelle im NKA-Teil (Abschnitt 1.7)
      * Sowohl als reine Summe, als auch als Barwert.
-     * @param table
-     * @return
      */
     public static InvestmentCosts extractCosts( Element table ) {
         Double invCosts_sum;

@@ -22,13 +22,13 @@ class FiguresKMT {
   FiguresKMT() {}
 
   private static Trace getPriorityTrace(
-      Table table, Einstufung priority, String xName, String yName, String color) {
+          Table table, Einstufung priority, String xName, String yName, String color) {
     Table tableVbe = BvwpUtils.extractPriorityTable(table, priority.name());
     return ScatterTrace.builder(tableVbe.numberColumn(xName), tableVbe.numberColumn(yName))
-        .text(tableVbe.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-        .name(String.format(legendFormat, yName + "_" + priority.name()))
-        .marker(Marker.builder().color(color).build())
-        .build();
+            .text(tableVbe.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+            .name(String.format(legendFormat, yName + "_" + priority.name()))
+            .marker(Marker.builder().color(color).build())
+            .build();
   }
 
   // #########################
@@ -41,25 +41,25 @@ class FiguresKMT {
 
     double maxX = table.numberColumn(xName).max();
     Axis xAxis =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .title(xName)
-            .range(0., maxX)
-            //                             .autoRange( Axis.AutoRange.REVERSED );
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .title(xName)
+                    .range(0., maxX)
+                    //                             .autoRange( Axis.AutoRange.REVERSED );
+                    .build();
 
     Axis yAxis =
-        Axis.builder()
-            .type(Type.LOG)
-            //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
-            .title(yName)
-            .build();
+            Axis.builder()
+                    .type(Type.LOG)
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yName)
+                    .build();
     Layout layout = Layout.builder(yName).xAxis(xAxis).yAxis(yAxis).width(plotWidth).build();
     Trace trace =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(String.format(legendFormat, yName))
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(String.format(legendFormat, yName))
+                    .build();
 
     final Trace traceWb = getPriorityTrace(table, Einstufung.WB, xName, y2Name, "cyan");
     final Trace traceWbp = getPriorityTrace(table, Einstufung.WBP, xName, y2Name, "yellow");
@@ -67,11 +67,11 @@ class FiguresKMT {
     final Trace traceVbe = getPriorityTrace(table, Einstufung.VBE, xName, y2Name, "red");
 
     Trace trace3 =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y3Name))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(String.format(legendFormat, y3Name))
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y3Name))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(String.format(legendFormat, y3Name))
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     //            double[] xx = new double[]{1., 200.};
     //            Trace trace1 = ScatterTrace.builder( xx, xx )
@@ -89,17 +89,17 @@ class FiguresKMT {
     String y2Name = Headers.NKV_EL03_CARBON215_INVCOSTTUD;
 
     Axis yAxis =
-        Axis.builder()
-            //			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
-            //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
-            .title(yName)
-            .build();
+            Axis.builder()
+                    //			     .type( Axis.Type.LOG ) // wirft NKV < 0 raus!
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yName)
+                    .build();
     Layout layout = Layout.builder(yName).xAxis(xAxis).yAxis(yAxis).width(plotWidth).build();
     Trace trace =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(String.format(legendFormat, String.format("%30s", yName)))
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(String.format(legendFormat, String.format("%30s", yName)))
+                    .build();
 
     final Trace traceWb = getPriorityTrace(table, Einstufung.WB, xName, y2Name, "cyan");
     final Trace traceWbp = getPriorityTrace(table, Einstufung.WBP, xName, y2Name, "yellow");
@@ -118,10 +118,10 @@ class FiguresKMT {
     Trace trace4 = ScatterTrace.builder(xx, yy).mode(ScatterTrace.Mode.LINE).build();
 
     figure2 =
-        new Figure(
-            layout, trace
-            //				, trace3
-            , traceWb, traceWbp, traceVb, traceVbe, trace4);
+            new Figure(
+                    layout, trace
+                    //				, trace3
+                    , traceWb, traceWbp, traceVb, traceVbe, trace4);
     return figure2;
   }
 
@@ -132,35 +132,35 @@ class FiguresKMT {
     //        String y2Name = Headers.NKV_INDUZ_CO2;
 
     Axis yAxis =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .range(
-                Double.min(
-                    1.1 * table.numberColumn(y3Name).min(), 1.1 * table.numberColumn(yName).min()),
-                20.)
-            .title(yName)
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .range(
+                            Double.min(
+                                    1.1 * table.numberColumn(y3Name).min(), 1.1 * table.numberColumn(yName).min()),
+                            20.)
+                    .title(yName)
+                    .build();
     Layout layout = Layout.builder(yName).xAxis(xAxis).yAxis(yAxis).width(plotWidth).build();
     Trace trace =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(yName)
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName)
+                    .build();
 
     Trace trace3 =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y3Name))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(y3Name)
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y3Name))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(y3Name)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     double[] xx = new double[] {0., 1.1 * table.numberColumn(xName).max()};
     double[] yy = new double[] {1., 1.};
     Trace trace4 =
-        ScatterTrace.builder(xx, yy)
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("red").build())
-            .build();
+            ScatterTrace.builder(xx, yy)
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("red").build())
+                    .build();
 
     figure2 = new Figure(layout, trace, trace3, trace4);
     return figure2;
@@ -171,23 +171,23 @@ class FiguresKMT {
     String y2Name = Headers.CO2_COST_EL03;
 
     Axis yAxis =
-        Axis.builder()
-            .title(yName)
-            //                         .type( Axis.Type.LOG )
-            .build();
+            Axis.builder()
+                    .title(yName)
+                    //                         .type( Axis.Type.LOG )
+                    .build();
     Layout layout = Layout.builder("plot").xAxis(xAxis).yAxis(yAxis).width(plotWidth).build();
 
     Trace trace =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
-            .name(yName)
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
+                    .name(yName)
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .build();
     Trace trace2 =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y2Name))
-            .name(y2Name)
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .marker(Marker.builder().color("red").build())
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y2Name))
+                    .name(y2Name)
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .marker(Marker.builder().color("red").build())
+                    .build();
 
     return new Figure(layout, trace, trace2);
   }
@@ -200,32 +200,32 @@ class FiguresKMT {
     double maxY = 20.;
 
     Axis xAxis =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .title(xName)
-            .range(0., maxX)
-            //                             .autoRange( Axis.AutoRange.REVERSED );
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .title(xName)
+                    .range(0., maxX)
+                    //                             .autoRange( Axis.AutoRange.REVERSED );
+                    .build();
 
     table = table.sortDescendingOn(xName);
 
     Axis yAxis =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .range(Double.min(0., 1.1 * table.numberColumn(yName).min()), maxY)
-            //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
-            .title(yName)
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .range(Double.min(0., 1.1 * table.numberColumn(yName).min()), maxY)
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yName)
+                    .build();
 
     Layout layout =
-        Layout.builder(yName + " over " + xName).xAxis(xAxis).yAxis(yAxis).width(plotWidth).build();
+            Layout.builder(yName + " over " + xName).xAxis(xAxis).yAxis(yAxis).width(plotWidth).build();
 
     Trace cbrOverCbrTrace =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(yName)
-            .marker(Marker.builder().color("blue").build())
-            .build();
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName)
+                    .marker(Marker.builder().color("blue").build())
+                    .build();
 
     //        double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
     //        double[] yy = new double[]{0., 1.1* table.numberColumn( xName ).max()};
@@ -234,41 +234,33 @@ class FiguresKMT {
     double[] xy1 = new double[] {1., 1.};
 
     Trace diagonale =
-        ScatterTrace.builder(xx, yy)
-            .name(xName + " = " + yName)
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(xx, yy)
+                    .name(xName + " = " + yName)
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     Trace horizontalCbr1 =
-        ScatterTrace.builder(xx, xy1)
-            .name(yName + " = 1")
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(xx, xy1)
+                    .name(yName + " = 1")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     Trace verticalCbr1 =
-        ScatterTrace.builder(xy1, yy)
-            .name(xName + " = 1")
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(xy1, yy)
+                    .name(xName + " = 1")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     return new Figure(layout, cbrOverCbrTrace, diagonale, horizontalCbr1, verticalCbr1);
   }
 
   /**
    * Für NKV vergleich-Plot mit 2 Y-Achsen.
-   *
-   * @param plotWidth
-   * @param table
-   * @param xName
-   * @param yName
-   * @param yName2
-   * @return
-   */
-  static Figure createFigureNkvChange(
-      int plotWidth, Table table, String xName, String yName, String yName2) {
+   *   */
+  static Figure createFigureNkvChange(Table table, String yName, String yName2) {
 
     //        String xName = Headers.NKV_NO_CHANGE;
     //        String yName = Headers.NKV_CO2;
@@ -276,52 +268,52 @@ class FiguresKMT {
     double maxY = 20.;
 
     Axis xAxis =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .title(xName)
-            .range(0., maxX)
-            //                             .autoRange( Axis.AutoRange.REVERSED );
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .title(HeadersKN.NKV_ORIG)
+                    .range(0., maxX)
+                    //                             .autoRange( Axis.AutoRange.REVERSED );
+                    .build();
 
-    table = table.sortDescendingOn(xName);
+    table = table.sortDescendingOn(HeadersKN.NKV_ORIG);
 
     Axis yAxis =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .range(Double.min(0., 1.1 * table.numberColumn(yName).min()), maxY)
-            //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
-            .title(yName)
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .range(Double.min(0., 1.1 * table.numberColumn(yName).min()), maxY)
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yName)
+                    .build();
 
     Axis yAxis2 =
-        Axis.builder()
-            .type(Type.LINEAR)
-            .range(Double.min(0., 1.1 * table.numberColumn(yName2).min()), maxY)
-            //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
-            .title(yName2)
-            .build();
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .range(Double.min(0., 1.1 * table.numberColumn(yName2).min()), maxY)
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yName2)
+                    .build();
 
     Layout layout =
-        Layout.builder(yName + " and " + yName2 + " over " + xName)
-            .xAxis(xAxis)
-            .yAxis(yAxis)
-            .yAxis2(yAxis2)
-            .width(plotWidth)
-            .build();
+            Layout.builder(yName + " and " + yName2 + " over " + HeadersKN.NKV_ORIG)
+                    .xAxis(xAxis)
+                    .yAxis(yAxis)
+                    .yAxis2(yAxis2)
+                    .width(RunLocalCsvScrapingKMT.plotWidth)
+                    .build();
 
     Trace cbrOverCbrTrace1 =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(yName)
-            .marker(Marker.builder().color("blue").build())
-            .build();
+            ScatterTrace.builder(table.numberColumn(HeadersKN.NKV_ORIG), table.numberColumn(yName))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName)
+                    .marker(Marker.builder().color("blue").build())
+                    .build();
 
     Trace cbrOverCbrTrace2 =
-        ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName2))
-            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
-            .name(yName2)
-            .marker(Marker.builder().color("red").build())
-            .build();
+            ScatterTrace.builder(table.numberColumn(HeadersKN.NKV_ORIG), table.numberColumn(yName2))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName2)
+                    .marker(Marker.builder().color("red").build())
+                    .build();
 
     //        double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
     //        double[] yy = new double[]{0., 1.1* table.numberColumn( xName ).max()};
@@ -330,28 +322,28 @@ class FiguresKMT {
     double[] xy1 = new double[] {1., 1.};
 
     Trace diagonale =
-        ScatterTrace.builder(xx, yy)
-            .name(xName + " = " + yName)
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("orange").build())
-            .build();
+            ScatterTrace.builder(xx, yy)
+                    .name(HeadersKN.NKV_ORIG + " = " + yName)
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("orange").build())
+                    .build();
 
     Trace horizontalCbr1 =
-        ScatterTrace.builder(xx, xy1)
-            .name(yName + " = 1")
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(xx, xy1)
+                    .name(yName + " = 1")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     Trace verticalCbr1 =
-        ScatterTrace.builder(xy1, yy)
-            .name(xName + " = 1")
-            .mode(Mode.LINE)
-            .marker(Marker.builder().color("gray").build())
-            .build();
+            ScatterTrace.builder(xy1, yy)
+                    .name(HeadersKN.NKV_ORIG + " = 1")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
 
     return new Figure(
-        layout, cbrOverCbrTrace1, cbrOverCbrTrace2, diagonale, horizontalCbr1, verticalCbr1);
+            layout, cbrOverCbrTrace1, cbrOverCbrTrace2, diagonale, horizontalCbr1, verticalCbr1);
   }
 
 }
