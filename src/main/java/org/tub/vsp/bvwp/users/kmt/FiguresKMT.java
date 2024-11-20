@@ -354,22 +354,4 @@ class FiguresKMT {
         layout, cbrOverCbrTrace1, cbrOverCbrTrace2, diagonale, horizontalCbr1, verticalCbr1);
   }
 
-  /**
-   * Idee um eine Trennung zu erzeugen... Noch nicht optimal
-   *
-   * @param title
-   * @return
-   */
-  static Figure createTextFigure(String title) {
-
-    Layout layout =
-        Layout.builder(title)
-            .yAxis(Axis.builder().visible(false).build())
-            .xAxis(Axis.builder().visible(false).build())
-            .width(1)
-            .height(1)
-            .build();
-
-    return new Figure(layout);
-  }
 }

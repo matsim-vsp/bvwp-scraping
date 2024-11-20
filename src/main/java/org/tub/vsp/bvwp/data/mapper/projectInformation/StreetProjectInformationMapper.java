@@ -2,7 +2,6 @@ package org.tub.vsp.bvwp.data.mapper.projectInformation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.Assert;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.street.StreetProjectInformationDataContainer;

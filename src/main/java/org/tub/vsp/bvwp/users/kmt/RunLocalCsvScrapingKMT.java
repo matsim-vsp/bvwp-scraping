@@ -127,20 +127,20 @@ public class RunLocalCsvScrapingKMT {
         tbl.where(tbl.numberColumn(Headers.NKV_EL03_CARBON215_INVCOSTTUD).isLessThan(1.));
 
     { // -- von KN
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
       System.out.println("NKV Original auf Gesamttabelle");
       System.out.println(tbl.summarize( HeadersKN.NKV_ORIG, count, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
       System.out.println(tbl.summarize( HeadersKN.NKV_ORIG, count, mean, stdDev, min, max ).apply() );
       System.out.println(System.lineSeparator() + "Davon NKV < 1: nach Modifikation.");
       System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
       System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max).apply());
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
       System.out.println(tbl.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
       System.out.println(tbl.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).apply() );
       System.out.println(System.lineSeparator() + "Davon NKV < 1:");
       System.out.println(tableIndCo2kl1.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
       System.out.println(tableIndCo2kl1.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).apply() );
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
       System.out.println(tbl.summarize(Headers.CO2_COST_EL03, sum, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
       System.out.println(System.lineSeparator() + "Davon NKV < 1:");
       System.out.println(tableIndCo2kl1.summarize(Headers.CO2_COST_EL03, sum, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
@@ -148,9 +148,9 @@ public class RunLocalCsvScrapingKMT {
 
     {
       // KMT
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
       System.out.println("### KMT ###");
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
 
       List<String> headersKMT = new LinkedList<>();
       headersKMT.add( HeadersKN.NKV_ORIG );
@@ -190,7 +190,7 @@ public class RunLocalCsvScrapingKMT {
         new CsvWriter().write(nkvBelow1_count, options);
       }
 
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
 
       { // Gesparte Investitionskosten - Barwert der Kosten in Mio EUR
         Table nkvBelow1_costs =
@@ -212,7 +212,7 @@ public class RunLocalCsvScrapingKMT {
         new CsvWriter().write(nkvBelow1_costs, options);
       }
 
-      System.out.println(BvwpUtils.SEPARATOR_AT_START );
+      System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
 
       { // Gesparte CO2 - Emissionen: Aus Verkehr und Lebenszyklusemissionen (t/a)
         Table nkvBelow1_co2safed = Table.create(
