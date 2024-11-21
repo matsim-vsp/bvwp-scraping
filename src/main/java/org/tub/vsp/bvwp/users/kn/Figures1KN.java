@@ -115,18 +115,9 @@ class Figures1KN{
 			// ===========================
 			{
 				DoubleColumn column = DoubleColumn.create( EINSTUFUNG_AS_NUMBER );
-				final double factor = 8.;
-				final double offset = 6.;
 				for( String prio : table.stringColumn( EINSTUFUNG ) ){
-					switch( Einstufung.valueOf( prio ) ){
-						case VBE -> column.append( 3. * factor + offset );
-						case VB -> column.append( 2. * factor + offset );
-						case WBP -> column.append( 1. * factor + offset );
-						case WB -> column.append( offset );
-//					case UNDEFINED -> column.append( 2. );
-						default -> //						throw new IllegalStateException( "Unexpected value: " + prio );
-                                column.append( offset );
-					}
+					final double size = Einstufung.getSize( prio );
+					column.append( size );
 				}
 				table.addColumns( column );
 			}

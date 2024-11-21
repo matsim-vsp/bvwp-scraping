@@ -33,4 +33,27 @@ public enum Einstufung{
         throw new RuntimeException( "unknown Einstufung=" + description );
 //        return UNDEFINED;
     }
+    public static double getSize( String prio ){
+                final double factor = 8.;
+                final double offset = 6.;
+                double size = 0.;
+                switch( valueOf( prio ) ){
+                        case VBE -> {
+                                size = 3. * factor + offset;
+                        }
+                        case VB -> {
+                                size = 2. * factor + offset;
+                        }
+                        case WBP -> {
+                                size = 1. * factor + offset;
+                        }
+                        case WB -> {
+                                size = offset;
+                        }
+                        default -> {
+                                size = offset;
+                        }
+                }
+                return size;
+        }
 }
