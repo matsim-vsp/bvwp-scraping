@@ -1,6 +1,6 @@
-package org.tub.vsp.bvwp.users.kn;
+package org.tub.vsp.bvwp;
 
-class Gbl {
+public class Gbl {
 	private Gbl(){} // do not instantiate
 
 	public static final void assertTrue( boolean condition ) {

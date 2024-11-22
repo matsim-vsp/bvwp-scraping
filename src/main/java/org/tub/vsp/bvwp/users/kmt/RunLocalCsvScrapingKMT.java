@@ -11,6 +11,7 @@ import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
+import org.tub.vsp.bvwp.Gbl;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
@@ -59,20 +60,40 @@ public class RunLocalCsvScrapingKMT {
     String filePath = "../shared-svn/";
     Map<String, Double> constructionCostsByProject = BvwpUtils.getConstructionCostsFromTudFile(filePath);
 
-    // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und
-    // die Werte gleich dort eintragen.  kai, feb'24
-    List<StreetAnalysisDataContainer> allStreetBaseData =
-        scraper.extractAllLocalBaseData("./data/street/all", "A", ".*", "").stream()
-            .map( streetBaseDataContainer ->
-                    new StreetAnalysisDataContainer(
-                        streetBaseDataContainer,
-                        //          0.
-                        constructionCostsByProject.get(streetBaseDataContainer.getProjectInformation().getProjectNumber())))
+    final String regexToMatch = "(A.*)|(B288_A524-G20-NW.html)"; // dies führt, mit prefix="" (!), zu den gleichen 213 BAB Projekten wie bei Richard.
+//        final String regexToMatch = "(A...B.*)|(A....B.*)";
+
+    StringBuilder strb = new StringBuilder();
+    strb.append("A20-G10-SH.html"); // gibt es nochmal mit A20-G10-SH-NI.  Muss man beide zusammenzählen?  kai, feb'24
+//                    strb.append("A57-G10-NW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
+//                    strb.append("A81-G50-BW.html")) // sehr hohes DTV für 4 Spuren.  ??  kai, mar'24
+    strb.append("|A61-G10-RP-T2-RP.html"); // benefits and costs for T1 and T2 are same; there are no revised investment costs from TUD for T2
+    strb.append("|A3-G30-HE-T05-HE.html"); // benefits and costs for T04 and T05 are same; there are no revised investment costs from TUD for T05
+    strb.append("|A3-G30-HE-T08-HE.html"); // benefits and costs for T06 and T08 are same; there are no revised investment costs from TUD for T08
+    strb.append("|A40-G30-NW-T4-NW.html"); // dto
+    strb.append("|A003-G061-BY.html"); // dto
+    strb.append("|A860_B31-G20-BW-T2-BW.html"); // Exkludiert, da NKA von T1 genutzt UND Teilprojekt selber BStr ist
+    strb.append("|A860_B31-G20-BW-T3-BW.html"); // Exkludiert, da NKA von T1 genutzt UND Teilprojekt selber BStr ist
+    strb.append("|A860_B31-G20-BW-T4-BW.html"); // Exkludiert, da NKA von T1 genutzt UND Teilprojekt selber BStr ist
+    strb.append("|A860_B31-G20-BW-T5-BW.html"); // BStr, da Teilprojekt einzeln bewertet UND NKA für das Teilprojekt vorliegt yyyy müsste man für BStr reinnehmen!
+    final String regexToExclude = strb.toString();
+
+    logger.info( "Starting scraping" );
+    // yyyy man könnte (sollte?) den table in den StreetAnalysisDataContainer mit hinein geben, und die Werte gleich dort eintragen.  kai, feb'24
+    List<StreetAnalysisDataContainer> allStreetBaseData = new StreetScraper()
+            .extractAllLocalBaseData( "./data/street/all", "", regexToMatch, regexToExclude )
+            .stream()
+            .map(streetBaseDataContainer -> new StreetAnalysisDataContainer(
+                    streetBaseDataContainer,
+                    constructionCostsByProject.get(streetBaseDataContainer.getProjectInformation().getProjectNumber())
+            ))
             .toList();
 
-    logger.info("Writing csv");
-    StreetCsvWriter csvWriter = new StreetCsvWriter("output/street_data.csv");
-    Table table = csvWriter.writeCsv(allStreetBaseData);
+    logger.info( "Writing csv and generating table:" );
+    Table table = new StreetCsvWriter( "output/street_data.csv" ).writeCsv( allStreetBaseData );
+
+    Gbl.assertTrue( table.rowCount()==213, "wrong number of (BAB) projects; should be 213 but is "+table.rowCount() );
+
 
     table.addColumns(
         table

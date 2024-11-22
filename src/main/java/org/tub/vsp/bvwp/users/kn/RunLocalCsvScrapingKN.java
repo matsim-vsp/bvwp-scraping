@@ -4,6 +4,7 @@ import org.apache.commons.math3.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
+import org.tub.vsp.bvwp.Gbl;
 import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Einstufung;
