@@ -458,7 +458,7 @@ class Figures2KN extends Figures1KN {
 	public Figure fzkmFromTtime_vs_fzkmOrig(){
 		String xName = ADDTL_PKWKM_ORIG;
 
-		String yName = ADDTL_PKWKM_FROM_TTIME;
+		String yName = ADDTL_PKWKM_FROM_TTIME_50;
 		String y2Name = yName;
 
 		Axis xAxis = Axis.builder().title( xName ).titleFont( defaultFont ).build();
@@ -497,8 +497,8 @@ class Figures2KN extends Figures1KN {
 				, table.stringColumn( BAUTYP )
 				, table.column( EINSTUFUNG_AS_NUMBER )
 				, table.doubleColumn( x2Name )
-				, table.doubleColumn( ADDTL_PKWKM_FROM_TTIME )
-				, table.doubleColumn( ADDTL_PKWKM_FROM_TTIME ).subtract( table.doubleColumn( x2Name ) ).setName( y2Name )
+				, table.doubleColumn(ADDTL_PKWKM_FROM_TTIME_50)
+				, table.doubleColumn(ADDTL_PKWKM_FROM_TTIME_50).subtract( table.doubleColumn( x2Name ) ).setName( y2Name )
 					   );
 
 		Axis xAxis = Axis.builder().title( x2Name ).titleFont( defaultFont ).build();
@@ -538,7 +538,7 @@ class Figures2KN extends Figures1KN {
 
 		final String ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG = "additional pkwkm from ttime plus orig";
 
-		table.addColumns(  table.numberColumn( ADDTL_PKWKM_FROM_TTIME ).add( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG ) );
+		table.addColumns(  table.numberColumn(ADDTL_PKWKM_FROM_TTIME_50).add( table.numberColumn( ADDTL_PKWKM_ORIG ) ).setName( ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG ) );
 
 		String y2Name = ADDTL_PKWKM_FROM_TTIME_PLUS_ORIG;
 
