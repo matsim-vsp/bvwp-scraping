@@ -37,7 +37,6 @@ public class RunLocalCsvScrapingKMT_EWGT {
 
   /**
    * Fokus hier ist auf der Analyse für EWGT2024-Paper --> CO2-Preis und Investititonskosten.
-   * TODO: Anpassen auf 213 Projekte (BAB)
    * @param args
    * @throws IOException
    */

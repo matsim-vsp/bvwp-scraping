@@ -2,7 +2,7 @@ package org.tub.vsp.bvwp.data.container.analysis;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.bvwp.computation.ComputationKN;
+import org.tub.vsp.bvwp.computation.ComputationGlb;
 import org.tub.vsp.bvwp.computation.Modifications;
 import org.tub.vsp.bvwp.computation.NkvCalculatorRail;
 import org.tub.vsp.bvwp.data.Headers;
@@ -50,7 +50,7 @@ public class RailAnalysisDataContainer {
 
         entries.put( Headers.ADDTL_LANE_KM, additionalLaneKm );
 
-        double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationKN.LANE_KM_AB * 0.3 * ComputationKN.FZKM_AB;
+        double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationGlb.LANE_KM_AB * 0.3 * ComputationGlb.FZKM_AB;
 //        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - baseDataContainer.getPhysicalEffect().getVehicleKilometers().overall();
         // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 

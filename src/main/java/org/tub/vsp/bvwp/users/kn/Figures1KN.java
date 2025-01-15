@@ -2,7 +2,7 @@ package org.tub.vsp.bvwp.users.kn;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.tub.vsp.bvwp.computation.ComputationKN;
+import org.tub.vsp.bvwp.computation.ComputationGlb;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.type.Einstufung;
@@ -376,12 +376,12 @@ class Figures1KN{
 		String y2Name = "elasticity_new";
 
 		table.addColumns( table.numberColumn( ADDTL_PKWKM_ORIG )
-				       .divide( ComputationKN.FZKM_AB )
-				       .multiply( ComputationKN.LANE_KM_AB )
+				       .divide( ComputationGlb.FZKM_AB )
+				       .multiply( ComputationGlb.LANE_KM_AB )
 				       .divide( table.numberColumn( ADDTL_LANE_KM ) ).setName("elasticity_old" ),
 				table.numberColumn( ADDTL_PKWKM_EL03 )
-				     .divide( ComputationKN.FZKM_AB )
-				     .multiply( ComputationKN.LANE_KM_AB )
+				     .divide( ComputationGlb.FZKM_AB )
+				     .multiply( ComputationGlb.LANE_KM_AB )
 				     .divide( table.numberColumn( ADDTL_LANE_KM ) ).setName("elasticity_new" )
 				);
 
