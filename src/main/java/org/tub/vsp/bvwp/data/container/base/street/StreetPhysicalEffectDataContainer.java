@@ -9,7 +9,7 @@ public class StreetPhysicalEffectDataContainer {
     private PhysicalEffect pvVehicleHours; //Personenverkehr (Pkw) (Fzg-h)
     private PhysicalEffect pvVehicleKilometers; //Personenverkehr (Pkw) Fzg-km
     private PhysicalEffect pvPersonHours; //Personenverkehr Personen-h
-    private PhysicalEffect gvVehicleHours; //Güterverkehr (Lkw) Fzg-h
+    private Double gvVehicleHours; //Güterverkehr (Lkw) Fzg-h ; Nicht differenziert nach Entfernung <50; >= 50km
     private Double gvVehicleKilometers; //Güterverkehr (Lkw) Fzg-km
 
     public StreetEmissionsDataContainer getEmissionsDataContainer() {
@@ -84,10 +84,10 @@ public class StreetPhysicalEffectDataContainer {
         result = 31 * result + (pvVehicleKilometers != null ? pvVehicleKilometers.hashCode() : 0);
         return result;
     }
-    public void setGvVehicleHours(PhysicalEffect gvVehicleHours){
+    public void setGvVehicleHours(Double gvVehicleHours){
         this.gvVehicleHours = gvVehicleHours;
     }
-    public PhysicalEffect getGvVehicleHours(){
+    public Double getGvVehicleHours(){
         return gvVehicleHours;
     }
 

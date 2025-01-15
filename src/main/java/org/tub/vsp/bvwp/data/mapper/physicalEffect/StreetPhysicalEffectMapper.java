@@ -34,7 +34,11 @@ public class StreetPhysicalEffectMapper {
                   .ifPresent(i -> physicalEffectDataContainer.setPvVehicleKilometers(extractEffect(table.get(), i ) ) );
 
         JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Betriebsleistung Güterverkehr (GV)" )
-                        .ifPresent( ii -> physicalEffectDataContainer.setGvVehicleKilometers( JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table.get(), ii, 1) ) ) );
+                .ifPresent( ii -> physicalEffectDataContainer.setGvVehicleKilometers( JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table.get(), ii, 1) ) ) );
+
+        JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Fahrzeugeinsatzzeiten im GV" )
+                .ifPresent( ii -> physicalEffectDataContainer.setGvVehicleHours( JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table.get(), ii, 1) ) ) );
+
 
         return physicalEffectDataContainer;
     }
