@@ -68,7 +68,7 @@ public class StreetAnalysisDataContainer {
 
         entries.put( ADDTL_LANE_KM, additionalLaneKm );
 
-        double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationGlb.LANE_KM_AB * 0.3 * ComputationGlb.FZKM_AB;
+        final double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationGlb.LANE_KM_AB * 0.3 * ComputationGlb.FZKM_AB;
         final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getPvVehicleKilometers().overall();
         // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 
@@ -175,15 +175,23 @@ public class StreetAnalysisDataContainer {
 
 
         //Für hEART Paper 2025, KMT
+        //0.6 ist analog Heyl
         double addtlFzkmFromElasticity06 = additionalLaneKm / ComputationGlb.LANE_KM_AB * 0.6 * ComputationGlb.FZKM_AB;
         entries.put(ADDTL_PKWKM_EL06, addtlFzkmFromElasticity06);
 
+        //Reduzierte Werte; 0.3 ist für Rual richtig -> Neubau, wie A20
         entries.put(ADDTL_PKWKM_EL03_HALF, 0.5 * addtlFzkmFromElasticity03);
 
-        double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29 = 29; // km/h
-        double addtlFzkmFromTtime29 = - streetBaseData.getPhysicalEffect().getPvVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29;
+        //TODO: Rechnung machen, die mit 0.6 Ausbau und 0.3 Neubau rechnet --> Case "reduziert"
+
+        //Aus Reisezeit, welche wieder in Verkehr investiert wird. ! Diese Werte sind zusätzlich zu den veränderten vkm aus PRINS.
+        final double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29 = 29; // km/h
+        final double addtlFzkmFromTtime29 = - streetBaseData.getPhysicalEffect().getPvVehicleHours().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29;
 
         entries.put(ADDTL_PKWKM_FROM_TTIME_29, addtlFzkmFromTtime29);
+        entries.put(ADDTL_PKWKM_FROM_TTIME_29_HALF, 0.5 * addtlFzkmFromTtime29); //Nur halbe Zeitgewinne werden in zusätzliche Reisen investiert
+         // Nun noch die km aus PRINS dazurechnen, damit gesamt-Wert klar wird
+        entries.put(ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, (0.5 * addtlFzkmFromTtime29) + streetBaseData.getPhysicalEffect().getPvVehicleKilometers().overall());
 
         //End heart25
 
