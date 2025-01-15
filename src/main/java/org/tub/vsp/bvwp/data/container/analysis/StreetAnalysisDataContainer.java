@@ -106,7 +106,7 @@ public class StreetAnalysisDataContainer {
 //        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON700ptpr0_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( discountCorr*co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ) ) );
 //        entries.put(Headers.NKV_EL03_CARBON700ptpr0, nkvCalculator.calculateNkv( new Modifications( discountCorr*co2Price700, addtlFzkmBeyondPrinsEl03, 1. ) ) );
-//        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1. ), streetBaseData ) );
+        entries.put(Headers.NKV_EL03_CARBON215_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price215, addtlFzkmBeyondPrinsEl03, constructionCostFactorTud, 1., 1. )) );
 //        entries.put(Headers.NKV_EL03_CARBON700tpr0_INVCOSTTUD, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor, 1.75 ), streetBaseData ) );
 //        entries.put(Headers.NKV_EL03_CARBON700tpr0, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, 1., 1.75 ), streetBaseData ) );
 //        entries.put(Headers.NKV_EL03_CO2_INVCOST50, NkvCalculator.calculateNkv( new Modifications( co2Price700, addtlFzkmBeyondPrinsEl03, constructionCostFactor ), streetBaseData ) );

@@ -298,7 +298,7 @@ class FiguresKMT {
                     .xAxis(xAxis)
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
-                    .width(RunLocalCsvScrapingKMT.plotWidth)
+                    .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
                     .build();
 
     Trace cbrOverCbrTrace1 =
