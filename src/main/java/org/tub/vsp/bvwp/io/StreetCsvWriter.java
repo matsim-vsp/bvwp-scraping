@@ -137,13 +137,13 @@ public class StreetCsvWriter {
         record.add(Headers.DAUER_BAU, baseDataContainer.getCostBenefitAnalysis().getDurations().construction());
         record.add(Headers.DAUER_BETRIEB, baseDataContainer.getCostBenefitAnalysis().getDurations().operation());
 
-        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getPVehicleKilometers().overall());
-        record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPVehicleKilometers().induced() ).orElse(0. ) );
-        record.add(Headers.ADDTL_LKWKM_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getLVehicleKilometers() ).orElse(0. ) );
+        record.add(Headers.ADDTL_PKWKM_ORIG, baseDataContainer.getPhysicalEffect().getPvVehicleKilometers().overall());
+        record.add(Headers.ADDTL_PKWKM_INDUZ_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPvVehicleKilometers().induced() ).orElse(0. ) );
+        record.add(Headers.ADDTL_LKWKM_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getGvVehicleKilometers() ).orElse(0. ) );
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
-        record.add(Headers.ADDTL_PKWH_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPTravelTimes().overall() ).orElse(0. ));
+        record.add(Headers.ADDTL_PKWH_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPvVehicleHours().overall() ).orElse(0. ));
 
 
 

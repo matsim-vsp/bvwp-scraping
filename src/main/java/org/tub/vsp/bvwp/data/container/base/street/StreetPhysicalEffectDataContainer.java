@@ -6,10 +6,11 @@ import java.util.Objects;
 
 public class StreetPhysicalEffectDataContainer {
     private StreetEmissionsDataContainer emissionsDataContainer;
-    private PEffect pVehicleHours; //Personenverkehr
-    private PEffect pVehicleKilometers; //Personenverkehr
-    private PEffect lVehicleHours; //Güterverkehr (Lkw)
-    private Double lVehicleKilometers; //Güterverkehr (Lkw)
+    private PhysicalEffect pvVehicleHours; //Personenverkehr (Pkw) (Fzg-h)
+    private PhysicalEffect pvVehicleKilometers; //Personenverkehr (Pkw) Fzg-km
+    private PhysicalEffect pvPersonHours; //Personenverkehr Personen-h
+    private PhysicalEffect gvVehicleHours; //Güterverkehr (Lkw) Fzg-h
+    private Double gvVehicleKilometers; //Güterverkehr (Lkw) Fzg-km
 
     public StreetEmissionsDataContainer getEmissionsDataContainer() {
         return emissionsDataContainer;
@@ -24,27 +25,36 @@ public class StreetPhysicalEffectDataContainer {
         return this;
     }
 
-    public PEffect getPTravelTimes() {
-        return pVehicleHours;
+    public PhysicalEffect getPvVehicleHours() {
+        return pvVehicleHours;
     }
 
-    public void setPVehicleHours(PEffect pVehicleHours) {
-        this.pVehicleHours = pVehicleHours;
+    public void setPvVehicleHours(PhysicalEffect pvVehicleHours) {
+        this.pvVehicleHours = pvVehicleHours;
     }
 
-    public PEffect getPVehicleKilometers() {
-        return pVehicleKilometers;
+    public PhysicalEffect getPvVehicleKilometers() {
+        return pvVehicleKilometers;
     }
 
-    public void setPVehicleKilometers( PEffect pVehicleKilometers ) {
-        this.pVehicleKilometers = pVehicleKilometers;
-    }
-    public Double getLVehicleKilometers() {
-        return lVehicleKilometers;
+    public void setPvVehicleKilometers(PhysicalEffect pvVehicleKilometers ) {
+        this.pvVehicleKilometers = pvVehicleKilometers;
     }
 
-    public void setLVehicleKilometers( Double lVehicleKilometers ) {
-        this.lVehicleKilometers = lVehicleKilometers;
+    public PhysicalEffect getPvPersonHours() {
+        return pvPersonHours;
+    }
+
+    public void setPvPersonHours(PhysicalEffect pvPersonHours) {
+        this.pvPersonHours = pvPersonHours;
+    }
+
+    public Double getGvVehicleKilometers() {
+        return gvVehicleKilometers;
+    }
+
+    public void setGvVehicleKilometers(Double gvVehicleKilometers ) {
+        this.gvVehicleKilometers = gvVehicleKilometers;
     }
 
     @Override
@@ -61,27 +71,28 @@ public class StreetPhysicalEffectDataContainer {
         if (!Objects.equals(emissionsDataContainer, that.emissionsDataContainer)) {
             return false;
         }
-        if (!Objects.equals(pVehicleHours, that.pVehicleHours)) {
+        if (!Objects.equals(pvVehicleHours, that.pvVehicleHours)) {
             return false;
         }
-        return Objects.equals( pVehicleKilometers, that.pVehicleKilometers );
+        return Objects.equals(pvVehicleKilometers, that.pvVehicleKilometers);
     }
 
     @Override
     public int hashCode() {
         int result = emissionsDataContainer != null ? emissionsDataContainer.hashCode() : 0;
-        result = 31 * result + (pVehicleHours != null ? pVehicleHours.hashCode() : 0);
-        result = 31 * result + (pVehicleKilometers != null ? pVehicleKilometers.hashCode() : 0);
+        result = 31 * result + (pvVehicleHours != null ? pvVehicleHours.hashCode() : 0);
+        result = 31 * result + (pvVehicleKilometers != null ? pvVehicleKilometers.hashCode() : 0);
         return result;
     }
-    public void setlVehicleHours(PEffect lVehicleHours){
-        this.lVehicleHours = lVehicleHours;
+    public void setGvVehicleHours(PhysicalEffect gvVehicleHours){
+        this.gvVehicleHours = gvVehicleHours;
     }
-    public PEffect getlVehicleHours(){
-        return lVehicleHours;
+    public PhysicalEffect getGvVehicleHours(){
+        return gvVehicleHours;
     }
 
-    public record PEffect(Double overall, Double induced, Double shifted) {
+
+    public record PhysicalEffect(Double overall, Double induced, Double shifted) {
 
     }
 }

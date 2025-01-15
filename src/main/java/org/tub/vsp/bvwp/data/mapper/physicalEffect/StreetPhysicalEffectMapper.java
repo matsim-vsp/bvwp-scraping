@@ -24,17 +24,17 @@ public class StreetPhysicalEffectMapper {
             return physicalEffectDataContainer;
         }
 
-        JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Fahrzeugeinsatzzeiten im PV" )
-                                  .ifPresent( i -> physicalEffectDataContainer.setlVehicleHours( extractEffect( table.get(), i ) ) );
+        JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Fahrzeugeinsatzzeiten im PV" ) //Pwk-h/a
+                                  .ifPresent( i -> physicalEffectDataContainer.setGvVehicleHours( extractEffect( table.get(), i ) ) );
 
-        JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Reisezeit im PV")
-                  .ifPresent(i -> physicalEffectDataContainer.setPVehicleHours(extractEffect(table.get(), i)));
+        JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Reisezeit im PV") //Personen-h / a
+                  .ifPresent(i -> physicalEffectDataContainer.setPvVehicleHours(extractEffect(table.get(), i)));
 
         JSoupUtils.getFirstRowIndexWithText(table.get(), "Veränderung der Betriebsleistung im Personenverkehr")
-                  .ifPresent(i -> physicalEffectDataContainer.setPVehicleKilometers(extractEffect(table.get(), i ) ) );
+                  .ifPresent(i -> physicalEffectDataContainer.setPvVehicleKilometers(extractEffect(table.get(), i ) ) );
 
         JSoupUtils.getFirstRowIndexWithText( table.get(), "Veränderung der Betriebsleistung Güterverkehr (GV)" )
-                        .ifPresent( ii -> physicalEffectDataContainer.setLVehicleKilometers( JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table.get(), ii, 1) ) ) );
+                        .ifPresent( ii -> physicalEffectDataContainer.setGvVehicleKilometers( JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table.get(), ii, 1) ) ) );
 
         return physicalEffectDataContainer;
     }
@@ -48,7 +48,7 @@ public class StreetPhysicalEffectMapper {
         return Optional.empty();
     }
 
-    private static StreetPhysicalEffectDataContainer.PEffect extractEffect( Element table, int firsRow ) {
+    private static StreetPhysicalEffectDataContainer.PhysicalEffect extractEffect(Element table, int firsRow ) {
         Double overall = JSoupUtils.parseDoubleOrElseNull(JSoupUtils.getTextFromRowAndCol(table, firsRow, 1));
         Double induced = getFirstRowIndexWithTextAfter(table, "induziertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
@@ -56,6 +56,6 @@ public class StreetPhysicalEffectMapper {
         Double shifted = getFirstRowIndexWithTextAfter(table, "verlagertem Verkehr", firsRow)
                 .map(row -> JSoupUtils.getTextFromRowAndCol(table, row, 1))
                 .map(JSoupUtils::parseDoubleOrElseNull).orElse(null);
-        return new StreetPhysicalEffectDataContainer.PEffect(overall, induced, shifted);
+        return new StreetPhysicalEffectDataContainer.PhysicalEffect(overall, induced, shifted);
     }
 }
