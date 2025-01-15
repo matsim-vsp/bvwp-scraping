@@ -182,6 +182,7 @@ public class StreetAnalysisDataContainer {
 
         double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29 = 29; // km/h
         double addtlFzkmFromTtime29 = - streetBaseData.getPhysicalEffect().getPTravelTimes().overall() * AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29;
+
         entries.put(ADDTL_PKWKM_FROM_TTIME_29, addtlFzkmFromTtime29);
 
         //End heart25

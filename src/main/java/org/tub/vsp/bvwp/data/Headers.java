@@ -15,6 +15,8 @@ public final class Headers{
 	public static final String ADDTL_PKWKM = "zusätzliche Pkw-km";
 	public static final String ADDTL_LKWKM = "zusätzliche Lkw-km";
 	public static final String ADDTL_PKWKM_EL03_DIFF = "addtl_pkwkm_el03_diff";
+
+	public static final String ADDTL_PKWH = "zusätzliche Pkw-h";
 	/**
 	 * Der "induzierte" (Mehr-)Verkehr laut PRINS.
 	 */
@@ -33,6 +35,8 @@ public final class Headers{
 	 * Mehrverkehr auf Pkw, den das Projekt erzeugt, laut PRINS.
 	 */
 	public static final String ADDTL_PKWKM_ORIG = ADDTL_PKWKM + " in PRINS";
+	public static final String ADDTL_PKWH_ORIG = ADDTL_PKWH + " in PRINS";
+
 	//Güterverkehr
 	public static final String ADDTL_LKWKM_ORIG = ADDTL_LKWKM + " in PRINS";
 	/**

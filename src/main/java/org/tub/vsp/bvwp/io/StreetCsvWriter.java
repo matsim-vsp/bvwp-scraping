@@ -143,6 +143,10 @@ public class StreetCsvWriter {
 
         record.add(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getNbOperations().overall());
 
+        record.add(Headers.ADDTL_PKWH_ORIG, Optional.ofNullable(baseDataContainer.getPhysicalEffect().getPTravelTimes().overall() ).orElse(0. ));
+
+
+
         //co2 equivalents
         record.add(Headers.CO_2_EQUIVALENTS_EMISSIONS, baseDataContainer.getPhysicalEffect().getEmissionsDataContainer().co2Overall());
 //        record.add(Headers.B_CO_2_EQUIVALENTS_ANNUAL, baseDataContainer.getCostBenefitAnalysis()
@@ -233,6 +237,8 @@ public class StreetCsvWriter {
 //        headers.addDoubleColumn( Headers.PKWKM_INDUZ_NEU ); // added by automagic
         headers.addDoubleColumn( Headers.ADDTL_LKWKM_ORIG );
         headers.addDoubleColumn(Headers.B_FZKM);
+
+        headers.addDoubleColumn(Headers.ADDTL_PKWH_ORIG);
 
         headers.addDoubleColumn(Headers.CO_2_EQUIVALENTS_EMISSIONS);
 //        headers.addDoubleColumn( Headers.B_CO_2_EQUIVALENTS_ANNUAL );
