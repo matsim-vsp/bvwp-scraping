@@ -26,8 +26,9 @@ public final class Headers{
 	 * dass sich die Werte immer mal ändern.
 	 */
 	public static final String ADDTL_PKWKM_EL03 = ADDTL_PKWKM + " aus Elastizität 0,3";
-	public static final String ADDTL_PKWKM_EL03_HALF = ADDTL_PKWKM + " aus Elastizität 0,3, halbiert"; //Hälfte des Mehrverkehrs aus Re-Routing
+	public static final String ADDTL_PKWKM_EL03_HALF = ADDTL_PKWKM + " aus Elastizität 0,3; halbiert"; //Hälfte des Mehrverkehrs aus Re-Routing
 	public static final String ADDTL_PKWKM_EL06 = ADDTL_PKWKM + " aus Elastizität 0,6";
+	public static final String ADDTL_PKWKM_EL0306_HALF = ADDTL_PKWKM + " aus Elastizität 0,3 oder 0,6; halbiert"; //0.3 für Neubau (rual), 0.6. für Ausbau (urban) Hälfte des Mehrverkehrs aus Re-Routing
 	public static final String ADDTL_PKWKM_FROM_TTIME_29 = ADDTL_PKWKM + " aus Reisezeitgewinnen, 29kmh";
 	public static final String ADDTL_PKWKM_FROM_TTIME_29_HALF = ADDTL_PKWKM + " aus Reisezeitgewinnen, 29kmh, halbiert";
 	public static final String ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP = ADDTL_PKWKM + " aus Reisezeitgewinnen, 29kmh, halbiert, plus BVWP";

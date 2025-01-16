@@ -68,7 +68,7 @@ public class StreetAnalysisDataContainer {
 
         entries.put( ADDTL_LANE_KM, additionalLaneKm );
 
-        final double addtlFzkmFromElasticity03 = additionalLaneKm / ComputationGlb.LANE_KM_AB * 0.3 * ComputationGlb.FZKM_AB;
+        final double addtlFzkmFromElasticity03 = calcAddtlFzkmFromElasticity(additionalLaneKm, 0.3);
         final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getPvVehicleKilometers().overall();
         // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 
@@ -176,13 +176,20 @@ public class StreetAnalysisDataContainer {
 
         //Für hEART Paper 2025, KMT
         //0.6 ist analog Heyl
-        double addtlFzkmFromElasticity06 = additionalLaneKm / ComputationGlb.LANE_KM_AB * 0.6 * ComputationGlb.FZKM_AB;
-        entries.put(ADDTL_PKWKM_EL06, addtlFzkmFromElasticity06);
+        entries.put(ADDTL_PKWKM_EL06, calcAddtlFzkmFromElasticity(additionalLaneKm, 0.6));
 
         //Reduzierte Werte; 0.3 ist für Rual richtig -> Neubau, wie A20
         entries.put(ADDTL_PKWKM_EL03_HALF, 0.5 * addtlFzkmFromElasticity03);
 
         //TODO: Rechnung machen, die mit 0.6 Ausbau und 0.3 Neubau rechnet --> Case "reduziert"
+        double elasticityFactor;
+        if ( streetBaseData.getProjectInformation().getBautyp().description.startsWith( "NB" ) ) {
+            elasticityFactor = 0.3;
+        } else { //alles weitere also v.a. Erweiterungen aber auch Knotenpunkte, die ich auch eher als "Engpass" sehen würde.
+            elasticityFactor = 0.6;
+        }
+
+        entries.put(ADDTL_PKWKM_EL0306_HALF, 0.5 * calcAddtlFzkmFromElasticity(additionalLaneKm, elasticityFactor));
 
         //Aus Reisezeit, welche wieder in Verkehr investiert wird. ! Diese Werte sind zusätzlich zu den veränderten vkm aus PRINS.
         final double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29 = 29; // km/h
@@ -202,6 +209,10 @@ public class StreetAnalysisDataContainer {
 //        logger.info("exit");
 //        System.exit(-1);
 
+    }
+
+    private static double calcAddtlFzkmFromElasticity(double additionalLaneKm, double elasticityFactor) {
+        return additionalLaneKm / ComputationGlb.LANE_KM_AB * elasticityFactor * ComputationGlb.FZKM_AB;
     }
 
     public StreetBaseDataContainer getStreetBaseDataContainer() {
