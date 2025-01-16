@@ -183,7 +183,7 @@ public class StreetAnalysisDataContainer {
 
         //TODO: Rechnung machen, die mit 0.6 Ausbau und 0.3 Neubau rechnet --> Case "reduziert"
         double elasticityFactor;
-        if ( streetBaseData.getProjectInformation().getBautyp().description.startsWith( "NB" ) ) {
+        if ( streetBaseData.getProjectInformation().getBautyp().name().startsWith( "NB" ) ) {
             elasticityFactor = 0.3;
         } else { //alles weitere also v.a. Erweiterungen aber auch Knotenpunkte, die ich auch eher als "Engpass" sehen würde.
             elasticityFactor = 0.6;

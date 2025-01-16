@@ -9,13 +9,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.HeadersKN;
-import tech.tablesaw.api.DoubleColumn;
-import tech.tablesaw.api.Table;
+import tech.tablesaw.aggregate.AggregateFunctions;
+import tech.tablesaw.api.*;
 import tech.tablesaw.io.csv.CsvWriteOptions;
 import tech.tablesaw.io.csv.CsvWriter;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Figure;
 import tech.tablesaw.plotly.components.Layout;
+import tech.tablesaw.plotly.components.Marker;
+import tech.tablesaw.plotly.traces.BarTrace;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.Trace;
 
@@ -25,6 +27,178 @@ class Figures2KN extends Figures1KN {
 	Figures2KN( Table table ){
 		super( table, null);
 	}
+
+	static Figure barChartFigureInvKosten(Table table, String whichNkv, String welcheHhrelKosten){
+
+		Table table2 = Table.create( table.column( PROJECT_NAME ), table.column( whichNkv ), table.column( welcheHhrelKosten ), table.column( EINSTUFUNG ), table.column(EINSTUFUNG_AS_NUMBER) )
+									   .sortDescendingOn( EINSTUFUNG_AS_NUMBER );
+		table = null;
+
+		for( Row row : table2 ){
+			if ( row.getString( PROJECT_NAME ).contains( "dummy" ) ) {
+				row.setDouble( whichNkv, 0.5 );
+				row.setDouble( welcheHhrelKosten, 0. );
+			}
+		}
+
+		final String ALL = EINSTUFUNG;
+		if ( !table2.containsColumn( ALL ) ){
+			StringColumn dummy = StringColumn.create( ALL );
+			for( String string : table2.stringColumn( EINSTUFUNG ) ){
+				dummy.append( ALL );
+			}
+			table2.addColumns( dummy );
+		}
+
+		String aggregation = ALL;
+
+		String whichInvCostMrd = welcheHhrelKosten + " [Mrd Eu]";
+		table2.addColumns( table2.numberColumn( welcheHhrelKosten ).divide( 1000 ).setName( whichInvCostMrd ) );
+
+		Axis yAxis = Axis.builder().title( whichInvCostMrd ).build();
+		Layout layout = Layout.builder().barMode( Layout.BarMode.STACK ).yAxis( yAxis ).title( whichNkv ).build();
+
+		List<BarTrace> traces = new ArrayList<>();
+		{
+			final Table tTmp = table2.where( table2.numberColumn( whichNkv ).isLessThan( 1. ) );
+			System.out.println( tTmp.print(55));
+			Table t3 = tTmp
+							 .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", whichInvCostMrd, "NKV<1", "red" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 1., 2.-Double.MIN_VALUE ) )
+							 .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", whichInvCostMrd, "1<=NKV<2", "orange" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 2., 3.-Double.MIN_VALUE ) )
+							 .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", whichInvCostMrd, "2<=NKV<3", "yellow" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 3., 4.-Double.MIN_VALUE ) )
+							 .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", whichInvCostMrd, "3<=NKV<4", "AAAAFF" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 4., 5.-Double.MIN_VALUE ) )
+							 .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", whichInvCostMrd, "4<=NKV<5", "8888FF" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isGreaterThanOrEqualTo(5. ) )
+							 .summarize( whichInvCostMrd, AggregateFunctions.sum ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", whichInvCostMrd, "5<=NKV", "6666FF" ) );
+		}
+
+		final Figure figure = new Figure( layout, traces.toArray( new BarTrace[0] ) );
+		return figure;
+	}
+
+	private static BarTrace myGenerateBarTrace(Table t3, String catColumn, String x, String whichColumn, String name, String color ){
+		System.out.println( t3.print() );
+		return BarTrace.builder( t3.categoricalColumn( catColumn ), t3.numberColumn( x + whichColumn + "]" ) )
+					   .orientation( BarTrace.Orientation.VERTICAL )
+					   .name( name )
+					   .marker( Marker.builder().color( color ).build() )
+					   .build();
+	}
+
+	static Figure barChartFigureAnzahlProjekte(Table table, String whichNkv){
+		Table table2 = Table.create( table.column( PROJECT_NAME ), table.column( whichNkv ), table.column( EINSTUFUNG ), table.column(EINSTUFUNG_AS_NUMBER) )
+							.sortDescendingOn( EINSTUFUNG_AS_NUMBER );
+
+		for( Row row : table2 ){
+			if ( row.getString( PROJECT_NAME ).contains( "dummy" ) ) {
+				row.setDouble( whichNkv, 0.5 );
+			}
+		}
+
+		final String ALL = EINSTUFUNG;
+		if ( !table2.containsColumn( ALL ) ){
+			StringColumn dummyColumn = StringColumn.create( ALL );
+			for( String string : table2.stringColumn( EINSTUFUNG ) ){
+				dummyColumn.append( ALL );
+			}
+			table2.addColumns( dummyColumn );
+		}
+
+		LongColumn weightColumn = LongColumn.create("weight");
+		for( String projectName : table2.stringColumn( PROJECT_NAME ) ){
+			if ( projectName.contains( "dummy" ) ) {
+				weightColumn.append( 0 );
+			} else {
+				weightColumn.append( 1 );
+			}
+		}
+		table2.addColumns( weightColumn );
+
+
+		String aggregation = ALL;
+
+		System.out.println( table2.print() );
+		table = null;
+
+		Axis yAxis = Axis.builder().title( "Anzahl Projekte" ).build();
+		Layout layout = Layout.builder().barMode( Layout.BarMode.RELATIVE ).yAxis( yAxis ).title( whichNkv ).build();
+
+		List<BarTrace> traces = new ArrayList<>();
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isLessThan( 1. ) )
+							 .summarize( "weight", AggregateFunctions.sum ).by( aggregation );
+			System.out.println( t3.print() );
+			traces.add( myGenerateBarTrace( t3, aggregation, "Sum [", "weight", "NKV<1", "red" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 1., 2.-Double.MIN_VALUE ) )
+							 .summarize( whichNkv, AggregateFunctions.count ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Count [", whichNkv, "1<=NKV<2", "orange" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 2., 3.-Double.MIN_VALUE ) )
+							 .summarize( whichNkv, AggregateFunctions.count ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Count [", whichNkv, "2<=NKV<3", "yellow" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 3., 4.-Double.MIN_VALUE ) )
+							 .summarize( whichNkv, AggregateFunctions.count ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Count [", whichNkv, "3<=NKV<4", "AAAAFF" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isBetweenInclusive( 4., 5.-Double.MIN_VALUE ) )
+							 .summarize( whichNkv, AggregateFunctions.count ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Count [", whichNkv, "4<=NKV<5", "8888FF" ) );
+		}
+		{
+			Table t3 = table2.where( table2.numberColumn( whichNkv ).isGreaterThanOrEqualTo(5. ) )
+							 .summarize( whichNkv, AggregateFunctions.count ).by( aggregation );
+
+			traces.add( myGenerateBarTrace( t3, aggregation, "Count [", whichNkv, "5<=NKV", "6666FF" ) );
+		}
+
+		final Figure figure = new Figure( layout, traces.toArray( new BarTrace[0] ) );
+		return figure;
+	}
+
+	static String createHeader1(String str ) {
+		return "<h1>" + str + "</h1>";
+	}
+
+	static String createHeader2(String str ) {
+		return "<h2>" + str + "</h2>";
+	}
+
 	// ========================================================================================
 	// ========================================================================================
 	public Figure nkv_vs_dtv( String whichNKV ){
@@ -471,6 +645,7 @@ class Figures2KN extends Figures1KN {
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
+
 	public Figure fzkmEl03_vs_fzkmOrig(){
 		String xName = ADDTL_PKWKM_ORIG;
 
@@ -487,6 +662,25 @@ class Figures2KN extends Figures1KN {
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
+
+	/**
+	 * Plottet die Fahrzeugkm  gegenüber anderen Fzg-km.
+	 */
+	public Figure fzkmEl_vs_fzkm(String xName, String yName){
+
+		String y2Name = yName;
+
+		Axis xAxis = Axis.builder().title( xName ).titleFont( defaultFont ).build();
+
+		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
+
+		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
+		traces.add( diagonalLine2( table, xName, y2Name ) );
+		return new Figure( layout, traces.toArray(new Trace[]{} ) );
+	}
+
 	public Figure fzkmFromTtimeDelta_vs_fzkmOrig(){
 		String x2Name = ADDTL_PKWKM_ORIG;
 
