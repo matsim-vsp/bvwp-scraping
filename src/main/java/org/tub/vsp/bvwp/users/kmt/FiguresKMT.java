@@ -4,6 +4,7 @@ import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.type.Einstufung;
+import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
 import tech.tablesaw.plotly.components.Axis.Type;
@@ -13,6 +14,9 @@ import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.ScatterTrace.Mode;
 import tech.tablesaw.plotly.traces.Trace;
+
+import java.util.ArrayList;
+import java.util.List;
 
 class FiguresKMT {
 
@@ -345,5 +349,121 @@ class FiguresKMT {
     return new Figure(
             layout, cbrOverCbrTrace1, cbrOverCbrTrace2, diagonale, horizontalCbr1, verticalCbr1);
   }
+
+  /**
+   * Für NKV vergleich-Plot mit 2 Y-Achsen.
+   *   */
+  static Figure createFigureElaChange(Table table, String xName, String yName1, String yName2, String yName3, String yAxisName) {
+
+    //        String xName = Headers.NKV_NO_CHANGE;
+    //        String yName = Headers.NKV_CO2;
+    //Todo: Berechnen
+    double maxX = table.numberColumn( xName ).max() * 1.1;
+    double maxY = calculateMaxValue(table, List.of(yName1, yName2, yName3)) * 1.1;
+
+//    double maxX = 20.;
+//    double maxY = 20.;
+
+    Axis xAxis =
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .title(xName)
+                    .range(0., maxX)
+                    //                             .autoRange( Axis.AutoRange.REVERSED );
+                    .build();
+
+    table = table.sortDescendingOn(HeadersKN.NKV_ORIG);
+
+    Axis yAxis =
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .range(Double.min(0., 1.1 * table.numberColumn(yName1).min()), maxY)
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yName1)
+                    .build();
+
+    Axis yAxis2 =
+            Axis.builder()
+                    .type(Type.LINEAR)
+                    .range(Double.min(0., 1.1 * table.numberColumn(yName2).min()), maxY)
+                    //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
+                    .title(yAxisName)
+                    .build();
+
+
+    Layout layout =
+            Layout.builder( "Changes from calculation approaches  over " + xName)
+                    .xAxis(xAxis)
+                    .yAxis(yAxis)
+                    .yAxis2(yAxis2)
+                    .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
+                    .build();
+
+    Trace y1overX =
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName1))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName1)
+                    .marker(Marker.builder().color("blue").build())
+                    .build();
+
+    Trace y2overX =
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName2))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName2)
+                    .marker(Marker.builder().color("red").build())
+                    .build();
+
+    Trace y3overX =
+            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName3))
+                    .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+                    .name(yName3)
+                    .marker(Marker.builder().color("orange").build())
+                    .build();
+
+    //Diagonalen
+    double overallMax = Math.max(maxX, maxY);
+    double[] xx = new double[] {0.,overallMax};
+    double[] yy = new double[] {0., overallMax};
+    double[] xy1 = new double[] {1., 1.};
+
+    Trace diagonale =
+            ScatterTrace.builder(xx, yy)
+                    .name("diagonal Line")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("magenta").build())
+                    .build();
+
+    return new Figure(layout, y1overX, y2overX, y3overX, diagonale);
+
+//    Trace horizontalCbr1 =
+//            ScatterTrace.builder(xx, xy1)
+//                    .name(yAxisName + " = 1")
+//                    .mode(Mode.LINE)
+//                    .marker(Marker.builder().color("gray").build())
+//                    .build();
+//
+//    Trace verticalCbr1 =
+//            ScatterTrace.builder(xy1, yy)
+//                    .name(xName+ " = 1")
+//                    .mode(Mode.LINE)
+//                    .marker(Marker.builder().color("gray").build())
+//                    .build();
+//
+//    return new Figure(layout, y1overX, y2overX, y3overX, diagonale, horizontalCbr1, verticalCbr1);
+  }
+
+  private static double calculateMaxValue(Table table, List<String> yNames) {
+      List<Double> allValues = new ArrayList<>();
+
+      for (String yName : yNames) {
+        DoubleColumn column = table.doubleColumn(yName);
+        for (double value : column) {
+          if (!Double.isNaN(value)) {
+            allValues.add(value);
+          }
+        }
+      }
+      return allValues.stream().max(Double::compare).orElse(Double.NaN);
+    }
 
 }

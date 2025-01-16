@@ -13,7 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.Gbl;
-import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Einstufung;
@@ -113,12 +112,12 @@ public class RunLocalCsvScrapingKMT2_hEART {
         Figures2KN figures2 = new Figures2KN(table);
 
         List<Pair<String, List<Figure>>> figures = new ArrayList<>();
+        Figure fig;
 
         figures.add( Pair.create( Figures2KN.createHeader1( "Plots für hEART-Paper 2025" ), null ) );
 
+        //#####
         figures.add( Pair.create( Figures2KN.createHeader1( "Aus Elastizitäten" ), null ) );
-
-        Figure fig;
 
         fig = figures2.fzkmEl_vs_fzkm(ADDTL_PKWKM_ORIG, ADDTL_PKWKM_EL06 );
         figures.add( Pair.create( Figures2KN.createHeader2( "Elastizität 0.6"), Collections.singletonList( fig )));
@@ -130,6 +129,7 @@ public class RunLocalCsvScrapingKMT2_hEART {
         figures.add( Pair.create( Figures2KN.createHeader2( "'reduziert': Elastizität 0.3 oder 0.6 ja nach Bautyp; halbiert"), Collections.singletonList( fig )));
 
 
+        //####
         figures.add( Pair.create( Figures2KN.createHeader1( "Aus Reisezeitgewinnen" ), null ) );
 
         fig = figures2.fzkmEl_vs_fzkm(ADDTL_PKWKM_ORIG, ADDTL_PKWKM_FROM_TTIME_29_HALF);
@@ -137,6 +137,14 @@ public class RunLocalCsvScrapingKMT2_hEART {
 
         fig = figures2.fzkmEl_vs_fzkm(ADDTL_PKWKM_ORIG, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP);
         figures.add( Pair.create( Figures2KN.createHeader2( "BVWP plus 0.5 Fahreitgewinnen, 29km/h, "), Collections.singletonList( fig )));
+
+
+        //####
+        figures.add( Pair.create( Figures2KN.createHeader1( "Kombiniert" ), null ) );
+
+        fig = FiguresKMT.createFigureElaChange(table, ADDTL_PKWKM_ORIG, ADDTL_PKWKM_EL06, ADDTL_PKWKM_EL0306_HALF, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "additional mio vkm/a");
+        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
+
 
         plotFigures("multiplot_hEART.html", figures);
 
