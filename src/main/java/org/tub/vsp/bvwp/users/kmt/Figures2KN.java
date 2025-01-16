@@ -289,7 +289,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName  ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName  ) );
 
 		traces.add( this.vertialNkvOneLine( yName ) );
 
@@ -403,7 +403,7 @@ class Figures2KN extends Figures1KN {
 		String title = "";
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ) );
 
 		// the nkv=1 line:
 		double[] xx = new double[]{1., 1.};
@@ -437,7 +437,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table, xName, y2Name ) );
 
 		traces.add( vertialNkvOneLine( y2Name ) );
 
@@ -475,7 +475,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, x2Name, y2Name ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, x2Name, y2Name ) );
 		traces.add( diagonalLine2( table2, x2Name, y2Name ) );
 		traces.add( horizontalNkvOneLine( table2, x2Name ) );
 		traces.add( vertialNkvOneLine( table2, y2Name ) );
@@ -493,7 +493,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxisBuilder.build() ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ) );
 //		traces.add( diagonalLine2( table, x2Name, y2Name ) );
 //		traces.add( horizontalNkvOneLine( table, x2Name ) );
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
@@ -512,7 +512,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "CO2-Kosten vs Investitionskosten" ).margin( defaultMargin ).xAxis( xAxisBuilder.titleFont( defaultFont ).title( xName ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ));
 //		traces.add( ScatterTrace.builder( new double[]{0., 4000.}, new double[]{0., 1900.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
@@ -551,7 +551,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).xAxis( xAxisBuilder.title( xName ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ) );
 
 		// the nkv=1 line:
 		double[] xx = new double[]{1., 1.};
@@ -575,7 +575,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder("").xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name  ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table, xName, y2Name  ) );
 
 		traces.add( vertialNkvOneLine( y2Name ) );
 
@@ -612,7 +612,7 @@ class Figures2KN extends Figures1KN {
 				      .width( plotWidth )
 				      .build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name ) );
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table, xName, y2Name ) );
 
 //		Trace trace = ScatterTrace.builder( table.numberColumn( xName ), table.numberColumn( yName ) )
 //					  .text( table.stringColumn( Headers.PROJECT_NAME ).asObjectArray() )
@@ -641,7 +641,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-        List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
+        List<Trace> traces = new ArrayList<>(getTracesColoredByBautyp(table, xName, y2Name));
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -658,7 +658,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-        List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
+        List<Trace> traces = new ArrayList<>(getTracesColoredByBautyp(table, xName, y2Name));
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -676,7 +676,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
+		List<Trace> traces = new ArrayList<>(getTracesColoredByBautyp(table, xName, y2Name));
 		traces.add( diagonalLine2( table, xName, y2Name ) );
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -701,7 +701,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-        List<Trace> traces = new ArrayList<>(getTracesByColor(table2, x2Name, y2Name));
+        List<Trace> traces = new ArrayList<>(getTracesColoredByBautyp(table2, x2Name, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	public Figure fzkmFromEl03Delta_vs_fzkmOrig(){
@@ -724,7 +724,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-        List<Trace> traces = new ArrayList<>(getTracesByColor(table2, xName, y2Name));
+        List<Trace> traces = new ArrayList<>(getTracesColoredByBautyp(table2, xName, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	public Figure fzkmFromTtimeSum_vs_fzkmOrig(){
@@ -742,7 +742,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder().xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
 
-        List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
+        List<Trace> traces = new ArrayList<>(getTracesColoredByBautyp(table, xName, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
 	Figure investmentCost( int cap, String xName, String yName ){
@@ -760,7 +760,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ));
 		if ( xName.contains( "NKV" ) ){
 			traces.add( vertialNkvOneLine( table2, yName ) );
 		}
@@ -784,7 +784,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ));
 		if ( xName.contains( "NKV" ) ){
 			traces.add( vertialNkvOneLine( table2, yName ) );
 		}
@@ -806,7 +806,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ));
 		if ( xName.contains( "NKV" ) ){
 			traces.add( vertialNkvOneLine( table2, yName ) );
 		}
@@ -828,7 +828,7 @@ class Figures2KN extends Figures1KN {
 
 		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
 
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
+		List<Trace> traces = new ArrayList<>( getTracesColoredByBautyp( table2, xName, yName ));
 		if ( xName.contains( "NKV" ) ){
 			traces.add( vertialNkvOneLine( table2, yName ) );
 		}
