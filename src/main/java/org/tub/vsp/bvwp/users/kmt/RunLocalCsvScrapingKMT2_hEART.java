@@ -154,6 +154,10 @@ public class RunLocalCsvScrapingKMT2_hEART {
 
         plotFigures("multiplot_hEART.html", figures);
 
+        // ===
+        //Berechnungen NKV < 1
+        List<String> headers = List.of( NKV_ORIG_EN, NKV_ADDTL_PKWKM_EL06, NKV_ADDTL_PKWKM_EL0306_HALF, NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP);
+        TableCalculationsKMT.printNkvTablesKMT(table, headers);
 
     }
 
