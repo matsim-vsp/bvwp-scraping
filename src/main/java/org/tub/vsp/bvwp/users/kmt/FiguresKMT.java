@@ -353,6 +353,81 @@ class FiguresKMT {
   /**
    * Für NKV vergleich-Plot mit 2 Y-Achsen.
    *   */
+  static Figure createFigureNkvChange(Table table, String xName, String yName1, String yName2, String yName3, String yAxisName) {
+
+    //        String xName = Headers.NKV_NO_CHANGE;
+    //        String yName = Headers.NKV_CO2;
+    double maxX = 20.;
+    double maxY = 20.;
+
+    Axis xAxis = Axis.builder().type(Type.LINEAR)
+            .title(xName)
+            .range(0., maxX)
+            .build();
+
+    table = table.sortDescendingOn(HeadersKN.NKV_ORIG);
+
+    Axis yAxis = Axis.builder().type(Type.LINEAR)
+            .range(Double.min(0., 1.1 * table.numberColumn(yName1).min()), maxY)
+                    .title(yName1)
+                    .build();
+
+    Axis yAxis2 = Axis.builder().type(Type.LINEAR)
+                    .range(Double.min(0., 1.1 * table.numberColumn(yName2).min()), maxY)
+                    .title(yName2)
+                    .build();
+
+    Layout layout = Layout.builder(yName1 + " and " + yName2 + " over " + HeadersKN.NKV_ORIG)
+                    .xAxis(xAxis)
+                    .yAxis(yAxis)
+                    .yAxis2(yAxis2)
+                    .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
+                    .build();
+
+    Trace y1overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName1))
+            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+            .name(yName1)
+            .marker(Marker.builder().color("blue").build())
+            .build();
+
+    Trace y2overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName2))
+            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+            .name(yName2)
+            .marker(Marker.builder().color("red").build())
+            .build();
+
+    Trace y3overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName3))
+            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+            .name(yName3)
+            .marker(Marker.builder().color("orange").build())
+            .build();
+
+    //        double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
+    //        double[] yy = new double[]{0., 1.1* table.numberColumn( xName ).max()};
+    double[] xx = new double[] {0., maxX};
+    double[] yy = new double[] {0., maxY};
+    double[] xy1 = new double[] {1., 1.};
+
+    Trace diagonale = getDiagonalTrace(xx, yy, "magenta");
+
+    Trace horizontalCbr1 = ScatterTrace.builder(xx, xy1)
+                    .name("horizontal = 1")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
+
+    Trace verticalCbr1 = ScatterTrace.builder(xy1, yy)
+                    .name("vertical = 1")
+                    .mode(Mode.LINE)
+                    .marker(Marker.builder().color("gray").build())
+                    .build();
+
+    return new Figure(layout, y1overX, y2overX, y3overX, diagonale, horizontalCbr1, verticalCbr1);
+  }
+
+  /**
+   * Für NKV vergleich-Plot mit 2 Y-Achsen.
+   *   */
   static Figure createFigureElaChange(Table table, String xName, String yName1, String yName2, String yName3, String yAxisName) {
 
     //        String xName = Headers.NKV_NO_CHANGE;
@@ -364,26 +439,21 @@ class FiguresKMT {
 //    double maxX = 20.;
 //    double maxY = 20.;
 
-    Axis xAxis =
-            Axis.builder()
-                    .type(Type.LINEAR)
+    Axis xAxis = Axis.builder().type(Type.LINEAR)
                     .title(xName)
                     .range(0., maxX)
-                    //                             .autoRange( Axis.AutoRange.REVERSED );
                     .build();
 
     table = table.sortDescendingOn(HeadersKN.NKV_ORIG);
 
-    Axis yAxis =
-            Axis.builder()
+    Axis yAxis = Axis.builder()
                     .type(Type.LINEAR)
                     .range(Double.min(0., 1.1 * table.numberColumn(yName1).min()), maxY)
                     //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
                     .title(yName1)
                     .build();
 
-    Axis yAxis2 =
-            Axis.builder()
+    Axis yAxis2 = Axis.builder()
                     .type(Type.LINEAR)
                     .range(Double.min(0., 1.1 * table.numberColumn(yName2).min()), maxY)
                     //                             .range( 1.1*table.numberColumn( y2Name ).min(),4. )
@@ -391,30 +461,26 @@ class FiguresKMT {
                     .build();
 
 
-    Layout layout =
-            Layout.builder( "Changes from calculation approaches  over " + xName)
+    Layout layout = Layout.builder( "Changes from calculation approaches  over " + xName)
                     .xAxis(xAxis)
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
                     .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
                     .build();
 
-    Trace y1overX =
-            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName1))
+    Trace y1overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName1))
                     .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
                     .name(yName1)
                     .marker(Marker.builder().color("blue").build())
                     .build();
 
-    Trace y2overX =
-            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName2))
+    Trace y2overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName2))
                     .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
                     .name(yName2)
                     .marker(Marker.builder().color("red").build())
                     .build();
 
-    Trace y3overX =
-            ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName3))
+    Trace y3overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(yName3))
                     .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
                     .name(yName3)
                     .marker(Marker.builder().color("orange").build())
@@ -426,12 +492,7 @@ class FiguresKMT {
     double[] yy = new double[] {0., overallMax};
     double[] xy1 = new double[] {1., 1.};
 
-    Trace diagonale =
-            ScatterTrace.builder(xx, yy)
-                    .name("diagonal Line")
-                    .mode(Mode.LINE)
-                    .marker(Marker.builder().color("magenta").build())
-                    .build();
+    Trace diagonale = getDiagonalTrace(xx, yy, "magenta");
 
     return new Figure(layout, y1overX, y2overX, y3overX, diagonale);
 
@@ -450,6 +511,14 @@ class FiguresKMT {
 //                    .build();
 //
 //    return new Figure(layout, y1overX, y2overX, y3overX, diagonale, horizontalCbr1, verticalCbr1);
+  }
+
+  private static ScatterTrace getDiagonalTrace(double[] xx, double[] yy, String colorString) {
+    return ScatterTrace.builder(xx, yy)
+            .name("diagonal Line")
+            .mode(Mode.LINE)
+            .marker(Marker.builder().color(colorString).build())
+            .build();
   }
 
   private static double calculateMaxValue(Table table, List<String> yNames) {

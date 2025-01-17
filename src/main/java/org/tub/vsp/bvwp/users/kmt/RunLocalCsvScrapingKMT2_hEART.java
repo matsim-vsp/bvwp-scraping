@@ -145,6 +145,12 @@ public class RunLocalCsvScrapingKMT2_hEART {
         fig = FiguresKMT.createFigureElaChange(table, ADDTL_PKWKM_ORIG, ADDTL_PKWKM_EL06, ADDTL_PKWKM_EL0306_HALF, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "additional mio vkm/a");
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
 
+        //
+        figures.add( Pair.create( Figures2KN.createHeader1( "NKV" ), null ) );
+        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"),null));
+
+        fig = FiguresKMT.createFigureNkvChange(table, NKV_ORIG_EN, NKV_ADDTL_PKWKM_EL06, NKV_ADDTL_PKWKM_EL0306_HALF, NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "updated BCR");
+        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
 
         plotFigures("multiplot_hEART.html", figures);
 
