@@ -351,12 +351,10 @@ class FiguresKMT {
   }
 
   /**
-   * Für NKV vergleich-Plot mit 2 Y-Achsen.
+   * Für NKV vergleich-Plot mit 3 Kurven.
    *   */
-  static Figure createFigureNkvChange(Table table, String xName, String yName1, String yName2, String yName3, String yAxisName) {
+  static Figure createFigureNkvChange(Table table, String title, String xName, String yName1, String yName2, String yName3, String yAxisName) {
 
-    //        String xName = Headers.NKV_NO_CHANGE;
-    //        String yName = Headers.NKV_CO2;
     double maxX = 20.;
     double maxY = 20.;
 
@@ -365,7 +363,7 @@ class FiguresKMT {
             .range(0., maxX)
             .build();
 
-    table = table.sortDescendingOn(HeadersKN.NKV_ORIG);
+    table = table.sortDescendingOn(xName);
 
     Axis yAxis = Axis.builder().type(Type.LINEAR)
             .range(Double.min(0., 1.1 * table.numberColumn(yName1).min()), maxY)
@@ -377,7 +375,7 @@ class FiguresKMT {
                     .title(yName2)
                     .build();
 
-    Layout layout = Layout.builder(yName1 + " and " + yName2 + " over " + HeadersKN.NKV_ORIG)
+    Layout layout = Layout.builder(title)
                     .xAxis(xAxis)
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
@@ -402,33 +400,31 @@ class FiguresKMT {
             .marker(Marker.builder().color("orange").build())
             .build();
 
-    //        double[] xx = new double[]{0., 1.1* table.numberColumn( xName ).max() };
-    //        double[] yy = new double[]{0., 1.1* table.numberColumn( xName ).max()};
     double[] xx = new double[] {0., maxX};
     double[] yy = new double[] {0., maxY};
     double[] xy1 = new double[] {1., 1.};
 
     Trace diagonale = getDiagonalTrace(xx, yy, "magenta");
 
-    Trace horizontalCbr1 = ScatterTrace.builder(xx, xy1)
+    Trace horizontalEq1 = ScatterTrace.builder(xx, xy1)
                     .name("horizontal = 1")
                     .mode(Mode.LINE)
                     .marker(Marker.builder().color("gray").build())
                     .build();
 
-    Trace verticalCbr1 = ScatterTrace.builder(xy1, yy)
+    Trace verticalEq1 = ScatterTrace.builder(xy1, yy)
                     .name("vertical = 1")
                     .mode(Mode.LINE)
                     .marker(Marker.builder().color("gray").build())
                     .build();
 
-    return new Figure(layout, y1overX, y2overX, y3overX, diagonale, horizontalCbr1, verticalCbr1);
+    return new Figure(layout, y1overX, y2overX, y3overX, diagonale, horizontalEq1, verticalEq1);
   }
 
   /**
    * Für NKV vergleich-Plot mit 2 Y-Achsen.
    *   */
-  static Figure createFigureElaChange(Table table, String xName, String yName1, String yName2, String yName3, String yAxisName) {
+  static Figure createFigureElaChange(Table table, String title, String xName, String yName1, String yName2, String yName3, String yAxisName) {
 
     //        String xName = Headers.NKV_NO_CHANGE;
     //        String yName = Headers.NKV_CO2;
@@ -461,7 +457,7 @@ class FiguresKMT {
                     .build();
 
 
-    Layout layout = Layout.builder( "Changes from calculation approaches  over " + xName)
+    Layout layout = Layout.builder( title)
                     .xAxis(xAxis)
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
