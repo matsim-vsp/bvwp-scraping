@@ -68,8 +68,10 @@ public class StreetAnalysisDataContainer {
 
         entries.put( ADDTL_LANE_KM, additionalLaneKm );
 
+        final Double addVkmPrins = streetBaseData.getPhysicalEffect().getPvVehicleKilometers().overall(); // Mehrverkehr PWK aus PRINS
+
         final double addtlFzkmFromElasticity03 = calcAddtlFzkmFromElasticity(additionalLaneKm, 0.3);
-        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - streetBaseData.getPhysicalEffect().getPvVehicleKilometers().overall();
+        final double addtlFzkmBeyondPrinsEl03 = addtlFzkmFromElasticity03 - addVkmPrins;
         // (this is formulated such that addtlFzkmBeyondPrinsEl03=0 means the original additional Fzkm)
 
 //        logger.info("addtlFzkmBeyondPrinsEl03=" + addtlFzkmBeyondPrinsEl03);
@@ -174,14 +176,15 @@ public class StreetAnalysisDataContainer {
         entries.put( NKV_ELTTIME_CARBON2000_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price2000, addtlFzkmFromTtime50, constructionCostFactorTud, 1, 1. ) ) );
 
 
-        //Für hEART Paper 2025, KMT
+        //Beginn: Für hEART Paper 2025, KMT
         //0.6 ist analog Heyl
-        entries.put(ADDTL_PKWKM_EL06, calcAddtlFzkmFromElasticity(additionalLaneKm, 0.6));
+       final double addVkmEla06 = calcAddtlFzkmFromElasticity(additionalLaneKm, 0.6);
+        entries.put(ADDTL_PKWKM_EL06, addVkmEla06);
 
         //Reduzierte Werte; 0.3 ist für Rual richtig -> Neubau, wie A20
         entries.put(ADDTL_PKWKM_EL03_HALF, 0.5 * addtlFzkmFromElasticity03);
 
-        //TODO: Rechnung machen, die mit 0.6 Ausbau und 0.3 Neubau rechnet --> Case "reduziert"
+        //Rechnung die mit 0.6 Ausbau (Annahme: Engpass/Urban) und 0.3 Neubau (Annahme: Erschließung/Rual) rechnet --> Case "reduziert"
         double elasticityFactor;
         if ( streetBaseData.getProjectInformation().getBautyp().name().startsWith( "NB" ) ) {
             elasticityFactor = 0.3;
@@ -189,7 +192,8 @@ public class StreetAnalysisDataContainer {
             elasticityFactor = 0.6;
         }
 
-        entries.put(ADDTL_PKWKM_EL0306_HALF, 0.5 * calcAddtlFzkmFromElasticity(additionalLaneKm, elasticityFactor));
+        final double addVkmEla0306_half = 0.5 * calcAddtlFzkmFromElasticity(additionalLaneKm, elasticityFactor);
+        entries.put(ADDTL_PKWKM_EL0306_HALF, addVkmEla0306_half);
 
         //Aus Reisezeit, welche wieder in Verkehr investiert wird. ! Diese Werte sind zusätzlich zu den veränderten vkm aus PRINS.
         final double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL29 = 29; // km/h
@@ -198,8 +202,14 @@ public class StreetAnalysisDataContainer {
         entries.put(ADDTL_PKWKM_FROM_TTIME_29, addtlFzkmFromTtime29);
         entries.put(ADDTL_PKWKM_FROM_TTIME_29_HALF, 0.5 * addtlFzkmFromTtime29); //Nur halbe Zeitgewinne werden in zusätzliche Reisen investiert
          // Nun noch die km aus PRINS dazurechnen, damit gesamt-Wert klar wird
-        entries.put(ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, (0.5 * addtlFzkmFromTtime29) + streetBaseData.getPhysicalEffect().getPvVehicleKilometers().overall());
+        final double addVkmFromTT29inklBvwp = (0.5 * addtlFzkmFromTtime29) + addVkmPrins;
+        entries.put(ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, addVkmFromTT29inklBvwp);
 
+        //und nun die NKVs dazu --- Beachte, dass die vkm aus Prins hier wieder abgezigen werden müssen, weil im Rahmen der Modifikation nur die zusätzlichen km betrachtet werden und als zusätzliche CO2-Emittenten betrachtet werden.:
+        //TODO: Siehe auch meinen Kommentar zur Berechnung bei Änderung vkm im NKVCalculator, KMT jan'25
+        entries.put( NKV_ADDTL_PKWKM_EL06, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addVkmEla06-addVkmPrins, 1, 1, 1. ) ) );
+        entries.put( NKV_ADDTL_PKWKM_EL0306_HALF, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addVkmEla0306_half-addVkmPrins, 1, 1, 1. ) ) );
+        entries.put( NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addVkmFromTT29inklBvwp - addVkmPrins, 1, 1, 1. ) ) );
         //End heart25
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {

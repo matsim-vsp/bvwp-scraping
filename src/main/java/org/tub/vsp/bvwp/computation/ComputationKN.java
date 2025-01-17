@@ -109,6 +109,14 @@ public class ComputationKN {
         b_all -= benefits.co2_betrieb;
         b_all += benefits.co2_betrieb * modifications.co2Price()/145. * modifications.emobCorrFact() ;
 
+        //TODO: Wenn ich das richtig sehe, rechnen wir hier nur einfach die Mehrkm mit 200g/km drauf.
+        // Es erfolgt aber keine Berücksichtigung das mehr-km auch andere Emissionen erhöhen.
+        // Und ist der Mehrverkehr dann bei uns ansonsten Nutzen-Neutral (Reisezeit, Kosten für Fahrt, etc.), weil wir annehmen, dass sich das im Impl. Nutzen ausgleicht?
+        // kmt jan'25
+
+        //TODO: macht es nicht eigentlich Sinn, dass wir die CO2-Menge (neu) auch ausgeben, und man sich dann in der Berechnung darauf stützt....
+        // Dann ließe sich die Menge an mehr/weniger CO2 sofort plotten.
+        // kmt jan'25
         b_all += modifications.mehrFzkm() * 200 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
         // 200 t / 1 mio km = 200g/km
 

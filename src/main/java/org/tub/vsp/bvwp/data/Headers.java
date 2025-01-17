@@ -116,6 +116,7 @@ public final class Headers{
 
 	/**
 	 * KMT: NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis von 2000 Euro.
+	 * EWGT 2024
 	 */
 	public static final String NKV_CO2_2000_EN = "BCR_co2_2000"; //2000 Euro/t -> muss dann noch nach 2012 umgerechnet werden
 	public static final String NKV_CO2_2000_INVCOST150_EN = "BCR_co2_2000_invcost150"; //50% höhere Investmentcosts
@@ -124,6 +125,7 @@ public final class Headers{
 
 	/**
 	 * KMT: NKV bei erhöhten Investitionskosten (welchen?) in Kombination mit erhöhtem CO2-Preis von 700 Euro.
+	 * EWGT 2024
 	 */
 	public static final String NKV_CO2_700_EN = "BCR_co2_700"; //700 Euro/t lt UBA für 2030 (Preisstand 2020) -> muss dann noch nach 2012 umgerechnet werden
 	public static final String NKV_CO2_700_INVCOST150_EN = "BCR_co2_700_invcost150"; //50% höhere Investmentcosts
@@ -179,6 +181,16 @@ public final class Headers{
 	public static final String NKV_NO_CHANGE_EN = "BCR";
 	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++ & EMob";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
+
+	/**
+	 * NKV bei erhöten vkm (hEART-Paper 2025)
+	 * KMT Jan25
+	 */
+	public static final String NKV_ADDTL_PKWKM_EL06 = "NKV_"+ADDTL_PKWKM_EL06;
+	public static final String NKV_ADDTL_PKWKM_EL0306_HALF = "NKV_"+ADDTL_PKWKM_EL0306_HALF;
+	public static final String NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP = "NKV_"+ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP;
+
+
 	/**
 	 * Originales NKV.
 	 */
