@@ -239,17 +239,17 @@ public class RunLocalCsvScrapingKMT_EWGT {
         FiguresKMT.createFigureNkvChange(
                 table,
                 Headers.NKV_INVCOST150_EN,
-            Headers.NKV_INVCOST200_EN);
+            Headers.NKV_INVCOST200_EN, 8);
     Figure figureNkvChange_Co2_700_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
                 table,
                 Headers.NKV_CO2_700_INVCOST150_EN,
-            Headers.NKV_CO2_700_INVCOST200_EN);
+            Headers.NKV_CO2_700_INVCOST200_EN, 8);
     Figure figureNkvChange_Co2_2000_InvCost150_200 =
         FiguresKMT.createFigureNkvChange(
                 table,
                 Headers.NKV_CO2_2000_INVCOST150_EN,
-            Headers.NKV_CO2_2000_INVCOST200_EN);
+            Headers.NKV_CO2_2000_INVCOST200_EN, 8);
 
     String page =
         MultiPlotUtils.pageTop()

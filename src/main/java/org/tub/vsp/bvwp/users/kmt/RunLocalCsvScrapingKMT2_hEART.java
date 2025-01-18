@@ -142,14 +142,14 @@ public class RunLocalCsvScrapingKMT2_hEART {
         //####
         figures.add( Pair.create( Figures2KN.createHeader1( "Kombiniert" ), null ) );
 
-        fig = FiguresKMT.createFigureElaChange(table, "Changes in addtl. vkm depending on calculation approaches", ADDTL_PKWKM_ORIG, ADDTL_PKWKM_EL06, ADDTL_PKWKM_EL0306_HALF, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "additional mio vkm/a");
+        fig = FiguresKMT.createFigureElaChange(table, "Changes in addtl. vkm depending on calculation approaches", ADDTL_PKWKM_ORIG, ADDTL_PKWKM_EL06, ADDTL_PKWKM_EL0306_HALF, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "original additional mileage (mio vkm/a) from BVWP 2030", "updated additional mileage (mio vkm/a)", 8);
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
 
         //
         figures.add( Pair.create( Figures2KN.createHeader1( "NKV" ), null ) );
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze - Co2-Preis BVWP"),null));
 
-        fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approaches", NKV_ORIG_EN, NKV_ADDTL_PKWKM_EL06, NKV_ADDTL_PKWKM_EL0306_HALF, NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "updated BCR");
+        fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approaches", NKV_ORIG_EN, NKV_ADDTL_PKWKM_EL06, NKV_ADDTL_PKWKM_EL0306_HALF, NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "original BCR from BVWP 2030", "updated BCR", 8);
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
 
         plotFigures("multiplot_hEART.html", figures);
