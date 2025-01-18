@@ -142,14 +142,21 @@ public class RunLocalCsvScrapingKMT2_hEART {
         //####
         figures.add( Pair.create( Figures2KN.createHeader1( "Kombiniert" ), null ) );
 
-        fig = FiguresKMT.createFigureElaChange(table, "Changes in addtl. vkm depending on calculation approaches", ADDTL_PKWKM_ORIG, ADDTL_PKWKM_EL06, ADDTL_PKWKM_EL0306_HALF, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "original additional mileage (mio vkm/a) from BVWP 2030", "updated additional mileage (mio vkm/a)", 8);
+        var y1 = new DataNamaRecord(ADDTL_PKWKM_EL06, "elasticity = 0.6");
+        var y2 = new DataNamaRecord(ADDTL_PKWKM_EL0306_HALF, "reduced");
+        var y3 = new DataNamaRecord(ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "from travel Time gains");
+
+        fig = FiguresKMT.createFigureElaChange(table, "Changes in additional vkm/a depending on calculation approach", ADDTL_PKWKM_ORIG, y1, y2, y3, "original additional mileage (mio vkm/a) from BVWP 2030", "updated additional mileage (mio vkm/a)", 8);
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
 
         //
         figures.add( Pair.create( Figures2KN.createHeader1( "NKV" ), null ) );
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze - Co2-Preis BVWP"),null));
 
-        fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approaches", NKV_ORIG_EN, NKV_ADDTL_PKWKM_EL06, NKV_ADDTL_PKWKM_EL0306_HALF, NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "original BCR from BVWP 2030", "updated BCR", 8);
+        y1 = new DataNamaRecord(NKV_ADDTL_PKWKM_EL06, "elasticity = 0.6");
+        y2 = new DataNamaRecord(NKV_ADDTL_PKWKM_EL0306_HALF, "reduced");
+        y3 = new DataNamaRecord(NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "from travel Time gains");
+        fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approach", NKV_ORIG_EN, y1, y2, y3, "original BCR from BVWP 2030", "updated BCR", 8);
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
 
         plotFigures("multiplot_hEART.html", figures);
@@ -160,8 +167,6 @@ public class RunLocalCsvScrapingKMT2_hEART {
         TableCalculationsKMT.printNkvTablesKMT(table, headers);
 
     }
-
-
 
     private static void plotsKNsFigures(Table table, String PLUS_110_PCT) throws IOException {
         final String NKV_ORIG_CAPPED5 = addCap( 5, table, HeadersKN.NKV_ORIG );
@@ -562,4 +567,6 @@ public class RunLocalCsvScrapingKMT2_hEART {
         new Browser().browse(outputFile);
     }
 
+
+    public record DataNamaRecord(String data, String name) {};
 }
