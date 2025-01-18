@@ -356,9 +356,9 @@ class FiguresKMT {
    * Für NKV vergleich-Plot mit 3 Kurven.
    *   */
   static Figure createFigureNkvChange(Table table, String title, String xName,
-                                      RunLocalCsvScrapingKMT2_hEART.DataNamaRecord y1,
-                                      RunLocalCsvScrapingKMT2_hEART.DataNamaRecord y2,
-                                      RunLocalCsvScrapingKMT2_hEART.DataNamaRecord y3,
+                                      DataNameRecord y1,
+                                      DataNameRecord y2,
+                                      DataNameRecord y3,
                                       String xAxisTitle, String yAxisTitle, int markerSize) {
 
     double maxX = 20.;
@@ -430,9 +430,9 @@ class FiguresKMT {
    *
    **/
   static Figure createFigureElaChange(Table table, String title, String xName,
-                                      RunLocalCsvScrapingKMT2_hEART.DataNamaRecord y1,
-                                      RunLocalCsvScrapingKMT2_hEART.DataNamaRecord y2,
-                                      RunLocalCsvScrapingKMT2_hEART.DataNamaRecord y3,
+                                      DataNameRecord y1,
+                                      DataNameRecord y2,
+                                      DataNameRecord y3,
                                       String xAxisTitle, String yAxisTitle, int markerSize) {
 
 
