@@ -142,28 +142,50 @@ public class RunLocalCsvScrapingKMT2_hEART {
         //####
         figures.add( Pair.create( Figures2KN.createHeader1( "Kombiniert" ), null ) );
 
-        var y1 = new DataNameRecord(ADDTL_PKWKM_EL06, "elasticity = 0.6");
-        var y2 = new DataNameRecord(ADDTL_PKWKM_EL0306_HALF, "reduced");
-        var y3 = new DataNameRecord(ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "from travel Time gains");
+        {
+            var y1 = new DataNameRecord(ADDTL_PKWKM_EL06, "elasticity = 0.6");
+            var y2 = new DataNameRecord(ADDTL_PKWKM_EL0306_HALF, "reduced");
+            var y3 = new DataNameRecord(ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "from travel Time gains");
 
-        fig = FiguresKMT.createFigureElaChange(table, "Changes in additional vkm/a depending on calculation approach", ADDTL_PKWKM_ORIG, y1, y2, y3, "original additional mileage (mio vkm/a) from BVWP 2030", "updated additional mileage (mio vkm/a)", 8);
-        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
-
+            fig = FiguresKMT.createFigureElaChange(table, "Changes in additional vkm/a depending on calculation approach", ADDTL_PKWKM_ORIG, y1, y2, y3, "original additional mileage (mio vkm/a) from BVWP 2030", "updated additional mileage (mio vkm/a)", 8);
+            figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
+        }
         //
+
         figures.add( Pair.create( Figures2KN.createHeader1( "NKV" ), null ) );
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze - Co2-Preis BVWP"),null));
 
-        y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06, "elasticity = 0.6");
-        y2 = new DataNameRecord(NKV_ADDTL_PKWKM_EL0306_HALF, "reduced");
-        y3 = new DataNameRecord(NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "from travel Time gains");
-        fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approach", NKV_ORIG_EN, y1, y2, y3, "original BCR from BVWP 2030", "updated BCR", 8);
-        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
+        {
+            var y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06, "elasticity = 0.6");
+            var y2 = new DataNameRecord(NKV_ADDTL_PKWKM_EL0306_HALF, "reduced");
+            var y3 = new DataNameRecord(NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, "from travel time gains");
+            fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approach", NKV_ORIG_EN, y1, y2, y3, "original BCR from BVWP 2030", "updated BCR", 8);
+            figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
+        }
+
+        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze -- Co2-Preis 700 -- Investmentcosts TUD"),null));
+
+        {
+            var y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06_CARBON700_INVCOSTTUD, "elasticity = 0.6");
+            var y2 = new DataNameRecord(NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD, "reduced");
+            var y3 = new DataNameRecord(NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_INVCOSTTUD, "from travel time gains");
+            fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approach; co2-price 700 EUR/t; updated inv. costs", NKV_ORIG_EN, y1, y2, y3, "original BCR from BVWP 2030", "updated BCR", 8);
+            figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
+        }
 
         plotFigures("multiplot_hEART.html", figures);
 
         // ===
         //Berechnungen NKV < 1
-        List<String> headers = List.of( NKV_ORIG_EN, NKV_ADDTL_PKWKM_EL06, NKV_ADDTL_PKWKM_EL0306_HALF, NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP);
+        List<String> headers = List.of(
+                NKV_ORIG_EN,
+                NKV_ADDTL_PKWKM_EL06,
+                NKV_ADDTL_PKWKM_EL0306_HALF,
+                NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP,
+                NKV_ADDTL_PKWKM_EL06_CARBON700_INVCOSTTUD,
+                NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD,
+                NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_INVCOSTTUD
+        );
         TableCalculationsKMT.printNkvTablesKMT(table, headers);
 
     }

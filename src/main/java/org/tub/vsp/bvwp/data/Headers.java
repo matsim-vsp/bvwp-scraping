@@ -182,13 +182,21 @@ public final class Headers{
 	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++ & EMob";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
 
+
 	/**
 	 * NKV bei erhöten vkm (hEART-Paper 2025)
 	 * KMT Jan25
 	 */
-	public static final String NKV_ADDTL_PKWKM_EL06 = "NKV_"+ADDTL_PKWKM_EL06;
-	public static final String NKV_ADDTL_PKWKM_EL0306_HALF = "NKV_"+ADDTL_PKWKM_EL0306_HALF;
-	public static final String NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP = "NKV_"+ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP;
+	private static final String NKV_praefix = "NKV_";
+
+	public static final String NKV_ADDTL_PKWKM_EL06 = NKV_praefix +ADDTL_PKWKM_EL06;
+	public static final String NKV_ADDTL_PKWKM_EL0306_HALF = NKV_praefix +ADDTL_PKWKM_EL0306_HALF;
+	public static final String NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP = NKV_praefix +ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP;
+
+	private static final String CARBON_700_INVCOST_TUD_suffix = "_carbon700_invcostTud";
+	public static final String NKV_ADDTL_PKWKM_EL06_CARBON700_INVCOSTTUD = NKV_praefix +ADDTL_PKWKM_EL06 + CARBON_700_INVCOST_TUD_suffix;
+	public static final String NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD = NKV_praefix +ADDTL_PKWKM_EL0306_HALF + CARBON_700_INVCOST_TUD_suffix;
+	public static final String NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_INVCOSTTUD = NKV_praefix +ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP + CARBON_700_INVCOST_TUD_suffix;
 
 
 	/**
