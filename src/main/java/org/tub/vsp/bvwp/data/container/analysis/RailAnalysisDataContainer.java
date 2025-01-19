@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.SequencedMap;
 
 import static org.tub.vsp.bvwp.computation.Modifications.*;
+import static org.tub.vsp.bvwp.data.Headers.NKV_ORIG;
 
 
 public class RailAnalysisDataContainer {
@@ -56,7 +57,7 @@ public class RailAnalysisDataContainer {
 
         entries.put(Headers.B_PER_KM, baseDataContainer.getCostBenefitAnalysis().getOverallBenefit().overall() / baseDataContainer.getProjectInformation().getLength() );
 
-        entries.put( HeadersKN.NKV_ORIG, NkvCalculatorRail.calculateNkv( NO_CHANGE, baseDataContainer ) );
+        entries.put( NKV_ORIG, NkvCalculatorRail.calculateNkv( NO_CHANGE, baseDataContainer ) );
 
 //        entries.put(Headers.NKV_CO2, NkvCalculatorRail.calculateNkv(new Modifications( co2Price796, 0., 1, 1, 1. ), baseDataContainer ) );
         entries.put(Headers.NKV_CO2_700_EN, NkvCalculatorRail.calculateNkv(new Modifications( co2Price796, 0., 1, 1, 1. ), baseDataContainer ) );

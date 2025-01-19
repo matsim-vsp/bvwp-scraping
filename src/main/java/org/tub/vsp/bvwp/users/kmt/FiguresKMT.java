@@ -35,9 +35,9 @@ class FiguresKMT {
 
   static Figure createFigureCostByPriority(int plotWidth, Table table, String xName) {
     Figure figure3;
-    String yName = Headers.INVCOST_BARWERT_ORIG;
-    String y3Name = Headers.INVCOST_BARWERT_ORIG;
-    String y2Name = Headers.INVCOST_BARWERT_ORIG;
+    String yName = HeadersKN.INVCOST_BARWERT_ORIG;
+    String y3Name = HeadersKN.INVCOST_BARWERT_ORIG;
+    String y2Name = HeadersKN.INVCOST_BARWERT_ORIG;
 
     double maxX = table.numberColumn(xName).max();
     Axis xAxis =
@@ -270,12 +270,12 @@ class FiguresKMT {
     Axis xAxis =
             Axis.builder()
                     .type(Type.LINEAR)
-                    .title(HeadersKN.NKV_ORIG)
+                    .title(Headers.NKV_ORIG)
                     .range(0., maxX)
                     //                             .autoRange( Axis.AutoRange.REVERSED );
                     .build();
 
-    table = table.sortDescendingOn(HeadersKN.NKV_ORIG);
+    table = table.sortDescendingOn(Headers.NKV_ORIG);
 
     Axis yAxis =
             Axis.builder()
@@ -294,7 +294,7 @@ class FiguresKMT {
                     .build();
 
     Layout layout =
-            Layout.builder(yName + " and " + yName2 + " over " + HeadersKN.NKV_ORIG)
+            Layout.builder(yName + " and " + yName2 + " over " + Headers.NKV_ORIG)
                     .xAxis(xAxis)
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
@@ -302,14 +302,14 @@ class FiguresKMT {
                     .build();
 
     Trace cbrOverCbrTrace1 =
-            ScatterTrace.builder(table.numberColumn(HeadersKN.NKV_ORIG), table.numberColumn(yName))
+            ScatterTrace.builder(table.numberColumn(Headers.NKV_ORIG), table.numberColumn(yName))
                     .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
                     .name(yName)
                     .marker(Marker.builder().color("blue").build())
                     .build();
 
     Trace cbrOverCbrTrace2 =
-            ScatterTrace.builder(table.numberColumn(HeadersKN.NKV_ORIG), table.numberColumn(yName2))
+            ScatterTrace.builder(table.numberColumn(Headers.NKV_ORIG), table.numberColumn(yName2))
                     .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
                     .name(yName2)
                     .marker(Marker.builder().color("red").build())
@@ -323,7 +323,7 @@ class FiguresKMT {
 
     Trace diagonale =
             ScatterTrace.builder(xx, yy)
-                    .name(HeadersKN.NKV_ORIG + " = " + yName)
+                    .name(Headers.NKV_ORIG + " = " + yName)
                     .mode(Mode.LINE)
                     .marker(Marker.builder().color("orange").build())
                     .build();
@@ -337,7 +337,7 @@ class FiguresKMT {
 
     Trace verticalCbr1 =
             ScatterTrace.builder(xy1, yy)
-                    .name(HeadersKN.NKV_ORIG + " = 1")
+                    .name(Headers.NKV_ORIG + " = 1")
                     .mode(Mode.LINE)
                     .marker(Marker.builder().color("gray").build())
                     .build();

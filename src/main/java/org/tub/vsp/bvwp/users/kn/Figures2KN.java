@@ -55,21 +55,21 @@ class Figures2KN extends Figures1KN {
 
 		table2.addColumns( table2.doubleColumn( xName ).power( 2 ).setName( "power2" ) );
 
-		switch ( whichNKV ) {
-			case HeadersKN.NKV_ORIG -> {
-				traces.add( ScatterTrace.builder( new double[]{60_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
-				traces.add( ScatterTrace.builder( new double[]{ 100_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
-			}
-			case NKV_ELTTIME_CARBON700_INVCOSTTUD -> {
-				traces.add( ScatterTrace.builder( new double[]{70_000., 110_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
-				traces.add( ScatterTrace.builder( new double[]{ 110_000., 150_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
-			}
-			case NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD -> {
-				traces.add( ScatterTrace.builder( new double[]{70_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
-				traces.add( ScatterTrace.builder( new double[]{ 110_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
-			}
-			default -> throw new IllegalStateException( "Unexpected value: " + whichNKV );
-		}
+//		switch ( whichNKV ) {
+//			case HeadersKN.NKV_ORIG -> {
+//				traces.add( ScatterTrace.builder( new double[]{60_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
+//				traces.add( ScatterTrace.builder( new double[]{ 100_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
+//			}
+//			case NKV_ELTTIME_CARBON700_INVCOSTTUD -> {
+//				traces.add( ScatterTrace.builder( new double[]{70_000., 110_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
+//				traces.add( ScatterTrace.builder( new double[]{ 110_000., 150_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
+//			}
+//			case NKV_ELTTIME_CARBON2000_EMOB_INVCOSTTUD -> {
+//				traces.add( ScatterTrace.builder( new double[]{70_000., 100_000.}, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide the eye" ).build() );
+//				traces.add( ScatterTrace.builder( new double[]{ 110_000., 140_000. }, new double[]{0., 10.} ).mode( ScatterTrace.Mode.LINE ).name( "line to guide they eye" ).build() );
+//			}
+//			default -> throw new IllegalStateException( "Unexpected value: " + whichNKV );
+//		}
 
 		{
 //			Table tableEW8 = table.where( table.stringColumn( BAUTYP ).containsString( "EW8" ) );
@@ -168,7 +168,7 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	public Figure costOrigVsCumulativeCostOrig(){
 
-		String xName = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
+		String xName = Headers.addCap( 5, table, NKV_ORIG );
 
 		Axis xAxis = Axis.builder().title(xName).titleFont( defaultFont ).autoRange( Axis.AutoRange.REVERSED )
 				 .showZeroLine( false )
@@ -177,12 +177,12 @@ class Figures2KN extends Figures1KN {
 				 .range( nkvCappedMax, nkvMin )
 				 .build();
 
-		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( INVCOST_BARWERT_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
+		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( HeadersKN.INVCOST_BARWERT_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
 
 		DoubleColumn cumulativeCost = DoubleColumn.create( "cumulative_cost" );
 		{
 			double sum = 0.;
-			for( Double cost : table2.doubleColumn( INVCOST_BARWERT_ORIG ) ){
+			for( Double cost : table2.doubleColumn( HeadersKN.INVCOST_BARWERT_ORIG ) ){
 				sum += cost;
 				cumulativeCost.append( sum );
 			}
@@ -204,7 +204,7 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	// ========================================================================================
 	public Figure cost_VS_nkvOrig(){
-		String xName = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
+		String xName = Headers.addCap( 5, table, NKV_ORIG );
 
 		Axis xAxis = Axis.builder().titleFont( defaultFont ).title(xName).autoRange( Axis.AutoRange.REVERSED )
 //				 .visible( false )
@@ -217,7 +217,7 @@ class Figures2KN extends Figures1KN {
 
 		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
 
-		String yName = INVCOST_BARWERT_ORIG;
+		String yName = HeadersKN.INVCOST_BARWERT_ORIG;
 		Axis yAxis = Axis.builder().titleFont( defaultFont ).title( yName )
 //				 .showZeroLine( false )
 //				 .showLine( false )
@@ -284,8 +284,8 @@ class Figures2KN extends Figures1KN {
 	// ========================================================================================
 	// ========================================================================================
 	public Figure nkvNew_vs_nkvOrig( int cap, String yName ){
-		String xName = HeadersKN.NKV_ORIG;
-		String x2Name = Headers.addCap( cap, table, HeadersKN.NKV_ORIG );
+		String xName = NKV_ORIG;
+		String x2Name = Headers.addCap( cap, table, NKV_ORIG );
 		Axis.AxisBuilder xAxisBuilder = Axis.builder()
 						    .autoRange( Axis.AutoRange.REVERSED )
 						    .zeroLineWidth( 0 ).zeroLineColor( "white" );
@@ -345,78 +345,13 @@ class Figures2KN extends Figures1KN {
 
 	// ========================================================================================
 	// ========================================================================================
-	public Figure nco2v_vs_vs_nkvElttimeCarbon700Invcosttud( int cap ){
-		String xName = Headers.cappedOf( cap, NKV_ELTTIME_CARBON700_INVCOSTTUD );
-		Axis.AxisBuilder xAxisBuilder = Axis.builder().titleFont( defaultFont );
-
-		if ( cap ==Integer.MAX_VALUE ) {
-			xName = NKV_ELTTIME_CARBON700_INVCOSTTUD;
-			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
-		} else {
-			xAxisBuilder.range( nkvCappedMax, nkvMin );
-		}
-
-		Table table2 = Table.create( table.stringColumn( PROJECT_NAME )
-				, table.stringColumn( BAUTYP )
-				, table.numberColumn( EINSTUFUNG_AS_NUMBER )
-				, table.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD )
-				, table.doubleColumn( xName )
-				, table.doubleColumn( INVCOST_TUD )
-				, table.doubleColumn( CO2_COST_EL03 ) // should be ELTTIME!!
-					   );
-
-		final String N_CO2_V = "N-CO2-V";
-		table2.addColumns( table2.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD )
-					 .multiply( table2.doubleColumn( INVCOST_TUD ) )
-					 .divide( table2.doubleColumn( CO2_COST_EL03 ) ).setName( N_CO2_V )
-				 ) ;
-
-
-		String yName = N_CO2_V;
-		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
-
-		Layout layout = Layout.builder( "" ).xAxis( xAxisBuilder.title( xName ).build() ).yAxis( yAxis ).width( plotWidth ).build();
-
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ) );
-
-		// the nkv=1 line:
-		double[] xx = new double[]{1., 1.};
-		double[] yy = new double[]{0., 1.1* table2.numberColumn( yName ).max() };
-		traces.add( ScatterTrace.builder( xx, yy ).mode( ScatterTrace.Mode.LINE ).name("NKV=1").build() );
-
-		return new Figure( layout, traces.toArray( new Trace[]{} ) );
-	}
-
-	// ========================================================================================
-	// ========================================================================================
-	public Figure invcosttud_vs_nkvElttimeCarbon2000Invcosttud(){
-		String xName = Headers.capped5Of( NKV_ELTTIME_CARBON2000_INVCOSTTUD );
-		String y2Name = INVCOST_TUD;
-
-		Axis xAxis = Axis.builder().title( xName ).titleFont( defaultFont ).autoRange( Axis.AutoRange.REVERSED )
-//				 .range( nkvCappedMax, nkvMin )
-								   .build();
-
-		Axis yAxis = Axis.builder().title( y2Name ).titleFont( defaultFont ).build();
-
-		Layout layout = Layout.builder("").xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
-
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table, xName, y2Name  ) );
-
-		traces.add( vertialNkvOneLine( y2Name ) );
-
-		return new Figure( layout, traces.toArray(new Trace[]{} ) );
-	}
-
-	// ========================================================================================
-	// ========================================================================================
 	private ScatterTrace vertialNkvOneLine( String y2Name ){
 		return vertialNkvOneLine( table, y2Name );
 	}
 	// ################################################################
 	// ################################################################
 	Figure invcost_tud_vs_orig(){
-		String xName = INVCOST_BARWERT_ORIG;
+		String xName = HeadersKN.INVCOST_BARWERT_ORIG;
 
 		String yName = INVCOST_TUD;
 //		String y3Name = Headers.COST_OVERALL;

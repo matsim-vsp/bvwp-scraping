@@ -3,7 +3,6 @@ package org.tub.vsp.bvwp.users.kn;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
-import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.RailAnalysisDataContainer;
 import org.tub.vsp.bvwp.io.RailTableCreator;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
@@ -18,6 +17,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.tub.vsp.bvwp.data.Headers.NKV_ORIG;
 
 public class RunLocalRailScrapingKN{
     private static final Logger logger = LogManager.getLogger( RunLocalRailScrapingKN.class );
@@ -36,7 +37,7 @@ public class RunLocalRailScrapingKN{
 
         // ===
 
-        Figures1RailKN figures1 = new Figures1RailKN( table, Headers.addCap( 5, table, HeadersKN.NKV_ORIG ) );
+        Figures1RailKN figures1 = new Figures1RailKN( table, Headers.addCap( 5, table, NKV_ORIG ) );
 //        Figures2KN figures2 = new Figures2KN( table );
 
         List<Figure> plots1 = new ArrayList<>();

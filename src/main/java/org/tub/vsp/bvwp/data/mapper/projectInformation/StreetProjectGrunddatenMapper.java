@@ -4,7 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
-import org.tub.vsp.bvwp.data.container.base.street.StreetProjectInformationDataContainer;
+import org.tub.vsp.bvwp.data.container.base.street.StreetProjecGrunddatenContainer;
 import org.tub.vsp.bvwp.data.type.Bautyp;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 
@@ -12,11 +12,11 @@ import java.text.ParseException;
 
 import static org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils.extractInformation;
 
-public class StreetProjectInformationMapper {
-    private static final Logger logger = LogManager.getLogger(StreetProjectInformationMapper.class);
+public class StreetProjectGrunddatenMapper{
+    private static final Logger logger = LogManager.getLogger( StreetProjectGrunddatenMapper.class );
 
-    public static StreetProjectInformationDataContainer mapDocument(Document document) {
-        StreetProjectInformationDataContainer projectInformation = new StreetProjectInformationDataContainer();
+    public static StreetProjecGrunddatenContainer mapDocument( Document document ) {
+        StreetProjecGrunddatenContainer projectInformation = new StreetProjecGrunddatenContainer();
 
         String projectNumber = extractInformation(document, 0, "Projektnummer");
         String street = extractInformation(document, 0, "Straße");
@@ -25,8 +25,6 @@ public class StreetProjectInformationMapper {
             length = length.replace(" km", "");
         }
         String bautyp = extractInformation(document, 0, "Bautyp(en), Bauziel(e)");
-
-        String einstufung = extractInformation(document, 1, "Dringlichkeitseinstufung");
 
         String verkehrsbelastungPlanfall = extractInformation( document, 0, "im Planfall 2030" );
         if ( verkehrsbelastungPlanfall != null ) {
@@ -41,7 +39,20 @@ public class StreetProjectInformationMapper {
             verkehrsbelastungPlanfall = "0.";
         }
 
+        String einstufung = extractInformation(document, 1, "Dringlichkeitseinstufung");
+
+//        for( int ii=0; ii<10; ii++ ){
+//            String abc = extractInformation( document, ii, "Kostenbestandteile" );
+//            logger.info( abc );
+//        }
+//        System.exit(-1);
+
 //        logger.warn( ConsoleColors.TEXT_RED + "project=" + projectNumber + "; verkehrsbelastungPlanfall=" + verkehrsbelastungPlanfall + ConsoleColors.TEXT_BLACK ) ;
+
+        String umweltbetroffenheit = extractInformation( document, 2, "Umweltbetroffenheit" );
+        String raumordnerischeBedeutung = extractInformation( document, 2, "Raumordnerische" );
+
+        logger.info( projectNumber + umweltbetroffenheit + raumordnerischeBedeutung );
 
         if ( projectNumber.contains( "A008-G010-BY" ) ){
             logger.warn("projectNumber={}; einstufung={}", projectNumber, einstufung);
@@ -70,7 +81,10 @@ public class StreetProjectInformationMapper {
                                      .setLength(JSoupUtils.parseDouble(length))
                                      .setBautyp(Bautyp.getFromString(bautyp))
                                      .setEinstufung( Einstufung.getFromString(einstufung ) )
-                                     .setVerkehrsbelastungPlanfall( JSoupUtils.parseDouble( verkehrsbelastungPlanfall ) );
+                                     .setVerkehrsbelastungPlanfall( JSoupUtils.parseDouble( verkehrsbelastungPlanfall ) )
+                                   .setUmweltbetroffenheit( umweltbetroffenheit )
+                                   .setRaumordnerischeBedeutung( raumordnerischeBedeutung )
+                            ;
         } catch (ParseException e) {
             logger.error("projectNumber={}", projectNumber);
             throw new RuntimeException(e);

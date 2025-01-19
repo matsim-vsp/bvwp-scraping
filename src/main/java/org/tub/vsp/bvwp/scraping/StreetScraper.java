@@ -8,7 +8,7 @@ import org.tub.vsp.bvwp.data.mapper.costBenefit.StreetCostBenefitMapper;
 import org.tub.vsp.bvwp.data.mapper.environmentalCriteria.StreetEnvironmentalCriteriaMapper;
 import org.tub.vsp.bvwp.data.mapper.physicalEffect.StreetPhysicalEffectMapper;
 import org.tub.vsp.bvwp.data.mapper.projectInformation.ProjectInformationMapperUtils;
-import org.tub.vsp.bvwp.data.mapper.projectInformation.StreetProjectInformationMapper;
+import org.tub.vsp.bvwp.data.mapper.projectInformation.StreetProjectGrunddatenMapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class StreetScraper extends AbstractScraper<StreetBaseDataContainer> {
 
         StreetBaseDataContainer streetBaseDataContainer = new StreetBaseDataContainer();
         return Optional.of(streetBaseDataContainer.setUrl(url)
-                                                  .setProjectInformation(StreetProjectInformationMapper.mapDocument(doc))
+                                                  .setProjectInformation( StreetProjectGrunddatenMapper.mapDocument(doc ) )
                                                   .setPhysicalEffect(StreetPhysicalEffectMapper.mapDocument(doc))
                                                   .setCostBenefitAnalysis(StreetCostBenefitMapper.mapDocument(doc))
                                                   .setEnvironmentalCriteria(StreetEnvironmentalCriteriaMapper.mapDocument(doc)));

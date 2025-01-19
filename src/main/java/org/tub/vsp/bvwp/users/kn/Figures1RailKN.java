@@ -87,7 +87,7 @@ class Figures1RailKN{
 //			Headers.addCap5( table, NKV_EL03_CARBON700tpr0_INVCOSTTUD );
 //			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
 //			Headers.addCap5( table, NKV_ELTTIME_CARBON700TPR0_INVCOSTTUD );
-			Headers.addCap5( table, HeadersKN.NKV_ORIG );
+			Headers.addCap5( table, Headers.NKV_ORIG );
 //			Headers.addCap5( table, NKV_EL03 );
 //			Headers.addCap5( table, NKV_EL03_CARBON700tpr0 );
 			Headers.addCap5( table, HeadersKN.NKV_CARBON700 );
@@ -154,7 +154,7 @@ class Figures1RailKN{
 
 		this.table = table;
 
-		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
+		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, Headers.NKV_ORIG );
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
 //		nkvMin = table.doubleColumn( NKV_EL03_CARBON215_INVCOSTTUD_CAPPED5 ).min();
 		nkvMin = table.doubleColumn( HeadersKN.NKV_CARBON700 ).min();
@@ -246,7 +246,7 @@ class Figures1RailKN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure nkv_orig(){
-		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
+		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, Headers.NKV_ORIG );
 
 		String yName = NKV_ORIG_CAPPED5;
 		String y2Name = NKV_ORIG_CAPPED5;
@@ -267,7 +267,7 @@ class Figures1RailKN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure invCost_orig(){
-		String yName = INVCOST_BARWERT_ORIG;
+		String yName = HeadersKN.INVCOST_BARWERT_ORIG;
 		String y2Name = yName;
 
 		Axis yAxis = Axis.builder()
@@ -287,17 +287,17 @@ class Figures1RailKN{
 	// ========================================================================================
 	// ========================================================================================
 	Figure invCost_orig_cumulative(){
-		String yName = INVCOST_BARWERT_ORIG;
+		String yName = HeadersKN.INVCOST_BARWERT_ORIG;
 		String y2Name = yName;
 
-		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( INVCOST_BARWERT_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
+		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( HeadersKN.INVCOST_BARWERT_ORIG ), table.doubleColumn( xName ) ).sortDescendingOn( xName );
 
 		table2 = table2.sortDescendingOn( xName ); // necessary to get cumulative cost right
 
 		DoubleColumn cumulativeCost = DoubleColumn.create( "cumulative_cost" );
 		{
 			double sum = 0.;
-			for( Double cost : table2.doubleColumn( INVCOST_BARWERT_ORIG ) ){
+			for( Double cost : table2.doubleColumn( HeadersKN.INVCOST_BARWERT_ORIG ) ){
 				sum += cost;
 				cumulativeCost.append( sum );
 			}

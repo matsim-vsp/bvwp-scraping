@@ -5,19 +5,21 @@ import org.tub.vsp.bvwp.data.type.Einstufung;
 
 import java.util.Objects;
 
-public class StreetProjectInformationDataContainer {
+public class StreetProjecGrunddatenContainer{
     private String projectNumber;
     private String street;
     private Einstufung priority;
     private Bautyp bautyp;
     private Double length;
     private Double verkehrsbelastung2030;
+    private String umweltbetroffenheit;
+    private String raumordnerischeBedeutung;
 
     public String getProjectNumber() {
         return projectNumber;
     }
 
-    public StreetProjectInformationDataContainer setProjectNumber(String projectNumber) {
+    public StreetProjecGrunddatenContainer setProjectNumber( String projectNumber ) {
         this.projectNumber = projectNumber;
         return this;
     }
@@ -26,7 +28,7 @@ public class StreetProjectInformationDataContainer {
         return street;
     }
 
-    public StreetProjectInformationDataContainer setStreet(String street) {
+    public StreetProjecGrunddatenContainer setStreet( String street ) {
         this.street = street;
         return this;
     }
@@ -35,7 +37,7 @@ public class StreetProjectInformationDataContainer {
         return priority;
     }
 
-    public StreetProjectInformationDataContainer setEinstufung( Einstufung priority ) {
+    public StreetProjecGrunddatenContainer setEinstufung( Einstufung priority ) {
         this.priority = priority;
         return this;
     }
@@ -49,7 +51,7 @@ public class StreetProjectInformationDataContainer {
             return false;
         }
 
-        StreetProjectInformationDataContainer that = (StreetProjectInformationDataContainer) o;
+        StreetProjecGrunddatenContainer that = (StreetProjecGrunddatenContainer) o;
 
         if (!Objects.equals(projectNumber, that.projectNumber)) {
             return false;
@@ -68,7 +70,7 @@ public class StreetProjectInformationDataContainer {
         return result;
     }
 
-    public StreetProjectInformationDataContainer setBautyp(Bautyp bautyp) {
+    public StreetProjecGrunddatenContainer setBautyp( Bautyp bautyp ) {
         this.bautyp = bautyp;
         return this;
     }
@@ -77,7 +79,7 @@ public class StreetProjectInformationDataContainer {
         return bautyp;
     }
 
-    public StreetProjectInformationDataContainer setLength(Double length) {
+    public StreetProjecGrunddatenContainer setLength( Double length ) {
         this.length = length;
         return this;
     }
@@ -85,12 +87,26 @@ public class StreetProjectInformationDataContainer {
     public Double getLength() {
         return length;
     }
-    public StreetProjectInformationDataContainer setVerkehrsbelastungPlanfall( Double verkehrsbelastung2030 ){
+    public StreetProjecGrunddatenContainer setVerkehrsbelastungPlanfall( Double verkehrsbelastung2030 ){
         this.verkehrsbelastung2030 = verkehrsbelastung2030;
         return this;
     }
 
     public Double getVerkehrsbelastungPlanfall() {
         return verkehrsbelastung2030;
+    }
+    public StreetProjecGrunddatenContainer setUmweltbetroffenheit( String umweltbetroffenheit ){
+        this.umweltbetroffenheit = umweltbetroffenheit;
+        return this;
+    }
+    public String getUmweltbetroffenheit(){
+        return umweltbetroffenheit;
+    }
+    public StreetProjecGrunddatenContainer setRaumordnerischeBedeutung( String raumordnerischeBedeutung ){
+        this.raumordnerischeBedeutung = raumordnerischeBedeutung;
+        return this;
+    }
+    public String getRaumordnerischeBedeutung(){
+        return raumordnerischeBedeutung;
     }
 }

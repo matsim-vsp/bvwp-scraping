@@ -5,7 +5,7 @@ import java.util.Objects;
 public class StreetBaseDataContainer {
     private String url;
 
-    private StreetProjectInformationDataContainer projectInformation;
+    private StreetProjecGrunddatenContainer projectInformation;
     private StreetPhysicalEffectDataContainer physicalEffect;
     private StreetCostBenefitAnalysisDataContainer costBenefitAnalysis;
     private StreetEnvironmentalDataContainer environmentalCriteria;
@@ -19,11 +19,11 @@ public class StreetBaseDataContainer {
         return this;
     }
 
-    public StreetProjectInformationDataContainer getProjectInformation() {
+    public StreetProjecGrunddatenContainer getProjectInformation() {
         return projectInformation;
     }
 
-    public StreetBaseDataContainer setProjectInformation(StreetProjectInformationDataContainer projectInformation) {
+    public StreetBaseDataContainer setProjectInformation( StreetProjecGrunddatenContainer projectInformation ) {
         this.projectInformation = projectInformation;
         return this;
     }

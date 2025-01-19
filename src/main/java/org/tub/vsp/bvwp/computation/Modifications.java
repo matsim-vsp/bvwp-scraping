@@ -4,8 +4,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public record Modifications(double co2Price, double mehrFzkm, double investmentCostFactor, double discountCorrFact, double emobCorrFact) {
-
     private static final Logger log = LogManager.getLogger(Modifications.class);
+
+    public static final double invCostFactor173 = 1.73;
+
+    public static final double invCostFactor220 = 2.20;
+
     public static final double INFLATION_Factor2020to2012 = 0.917; // Zinse Wert von 2020 auf BVWP Zeitpunkt 2012 ab.
     public static final double co2PriceBVWP = 145.;
     public static final double co2Price796 = 796.;

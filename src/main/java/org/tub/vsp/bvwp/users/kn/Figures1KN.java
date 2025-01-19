@@ -90,16 +90,16 @@ class Figures1KN{
 			// ===========================
 //			Headers.addCap5( table, NKV_EL03_CARBON215_INVCOSTTUD );
 //			Headers.addCap5( table, NKV_EL03_CARBON700ptpr0_INVCOSTTUD );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON700_INVCOSTTUD );
-			Headers.addCap5( table, HeadersKN.NKV_ORIG );
+//			Headers.addCap5( table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_ELTTIME_CARBON700_INVCOSTTUD );
+//			Headers.addCap5( table, HeadersKN.NKV_ORIG );
 //			Headers.addCap5( table, NKV_EL03 );
 //			Headers.addCap5( table, NKV_EL03_CARBON700ptpr0 );
 			Headers.addCap5( table, HeadersKN.NKV_CARBON700 );
-			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
+//			Headers.addCap5( table, NKV_ELTTIME_CARBON2000_INVCOSTTUD );
 
 //			Headers.addCap( 10, table, NKV_EL03_CARBON215_INVCOSTTUD );
-			Headers.addCap( 10, table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
+//			Headers.addCap( 10, table, NKV_ELTTIME_CARBON215_INVCOSTTUD );
 			// ===========================
 			// ===========================
 			{
@@ -144,9 +144,10 @@ class Figures1KN{
 
 		this.table = table;
 
-		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
+		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, NKV_ORIG );
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
-		nkvMin = table.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD ).min();
+//		nkvMin = table.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD ).min();
+		nkvMin = -3;
 
 		this.defaultMargin = Margin.builder()
 //						.autoExpand( true )

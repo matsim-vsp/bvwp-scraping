@@ -5,6 +5,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.container.base.street.StreetBaseDataContainer;
 import org.tub.vsp.bvwp.data.container.base.street.StreetCostBenefitAnalysisDataContainer;
@@ -133,6 +134,9 @@ public class StreetCsvWriter {
 
         record.add(Headers.LENGTH, baseDataContainer.getProjectInformation().getLength());
 
+        record.add( Headers.UMWELTBETROFFENHEIT, baseDataContainer.getProjectInformation().getUmweltbetroffenheit() );
+        record.add( Headers.RAUMORDNERISCHE_BEDEUTUNG, baseDataContainer.getProjectInformation().getRaumordnerischeBedeutung() );
+
         record.add(Headers.DAUER_PLANUNG, baseDataContainer.getCostBenefitAnalysis().getDurations().planning());
         record.add(Headers.DAUER_BAU, baseDataContainer.getCostBenefitAnalysis().getDurations().construction());
         record.add(Headers.DAUER_BETRIEB, baseDataContainer.getCostBenefitAnalysis().getDurations().operation());
@@ -160,14 +164,14 @@ public class StreetCsvWriter {
                                                    .map(StreetCostBenefitAnalysisDataContainer::getOverallBenefit)
                                                    .map(Benefit::overall)
                                                    .orElse(null));
-        record.add(Headers.INVCOST_BARWERT_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
-                                                         .map(StreetCostBenefitAnalysisDataContainer::getInvCost)
-                                                         .map( InvestmentCosts::barwert )
-                                                         .orElse(null));
-        record.add(Headers.INVCOST_SUM_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
-                                                         .map(StreetCostBenefitAnalysisDataContainer::getInvCost)
-                                                         .map( InvestmentCosts::sum )
-                                                         .orElse(null));
+        record.add( HeadersKN.INVCOST_BARWERT_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
+							    .map(StreetCostBenefitAnalysisDataContainer::getInvCost)
+							    .map( InvestmentCosts::barwert )
+							    .orElse(null));
+        record.add( HeadersKN.INVCOST_SUM_ORIG, Optional.ofNullable(baseDataContainer.getCostBenefitAnalysis() )
+							.map(StreetCostBenefitAnalysisDataContainer::getInvCost)
+							.map( InvestmentCosts::sum )
+							.orElse(null));
         // (yy warum diese aufwändige Syntax?  kai, feb'24)
         // --> da sowohl getCostBenefitAnalysis, getCost als auch overallCosts null zurückgeben können, wenn die
         // Daten nicht vorhanden sind. So spart man sich null checks (paul, feb'24)
@@ -223,6 +227,8 @@ public class StreetCsvWriter {
         headers.addStringColumn( Headers.EINSTUFUNG );
         headers.addStringColumn(Headers.BAUTYP);
         headers.addDoubleColumn(Headers.LENGTH);
+        headers.addStringColumn( Headers.UMWELTBETROFFENHEIT );
+        headers.addStringColumn( Headers.RAUMORDNERISCHE_BEDEUTUNG );
 
         headers.addDoubleColumn(Headers.DAUER_PLANUNG);
         headers.addDoubleColumn(Headers.DAUER_BAU);
@@ -245,8 +251,8 @@ public class StreetCsvWriter {
 //        }
 
         headers.addDoubleColumn(Headers.B_OVERALL_ORIG );
-        headers.addDoubleColumn(Headers.INVCOST_BARWERT_ORIG );
-        headers.addDoubleColumn(Headers.INVCOST_SUM_ORIG );
+        headers.addDoubleColumn( HeadersKN.INVCOST_BARWERT_ORIG );
+        headers.addDoubleColumn( HeadersKN.INVCOST_SUM_ORIG );
 
         for (String s : analysisDataContainers.getFirst()
                                               .getColumns()

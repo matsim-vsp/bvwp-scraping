@@ -5,16 +5,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class ComputationKN {
-    // yyyyyy Einbau von Jahreswerten (z.B. Elektrifizierung über Zeit).  Voraussetzung: Ich kann die Diskontierung
-    // nachbauen.
-
     private static final Logger log = LogManager.getLogger(ComputationKN.class);
-
     public static final double FZKM_AB = 221000;
     public static final double LANE_KM_AB = 60000.;
-
     enum CO2_PER_KM { typicalValues, fromPrins }
-
     private static final CO2_PER_KM co2PerKm = CO2_PER_KM.fromPrins;
 
     static final class Amounts {
@@ -112,13 +106,20 @@ public class ComputationKN {
         b_all -= benefits.co2_betrieb;
         b_all += benefits.co2_betrieb * modifications.co2Price()/145. * modifications.emobCorrFact() ;
 
-        b_all += modifications.mehrFzkm() * 200 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
-        // 200 t / 1 mio km = 200g/km
+        b_all += modifications.mehrFzkm() * 145 * b_per_co2 * modifications.co2Price() / 145 * modifications.discountCorrFact() * modifications.emobCorrFact() ;
+        // 145 t / 1 mio km = 145g/km
+
+        if ( modifications.co2Price()==Modifications.co2PriceBVWP && modifications.mehrFzkm() > 0 ) {
+            log.info("here");
+        }
+        if ( modifications.co2Price()==Modifications.co2Price796 && modifications.mehrFzkm() > 0 ) {
+            log.info("here");
+        }
 
         // Problem ist, dass wir den (negativen) CO2-Benefit pro induzierten Fzkm nicht kennen.  PRINS weist nur Deltas der CO2-Emissionen sowie
         // der Fzkm aus.  Wenn man das durcheinander dividiert, dann sind die Resultate "all over the place".  Eine Begründung könnte sein, dass
         // z.B. viele Fze vorher Landstrasse und jetzt BAB fahren, und daher anders emittieren, obwohl sie die gleichen Fzkm fahren.  Daher werden
-        // die Emissionen des zusätzlichen induzierten Verkehrs "separat" gerechnet ... mit 200g/km.  kai, nov'24
+        // die Emissionen des zusätzlichen induzierten Verkehrs "separat" gerechnet ... mit 145g/km.  kai, nov'24
 
         Assert.assrt( modifications.discountCorrFact()==1 );  // m.E. anderen Weg nicht mehr verfolgt
         b_all *= modifications.discountCorrFact();

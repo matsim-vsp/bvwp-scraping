@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
 import org.tub.vsp.bvwp.data.Headers;
+import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
@@ -148,11 +149,11 @@ public class RunLocalCsvScrapingKMT {
       System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
       System.out.println(tableIndCo2kl1.summarize(Headers.NKV_EL03_CARBON215_INVCOSTTUD, count, mean, stdDev, min, max).apply());
       System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
-      System.out.println(tbl.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-      System.out.println(tbl.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).apply() );
+      System.out.println(tbl.summarize( HeadersKN.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+      System.out.println(tbl.summarize( HeadersKN.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).apply() );
       System.out.println(System.lineSeparator() + "Davon NKV < 1:");
-      System.out.println(tableIndCo2kl1.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
-      System.out.println(tableIndCo2kl1.summarize(Headers.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).apply() );
+      System.out.println(tableIndCo2kl1.summarize( HeadersKN.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).by(Headers.EINSTUFUNG ) );
+      System.out.println(tableIndCo2kl1.summarize( HeadersKN.INVCOST_BARWERT_ORIG, sum, mean, stdDev, min, max ).apply() );
       System.out.println(BvwpUtils.SEPARATOR_AUSGABE);
       System.out.println(tbl.summarize(Headers.CO2_COST_EL03, sum, mean, stdDev, min, max).by(Headers.EINSTUFUNG));
       System.out.println(System.lineSeparator() + "Davon NKV < 1:");
@@ -299,13 +300,13 @@ public class RunLocalCsvScrapingKMT {
         nkvBelow1_costs.addColumns(
             DoubleColumn.create(
                 "Investment costs of all projects (Mio EUR)",
-                (double) tbl.summarize(Headers.INVCOST_BARWERT_ORIG, sum ).apply().get(0, 0 ) ) );
+                (double) tbl.summarize( HeadersKN.INVCOST_BARWERT_ORIG, sum ).apply().get(0, 0 ) ) );
 
         // Erstelle eine Spalte für jeden "Fall"
         for (String s : headersKMT) {
           Table tblBelow1 = tbl.where(tbl.numberColumn(s).isLessThan(1.));
           nkvBelow1_costs.addColumns(
-              DoubleColumn.create(s, (double) tblBelow1.summarize(Headers.INVCOST_BARWERT_ORIG, sum ).apply().get(0, 0 ) ) );
+              DoubleColumn.create(s, (double) tblBelow1.summarize( HeadersKN.INVCOST_BARWERT_ORIG, sum ).apply().get(0, 0 ) ) );
         }
         System.out.println(nkvBelow1_costs.print());
 
@@ -344,8 +345,8 @@ public class RunLocalCsvScrapingKMT {
   private static void kmtPlots_old(Axis xAxis, Table table, String xNameKMT)
       throws IOException {
     Figure figureNkv = FiguresKMT.createFigureNkv(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, xNameKMT);
-    Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(RunLocalCsvScrapingKMT.plotWidth, table, Headers.INVCOST_BARWERT_ORIG );
-    Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, Headers.INVCOST_BARWERT_ORIG );
+    Figure figureCostByPriority = FiguresKMT.createFigureCostByPriority(RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.INVCOST_BARWERT_ORIG );
+    Figure figureNkvByPriority = FiguresKMT.createFigureNkvByPriority(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, HeadersKN.INVCOST_BARWERT_ORIG );
     Figure figureCO2Benefit = FiguresKMT.createFigureCO2(xAxis, RunLocalCsvScrapingKMT.plotWidth, table, xNameKMT);
     Figure figureNkvChangeCo2_680 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_700_EN );
     Figure figureNkvChangeInduz_2000 = FiguresKMT.createFigureNkvChange(RunLocalCsvScrapingKMT.plotWidth, table, Headers.NKV_ORIG_EN, Headers.NKV_CO2_2000_EN );
