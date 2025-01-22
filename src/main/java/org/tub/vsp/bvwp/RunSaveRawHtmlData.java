@@ -46,7 +46,7 @@ public class RunSaveRawHtmlData {
         final File file;
         switch( mode ) {
             case ROAD -> {
-                file = new File("data/street/all" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
+                file = new File("data/street/" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));
             }
             case RAIL -> {
                 file = new File("data/rail/all/" + projectUrl.substring(projectUrl.lastIndexOf("/") + 1));

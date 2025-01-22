@@ -2,7 +2,6 @@ package org.tub.vsp.bvwp.data.mapper.projectInformation;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.Assert;
 import org.jsoup.nodes.Document;
 import org.tub.vsp.bvwp.JSoupUtils;
 import org.tub.vsp.bvwp.data.container.base.street.StreetProjectInformationDataContainer;
@@ -63,6 +62,80 @@ public class StreetProjectInformationMapper {
             logger.warn( "projectNumber=" + projectNumber + "; einstufung=" + einstufung );
             logger.warn( "Project has NKV in main project but the Einstufungen VB, WBP in the subprojects.  Setting the main project to VB." );
             einstufung = Einstufung.VB.name();
+        }
+
+        {
+            if (projectNumber.contains("B131-G010-BY")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen WBP, WB in the subprojects.  Setting the main project to WB.");
+                einstufung = Einstufung.WBP.name();
+            }
+
+            if (projectNumber.contains("B 34-G10-BW")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen VB in the subprojects.  Setting the main project to VB.");
+                einstufung = Einstufung.VB.name();
+            }
+
+            if (projectNumber.contains("B73-G20-NI")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen VB, VB, WBP in the subprojects.  Setting the main project to VB.");
+                einstufung = Einstufung.VB.name();
+            }
+
+            if (projectNumber.contains("B88-G90-TH")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen WBP, VB in the subprojects.  Setting the main project to VB.");
+                einstufung = Einstufung.VB.name();
+            }
+
+            if (projectNumber.contains("B62/B508-G30-NW")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen VB in the subprojects.  Setting the main project to VB.");
+                einstufung = Einstufung.VB.name();
+            }
+
+            if (projectNumber.contains("B190n-G10-ST-NI")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen WBP in the subprojects.  Setting the main project to WBP.");
+                einstufung = Einstufung.WBP.name();
+            }
+
+            if (projectNumber.contains("B101-G20-SN")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen WBP, WB in the subprojects.  Setting the main project to WBP.");
+                einstufung = Einstufung.WBP.name();
+            }
+
+            if (projectNumber.contains("B470-G010-BY")) {
+                logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+                logger.warn("Project has NKV in main project but the Einstufungen VB, WB in the subprojects.  Setting the main project to VB.");
+                einstufung = Einstufung.VB.name();
+            }
+        }
+
+        if (projectNumber.contains("B247-G10-NI-TH-T1-NI")) {
+            logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+            logger.warn("Project has NKV in subprojects but the Einstufungen VB in the main project. Setting the sub project to VB.");
+            einstufung = Einstufung.VB.name();
+        }
+
+        if (projectNumber.contains("B247-G10-NI-TH-T2-NI")) {
+            logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+            logger.warn("Project has NKV in subprojects but the Einstufungen VB in the main project. Setting the sub project to VB.");
+            einstufung = Einstufung.VB.name();
+        }
+
+        if (projectNumber.contains("B247-G10-NI-TH-T3-TH")) {
+            logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+            logger.warn("Project has NKV in subprojects but the Einstufungen VB in the main project. Setting the sub project to VB.");
+            einstufung = Einstufung.VB.name();
+        }
+
+        if (einstufung.equals("siehe Teilprojekte")) {
+            logger.warn("projectNumber=" + projectNumber + "; einstufung=" + einstufung);
+            logger.warn("Project has has NKV in main project, but Einstufungen in the subprojects. Setting it to 'Teil'");
+            einstufung = Einstufung.TEIL.name();
         }
 
         try {

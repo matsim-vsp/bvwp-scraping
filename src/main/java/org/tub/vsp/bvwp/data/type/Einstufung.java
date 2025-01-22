@@ -8,7 +8,8 @@ public enum Einstufung{
     VB("Vordringlicher Bedarf (VB)"),
     WBP("Weiterer Bedarf mit Planungsrecht (WB*)"),
     WB( "Weiterer Bedarf (WB)"),
-    KB( "Kein Bedarf (KB)")
+    KB("Kein Bedarf (KB)"),
+    TEIL("Siehe Teilprojekte")
 //    ,@Deprecated /* yyyyyy lieber aufklären!! */ UNDEFINED("undefined")
     ;
 
