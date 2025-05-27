@@ -304,6 +304,7 @@ class FiguresKMT {
                     .xAxis(xAxis)
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
+                    .titleFont(defaultFont)
                     .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
                     .build();
 
@@ -367,6 +368,7 @@ class FiguresKMT {
     Axis xAxis = Axis.builder().type(Type.LINEAR)
             .title(xAxisTitle)
             .range(0., maxX)
+            .font(defaultFont)
             .titleFont( defaultFont )
             .build();
 
@@ -375,9 +377,9 @@ class FiguresKMT {
     Axis yAxis = Axis.builder().type(Type.LINEAR)
             .range(Double.min(0., 1.1 * table.numberColumn(y1.data()).min()), maxY)
             .title(yAxisTitle)
+            .font(defaultFont)
             .titleFont( defaultFont )
             .build();
-
 
     Layout layout = Layout.builder(title)
             .xAxis(xAxis)
@@ -445,6 +447,7 @@ class FiguresKMT {
     Axis xAxis = Axis.builder().type(Type.LINEAR)
             .title(xAxisTitle)
             .range(0., maxX)
+            .font( defaultFont )
             .titleFont( defaultFont )
             .build();
 
@@ -453,9 +456,11 @@ class FiguresKMT {
     Axis yAxis = Axis.builder()
             .type(Type.LINEAR)
             .range(Double.min(0., 1.1 * table.numberColumn(y2.data()).min()), maxY)
+            .font( defaultFont )
             .title(yAxisTitle)
             .titleFont( defaultFont )
             .build();
+
 
     Layout layout = Layout.builder( title)
             .xAxis(xAxis)
