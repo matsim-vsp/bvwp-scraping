@@ -6,11 +6,8 @@ import org.tub.vsp.bvwp.data.HeadersKN;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.plotly.components.Axis;
+import tech.tablesaw.plotly.components.*;
 import tech.tablesaw.plotly.components.Axis.Type;
-import tech.tablesaw.plotly.components.Figure;
-import tech.tablesaw.plotly.components.Layout;
-import tech.tablesaw.plotly.components.Marker;
 import tech.tablesaw.plotly.traces.ScatterTrace;
 import tech.tablesaw.plotly.traces.ScatterTrace.Mode;
 import tech.tablesaw.plotly.traces.Trace;
@@ -18,11 +15,12 @@ import tech.tablesaw.plotly.traces.Trace;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.tub.vsp.bvwp.users.kmt.Figures1KN.defaultFont;
-
 class FiguresKMT {
 
   private static final String legendFormat = "%30s";
+  private static final Font defaultFont = Font.builder().size(16).family(Font.Family.VERDANA).build();
+  private static final int plotWidth = 800;
+    private static final int plotHeight = plotWidth / 2;
 
   // Do not instanciate
   FiguresKMT() {}
@@ -305,7 +303,7 @@ class FiguresKMT {
                     .yAxis(yAxis)
                     .yAxis2(yAxis2)
                     .titleFont(defaultFont)
-                    .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
+                    .width(plotWidth)
                     .build();
 
     Trace cbrOverCbrTrace1 =
@@ -384,7 +382,8 @@ class FiguresKMT {
     Layout layout = Layout.builder(title)
             .xAxis(xAxis)
             .yAxis(yAxis)
-            .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
+            .width(plotWidth)
+            .height(plotHeight)
             .titleFont( defaultFont )
             .build();
 
@@ -466,7 +465,8 @@ class FiguresKMT {
             .xAxis(xAxis)
             .yAxis(yAxis)
             .titleFont( defaultFont )
-            .width(RunLocalCsvScrapingKMT_EWGT.plotWidth)
+            .width(plotWidth)
+            .height(plotHeight)
             .build();
 
     Trace y1overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y1.data()))
