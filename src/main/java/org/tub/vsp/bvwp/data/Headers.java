@@ -203,6 +203,11 @@ public final class Headers{
 	public static final String NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD = NKV_praefix +ADDTL_PKWKM_EL0306_HALF + CARBON_700_INVCOST_TUD_suffix;
 	public static final String NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_INVCOSTTUD = NKV_praefix +ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP + CARBON_700_INVCOST_TUD_suffix;
 
+	private static final String CARBON_700_EMOB_suffix = CARBON_700_suffix + "_eMob";
+	public static final String NKV_ADDTL_PKWKM_EL06_CARBON700_EMOB = NKV_praefix +ADDTL_PKWKM_EL06 + CARBON_700_EMOB_suffix;
+	public static final String NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_EMOB = NKV_praefix +ADDTL_PKWKM_EL0306_HALF + CARBON_700_EMOB_suffix;
+	public static final String NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_EMOB = NKV_praefix +ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP + CARBON_700_EMOB_suffix;
+
 
 	/**
 	 * Originales NKV.

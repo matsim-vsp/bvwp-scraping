@@ -220,6 +220,13 @@ public class StreetAnalysisDataContainer {
         entries.put( NKV_ADDTL_PKWKM_EL06_CARBON700_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla06-addVkmPrins, constructionCostFactorTud, 1, 1. ) ) );
         entries.put( NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla0306_half-addVkmPrins, constructionCostFactorTud, 1, 1. ) ) );
         entries.put( NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmFromTT29inklBvwp - addVkmPrins, constructionCostFactorTud, 1, 1. ) ) );
+
+        //Nun nochmal mit CO2-Preis 700 und Elektromobilität (wunsch von KN fürs Poster
+        entries.put( NKV_ADDTL_PKWKM_EL06_CARBON700_EMOB, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla06-addVkmPrins, 1, 1, emobCorrFact ) ) );
+        entries.put( NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_EMOB, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla0306_half-addVkmPrins, 1, 1, emobCorrFact ) ) );
+        entries.put( NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700_EMOB, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmFromTT29inklBvwp - addVkmPrins, 1, 1, emobCorrFact ) ) );
+
+
         //End heart25
 
         if ( streetBaseData.getProjectInformation().getProjectNumber().contains("A1-G50-NI" )) {
