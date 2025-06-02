@@ -154,7 +154,6 @@ public class RunLocalCsvScrapingKMT2_hEART {
 
         figures.add( Pair.create( Figures2KN.createHeader1( "NKV" ), null ) );
         figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze - Co2-Preis BVWP"),null));
-
         {
             var y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06, "elasticity = 0.6");
             var y2 = new DataNameRecord(NKV_ADDTL_PKWKM_EL0306_HALF, "reduced");
@@ -163,8 +162,16 @@ public class RunLocalCsvScrapingKMT2_hEART {
             figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
         }
 
-        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze -- Co2-Preis 700 -- Investmentcosts TUD"),null));
+        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze - Co2-Preis 700"),null));
+        {
+            var y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06_CARBON700, "elasticity = 0.6");
+            var y2 = new DataNameRecord(NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700, "reduced");
+            var y3 = new DataNameRecord(NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700, "from travel time gains");
+            fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR depending on calculation approach", NKV_ORIG_EN, y1, y2, y3, "original BCR from BVWP 2030", "updated BCR", 8);
+            figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze"), Collections.singletonList( fig )));
+        }
 
+        figures.add( Pair.create( Figures2KN.createHeader2( "Kombiniert die verschiedenen Ansätze -- Co2-Preis 700 -- Investmentcosts TUD"),null));
         {
             var y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06_CARBON700_INVCOSTTUD, "elasticity = 0.6");
             var y2 = new DataNameRecord(NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD, "reduced");

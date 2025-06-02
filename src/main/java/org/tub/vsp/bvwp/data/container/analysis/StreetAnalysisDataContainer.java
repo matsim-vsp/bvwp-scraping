@@ -211,6 +211,11 @@ public class StreetAnalysisDataContainer {
         entries.put( NKV_ADDTL_PKWKM_EL0306_HALF, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addVkmEla0306_half-addVkmPrins, 1, 1, 1. ) ) );
         entries.put( NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP, nkvCalculator.calculateNkv( new Modifications( co2PriceBVWP, addVkmFromTT29inklBvwp - addVkmPrins, 1, 1, 1. ) ) );
 
+        //Nun nochmal mit CO2-Preis 700
+        entries.put( NKV_ADDTL_PKWKM_EL06_CARBON700, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla06-addVkmPrins, 1, 1, 1. ) ) );
+        entries.put( NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla0306_half-addVkmPrins, 1, 1, 1. ) ) );
+        entries.put( NKV_ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP_CARBON700, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmFromTT29inklBvwp - addVkmPrins, 1, 1, 1. ) ) );
+
        //Nun nochmal mit CO2-Preis 700 und investmentkosten tud
         entries.put( NKV_ADDTL_PKWKM_EL06_CARBON700_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla06-addVkmPrins, constructionCostFactorTud, 1, 1. ) ) );
         entries.put( NKV_ADDTL_PKWKM_EL0306_HALF_CARBON700_INVCOSTTUD, nkvCalculator.calculateNkv( new Modifications( co2Price700, addVkmEla0306_half-addVkmPrins, constructionCostFactorTud, 1, 1. ) ) );
