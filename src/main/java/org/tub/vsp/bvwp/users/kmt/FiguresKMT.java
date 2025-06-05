@@ -356,6 +356,68 @@ class FiguresKMT {
    *   */
   static Figure createFigureNkvChange(Table table, String title, String xName,
                                       DataNameRecord y1,
+                                      String xAxisTitle, String yAxisTitle, int markerSize) {
+
+    double maxX = 20.;
+    double maxY = 20.;
+
+    Axis xAxis = Axis.builder().type(Type.LINEAR)
+            .title(xAxisTitle)
+            .range(0., maxX)
+            .font(defaultFont)
+            .titleFont( defaultFont )
+            .build();
+
+    table = table.sortDescendingOn(xName);
+
+    Axis yAxis = Axis.builder().type(Type.LINEAR)
+            .range(Double.min(0., 1.1 * table.numberColumn(y1.data()).min()), maxY)
+            .title(yAxisTitle)
+            .font(defaultFont)
+            .titleFont( defaultFont )
+            .build();
+
+    Layout layout = Layout.builder(title)
+            .xAxis(xAxis)
+            .yAxis(yAxis)
+            .width(plotWidth)
+            .height(plotHeight)
+            .titleFont( defaultFont )
+            .build();
+
+    Trace y1overX = ScatterTrace.builder(table.numberColumn(xName), table.numberColumn(y1.data()))
+            .text(table.stringColumn(Headers.PROJECT_NAME).asObjectArray())
+            .name(y1.name())
+            .marker(Marker.builder().color("blue").size(markerSize).build())
+            .build();
+
+
+    double[] xx = new double[] {0., maxX};
+    double[] yy = new double[] {0., maxY};
+    double[] xy1 = new double[] {1., 1.};
+
+    Trace diagonale = getDiagonalTrace(xx, yy, "magenta");
+
+    Trace horizontalEq1 = ScatterTrace.builder(xx, xy1)
+            .name("horizontal = 1")
+            .mode(Mode.LINE)
+            .marker(Marker.builder().color("gray").build())
+            .build();
+
+    Trace verticalEq1 = ScatterTrace.builder(xy1, yy)
+            .name("vertical = 1")
+            .mode(Mode.LINE)
+            .marker(Marker.builder().color("gray").build())
+            .build();
+
+    return new Figure(layout, y1overX, diagonale, horizontalEq1, verticalEq1);
+  }
+
+  /**
+   * Für NKV vergleich-Plot mit 3 Kurven.
+   *   */
+  static Figure createFigureNkvChange(Table table, String title, String xName,
+                                      DataNameRecord y1,
                                       DataNameRecord y2,
                                       DataNameRecord y3,
                                       String xAxisTitle, String yAxisTitle, int markerSize) {

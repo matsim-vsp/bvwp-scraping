@@ -136,7 +136,7 @@ public class RunLocalCsvScrapingKMT2_hEART {
         figures.add( Pair.create( Figures2KN.createHeader2( "zusätzlich aus Fahreitgewinnen, 29km/h, halbiert"), Collections.singletonList( fig )));
 
         fig = figures2.fzkmEl_vs_fzkm(ADDTL_PKWKM_ORIG, ADDTL_PKWKM_FROM_TTIME_29_HALF_InklBVWP);
-        figures.add( Pair.create( Figures2KN.createHeader2( "BVWP plus 0.5 Fahreitgewinnen, 29km/h, "), Collections.singletonList( fig )));
+        figures.add( Pair.create( Figures2KN.createHeader2( "BVWP plus 0.5 Fahrzeitgewinnen, 29km/h, "), Collections.singletonList( fig )));
 
 
         //####
@@ -152,6 +152,12 @@ public class RunLocalCsvScrapingKMT2_hEART {
         //
 
         figures.add( Pair.create( Figures2KN.createHeader1( "NKV" ), null ) );
+
+        {
+            var y1 = new DataNameRecord(NKV_CO2_700_INVCOSTTUD_EN, "");
+            fig = FiguresKMT.createFigureNkvChange(table, "Changes in BCR", NKV_ORIG_EN, y1, "original BCR from BVWP 2030", "updated BCR", 8);
+            figures.add( Pair.create( Figures2KN.createHeader2( "C=2Pries 700 und invCost TUD"), Collections.singletonList( fig )));
+        }
 
         {
             var y1 = new DataNameRecord(NKV_ADDTL_PKWKM_EL06, "elasticity = 0.6");
