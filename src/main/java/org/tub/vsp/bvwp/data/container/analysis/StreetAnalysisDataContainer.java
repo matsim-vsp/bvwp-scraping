@@ -133,6 +133,10 @@ public class StreetAnalysisDataContainer {
         entries.put(Headers.CO2_COST_EL03, Math.max( 1., nkvCalculator.calculateCo2_t( new Modifications( co2PriceBVWP, addtlFzkmBeyondPrinsEl03, 1,1,1  ) ) ) );
 //         ("max(1,...)" so that they become visible on logplot.  find other solution!
 
+            entries.put( Headers.B_NOISE, nkvCalculator.calculateNoise( NO_CHANGE ) );
+            entries.put( B_NOISE_INNERORTS, nkvCalculator.calculateNoiseInnerorts( NO_CHANGE ) );
+            entries.put( B_NOISE_AUSSERORTS, nkvCalculator.calculateNoiseAusserorts( NO_CHANGE ) );
+
 //        entries.put( INVCOST_TUD, this.constructionCostTud );
 
         double AVERAGE_SPEED_OF_ADDITIONAL_TRAVEL50 = 50; // km/h

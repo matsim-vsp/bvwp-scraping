@@ -79,8 +79,9 @@ public class ComputationKN {
         final double co2_betrieb;
         final double benefit_all;
         final double investmentCosts_Barwert;
+	    private final Double noise;
 
-        BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double benefit_all, double investmentCosts_barwert ) {
+	    BenefitsAndInvestmentCosts( double fzkm, double rz, double impl, double co2_infra, double co2_betrieb, double benefit_all, double investmentCosts_barwert, Double noise ) {
             // yyyyyy ist alles noch ganz schön unklar benannt!!
             this.fzkm = fzkm;
             this.rz = rz;
@@ -89,7 +90,8 @@ public class ComputationKN {
             this.co2_betrieb = co2_betrieb;
             this.benefit_all = benefit_all;
             this.investmentCosts_Barwert = investmentCosts_barwert;
-        }
+		    this.noise = noise;
+	    }
     }
 
 
@@ -135,6 +137,10 @@ public class ComputationKN {
         {
             log.info( String.format( "%1$20s: before = %2$5.0f; corr = %3$5.0f; after = %4$5.0f", msg, b_tmp, b_all - b_tmp, b_all ) );
         }
+    }
+
+    static Double b_noise( Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {
+        return benefits.noise ;
     }
 
     static Double b_co2(Modifications modifications, Amounts amounts, BenefitsAndInvestmentCosts benefits ) {

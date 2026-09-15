@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.tub.vsp.bvwp.data.Headers.*;
+import static tech.tablesaw.plotly.traces.ScatterTrace.YAxis.Y;
+import static tech.tablesaw.plotly.traces.ScatterTrace.YAxis.Y2;
 
 class Figures2KN extends Figures1KN {
 	private static final Logger log = LogManager.getLogger(Figures2KN.class );
@@ -86,18 +88,6 @@ class Figures2KN extends Figures1KN {
 	}
 	// ========================================================================================
 	// ========================================================================================
-	public Figure invcosttud_vs_nkvEl03Cprice215Invcosttud( int cap ){
-		String xName = Headers.cappedOf( cap, NKV_EL03_CARBON215_INVCOSTTUD );
-		return investmentCost( cap, xName, INVCOST_TUD );
-	}
-	// ========================================================================================
-	// ========================================================================================
-	public Figure cumulativeCostTud_vs_nkvEl03Cprice215InvcostTud( int cap ){
-		String xName = Headers.cappedOf( cap, NKV_EL03_CARBON215_INVCOSTTUD );
-		return cumulativeInvestmentCostTud( cap, xName );
-	}
-	// ========================================================================================
-	// ========================================================================================
 	public Figure invcost50_vs_NkvEl03Cprice700InvcostTud(){
 		String xName = NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5;
 		String yName = INVCOST_TUD;
@@ -118,49 +108,6 @@ class Figures2KN extends Figures1KN {
 		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName  ) );
 
 		traces.add( this.vertialNkvOneLine( yName ) );
-
-		return new Figure( layout, traces.toArray(new Trace[]{} ) );
-	}
-	// ========================================================================================
-	// ========================================================================================
-	public Figure cumcost50_vs_nkvEl03Cprice700InvcostTud(){
-
-		String xName = NKV_EL03_CARBON700_INVCOSTTUD_CAPPED5;
-
-		Axis xAxis = Axis.builder().title(xName).titleFont( defaultFont ).autoRange( Axis.AutoRange.REVERSED )
-				 .showZeroLine( false )
-				 .zeroLineWidth( 0 )
-				 .zeroLineColor( "lightgray" )
-				 .range( nkvCappedMax, nkvMin )
-				 .build();
-
-		Table table2 = Table.create( table.stringColumn( PROJECT_NAME ), table.doubleColumn( INVCOST_TUD ), table.doubleColumn( xName ) );
-
-		table2 = table2.sortDescendingOn( xName ); // necessary to get cumulative cost right
-
-		DoubleColumn cumulativeCost = DoubleColumn.create( "cumulative_cost" );
-		{
-			double sum = 0.;
-			for( Double cost : table2.doubleColumn( INVCOST_TUD ) ){
-				sum += cost;
-				cumulativeCost.append( sum );
-			}
-		}
-
-		new CsvWriter().write( table2, CsvWriteOptions.builder( new File( "cumCosts.tsv" ) ).separator( '\t' ).usePrintFormatters( true ).build() );
-
-		String yName = "cumulative_cost";
-		Axis yAxis = Axis.builder().title( yName )
-				 .titleFont( defaultFont ).build();
-
-//		String title = "WB meistens NKV<1; Knotenpunkt alle NKV>1; bei Erweiterung (EW) haengt NKV von der Verkehrsmenge ab; bei Neubau (NB) meist hohes NKV wenn Lueckenschluss, sonst niedrig bis < 1";
-		String title = "";
-		Layout layout = Layout.builder( title ).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
-
-		List<Trace> traces = new ArrayList<>();
-
-		var nameInLegend = "cumulative cost";
-		traces.add( ScatterTrace.builder( table2.doubleColumn( xName ), cumulativeCost ).mode( ScatterTrace.Mode.LINE ).showLegend( true ).name( String.format( legendFormat, nameInLegend ) ).build() );
 
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
@@ -274,7 +221,7 @@ class Figures2KN extends Figures1KN {
 	public List<Figure> getFigures( int cap, String xNameOrig ){
 		List<Figure> figures = new ArrayList<>();
 //		String xName = Headers.cappedOf( cap, xNameOrig );
-		figures.add( investmentCost( cap, xNameOrig, INVCOST_TUD ) );
+		figures.add( xxVsYy( cap, xNameOrig, INVCOST_TUD ) );
 		figures.add( carbon( cap, xNameOrig ) );
 //		figures.add( cumulativeInvestmentCostTud( cap, xName ) );
 		figures.add( cumBenefitVsCumCost( xNameOrig ) );
@@ -551,27 +498,6 @@ class Figures2KN extends Figures1KN {
         List<Trace> traces = new ArrayList<>(getTracesByColor(table, xName, y2Name));
 		return new Figure( layout, traces.toArray(new Trace[]{} ) );
 	}
-	Figure investmentCost( int cap, String xName, String yName ){
-		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
-
-		if ( cap ==Integer.MAX_VALUE ) {
-			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
-		} else {
-			xAxisBuilder.range( nkvCappedMax, nkvMin );
-		}
-
-		Table table2 = table.sortDescendingOn( xName ); // cannot remember why this is necessary
-
-		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
-
-		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xName ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
-
-		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xName, yName ));
-		if ( xName.contains( "NKV" ) ){
-			traces.add( vertialNkvOneLine( table2, yName ) );
-		}
-		return new Figure( layout, traces.toArray( new Trace[]{} ) );
-	}
 	Figure carbonOrig( int cap, String xName ){
 		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
 
@@ -640,16 +566,53 @@ class Figures2KN extends Figures1KN {
 		}
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
-	private Figure cumulativeInvestmentCostTud( int cap, String xName ){
-		Axis.AxisBuilder xAxisBuilder = Axis.builder();
+	Figure xxVsYy( int cap, String xName, String yName ){
+
+		Table tableTmp = Table.create( table.column( xName ), table.column( yName ), table.column( BAUTYP ), table.column(PROJECT_NAME), table.column(EINSTUFUNG_AS_NUMBER) );
+		String xNameNew = addCap( cap, tableTmp, xName );
+
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
+
+		double localNkvMin = tableTmp.doubleColumn( xNameNew ).min() - 0.2;
+		double localNkvMax = tableTmp.doubleColumn( xNameNew ).max() + 0.2;
+
 		if ( cap ==Integer.MAX_VALUE ) {
 			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
 		} else {
-			xAxisBuilder.range( nkvCappedMax, nkvMin );
+			xAxisBuilder.range( localNkvMax, localNkvMin ); // reversed!
 		}
 
+		Table table2 = tableTmp.sortDescendingOn( xNameNew ); // cannot remember why this is necessary
+
+		Axis yAxis = Axis.builder().title( yName ).titleFont( defaultFont ).build();
+
+		Layout layout = Layout.builder( "" ).margin( defaultMargin ).xAxis( xAxisBuilder.title( xNameNew ).titleFont( defaultFont ).build() ).yAxis( yAxis ).width( plotWidth ).build();
+
+		List<Trace> traces = new ArrayList<>( getTracesByColor( table2, xNameNew, yName ));
+		if ( xNameNew.contains( "NKV" ) ){
+			traces.add( vertialNkvOneLine( table2, yName ) );
+		}
+		return new Figure( layout, traces.toArray( new Trace[]{} ) );
+	}
+	public Figure cumulativeInvestmentCostTud( int cap, String xName ){
+		// yy todo: make the investment cost category more flexible (see "investment cost" method)
+
 		String columnToCumulate = INVCOST_TUD;
-		String yName = "cumulative_" + columnToCumulate;
+		String yName = "kum. " + columnToCumulate;
+
+		Table tableTmp = Table.create( table.column( xName ), table.column( columnToCumulate ), table.column( BAUTYP ), table.column(PROJECT_NAME), table.column(EINSTUFUNG_AS_NUMBER) );
+		String xNameNew = addCap( cap, tableTmp, xName );
+
+		Axis.AxisBuilder xAxisBuilder = Axis.builder().zeroLineWidth( 0 ).zeroLineColor( "white" );
+
+		double localNkvMin = tableTmp.doubleColumn( xNameNew ).min() - 0.2;
+		double localNkvMax = tableTmp.doubleColumn( xNameNew ).max() + 0.2;
+
+		if ( cap ==Integer.MAX_VALUE ) {
+			xAxisBuilder.autoRange( Axis.AutoRange.REVERSED );
+		} else {
+			xAxisBuilder.range( localNkvMax, localNkvMin ); // reversed!
+		}
 
 		final Table table2 = createCumulatedTable( xName, columnToCumulate, yName, table );
 
@@ -743,6 +706,9 @@ class Figures2KN extends Figures1KN {
 			DoubleColumn cumulativeCost = DoubleColumn.create( yName );
 			double sum = 0.;
 			for( Double cost : tableTmp.doubleColumn( BENEFIT ) ){
+				if ( Double.isNaN( cost ) ) {
+					cost = 0.; // probably "dummy" project
+				}
 				sum += cost;
 				cumulativeCost.append( sum );
 			}
@@ -755,6 +721,9 @@ class Figures2KN extends Figures1KN {
 			DoubleColumn cumulativeCost = DoubleColumn.create( xName );
 			double sum = 0.;
 			for( Double cost : tableTmp.doubleColumn( INVCOST_TUD ) ){
+				if ( Double.isNaN( cost ) ) {
+					cost = 0.; // probably "dummy" project
+				}
 				sum += cost;
 				cumulativeCost.append( sum );
 			}
@@ -765,12 +734,14 @@ class Figures2KN extends Figures1KN {
 
 		Axis xAxis = xAxisBuilder.title( xName ).build();
 		Axis yAxis = Axis.builder().title( yName ).build();
-		Layout layout = Layout.builder( "Kumulierter Nutzen vs kumulierte Investitionskosten:" ).margin(defaultMargin).xAxis( xAxis ).yAxis( yAxis ).width( plotWidth ).build();
+		Axis y2Axis = Axis.builder().title( INVCOST_TUD ).overlaying( Y ).side( Axis.Side.right ).build();
+		Layout layout = Layout.builder( "Kumulierter Nutzen vs kumulierte Investitionskosten:" ).margin(defaultMargin).xAxis( xAxis ).yAxis( yAxis ).yAxis2(y2Axis).width( plotWidth ).build();
 
 		List<Trace> traces = new ArrayList<>();
 
 		var nameInLegend = "cumulative cost";
-		traces.add( ScatterTrace.builder( tableTmp.doubleColumn( xName ), tableTmp.doubleColumn(yName) ).mode( ScatterTrace.Mode.LINE ).showLegend( true ).name( String.format( legendFormat, nameInLegend ) ).build() );
+		traces.add( ScatterTrace.builder( tableTmp.doubleColumn( xName ), tableTmp.doubleColumn(yName) ).yAxis( Y ).mode( ScatterTrace.Mode.LINE ).showLegend( true ).name( String.format( legendFormat, nameInLegend ) ).build() );
+		traces.add( ScatterTrace.builder( tableTmp.doubleColumn( xName ), tableTmp.doubleColumn(INVCOST_TUD) ).yAxis( Y2 ).mode( ScatterTrace.Mode.MARKERS ).showLegend( true ).name( String.format( legendFormat, nameInLegend ) ).build() );
 
 		return new Figure( layout, traces.toArray( new Trace[]{} ) );
 	}
@@ -781,6 +752,9 @@ class Figures2KN extends Figures1KN {
 		{
 			double sum = 0.;
 			for( Double cost : table2.doubleColumn( columnToCumulate ) ){
+				if ( Double.isNaN( cost ) ) { // dummy rows for bar plots
+					cost = 0.;
+				}
 				sum += cost;
 				cumulativeCost.append( sum );
 			}

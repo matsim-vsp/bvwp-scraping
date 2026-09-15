@@ -100,7 +100,7 @@ public final class Headers{
 //	/**
 //	 * Investitionskosten nach Berechnung der TUD
 //	 */
-	public static final String INVCOST_TUD = "Inv.kosten TUD";
+	public static final String INVCOST_TUD = "Inv.kosten v02 [Mio Eu]";
 //	public static final String INVCOST_PLUS83 = "Inv.kosten+83%";
 	/**
 	 * Länge des Projektes.
@@ -182,6 +182,9 @@ public final class Headers{
 	public static final String NProCo2_ELTTIME_CARBON2000_EMOB_INVCOSTTUD = "Nutzen_pro_CO2 mit Inv.Kosten+/Str.mehrverk.+/CO2-Preis++ & EMob";
 	public static final String NProCo2_ORIG = "Nutzen_pro_CO2 lt. BVWP'30";
 
+	public static final String B_NOISE = "b_noise";
+	public static final String B_NOISE_INNERORTS = "b_noiseInnerorts";
+	public static final String B_NOISE_AUSSERORTS = "b_noiseAusserorts";
 
 	/**
 	 * NKV bei erhöten vkm (hEART-Paper 2025)
@@ -240,6 +243,25 @@ public final class Headers{
 		for( Double number : table.doubleColumn( key ) ){
 			number = Math.min( number, cap - Math.random() * 0.1 + 0.05 );
 			newColumn.append( number );
+		}
+		table.addColumns( newColumn );
+		return newColumnName;
+	}
+	public static String cumulativeOf( String str ) {
+		return str +  "_cumulative";
+	}
+	public static String addCumulative( Table table, String key ) {
+		final String newColumnName = Headers.cumulativeOf( key );
+		if ( table.containsColumn( newColumnName  ) ) {
+			return newColumnName;
+		}
+		DoubleColumn newColumn = DoubleColumn.create( newColumnName );
+		{
+			double sum = 0.;
+			for( Double value : table.doubleColumn( key ) ){
+				sum += value;
+				newColumn.append( sum );
+			}
 		}
 		table.addColumns( newColumn );
 		return newColumnName;

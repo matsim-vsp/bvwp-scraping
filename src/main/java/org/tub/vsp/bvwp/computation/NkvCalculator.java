@@ -27,6 +27,15 @@ public class NkvCalculator {
     public Double calculateCo2_t( Modifications modifications ) {
         return calculateCo2_t( modifications, this.streetBaseDataContainer );
     }
+    public Double calculateNoise( Modifications modifications ) {
+        return this.streetBaseDataContainer.getCostBenefitAnalysis().getNg().overall();
+    }
+    public Double calculateNoiseInnerorts( Modifications modifications ) {
+        return this.streetBaseDataContainer.getCostBenefitAnalysis().getNgi().overall();
+    }
+    public Double calculateNoiseAusserorts( Modifications modifications ) {
+        return this.streetBaseDataContainer.getCostBenefitAnalysis().getNga().overall();
+    }
 
     // old static methods beyond:
     private static Double calculateNkv(Modifications modifications, StreetBaseDataContainer streetBaseDataContainer) {
@@ -81,6 +90,7 @@ public class NkvCalculator {
     }
 
     private static Optional<BenefitsAndInvestmentCosts> benefitsFromStreetBaseData( StreetBaseDataContainer streetBaseDataContainer ) {
+
         // @formatter:off
         return Optional.ofNullable(streetBaseDataContainer).map(StreetBaseDataContainer::getCostBenefitAnalysis)
                        .map(cb -> new BenefitsAndInvestmentCosts(
@@ -91,6 +101,7 @@ public class NkvCalculator {
                                        cb.getNa().get(Emission.CO2).overall(), // co2_betrieb
                                        cb.getOverallBenefit().overall(), // benefit
                                        cb.getInvCost().barwert() //barwert der bewertungsrelevanten Investitionskosten
+                                       , cb.getNg().overall() // "g = geräuschbelastung"
                        ));
         // @formatter:on
     }

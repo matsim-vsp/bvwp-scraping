@@ -38,6 +38,8 @@ public class StreetCostBenefitMapper {
                                            .setNi(extractSimpleBenefit(element, "NI"))
                                            .setNl(extractSimpleBenefit(element, "NL"))
                                            .setNg(extractSimpleBenefit(element, "NG"))
+                                           .setNgi(extractSimpleBenefit(element, "NGi"))
+                                           .setNga(extractSimpleBenefit(element, "NGa"))
                                            .setNt(extractSimpleBenefit(element, "NT"))
                                            .setNz(extractSimpleBenefit(element, "NZ"))
                                            //Only for emissions we scrape the individual values

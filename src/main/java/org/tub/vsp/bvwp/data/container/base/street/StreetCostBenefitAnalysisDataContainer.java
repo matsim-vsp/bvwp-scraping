@@ -24,7 +24,6 @@ public class StreetCostBenefitAnalysisDataContainer {
     private Benefit ntz;
     private Benefit ni;
     private Benefit nl;
-    private Benefit ng;
     private Map<Emission, Benefit> na;
     private Benefit nt;
     private Benefit nz;
@@ -105,14 +104,35 @@ public class StreetCostBenefitAnalysisDataContainer {
         return this;
     }
 
+    // === noise:
+    private Benefit ng;
     public Benefit getNg() {
         return ng;
     }
-
     public StreetCostBenefitAnalysisDataContainer setNg(Benefit ng) {
         this.ng = ng;
         return this;
     }
+
+    private Benefit ngi;
+    public Benefit getNgi() {
+        return ngi;
+    }
+    public StreetCostBenefitAnalysisDataContainer setNgi( Benefit ngi ) {
+        this.ngi = ngi;
+        return this;
+    }
+
+    private Benefit nga;
+    public Benefit getNga() {
+        return nga;
+    }
+    public StreetCostBenefitAnalysisDataContainer setNga( Benefit nga ) {
+        this.nga = nga;
+        return this;
+    }
+
+    // === (end noise)
 
     public Map<Emission, Benefit> getNa() {
         return na;

@@ -147,6 +147,7 @@ class Figures1KN{
 		final String NKV_ORIG_CAPPED5 = Headers.addCap( 5, table, HeadersKN.NKV_ORIG );
 		nkvCappedMax = table.doubleColumn( NKV_ORIG_CAPPED5 ).max() + 0.2 ;
 		nkvMin = table.doubleColumn( NKV_ELTTIME_CARBON700_INVCOSTTUD ).min();
+		// yyyy the above somehow needs to be made configurable.  I think that later code builds the table with the capped values on the fly, but this here refers to older code.
 
 		this.defaultMargin = Margin.builder()
 //						.autoExpand( true )

@@ -1,17 +1,15 @@
 package org.tub.vsp.bvwp.users.kmt;
 
-import java.util.*;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.tub.vsp.bvwp.BvwpUtils;
+import org.tub.vsp.bvwp.Gbl;
 import org.tub.vsp.bvwp.data.Headers;
 import org.tub.vsp.bvwp.data.container.analysis.StreetAnalysisDataContainer;
 import org.tub.vsp.bvwp.data.type.Einstufung;
 import org.tub.vsp.bvwp.io.StreetCsvWriter;
 import org.tub.vsp.bvwp.plot.MultiPlotUtils;
 import org.tub.vsp.bvwp.scraping.StreetScraper;
-import org.tub.vsp.bvwp.Gbl;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.plotly.components.Axis;
@@ -24,6 +22,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.NumberFormat;
+import java.util.*;
 
 import static tech.tablesaw.aggregate.AggregateFunctions.*;
 
@@ -132,7 +131,7 @@ public class RunLocalCsvScrapingKMT_EWGT {
         };
 
     final Table tbl = table.sortOn(comparator);
-    NumberFormat format = NumberFormat.getCompactNumberInstance();
+    NumberFormat format = NumberFormat.getNumberInstance( Locale.GERMANY );
     format.setMaximumFractionDigits(0);
     tbl.numberColumn(Headers.CO2_COST_EL03).setPrintFormatter(format, "n/a");
 

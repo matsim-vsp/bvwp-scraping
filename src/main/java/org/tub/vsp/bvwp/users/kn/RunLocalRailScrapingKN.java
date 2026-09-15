@@ -65,24 +65,36 @@ public class RunLocalRailScrapingKN{
 //        plots1.add( figures1.fzkmNew() );
 
         // ===
+        {
+            StringBuilder page = new StringBuilder( MultiPlotUtils.pageTop() + System.lineSeparator() );
+            for( int ii = 0 ; ii < plots1.size() ; ii++ ){
+                page.append( plots1.get( ii ).asJavascript( "plot" + (ii + 1) ) ).append( System.lineSeparator() );
+            }
+            page.append( MultiPlotUtils.pageBottom );
 
-        StringBuilder page = new StringBuilder( MultiPlotUtils.pageTop() + System.lineSeparator() );
-        for( int ii=0; ii<plots1.size(); ii++ ) {
-            page.append( plots1.get( ii ).asJavascript( "plot" + (ii + 1) ) ).append( System.lineSeparator() );
+            File outputFile = Paths.get( "multiplot.html" ).toFile();
+
+            try( FileWriter fileWriter = new FileWriter( outputFile ) ){
+                fileWriter.write( page.toString() );
+            }
+
+            new Browser().browse( outputFile );
         }
-        for( int ii=0; ii<plots2.size(); ii++ ) {
-            final char c = (char) (ii + 65); // generate A, B, ... to be backwards compatible with what we had so far.  kai, mar'24
-            page.append( plots2.get( ii ).asJavascript( "plot" + c ) ).append( System.lineSeparator() );
+        {
+            StringBuilder page = new StringBuilder( MultiPlotUtils.pageTop() + System.lineSeparator() );
+            for( int ii = 0 ; ii < plots2.size() ; ii++ ){
+                page.append( plots1.get( ii ).asJavascript( "plot" + (ii + 1) ) ).append( System.lineSeparator() );
+            }
+            page.append( MultiPlotUtils.pageBottom );
+
+            File outputFile = Paths.get( "multiplot2.html" ).toFile();
+
+            try( FileWriter fileWriter = new FileWriter( outputFile ) ){
+                fileWriter.write( page.toString() );
+            }
+
+            new Browser().browse( outputFile );
         }
-        page.append( MultiPlotUtils.pageBottom );
-
-        File outputFile = Paths.get("multiplot.html" ).toFile();
-
-        try ( FileWriter fileWriter = new FileWriter(outputFile)) {
-            fileWriter.write( page.toString() );
-        }
-
-        new Browser().browse(outputFile );
 
         // ===
 

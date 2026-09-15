@@ -23,8 +23,8 @@ public class MultiPlotUtils {
 								   + "</head>"
 								   + System.lineSeparator()
 								   + "<body>"
-								   + System.lineSeparator()
-								   + "<h1>Part A</h1>" + System.lineSeparator() );
+								   + System.lineSeparator() );
+//								   + "<h1>Part A</h1>" + System.lineSeparator() );
 
 		for( int ii = 0 ; ii < 99 ; ii++ ){
 			result.append( "<div id='plot" + ii + "'>\n" );
@@ -49,8 +49,8 @@ public class MultiPlotUtils {
 									  + "    <title>Multi-plot test</title>" + System.lineSeparator()
 									  + "    <script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>" + System.lineSeparator()
 									  + "</head>" + System.lineSeparator()
-									  + "<body>" + System.lineSeparator()
-									  + "<h1>Part A</h1>" + System.lineSeparator() );
+									  + "<body>" + System.lineSeparator() );
+//									  + "<h1>Part A</h1>" + System.lineSeparator() );
 
 		// append the html that references each individual plot:
 		{
